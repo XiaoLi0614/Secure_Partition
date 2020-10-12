@@ -1,0 +1,40 @@
+-------------------------------------
+LandScape1:
+4th execution:
+similarity = 4.711268924730082
+Serial time = 34
+similarity = 4.710856019052638
+Parallel time = 19
+
+4th execution:
+similarity = 4.711268924730082
+Serial time = 34
+similarity = 4.710856019052638
+Parallel time = 19
+
+4th execution:
+similarity = 4.711268924730082
+Serial time = 35
+similarity = 4.710856019052638
+Parallel time = 19
+-------------------------------------
+LandScape2:
+4th execution:
+similarity = 5.182269887487286
+Serial time = 41
+similarity = 5.182642323077547
+Parallel time = 19
+
+4th execution:
+similarity = 5.182269887487286
+Serial time = 40
+similarity = 5.182642323077547
+Parallel time = 20
+
+3th execution:
+similarity = 5.182269887487286
+Serial time = 34
+similarity = 5.182642323077547
+Parallel time = 19
+-------------------------------------
+

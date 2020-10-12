@@ -1,0 +1,2 @@
+Class name changes
+    place -> Place

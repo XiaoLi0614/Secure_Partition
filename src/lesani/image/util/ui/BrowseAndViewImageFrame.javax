@@ -1,0 +1,38 @@
+package j.util.ui;
+
+import j.util.ui.ImageBrowsePanel;
+import lesani.gui.frame.MFrame;
+
+import javax.swing.*;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Mohsen Lesani
+ * Date: Apr 15, 2005
+ * Time: 9:53:48 PM
+ */
+
+public class BrowseAndViewImageFrame extends MFrame {
+	private JPanel mainPanel;
+	private JPanel imageBrowsePanelBackPanel;
+	private ImageBrowsePanel imageBrowsePanel;
+
+	public BrowseAndViewImageFrame()
+	{
+		super("View Image");
+		setMainPanel(mainPanel);
+		imageBrowsePanel = new ImageBrowsePanel("Select Image");
+		imageBrowsePanelBackPanel.add(imageBrowsePanel);
+		setExitOnClose();
+	}
+
+	public static void main(String[] args)
+	{
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		JDialog.setDefaultLookAndFeelDecorated(true);
+
+		MFrame browseAndViewImageFrame = new BrowseAndViewImageFrame();
+		browseAndViewImageFrame.view();
+	}
+
+}

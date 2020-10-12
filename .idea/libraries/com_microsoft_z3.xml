@@ -1,0 +1,24 @@
+<component name="libraryTable">
+  <library name="com.microsoft.z3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/com.microsoft.z3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/functionaljava-4.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/poi-3.17.jar!/" />
+      <root url="file://$PROJECT_DIR$" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$PROJECT_DIR$/src/cs179e/cs179e/Compiler/out/old/lesani/math/Jama/doc" />
+      <root url="file://$PROJECT_DIR$/src/cs179e/cs179e/Compiler/out/production/Compiler/lesani/math/Jama/doc" />
+      <root url="file://$PROJECT_DIR$/src/cs179e/cs179e/Compiler/src/lesani/math/Jama/doc" />
+      <root url="file://$PROJECT_DIR$/src/cs179e/cs179e/LesaniLib/production/LesaniLib/lesani/math/Jama/doc" />
+      <root url="file://$PROJECT_DIR$/src/cs179e/cs179e/LesaniLib/src/lesani/math/Jama/doc" />
+      <root url="file://$PROJECT_DIR$/src/lesani/math/Jama/doc" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/src" />
+      <root url="file://$PROJECT_DIR$" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$" recursive="false" type="SOURCES" />
+  </library>
+</component>

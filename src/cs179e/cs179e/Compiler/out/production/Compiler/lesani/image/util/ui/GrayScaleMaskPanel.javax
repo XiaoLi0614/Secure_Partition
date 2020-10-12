@@ -1,0 +1,99 @@
+package j.util.ui;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Mohsen Lesani
+ * Date: Apr 15, 2005
+ * Time: 4:34:19 PM
+ */
+public class GrayScaleMaskPanel extends JPanel
+{
+	private JPanel mainPanel;
+	private JLabel textLabel;
+	private JTextField lengthTextField;
+	private int length;
+	private JPanel slotsBackPanel;
+	private JPanel slotsPanel;
+	private Slot[][] slots;
+
+	class Slot extends JPanel
+	{
+		private JTextField grayScaleTextField = new JTextField(Integer.toString(1), 2);
+
+		public Slot()
+		{
+			setLayout(new BorderLayout());
+			add(grayScaleTextField, BorderLayout.CENTER);
+		}
+
+		public int getValue()
+		{
+			return Integer.parseInt(grayScaleTextField.getText());
+		}
+	}
+
+	public GrayScaleMaskPanel(int length, String text)
+	{
+		this.add(mainPanel);
+		textLabel.setText(text);
+		lengthTextField.setText(Integer.toString(length));
+		makeSlots(length);
+
+		lengthTextField.addKeyListener(new KeyListener()
+		{
+			public void keyPressed(KeyEvent e)
+			{
+
+			}
+
+			public void keyReleased(KeyEvent e)
+			{
+                if (e.getKeyCode() == KeyEvent.VK_ENTER)
+				{
+					makeSlots(Integer.parseInt(lengthTextField.getText()));
+				}
+			}
+
+			public void keyTyped(KeyEvent e)
+			{
+
+			}
+		});
+	}
+
+	private void makeSlots(int length)
+	{
+		this.length = length;
+		slotsPanel = new JPanel();
+		slotsBackPanel.removeAll();
+		slotsBackPanel.add(slotsPanel);
+
+		this.slots = new Slot[length][length];
+        slotsPanel.setLayout(new GridLayout(length, length));
+
+		for (int j = 0; j < length; j++)
+		{
+			for (int i = 0; i < length; i++)
+			{
+				Slot slot = new Slot();
+				slots[i][j] = slot;
+				slotsPanel.add(slot);
+			}
+		}
+		revalidate();
+	}
+
+	public int[][] getMask()
+	{
+		int[][] mask = new int[length][length];
+		for (int j = 0; j < length; j++)
+			for (int i = 0; i < length; i++)
+				mask[i][j] = slots[i][j].getValue();
+		return mask;
+	}
+}

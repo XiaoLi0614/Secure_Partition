@@ -1,0 +1,622 @@
+const ListVTable
+	:List.Delete
+	:List.Print
+	:List.Init
+	:List.GetElem
+	:List.GetNext
+	:List.SetNext
+	:List.Search
+	:List.GetEnd
+	:List.InitNew
+	:List.Insert
+
+func List.Init(this)
+	[this+12] = 1
+	ret 1
+
+func List.InitNew(this v_elem v_next v_end)
+	[this+12] = v_end
+	[this+4] = v_elem
+	[this+8] = v_next
+	ret 1
+
+func List.Insert(this new_elem)
+	aux03 = this
+	t.1 = HeapAllocZ(16)
+	[t.1] = :ListVTable
+	aux02 = t.1
+	if aux02 goto :L.1
+		Error("Null pointer")
+	L.1:
+	t.2 = [aux02]
+	t.3 = [t.2+32]
+	t.4 = call t.3(aux02 new_elem aux03 0)
+	ret_val = t.4
+	ret aux02
+
+func List.SetNext(this v_next)
+	[this+8] = v_next
+	ret 1
+
+func List.Delete(this e)
+	my_head = this
+	ret_val = 0
+	t.5 = Sub(0 1)
+	aux04 = t.5
+	aux01 = this
+	prev = this
+	t.6 = [this+12]
+	var_end = t.6
+	t.7 = [this+4]
+	var_elem = t.7
+	L.2:
+	if0 var_end goto :L.7
+	L.6:
+		t.9 = 0
+	goto :L.8
+	L.7:
+		t.9 = 1
+	L.8:
+	if0 ret_val goto :L.10
+	L.9:
+		t.10 = 0
+	goto :L.11
+	L.10:
+		t.10 = 1
+	L.11:
+	if0 t.9 goto :L.4
+	if0 t.10 goto :L.4
+	t.8 = 1
+	goto :L.5
+	L.4:
+	t.8 = 0
+	L.5:
+	if0 t.8 goto :L.3
+		if e goto :L.15
+			Error("Null pointer")
+		L.15:
+		t.11 = [e]
+		t.12 = [t.11+12]
+		t.13 = call t.12(e var_elem)
+		if0 t.13 goto :L.13
+		L.12:
+			ret_val = 1
+			t.14 = LtS(aux04 0)
+			if0 t.14 goto :L.17
+			L.16:
+				if aux01 goto :L.19
+					Error("Null pointer")
+				L.19:
+				t.15 = [aux01]
+				t.16 = [t.15+16]
+				t.17 = call t.16(aux01)
+				my_head = t.17
+			goto :L.18
+			L.17:
+				t.18 = Sub(0 555)
+				PrintIntS(t.18)
+				if prev goto :L.20
+					Error("Null pointer")
+				L.20:
+				t.19 = [prev]
+				t.20 = [t.19+20]
+				if aux01 goto :L.21
+					Error("Null pointer")
+				L.21:
+				t.21 = [aux01]
+				t.22 = [t.21+16]
+				t.23 = call t.22(aux01)
+				t.24 = call t.20(prev t.23)
+				aux05 = t.24
+				t.25 = Sub(0 555)
+				PrintIntS(t.25)
+			L.18:
+		goto :L.14
+		L.13:
+			nt = 0
+		L.14:
+		if0 ret_val goto :L.26
+		L.25:
+			t.26 = 0
+		goto :L.27
+		L.26:
+			t.26 = 1
+		L.27:
+		if0 t.26 goto :L.23
+		L.22:
+			prev = aux01
+			if aux01 goto :L.28
+				Error("Null pointer")
+			L.28:
+			t.27 = [aux01]
+			t.28 = [t.27+16]
+			t.29 = call t.28(aux01)
+			aux01 = t.29
+			if aux01 goto :L.29
+				Error("Null pointer")
+			L.29:
+			t.30 = [aux01]
+			t.31 = [t.30+28]
+			t.32 = call t.31(aux01)
+			var_end = t.32
+			if aux01 goto :L.30
+				Error("Null pointer")
+			L.30:
+			t.33 = [aux01]
+			t.34 = [t.33+12]
+			t.35 = call t.34(aux01)
+			var_elem = t.35
+			aux04 = 1
+		goto :L.24
+		L.23:
+			nt = 0
+		L.24:
+	goto :L.2
+	L.3:
+	ret my_head
+
+func List.Search(this e)
+	int_ret_val = 0
+	aux01 = this
+	t.36 = [this+12]
+	var_end = t.36
+	t.37 = [this+4]
+	var_elem = t.37
+	L.31:
+	if0 var_end goto :L.34
+	L.33:
+		t.38 = 0
+	goto :L.35
+	L.34:
+		t.38 = 1
+	L.35:
+	if0 t.38 goto :L.32
+		if e goto :L.39
+			Error("Null pointer")
+		L.39:
+		t.39 = [e]
+		t.40 = [t.39+12]
+		t.41 = call t.40(e var_elem)
+		if0 t.41 goto :L.37
+		L.36:
+			int_ret_val = 1
+		goto :L.38
+		L.37:
+			nt = 0
+		L.38:
+		if aux01 goto :L.40
+			Error("Null pointer")
+		L.40:
+		t.42 = [aux01]
+		t.43 = [t.42+16]
+		t.44 = call t.43(aux01)
+		aux01 = t.44
+		if aux01 goto :L.41
+			Error("Null pointer")
+		L.41:
+		t.45 = [aux01]
+		t.46 = [t.45+28]
+		t.47 = call t.46(aux01)
+		var_end = t.47
+		if aux01 goto :L.42
+			Error("Null pointer")
+		L.42:
+		t.48 = [aux01]
+		t.49 = [t.48+12]
+		t.50 = call t.49(aux01)
+		var_elem = t.50
+	goto :L.31
+	L.32:
+	ret int_ret_val
+
+func List.GetEnd(this)
+	t.51 = [this+12]
+	ret t.51
+
+func List.GetElem(this)
+	t.52 = [this+4]
+	ret t.52
+
+func List.GetNext(this)
+	t.53 = [this+8]
+	ret t.53
+
+func List.Print(this)
+	aux01 = this
+	t.54 = [this+12]
+	var_end = t.54
+	t.55 = [this+4]
+	var_elem = t.55
+	L.43:
+	if0 var_end goto :L.46
+	L.45:
+		t.56 = 0
+	goto :L.47
+	L.46:
+		t.56 = 1
+	L.47:
+	if0 t.56 goto :L.44
+		if var_elem goto :L.48
+			Error("Null pointer")
+		L.48:
+		t.57 = [var_elem]
+		t.58 = [t.57+8]
+		t.59 = call t.58(var_elem)
+		PrintIntS(t.59)
+		if aux01 goto :L.49
+			Error("Null pointer")
+		L.49:
+		t.60 = [aux01]
+		t.61 = [t.60+16]
+		t.62 = call t.61(aux01)
+		aux01 = t.62
+		if aux01 goto :L.50
+			Error("Null pointer")
+		L.50:
+		t.63 = [aux01]
+		t.64 = [t.63+28]
+		t.65 = call t.64(aux01)
+		var_end = t.65
+		if aux01 goto :L.51
+			Error("Null pointer")
+		L.51:
+		t.66 = [aux01]
+		t.67 = [t.66+12]
+		t.68 = call t.67(aux01)
+		var_elem = t.68
+	goto :L.43
+	L.44:
+	ret 1
+
+
+func Main()
+	t.69 = HeapAllocZ(4)
+	[t.69] = :LLVTable
+	if t.69 goto :L.52
+		Error("Null pointer")
+	L.52:
+	t.70 = [t.69]
+	t.71 = [t.70+0]
+	t.72 = call t.71(t.69)
+	PrintIntS(t.72)
+	ret
+
+const ElementVTable
+	:Element.GetSalary
+	:Element.Init
+	:Element.GetAge
+	:Element.Equal
+	:Element.GetMarried
+	:Element.Compare
+
+func Element.Init(this v_Age v_Salary v_Married)
+	[this+12] = v_Age
+	[this+4] = v_Salary
+	[this+8] = v_Married
+	ret 1
+
+func Element.GetAge(this)
+	t.73 = [this+12]
+	ret t.73
+
+func Element.GetSalary(this)
+	t.74 = [this+4]
+	ret t.74
+
+func Element.GetMarried(this)
+	t.75 = [this+8]
+	ret t.75
+
+func Element.Equal(this other)
+	ret_val = 1
+	if other goto :L.53
+		Error("Null pointer")
+	L.53:
+	t.76 = [other]
+	t.77 = [t.76+8]
+	t.78 = call t.77(other)
+	aux01 = t.78
+	if this goto :L.60
+		Error("Null pointer")
+	L.60:
+	t.80 = [this]
+	t.81 = [t.80+20]
+	t.82 = [this+12]
+	t.83 = call t.81(this aux01 t.82)
+	if0 t.83 goto :L.58
+	L.57:
+		t.79 = 0
+	goto :L.59
+	L.58:
+		t.79 = 1
+	L.59:
+	if0 t.79 goto :L.55
+	L.54:
+		ret_val = 0
+	goto :L.56
+	L.55:
+		if other goto :L.61
+			Error("Null pointer")
+		L.61:
+		t.84 = [other]
+		t.85 = [t.84+0]
+		t.86 = call t.85(other)
+		aux02 = t.86
+		if this goto :L.68
+			Error("Null pointer")
+		L.68:
+		t.88 = [this]
+		t.89 = [t.88+20]
+		t.90 = [this+4]
+		t.91 = call t.89(this aux02 t.90)
+		if0 t.91 goto :L.66
+		L.65:
+			t.87 = 0
+		goto :L.67
+		L.66:
+			t.87 = 1
+		L.67:
+		if0 t.87 goto :L.63
+		L.62:
+			ret_val = 0
+		goto :L.64
+		L.63:
+			t.92 = [this+8]
+			if0 t.92 goto :L.70
+			L.69:
+				if other goto :L.78
+					Error("Null pointer")
+				L.78:
+				t.94 = [other]
+				t.95 = [t.94+16]
+				t.96 = call t.95(other)
+				if0 t.96 goto :L.76
+				L.75:
+					t.93 = 0
+				goto :L.77
+				L.76:
+					t.93 = 1
+				L.77:
+				if0 t.93 goto :L.73
+				L.72:
+					ret_val = 0
+				goto :L.74
+				L.73:
+					nt = 0
+				L.74:
+			goto :L.71
+			L.70:
+				if other goto :L.82
+					Error("Null pointer")
+				L.82:
+				t.97 = [other]
+				t.98 = [t.97+16]
+				t.99 = call t.98(other)
+				if0 t.99 goto :L.80
+				L.79:
+					ret_val = 0
+				goto :L.81
+				L.80:
+					nt = 0
+				L.81:
+			L.71:
+		L.64:
+	L.56:
+	ret ret_val
+
+func Element.Compare(this num1 num2)
+	retval = 0
+	t.100 = Add(num2 1)
+	aux02 = t.100
+	t.101 = LtS(num1 num2)
+	if0 t.101 goto :L.84
+	L.83:
+		retval = 0
+	goto :L.85
+	L.84:
+		t.103 = LtS(num1 aux02)
+		if0 t.103 goto :L.90
+		L.89:
+			t.102 = 0
+		goto :L.91
+		L.90:
+			t.102 = 1
+		L.91:
+		if0 t.102 goto :L.87
+		L.86:
+			retval = 0
+		goto :L.88
+		L.87:
+			retval = 1
+		L.88:
+	L.85:
+	ret retval
+
+
+const LLVTable
+	:LL.Start
+
+func LL.Start(this)
+	t.104 = HeapAllocZ(16)
+	[t.104] = :ListVTable
+	last_elem = t.104
+	if last_elem goto :L.92
+		Error("Null pointer")
+	L.92:
+	t.105 = [last_elem]
+	t.106 = [t.105+8]
+	t.107 = call t.106(last_elem)
+	aux01 = t.107
+	head = last_elem
+	if head goto :L.93
+		Error("Null pointer")
+	L.93:
+	t.108 = [head]
+	t.109 = [t.108+8]
+	t.110 = call t.109(head)
+	aux01 = t.110
+	if head goto :L.94
+		Error("Null pointer")
+	L.94:
+	t.111 = [head]
+	t.112 = [t.111+4]
+	t.113 = call t.112(head)
+	aux01 = t.113
+	t.114 = HeapAllocZ(16)
+	[t.114] = :ElementVTable
+	el01 = t.114
+	if el01 goto :L.95
+		Error("Null pointer")
+	L.95:
+	t.115 = [el01]
+	t.116 = [t.115+4]
+	t.117 = call t.116(el01 25 37000 0)
+	aux01 = t.117
+	if head goto :L.96
+		Error("Null pointer")
+	L.96:
+	t.118 = [head]
+	t.119 = [t.118+36]
+	t.120 = call t.119(head el01)
+	head = t.120
+	if head goto :L.97
+		Error("Null pointer")
+	L.97:
+	t.121 = [head]
+	t.122 = [t.121+4]
+	t.123 = call t.122(head)
+	aux01 = t.123
+	PrintIntS(10000000)
+	t.124 = HeapAllocZ(16)
+	[t.124] = :ElementVTable
+	el01 = t.124
+	if el01 goto :L.98
+		Error("Null pointer")
+	L.98:
+	t.125 = [el01]
+	t.126 = [t.125+4]
+	t.127 = call t.126(el01 39 42000 1)
+	aux01 = t.127
+	el02 = el01
+	if head goto :L.99
+		Error("Null pointer")
+	L.99:
+	t.128 = [head]
+	t.129 = [t.128+36]
+	t.130 = call t.129(head el01)
+	head = t.130
+	if head goto :L.100
+		Error("Null pointer")
+	L.100:
+	t.131 = [head]
+	t.132 = [t.131+4]
+	t.133 = call t.132(head)
+	aux01 = t.133
+	PrintIntS(10000000)
+	t.134 = HeapAllocZ(16)
+	[t.134] = :ElementVTable
+	el01 = t.134
+	if el01 goto :L.101
+		Error("Null pointer")
+	L.101:
+	t.135 = [el01]
+	t.136 = [t.135+4]
+	t.137 = call t.136(el01 22 34000 0)
+	aux01 = t.137
+	if head goto :L.102
+		Error("Null pointer")
+	L.102:
+	t.138 = [head]
+	t.139 = [t.138+36]
+	t.140 = call t.139(head el01)
+	head = t.140
+	if head goto :L.103
+		Error("Null pointer")
+	L.103:
+	t.141 = [head]
+	t.142 = [t.141+4]
+	t.143 = call t.142(head)
+	aux01 = t.143
+	t.144 = HeapAllocZ(16)
+	[t.144] = :ElementVTable
+	el03 = t.144
+	if el03 goto :L.104
+		Error("Null pointer")
+	L.104:
+	t.145 = [el03]
+	t.146 = [t.145+4]
+	t.147 = call t.146(el03 27 34000 0)
+	aux01 = t.147
+	if head goto :L.105
+		Error("Null pointer")
+	L.105:
+	t.148 = [head]
+	t.149 = [t.148+24]
+	t.150 = call t.149(head el02)
+	PrintIntS(t.150)
+	if head goto :L.106
+		Error("Null pointer")
+	L.106:
+	t.151 = [head]
+	t.152 = [t.151+24]
+	t.153 = call t.152(head el03)
+	PrintIntS(t.153)
+	PrintIntS(10000000)
+	t.154 = HeapAllocZ(16)
+	[t.154] = :ElementVTable
+	el01 = t.154
+	if el01 goto :L.107
+		Error("Null pointer")
+	L.107:
+	t.155 = [el01]
+	t.156 = [t.155+4]
+	t.157 = call t.156(el01 28 35000 0)
+	aux01 = t.157
+	if head goto :L.108
+		Error("Null pointer")
+	L.108:
+	t.158 = [head]
+	t.159 = [t.158+36]
+	t.160 = call t.159(head el01)
+	head = t.160
+	if head goto :L.109
+		Error("Null pointer")
+	L.109:
+	t.161 = [head]
+	t.162 = [t.161+4]
+	t.163 = call t.162(head)
+	aux01 = t.163
+	PrintIntS(2220000)
+	if head goto :L.110
+		Error("Null pointer")
+	L.110:
+	t.164 = [head]
+	t.165 = [t.164+0]
+	t.166 = call t.165(head el02)
+	head = t.166
+	if head goto :L.111
+		Error("Null pointer")
+	L.111:
+	t.167 = [head]
+	t.168 = [t.167+4]
+	t.169 = call t.168(head)
+	aux01 = t.169
+	PrintIntS(33300000)
+	if head goto :L.112
+		Error("Null pointer")
+	L.112:
+	t.170 = [head]
+	t.171 = [t.170+0]
+	t.172 = call t.171(head el01)
+	head = t.172
+	if head goto :L.113
+		Error("Null pointer")
+	L.113:
+	t.173 = [head]
+	t.174 = [t.173+4]
+	t.175 = call t.174(head)
+	aux01 = t.175
+	PrintIntS(44440000)
+	ret 0
+
+

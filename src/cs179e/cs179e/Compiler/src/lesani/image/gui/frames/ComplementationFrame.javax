@@ -1,0 +1,64 @@
+package j.gui.frames;
+
+import j.util.ui.ImageBrowsePanel;
+import lesani.gui.frame.MFrame;
+
+import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import j.util.exception.NotAnImageFileException;
+import j.util.ImageUtil;
+import j.core.image.BinaryImage;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Mohsen Lesani
+ * Date: Apr 15, 2005
+ * Time: 11:00:13 AM
+ */
+public class ComplementationFrame extends MFrame
+{
+	private JPanel backImageBrowsePanel;
+	private JButton convertButton;
+	private JPanel mainPanel;
+
+	public ComplementationFrame()
+	{
+		super("Complementation");
+		setExitOnClose();
+		setMainPanel(mainPanel);
+		final ImageBrowsePanel imageBrowsePanel = new ImageBrowsePanel("Select Original Image");
+		backImageBrowsePanel.add(imageBrowsePanel);
+		convertButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					BinaryImage binaryImage = new BinaryImage(imageBrowsePanel.getImage());
+					BinaryImage complementedImage = ImageUtil.complement(binaryImage);
+					ImageUtil.showImageFrame("Complemented Image", complementedImage.getBufferedImage());
+				}
+				catch (NotAnImageFileException e1)
+				{
+					JOptionPane.showMessageDialog(ComplementationFrame.this,
+							"The file is not of a recognizable format.",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+			}
+		});
+	}
+
+	public static void main(String[] args)
+	{
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		JDialog.setDefaultLookAndFeelDecorated(true);
+
+		MFrame complementionFrame = new ComplementationFrame();
+		complementionFrame.view();
+	}
+}

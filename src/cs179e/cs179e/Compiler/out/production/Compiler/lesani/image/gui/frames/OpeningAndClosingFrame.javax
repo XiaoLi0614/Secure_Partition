@@ -1,0 +1,101 @@
+package j.gui.frames;
+
+import j.core.image.BinaryImage;
+import j.core.image.Image;
+import j.util.ui.ImageBrowsePanel;
+import lesani.gui.frame.MFrame;
+
+import javax.swing.*;
+
+import j.util.ImageUtil;
+import j.util.exception.NotAnImageFileException;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Mohsen Lesani
+ * Date: Apr 15, 2005
+ * Time: 12:08:31 PM
+ */
+
+public class OpeningAndClosingFrame extends MFrame
+{
+	private ImageBrowsePanel imageBrowsePanel;
+	private JPanel imageBrowsePanelBackPanel;
+	private JButton openButton;
+	private JButton closeButton;
+	private JPanel mainPanel;
+	private JTextField maskLengthTextField;
+
+	public OpeningAndClosingFrame()
+	{
+		super("Opening and Closing Binary Images");
+		setMainPanel(mainPanel);
+		imageBrowsePanel = new ImageBrowsePanel("Select Original Image");
+		imageBrowsePanelBackPanel.add(imageBrowsePanel);
+		setExitOnClose();
+
+		openButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					BufferedImage image = imageBrowsePanel.getImage();
+					BinaryImage binaryImage = new BinaryImage(image);
+
+					//ImageUtil.showImageFrame("Test", binaryImage);
+
+					Image openedImage = ImageUtil.open(binaryImage, Integer.parseInt(maskLengthTextField.getText()));
+					ImageUtil.showImageFrame("Opened Image", openedImage.getBufferedImage());
+				}
+				catch (NotAnImageFileException e1)
+				{
+					JOptionPane.showMessageDialog(OpeningAndClosingFrame.this,
+							"The file is not of a recognizable format.",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+		});
+
+		closeButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					BufferedImage image = imageBrowsePanel.getImage();
+					BinaryImage binaryImage = new BinaryImage(image);
+
+					//ImageUtil.showImageFrame("Test", binaryImage);
+
+					Image closedImage = ImageUtil.close(binaryImage, Integer.parseInt(maskLengthTextField.getText()));
+					ImageUtil.showImageFrame("Closed Image", closedImage.getBufferedImage());
+				}
+				catch (NotAnImageFileException e1)
+				{
+					JOptionPane.showMessageDialog(OpeningAndClosingFrame.this,
+							"The file is not of a recognizable format.",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+		});
+	}
+
+	public static void main(String[] args)
+	{
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		JDialog.setDefaultLookAndFeelDecorated(true);
+
+		MFrame openiningAndClosingFrame = new OpeningAndClosingFrame();
+		openiningAndClosingFrame.view();
+	}
+
+}

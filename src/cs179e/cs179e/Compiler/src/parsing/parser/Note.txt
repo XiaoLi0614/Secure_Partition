@@ -1,0 +1,2 @@
+Preserve syntaxtree package before running JTB.
+To make AST, syntaxtree nodes are augmented to hold inherited and synthesized values.

@@ -1,0 +1,42 @@
+====================================================================================
+Compile and Run: x10src/translated/image/experiments/experiment2
+====================================================================================
+Regenerating lib source ...
+------------------------------------------------------------------------------------
+Compile:
+Files: AllTrue.x10, Check.x10, Main.x10
+Compiling ...
+------------------------------------------------------------------------------------
+Run:
+Relational - Primitives
+Passed
+
+Relational - Arrays
+Passed
+
+Relational - Array and primitive - Test 1
+Passed
+
+Relational - Array and primitive - Test 2
+Passed
+
+Short circuit and, or and not
+Passed
+
+Elementwise and, or and not - primitives
+Passed
+
+Elementwise and, or and not - arrays
+Passed
+
+Elementwise and, or and not - primitive and array 1
+Passed
+
+Elementwise and, or and not - primitive and array 2
+Passed
+
+Success.
+------------------------------------------------------------------------------------
+====================================================================================
+
+

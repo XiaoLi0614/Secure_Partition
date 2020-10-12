@@ -1,0 +1,127 @@
+/*
+    Seq text = new Seq();
+    text.put();
+    return text.result();
+*/
+
+
+/*
+    public TextNode visit(AddLocalOps addLocalOps) {
+
+        Seq text = new Seq();
+        text.fullLine("// Riyaz: Let's ignore this for now.");
+        text.fullLine("// x10.lang.perf.addLocalOps(" + addLocalOps.param + ");");
+        return text.result();
+    }
+
+    public TextNode visit(ArrayAssignment arrayAssignment) {
+        Seq text = new Seq();
+        text.startLine(arrayAssignment.arrayName + " (");
+        String[] indexNames = arrayAssignment.indexNames;
+        if (indexNames.length > 1)
+            text.putBracketList(arrayAssignment.indexNames);
+        else
+            text.put(indexNames[0]);
+        text.put(") = ");
+        text.put(arrayAssignment.rightValueName);
+        text.endLine(";");
+        return text.result();
+    }
+
+    public TextNode visit(FieldAssignment fieldAssignment) {
+        Seq text = new Seq();
+        text.fullLine(fieldAssignment.receiver + "." + fieldAssignment.fieldName + " = " + fieldAssignment.rightValueName + ";");
+        return text.result();
+    }
+    public TextNode visit(FirstPlace firstPlace) {
+        return visit(new FieldSelection(new Id("Place"), "FIRST_PLACE"));
+    }
+
+    public TextNode visit(LastPlace lastPlace) {
+        // There is no last place. It is equal to max places. (?)
+        //return visit(new FieldSelection(new Id("Place"), "MAX_PLACES"));
+        return visit(
+            new ast.tree.expression.MethodCall(
+                new Id("Place"), "places", new String[]{"Place.MAX_PLACES - 1"}
+            )
+        );
+    }
+
+    public TextNode visit(MaxPlaces maxPlaces) {
+        return visit(new FieldSelection(new Id("Place"), "MAX_PLACES"));
+    }
+
+    public TextNode visit(Place place) {
+        return visit(
+            new ast.tree.expression.MethodCall(
+                new Id("Place"), "places", new String[]{place.placeNumberName}
+            )
+        );
+    }
+
+*/
+/*
+        Seq text = new Seq();
+        String initializer = "";
+        if (!newDistArray.arrayInitOption.isPresent()) {
+            ArrayInit arrayInit = ((Some<ArrayInit>)newDistArray.arrayInitOption).get();
+            initializer = "initializer" + initializerCounter;
+            initializerCounter++;
+            text.startLine("val " + initializer + " = ");
+            text.put("(");
+            text.put("Point");
+            text.put(arrayInit.initFuncParam.toString());
+            text.put(")");
+            text.put(" => ");
+            text.put(visitDispatch(arrayInit.block));
+            text.endLine(";");
+        }
+
+
+//        text.put("(new ");
+        text.put("(");
+        if (newDistArray.isFinal)
+            text.put("Array.makeVal");
+//            text.put("ValArray");
+        else
+            text.put("Array.make");
+//            text.put("Array");
+        text.put("[");
+        text.put(visitDispatch(newDistArray.elementType));
+        text.put("]");
+        text.put("(" + newDistArray.regionOrDistName);
+        if (newDistArray.arrayInitOption.isPresent()) {
+            text.put(", " + initializer + ")");
+        }
+//        text.put(")");
+        text.put(")");
+        //text.endLine(";");
+        return text.result();
+*/
+/*
+    public TextNode visit(DistributionUnion distributionUnion) {
+        Seq text = new Seq();
+        text.put("(" +
+                    distributionUnion.operand1Name +
+                    " || " +
+                    "(" +
+                        "(" +
+                            distributionUnion.operand2rangeStartName +
+                            " .. " +
+                            distributionUnion.operand2rangeEndName +
+                        ")" +
+                        "->" +
+                        distributionUnion.operand2placeName +
+                    ")" +
+                ")");
+        return text.result();
+    }
+*/
+/*
+    public TextNode visit(RegionSelection regionSelection) {
+        Seq text = new Seq();
+        text.put(visitDispatch(regionSelection.array));
+        text.put(".region");
+        return text.result();
+    }
+*/

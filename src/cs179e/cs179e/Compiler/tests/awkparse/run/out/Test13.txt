@@ -1,0 +1,2 @@
+1 $ 2 ++_ ++_ $ _++ _++ + 1 ++_ 2 --_ - _
+Expression parsed successfully.

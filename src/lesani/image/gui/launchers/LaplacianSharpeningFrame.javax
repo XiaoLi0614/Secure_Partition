@@ -1,0 +1,75 @@
+package j.gui.launchers;
+
+import j.core.image.GrayScaleImage;
+import j.util.ui.ImageBrowsePanel;
+import lesani.gui.frame.MFrame;
+
+import javax.swing.*;
+
+import j.util.ImageUtil;
+import j.util.exception.NotAnImageFileException;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Mohsen's Desktop
+ * Date: Apr 19, 2007
+ * Time: 8:17:49 PM
+ */
+
+public class LaplacianSharpeningFrame extends MFrame
+{
+	private JPanel imageBrowsePanelBackPanel;
+	private JPanel mainPanel;
+	private JButton SharpenButton;
+
+	public LaplacianSharpeningFrame()
+	{
+		super("Laplacian Sharpening");
+		setExitOnClose();
+		setMainPanel(mainPanel);
+		final ImageBrowsePanel imageBrowsePanel = new ImageBrowsePanel("Select Original Image");
+		imageBrowsePanelBackPanel.add(imageBrowsePanel);
+
+		SharpenButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					GrayScaleImage grayScaleImage = new GrayScaleImage(imageBrowsePanel.getImage());
+					GrayScaleImage sharpenedImage = ImageUtil.getScaledLaplacian(grayScaleImage);
+					ImageUtil.showImageFrame("Sharpened Image", sharpenedImage.getBufferedImage());
+				}
+				catch (NotAnImageFileException e1)
+				{
+					JOptionPane.showMessageDialog(LaplacianSharpeningFrame.this,
+							"The file is not of a recognizable format.",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+					//return;
+				}
+
+			}
+		});
+	}
+
+	public static void main(String[] args)
+	{
+		/*
+
+		System.out.println(args.length);
+		for (String arg : args)
+		{
+			System.out.println(arg);
+		}
+		*/
+
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		JDialog.setDefaultLookAndFeelDecorated(true);
+
+		MFrame borderDetectionFrame = new LaplacianSharpeningFrame();
+		borderDetectionFrame.view();
+	}
+}

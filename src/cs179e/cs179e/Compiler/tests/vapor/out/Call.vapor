@@ -1,0 +1,20 @@
+func Main()
+	t.1 = HeapAllocZ(4)
+	[t.1] = :AVTable
+	if t.1 goto :L.1
+		Error("Null pointer")
+	L.1:
+	t.2 = [t.1]
+	t.3 = [t.2+0]
+	t.4 = call t.3(t.1)
+	PrintIntS(t.4)
+	ret
+
+const AVTable
+	:A.run
+
+func A.run(this)
+	PrintIntS(42)
+	ret 99
+
+

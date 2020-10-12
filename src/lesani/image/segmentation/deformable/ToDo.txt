@@ -1,0 +1,17 @@
+
+To know how X10 accesses multiple cores.
+
+To convert parallel masking to X10.
+To take the paper code and convert it to X10
+    or write the code in Java and then take it to X10.
+
+Dirs:
+/home/mohsen/Prog/Shortcuts/4. Research/2.X10/2.Project/Project/LaunchBenchmarks/Launchers
+Images:
+/home/mohsen/Prog/Shortcuts/4. Research/1.CDSC/1. Image Processing/2. Projects/JavaProject/Images/Morphology
+
+
+
+--------------------------------------------
+To read image files by java to format and then by X10 from format.
+To do masking in parallel.

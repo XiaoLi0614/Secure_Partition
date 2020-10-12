@@ -1,0 +1,300 @@
+func Main()
+	t.1 = HeapAllocZ(12)
+	[t.1] = :QSVTable
+	if t.1 goto :L.1
+		Error("Null pointer")
+	L.1:
+	t.2 = [t.1]
+	t.3 = [t.2+8]
+	t.4 = call t.3(t.1 10)
+	PrintIntS(t.4)
+	ret
+
+const QSVTable
+	:QS.Print
+	:QS.Init
+	:QS.Start
+	:QS.Sort
+
+func QS.Start(this sz)
+	if this goto :L.2
+		Error("Null pointer")
+	L.2:
+	t.5 = [this]
+	t.6 = [t.5+4]
+	t.7 = call t.6(this sz)
+	aux01 = t.7
+	if this goto :L.3
+		Error("Null pointer")
+	L.3:
+	t.8 = [this]
+	t.9 = [t.8+0]
+	t.10 = call t.9(this)
+	aux01 = t.10
+	PrintIntS(9999)
+	t.11 = [this+8]
+	t.12 = Sub(t.11 1)
+	aux01 = t.12
+	if this goto :L.4
+		Error("Null pointer")
+	L.4:
+	t.13 = [this]
+	t.14 = [t.13+12]
+	t.15 = call t.14(this 0 aux01)
+	aux01 = t.15
+	if this goto :L.5
+		Error("Null pointer")
+	L.5:
+	t.16 = [this]
+	t.17 = [t.16+0]
+	t.18 = call t.17(this)
+	aux01 = t.18
+	ret 0
+
+func QS.Sort(this left right)
+	t = 0
+	t.19 = LtS(left right)
+	if0 t.19 goto :L.7
+	L.6:
+		t.20 = [this+4]
+		t.21 = [t.20]
+		t.22 = Lt(right t.21)
+		if t.22 goto :L.9
+		Error("Array index out of bounds")
+		L.9:
+		t.23 = MulS(right 4)
+		t.24 = Add(t.20 t.23)
+		t.25 = [t.24+4]
+		v = t.25
+		t.26 = Sub(left 1)
+		i = t.26
+		j = right
+		cont01 = 1
+		L.10:
+		if0 cont01 goto :L.11
+			cont02 = 1
+			L.12:
+			if0 cont02 goto :L.13
+				t.27 = Add(i 1)
+				i = t.27
+				t.28 = [this+4]
+				t.29 = [t.28]
+				t.30 = Lt(i t.29)
+				if t.30 goto :L.14
+				Error("Array index out of bounds")
+				L.14:
+				t.31 = MulS(i 4)
+				t.32 = Add(t.28 t.31)
+				t.33 = [t.32+4]
+				aux03 = t.33
+				t.35 = LtS(aux03 v)
+				if0 t.35 goto :L.19
+				L.18:
+					t.34 = 0
+				goto :L.20
+				L.19:
+					t.34 = 1
+				L.20:
+				if0 t.34 goto :L.16
+				L.15:
+					cont02 = 0
+				goto :L.17
+				L.16:
+					cont02 = 1
+				L.17:
+			goto :L.12
+			L.13:
+			cont02 = 1
+			L.21:
+			if0 cont02 goto :L.22
+				t.36 = Sub(j 1)
+				j = t.36
+				t.37 = [this+4]
+				t.38 = [t.37]
+				t.39 = Lt(j t.38)
+				if t.39 goto :L.23
+				Error("Array index out of bounds")
+				L.23:
+				t.40 = MulS(j 4)
+				t.41 = Add(t.37 t.40)
+				t.42 = [t.41+4]
+				aux03 = t.42
+				t.44 = LtS(v aux03)
+				if0 t.44 goto :L.28
+				L.27:
+					t.43 = 0
+				goto :L.29
+				L.28:
+					t.43 = 1
+				L.29:
+				if0 t.43 goto :L.25
+				L.24:
+					cont02 = 0
+				goto :L.26
+				L.25:
+					cont02 = 1
+				L.26:
+			goto :L.21
+			L.22:
+			t.45 = [this+4]
+			t.46 = [t.45]
+			t.47 = Lt(i t.46)
+			if t.47 goto :L.30
+			Error("Array index out of bounds")
+			L.30:
+			t.48 = MulS(i 4)
+			t.49 = Add(t.45 t.48)
+			t.50 = [t.49+4]
+			t = t.50
+			t.51 = [this+4]
+			t.52 = [this+4]
+			t.53 = [t.52]
+			t.54 = Lt(j t.53)
+			if t.54 goto :L.31
+			Error("Array index out of bounds")
+			L.31:
+			t.55 = MulS(j 4)
+			t.56 = Add(t.52 t.55)
+			t.57 = [t.56+4]
+			t.58 = MulS(i 4)
+			t.59 = Add(t.51 t.58)
+			[t.59+4] = t.57
+			t.60 = [this+4]
+			t.61 = MulS(j 4)
+			t.62 = Add(t.60 t.61)
+			[t.62+4] = t
+			t.63 = Add(i 1)
+			t.64 = LtS(j t.63)
+			if0 t.64 goto :L.33
+			L.32:
+				cont01 = 0
+			goto :L.34
+			L.33:
+				cont01 = 1
+			L.34:
+		goto :L.10
+		L.11:
+		t.65 = [this+4]
+		t.66 = [this+4]
+		t.67 = [t.66]
+		t.68 = Lt(i t.67)
+		if t.68 goto :L.35
+		Error("Array index out of bounds")
+		L.35:
+		t.69 = MulS(i 4)
+		t.70 = Add(t.66 t.69)
+		t.71 = [t.70+4]
+		t.72 = MulS(j 4)
+		t.73 = Add(t.65 t.72)
+		[t.73+4] = t.71
+		t.74 = [this+4]
+		t.75 = [this+4]
+		t.76 = [t.75]
+		t.77 = Lt(right t.76)
+		if t.77 goto :L.36
+		Error("Array index out of bounds")
+		L.36:
+		t.78 = MulS(right 4)
+		t.79 = Add(t.75 t.78)
+		t.80 = [t.79+4]
+		t.81 = MulS(i 4)
+		t.82 = Add(t.74 t.81)
+		[t.82+4] = t.80
+		t.83 = [this+4]
+		t.84 = MulS(right 4)
+		t.85 = Add(t.83 t.84)
+		[t.85+4] = t
+		if this goto :L.37
+			Error("Null pointer")
+		L.37:
+		t.86 = [this]
+		t.87 = [t.86+12]
+		t.88 = Sub(i 1)
+		t.89 = call t.87(this left t.88)
+		nt = t.89
+		if this goto :L.38
+			Error("Null pointer")
+		L.38:
+		t.90 = [this]
+		t.91 = [t.90+12]
+		t.92 = Add(i 1)
+		t.93 = call t.91(this t.92 right)
+		nt = t.93
+	goto :L.8
+	L.7:
+		nt = 0
+	L.8:
+	ret 0
+
+func QS.Print(this)
+	j = 0
+	L.39:
+	t.94 = [this+8]
+	t.95 = LtS(j t.94)
+	if0 t.95 goto :L.40
+		t.96 = [this+4]
+		t.97 = [t.96]
+		t.98 = Lt(j t.97)
+		if t.98 goto :L.41
+		Error("Array index out of bounds")
+		L.41:
+		t.99 = MulS(j 4)
+		t.100 = Add(t.96 t.99)
+		t.101 = [t.100+4]
+		PrintIntS(t.101)
+		t.102 = Add(j 1)
+		j = t.102
+	goto :L.39
+	L.40:
+	ret 0
+
+func QS.Init(this sz)
+	[this+8] = sz
+	t.103 = MulS(sz 4)
+	t.104 = Add(t.103 4)
+	t.105 = HeapAllocZ(t.104)
+	[t.105] = sz
+	[this+4] = t.105
+	t.106 = [this+4]
+	t.107 = MulS(0 4)
+	t.108 = Add(t.106 t.107)
+	[t.108+4] = 20
+	t.109 = [this+4]
+	t.110 = MulS(1 4)
+	t.111 = Add(t.109 t.110)
+	[t.111+4] = 7
+	t.112 = [this+4]
+	t.113 = MulS(2 4)
+	t.114 = Add(t.112 t.113)
+	[t.114+4] = 12
+	t.115 = [this+4]
+	t.116 = MulS(3 4)
+	t.117 = Add(t.115 t.116)
+	[t.117+4] = 18
+	t.118 = [this+4]
+	t.119 = MulS(4 4)
+	t.120 = Add(t.118 t.119)
+	[t.120+4] = 2
+	t.121 = [this+4]
+	t.122 = MulS(5 4)
+	t.123 = Add(t.121 t.122)
+	[t.123+4] = 11
+	t.124 = [this+4]
+	t.125 = MulS(6 4)
+	t.126 = Add(t.124 t.125)
+	[t.126+4] = 6
+	t.127 = [this+4]
+	t.128 = MulS(7 4)
+	t.129 = Add(t.127 t.128)
+	[t.129+4] = 9
+	t.130 = [this+4]
+	t.131 = MulS(8 4)
+	t.132 = Add(t.130 t.131)
+	[t.132+4] = 19
+	t.133 = [this+4]
+	t.134 = MulS(9 4)
+	t.135 = Add(t.133 t.134)
+	[t.135+4] = 5
+	ret 0
+
+

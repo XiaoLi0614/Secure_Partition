@@ -1,0 +1,43 @@
+Folder:
+F:\1. Works\5. UCLA\0. Work\Courses\Compiler Construction\Project\MiniJavaProject\src\jsrc.frontend.minijava\testprograms\cases\
+----------------------------------------------------------------------------------------------------
+BinaryTree
+BinaryTree-error.mjava
+Type Error: Non-integer left operand for "+".
+BinaryTree.mjava
+
+BubbleSort
+BubbleSort-error.mjava
+Type Error: Identifier "sz1" not defined.
+BubbleSort.mjava
+
+Factorial
+Factorial-error.mjava
+Type Error: Non-integer input to "print".
+Factorial.mjava
+
+LinearSearch
+LinearSearch-error.mjava
+Type Error: Indexing non-array type.
+LinearSearch.mjava
+
+LinkedList
+LinkedList-error.mjava
+Type Error: The declared return type and the type of the returned expression are not the same.
+LinkedList.mjava
+
+MoreThan4
+MoreThan4-error.mjava
+Type Error: Number of arguments not equal to number of parameters. 5 arguments passed for 6 parameters.
+MoreThan4.mjava
+
+QuickSort
+QuickSort-error.mjava
+Type Error: Indexing non-array type.
+QuickSort.mjava
+
+TreeVisitor
+TreeVisitor-error.mjava
+Type Error: Identifier "r" not defined.
+TreeVisitor.mjava
+----------------------------------------------------------------------------------------------------

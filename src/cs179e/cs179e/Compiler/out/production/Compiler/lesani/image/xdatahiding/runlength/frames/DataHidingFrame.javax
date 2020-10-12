@@ -1,0 +1,337 @@
+package j.xdatahiding.runlength.frames;
+
+import j.core.image.BinaryImage;
+import j.util.ui.ImageFrame;
+import j.core.image.GrayScaleImage;
+
+import javax.swing.*;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+import j.util.ImageUtil;
+import j.xdatahiding.runlength.core.ImagePanel;
+import j.xdatahiding.runlength.core.RunLengthDataExtracter;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Mohsen Lesani
+ * Date: Jan 22, 2005
+ * Time: 6:22:26 PM
+ */
+
+public class DataHidingFrame extends JFrame
+{
+	private JPanel mainPanel;
+	private JButton loadOriginalImageButton;
+	private JButton loadLogoImageButton;
+	private JButton saveEmbeddingImageButton;
+	private JButton hideDataButton;
+
+	private JScrollPane logoImageScrollPane;
+	private JScrollPane embeddingImageScrollPanel;
+	private JScrollPane originalImageScrollPane;
+
+	private JFileChooser fileChooser = new JFileChooser();
+	private JPanel dataEmbeddingPanel;
+	private JScrollPane embeddingImageScrollPanel2;
+	private JScrollPane hiddenImageScrollPanel;
+	private JButton extractDataButton;
+	private JButton loadEmbeddingImageButton;
+	private JButton saveHiddenImageButton;
+	private JPanel dataExtractingPanel;
+	private JTextField minRunLengthTextField;
+	private JButton viewChangedRunsButton;
+	private JScrollPane logoImageScrollPane2;
+	private JButton loadLogoImageButton2;
+
+	public DataHidingFrame()
+	{
+		super("Data Hiding");
+
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter()
+		{
+			public void windowClosing(WindowEvent e)
+			{
+				System.exit(0);
+			}
+		});
+
+		final ImagePanel originalImagePanel = new ImagePanel();
+		originalImageScrollPane.getViewport().add(originalImagePanel, BorderLayout.CENTER);
+		loadOriginalImageButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				loadImage(originalImagePanel);
+				originalImageScrollPane.getViewport().setPreferredSize(originalImagePanel.getPreferredSize());
+				originalImageScrollPane.revalidate();
+				originalImageScrollPane.repaint();
+				dataEmbeddingPanel.revalidate();
+				dataEmbeddingPanel.repaint();
+			}
+		});
+
+
+		final ImagePanel logoImagePanel = new ImagePanel();
+		logoImageScrollPane.getViewport().add(logoImagePanel);
+		loadLogoImageButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				loadImage(logoImagePanel);
+				logoImageScrollPane.getViewport().setPreferredSize(logoImagePanel.getPreferredSize());
+				//logoImageScrollPane.getViewport().setMaximumSize(logoImagePanel.getPreferredSize());
+				logoImageScrollPane.revalidate();
+				logoImageScrollPane.repaint();
+				dataEmbeddingPanel.revalidate();
+				dataEmbeddingPanel.repaint();
+			}
+		});
+
+		final ImagePanel logoImagePanel2 = new ImagePanel();
+		logoImageScrollPane2.getViewport().add(logoImagePanel2);
+		loadLogoImageButton2.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				loadImage(logoImagePanel2);
+				logoImageScrollPane2.getViewport().setPreferredSize(logoImagePanel2.getPreferredSize());
+				//logoImageScrollPane.getViewport().setMaximumSize(logoImagePanel.getPreferredSize());
+				logoImageScrollPane2.revalidate();
+				logoImageScrollPane2.repaint();
+				dataExtractingPanel.revalidate();
+				dataExtractingPanel.repaint();
+			}
+		});
+
+
+		final ImagePanel embeddingImagePanel = new ImagePanel();
+		embeddingImageScrollPanel.getViewport().add(embeddingImagePanel);
+		saveEmbeddingImageButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				saveImage(embeddingImagePanel);
+			}
+		});
+
+		final ImagePanel embeddingImagePanel2 = new ImagePanel();
+		embeddingImageScrollPanel2.getViewport().add(embeddingImagePanel2);
+		loadEmbeddingImageButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				loadImage(embeddingImagePanel2);
+				embeddingImageScrollPanel2.getViewport().setPreferredSize(embeddingImagePanel2.getPreferredSize());
+				embeddingImagePanel2.revalidate();
+				embeddingImageScrollPanel2.repaint();
+				dataExtractingPanel.revalidate();
+				dataExtractingPanel.repaint();
+			}
+		});
+
+		final ImagePanel hiddenImagePanel = new ImagePanel();
+		hiddenImageScrollPanel.getViewport().add(hiddenImagePanel);
+		saveHiddenImageButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				saveImage(hiddenImagePanel);
+			}
+		});
+
+		hideDataButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				BufferedImage bufferedImage = ImageUtil.runLengthHide(
+											new BinaryImage(originalImagePanel.getImage()),
+											new BinaryImage(logoImagePanel.getImage())).getBufferedImage();
+
+				/*
+				catch (Exception e1)
+				{
+					//e1.printStackTrace();
+					JOptionPane.showMessageDialog(DataHidingFrame.this,
+						"The original image is not big enough to hide the logo image. try a smaller logo.",
+						"Error",
+						JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				*/
+
+				embeddingImagePanel.setImage(bufferedImage);
+				embeddingImagePanel2.setImage(bufferedImage);
+
+				embeddingImageScrollPanel.revalidate();
+				embeddingImageScrollPanel.repaint();
+
+				embeddingImageScrollPanel2.revalidate();
+				embeddingImageScrollPanel2.repaint();
+
+				embeddingImagePanel.revalidate();
+				embeddingImagePanel2.revalidate();
+				mainPanel.revalidate();
+
+				mainPanel.repaint();
+			}
+		});
+
+		extractDataButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				BufferedImage bufferedImage =
+                        ImageUtil.runLengthExtract(new BinaryImage(embeddingImagePanel2.getImage()))
+                                .getBufferedImage();
+				//System.out.println(bufferedImage);
+				/*
+				catch (Exception e1)
+				{
+					//e1.printStackTrace();
+					JOptionPane.showMessageDialog(DataHidingFrame.this,
+						"This image is not a standard embedding image.",
+						"Error",
+						JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				*/
+
+				hiddenImagePanel.setImage(bufferedImage);
+				hiddenImageScrollPanel.revalidate();
+				hiddenImageScrollPanel.repaint();
+				dataExtractingPanel.revalidate();
+				dataExtractingPanel.repaint();
+			}
+		});
+
+		viewChangedRunsButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				RunLengthDataExtracter runLengthDataExtracter =
+						new RunLengthDataExtracter(new BinaryImage(embeddingImagePanel2.getImage()));
+
+				GrayScaleImage image = runLengthDataExtracter.getMarkedImage(new BinaryImage(logoImagePanel2.getImage()));
+				//BufferedImage image = originalImagePanel.getImage();
+
+				ImageFrame imageFrame = new ImageFrame(image);
+				imageFrame.view();
+
+			}
+		});
+
+		setContentPane(mainPanel);
+	}
+
+	private void loadImage(ImagePanel imagePanel)
+	{
+		int returnVal = fileChooser.showOpenDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION)
+		{
+			File file = fileChooser.getSelectedFile();
+			try
+			{
+				BufferedImage bufferedImage = ImageIO.read(file);
+				BinaryImage binaryImage = new BinaryImage(bufferedImage);
+				imagePanel.setImage(binaryImage.getBufferedImage());
+
+				/*
+				for (int y = 0; y < binaryImage.getHeight(); y++)
+				{
+					for (int x = 0; x < binaryImage.getWidth(); x++)
+					{
+						int value = binaryImage.get(x, y);
+						System.out.print(value + " ");
+					}
+					System.out.println("");
+				}
+                */
+                /*
+				if (image.getType() != BufferedImage.TYPE_BYTE_BINARY)
+				{
+					int selection = JOptionPane.showConfirmDialog(
+							this,
+							"The image is not binary. Convert to binary?",
+							"Error",
+							JOptionPane.OK_CANCEL_OPTION
+							);
+					if (selection == JOptionPane.CANCEL_OPTION)
+						return;
+					j.core.image.BinaryImage binaryImage = j.util.ImageUtil.convertToBinary(image);
+					imagePanel.setImage(binaryImage);
+				}
+				else
+				{
+					try
+					{
+						imagePanel.setImage(new j.core.image.BinaryImage(image));
+					}
+					catch (Exception e)
+					{
+					}
+				}
+				*/
+			}
+			catch (IOException e)
+			{
+				JOptionPane.showMessageDialog(this,
+						"The file is not of a recognizable format.",
+						"Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			//e.printStackTrace();
+			}
+			//ImageIcon imageIcon = new ImageIcon(file.getName());
+			//label.setIcon(imageIcon);
+		}
+		else
+			; //do nothing
+	}
+
+	private void saveImage(ImagePanel imagePanel)
+	{
+		int returnVal = fileChooser.showSaveDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION)
+		{
+			File file = fileChooser.getSelectedFile();
+
+			BufferedImage bufferedImage = imagePanel.getImage();
+			try
+			{
+				ImageIO.write(bufferedImage, "JPG", file);
+			}
+			catch (IOException e)
+			{
+				JOptionPane.showMessageDialog(this,
+						"The file could not be saved.",
+						"Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+		}
+		else
+			; //do nothing
+	}
+
+    public static void main(String[] args)
+	{
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		JDialog.setDefaultLookAndFeelDecorated(true);
+
+		JFrame dataHidingFrame = new DataHidingFrame();
+        //dataHidingFrame.pack();
+		dataHidingFrame.setSize(800, 400);
+		dataHidingFrame.setLocation(200, 100);
+		dataHidingFrame.setVisible(true);
+	}
+
+}

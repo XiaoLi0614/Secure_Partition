@@ -1,0 +1,35 @@
+const FacVTable
+	:Fac.ComputeFac
+
+func Fac.ComputeFac(this num)
+	t.1 = LtS(num 1)
+	if0 t.1 goto :L.2
+	L.1:
+		num_aux = 1
+	goto :L.3
+	L.2:
+		if this goto :L.4
+			Error("Null pointer")
+		L.4:
+		t.2 = [this]
+		t.3 = [t.2+0]
+		t.4 = Sub(num 1)
+		t.5 = call t.3(this t.4)
+		t.6 = MulS(num t.5)
+		num_aux = t.6
+	L.3:
+	ret num_aux
+
+
+func Main()
+	t.7 = HeapAllocZ(4)
+	[t.7] = :FacVTable
+	if t.7 goto :L.5
+		Error("Null pointer")
+	L.5:
+	t.8 = [t.7]
+	t.9 = [t.8+0]
+	t.10 = call t.9(t.7 10)
+	PrintIntS(t.10)
+	ret
+

@@ -1,0 +1,112 @@
+Generation of Gaussian Kernel Mask
+By sgsawant
+
+After a lot of searching on the internet I couldn’t find a simple specification to generate a Gaussian kernel mask of a given size and variance.
+
+Hence the following code:
+
+% ———————————————————
+
+% Author: Shashank G. Sawant
+
+% Date: November 04, 2009
+
+% Title: Generation of 2D Gaussian kernel mask
+
+% Details:
+
+% Mask Size: size x size = (2*k+1)x(2*k+1)
+
+% Variance: Sigma
+
+% Notes: The program is inefficient but easy to understand
+
+% Also it accepts only odd numbers as its size parameter
+
+% ———————————————————
+
+specification H=gkm(size,sigma)
+
+H=zeros(size);
+
+k=(size-1)/2;
+
+for i=1:(2*k+1)
+
+for j=1:(2*k+1)
+
+itpss=double(1/(2*pi*sigma^2));
+
+num=double(((i-k-1)^2+(j-k-1)^2));
+
+den=double(2*sigma^2);
+
+H(i,j)=double(itpss*exp(-num/den));
+
+end
+
+end
+
+The results of the same are as follows:
+
+Result 1::
+
+>> ceil(159*gkm(5,1.3))
+
+ans =
+
+2 4 5 4 2
+
+4 9 12 9 4
+
+5 12 15 12 5
+
+4 9 12 9 4
+
+2 4 5 4 2
+
+The above result is quite a standard in the literature explaining Canny Edge Detection
+
+Result 2:
+
+>> format long
+
+>> gkm(7,0.84089642)
+
+ans =
+
+Columns 1 through 4
+
+0.000000667834529 0.000022915625609 0.000191165460524 0.000387705531367
+
+0.000022915625609 0.000786311390357 0.006559523253494 0.013303467276683
+
+0.000191165460524 0.006559523253494 0.054720490941357 0.110979446595403
+
+0.000387705531367 0.013303467276683 0.110979446595403 0.225079076498442
+
+0.000191165460524 0.006559523253494 0.054720490941357 0.110979446595403
+
+0.000022915625609 0.000786311390357 0.006559523253494 0.013303467276683
+
+0.000000667834529 0.000022915625609 0.000191165460524 0.000387705531367
+
+Columns 5 through 7
+
+0.000191165460524 0.000022915625609 0.000000667834529
+
+0.006559523253494 0.000786311390357 0.000022915625609
+
+0.054720490941357 0.006559523253494 0.000191165460524
+
+0.110979446595403 0.013303467276683 0.000387705531367
+
+0.054720490941357 0.006559523253494 0.000191165460524
+
+0.006559523253494 0.000786311390357 0.000022915625609
+
+0.000191165460524 0.000022915625609 0.000000667834529
+
+The above result matches with the following Wikipedia article:
+
+http://en.wikipedia.org/wiki/Gaussian_blur

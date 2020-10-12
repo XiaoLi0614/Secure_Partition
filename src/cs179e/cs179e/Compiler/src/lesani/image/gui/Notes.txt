@@ -1,0 +1,6 @@
+
+For the brain image:
+One iteration of 20 filters
+
+For no 10:
+internal factor = 3 (where external factor = 1)

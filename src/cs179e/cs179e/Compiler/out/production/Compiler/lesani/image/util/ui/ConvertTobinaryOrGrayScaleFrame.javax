@@ -1,0 +1,200 @@
+package j.util.ui;
+
+import j.core.image.BinaryImage;
+import j.core.image.GrayScaleImage;
+import j.core.image.Image;
+
+import javax.swing.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Mohsen Lesani
+ * Date: Jan 24, 2005
+ * Time: 1:02:56 PM
+ */
+public class ConvertTobinaryOrGrayScaleFrame extends JFrame
+{
+
+	private JButton browseButton;
+	private JButton saveAsBinaryButton;
+	private JTextField fileNameTextField;
+	private JTextField saveAsFileNameTextField;
+
+	private JFileChooser fileChooser = new JFileChooser();
+	private File file;
+	private JPanel mainPanel;
+	private JButton saveAsGrayScaleButton;
+
+	public ConvertTobinaryOrGrayScaleFrame()
+	{
+		super("Convert to binary or gray scale image");
+
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter()
+		{
+			public void windowClosing(WindowEvent e)
+			{
+				System.exit(0);
+			}
+		});
+
+		getContentPane().add(mainPanel);
+
+		browseButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				int returnVal = fileChooser.showOpenDialog(ConvertTobinaryOrGrayScaleFrame.this);
+				if (returnVal == JFileChooser.APPROVE_OPTION)
+				{
+					file = fileChooser.getSelectedFile();
+					fileNameTextField.setText(file.getPath());
+					fileNameTextField.setScrollOffset(file.getPath().length());
+					saveAsFileNameTextField.setText(file.getParent() + "\\Converted" + file.getName());
+					saveAsFileNameTextField.setScrollOffset(file.getParent().length() + file.getName().length() + 7);
+				}
+			}
+		});
+
+		saveAsBinaryButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					if (fileNameTextField.getText().equals("") || saveAsFileNameTextField.getText().equals(""))
+						return;
+					BufferedImage image = loadImage();
+					BinaryImage binaryImage = new BinaryImage(image);
+					saveImage(binaryImage);
+				}
+				catch (IOException e1)
+				{
+					//return;
+				}
+			}
+		});
+
+		saveAsGrayScaleButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					if (fileNameTextField.getText().equals("") || saveAsFileNameTextField.getText().equals(""))
+						return;
+					BufferedImage image = loadImage();
+					GrayScaleImage grayScaleImage = new GrayScaleImage(image);
+					saveImage(grayScaleImage);
+				}
+				catch (IOException e1)
+				{
+					//return;
+				}
+			}
+
+		});
+
+	}
+	private BufferedImage loadImage() throws IOException
+	{
+
+		try
+		{
+			BufferedImage bufferedImage = ImageIO.read(file);
+			return bufferedImage;
+		}
+		catch (IOException e)
+		{
+			JOptionPane.showMessageDialog(ConvertTobinaryOrGrayScaleFrame.this,
+					"Invalid path or file name.",
+					"Error",
+					JOptionPane.WARNING_MESSAGE);
+			throw e;
+		}
+	}
+
+	private void saveImage(Image image)
+	{
+
+		try
+		{
+			File newFile = new File(saveAsFileNameTextField.getText());
+			ImageIO.write(image.getBufferedImage(), "JPG", newFile);
+		}
+		catch (IOException ioe)
+		{
+			JOptionPane.showMessageDialog(ConvertTobinaryOrGrayScaleFrame.this,
+					"Invalid path or file name.",
+					"Error",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+
+		JOptionPane.showMessageDialog(ConvertTobinaryOrGrayScaleFrame.this,
+					"File saved.",
+					"Success",
+					JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	public static void main(String[] args)
+	{
+		/*
+			javax.swing.plaf.metal.MetalLookAndFeel
+			com.sun.j.swing.plaf.motif.MotifLookAndFeel
+			com.sun.j.swing.plaf.windows.WindowsLookAndFeel
+			com.sun.j.swing.plaf.windows.WindowsClassicLookAndFeel
+		*/
+
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		JDialog.setDefaultLookAndFeelDecorated(true);
+
+		try
+		{
+			UIManager.setLookAndFeel("com.sun.j.swing.plaf.windows.WindowsLookAndFeel");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		JFrame convertToBinaryImageJFrame = new ConvertTobinaryOrGrayScaleFrame();
+
+		convertToBinaryImageJFrame.setSize(500, 300);
+		convertToBinaryImageJFrame.setLocation(250, 150);
+		convertToBinaryImageJFrame.setVisible(true);
+
+
+
+		/*
+		UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
+
+		for (UIManager.LookAndFeelInfo info : infos)
+		{
+			try
+			{
+				String className = info.getClassName();
+				System.out.println(className);
+				UIManager.setLookAndFeel(className);
+
+
+				JOptionPane.showMessageDialog(null, className);
+			}
+			catch (Exception e)
+			{
+				JOptionPane.showMessageDialog(null, "Error in look and feel setting.");
+			}
+		}
+        */
+
+	}
+
+}

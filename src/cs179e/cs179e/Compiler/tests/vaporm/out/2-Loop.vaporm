@@ -1,0 +1,16 @@
+func Main [in 0, out 0, local 0]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	$t0 = 1
+	goto :end
+begin:
+	PrintIntS($t0)
+	$t0 = MulS($t0 2)
+end:
+	$t1 = LtS($t0 100)
+	if $t1 goto :begin
+	ret
+
+

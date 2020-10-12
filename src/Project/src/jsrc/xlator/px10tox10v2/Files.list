@@ -1,0 +1,47 @@
+// Plasma benchmarks
+/media/MOHSENHD/1.Works/3.Research/0.Research/1.CDSC/2.Projects/0.Project/Orig/1.X10Orig/BenchmarksSource/benchmarks
+/media/MOHSENHD/1.Works/3.Research/0.Research/1.CDSC/2.Projects/0.Project/0.Project/src/x10src/translated/plasmax10/machine
+// -------------------------------------------------
+crypt/qplasma/IDEATestMain.x10
+crypt
+// -------------------------------------------------
+fragstream/qplasma/NewFragmentedStream.x10
+fragstream
+// -------------------------------------------------
+linpack/qplasma/LinpackMain.x10
+linpack
+// -------------------------------------------------
+mapreduce/qplasma/MapReduce.x10
+mapreduce
+// -------------------------------------------------
+mg/qplasma/MGMain.x10
+mg
+// -------------------------------------------------
+moldyn/qplasma/mdMain.x10
+moldyn
+// -------------------------------------------------
+montecarlo/qplasma/CallAppDemoMain.x10
+montecarlo
+// -------------------------------------------------
+plasma/qplasma/LinearESOpenPIC2DMain.x10
+plasma
+// -------------------------------------------------
+raytracer/qplasma/RayTracerMain.x10
+raytracer
+// -------------------------------------------------
+series/qplasma/SeriesMain.x10
+series
+// -------------------------------------------------
+//sor/qplasma/SORMain.x10
+//sor
+// -------------------------------------------------
+sparsemm/qplasma/SparseMatmultMain.x10
+sparsemm
+// -------------------------------------------------
+stream/qplasma/NewStream.x10
+stream
+// -------------------------------------------------
+//XtraPlasma/qplasma/LinearESOpenPIC2DMain.x10
+//XtraPlasma
+// -------------------------------------------------
+

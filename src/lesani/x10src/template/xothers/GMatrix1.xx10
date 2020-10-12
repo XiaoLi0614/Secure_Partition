@@ -1,0 +1,153 @@
+
+class GMatrix(n: Int, m: Int) {
+
+    static type GMatrix(n:Int, m:Int) = GMatrix{self.n==n && self.m==m};
+    static type Matrix(n:Int, m:Int) = GMatrix{self.n==n && n!=1 && self.m==m && m!=1};
+    static type Vector(n:Int) = GMatrix{(self.n==1 && self.m==n) || (self.n==n && self.m==1)};
+    static type HVector(n:Int) = GMatrix{self.n==1 && self.m==n};
+    static type VVector(n:Int) = GMatrix{self.n==n && self.m==1};
+
+    private val array: Array[Int](2);
+    private var num: Int;
+
+//    public def this(array: Array[Int](2)) {
+//        property(array.region.max(0)-array.region.min(0), array.region.max(1)-array.region.min(1));
+//        this.array = array;
+//    }
+
+    public def this(array: Array[Int](1)) {
+        property(1, array.region.max(0)-array.region.min(0));
+        val length = array.region.max(0)-array.region.min(0);
+        val r = (0..0)*(0..length);
+        this.array = new Array[Int](r, (
+                (p:Point(r.rank))=>
+                array(p(1))
+            )
+        );
+    }
+
+    public def this(n: Int, m: Int){n!=1 && m!=1}: Matrix(n, m) {
+        property(n, m);
+        val region = (0..n) * (0..m);
+        array = new Array[Int](region, 0);    
+    }
+
+    public def this(n: Int): HVector(n) {
+        property(1, n);
+        val region = (0..1) * (0..n);
+        array = new Array[Int](region, 0);
+    }
+
+    public def apply(i: int, j: Int): Int {
+        return array(i, j);
+    }
+
+    public def update(i: int, j: Int, v: Int): Void {
+        array(i, j) = v;
+    }
+
+    operator this + (y: GMatrix(this.n, this.m)): GMatrix(this.n, this.m) {
+        return null;
+    }
+
+    operator this * (y: GMatrix){this.m == y.n}: GMatrix(this.n, y.m) {
+        return null;
+    }
+
+
+    static def max(x: GMatrix): GMatrix {
+        
+        return null;
+        // What do we do to return a scalar value?
+        // We set array to null and use the num field.  
+    }
+
+    static def mmax(x: GMatrix){x.n!=1 && x.m!=1}: HVector(x.m) {
+        return null;
+    }
+
+    static def vmax(x: GMatrix){x.n==1 || x.m==1}: Int {
+        if (x.n == 1) {
+//            val xp = x as GMatrix{x.n==1};
+            val xp = x as HVector(x.n);
+            return hvmax(xp);
+        } else {
+            val xp = x as VVector(x.m);
+            return vvmax(xp);
+        }
+    }
+
+    static def hvmax(x: GMatrix){x.n==1}: Int {
+        return 1;
+    }
+
+    static def vvmax(x: GMatrix){x.m==1}: Int {
+        return 1;
+    }
+
+
+//    static def newHVector(array: Array[Int](1)) : HVector(array.region.max(0) - array.region.min(0)) {
+    static def newHVector(array: Array[Int](1)) : GMatrix(1, array.region.max(0) - array.region.min(0)) {
+        return new GMatrix(array);
+//        return null;
+    }
+
+    // I wonder why we cannot overload for all mmax, vmax
+    // I wonder why we cannot have "def mmax(x: Matrix(np, mp)): HVector(mp)".
+
+	public static def main(args: Array[String]): Void {
+//        newHVector([1, 2, 3]);
+        var a1 <: HVector(3) = newHVector([1, 2, 3]);
+
+//        Console.OUT.println(a1(0, 1));
+
+    }
+
+
+
+}
+
+class Experiment {
+    static operator (x: GMatrix) / (y: GMatrix): GMatrix {
+        return null;
+    }
+    static operator (x: Int) / (y: GMatrix): GMatrix {
+        return null;
+    }
+}
+
+
+    // This does not work can not override this way.
+//    def max(){this.n!=1 && this.m!=1}: HVector(m) {
+//        return null;
+//    }
+//
+//    def max(){this.n!=1 || this.m!=1}: Int {
+//        return 1;
+//    }
+
+
+//    static def max(x: GMatrix){x.n!=1 && x.m!=1}: HVector(x.m) {
+//        return null;
+//    }
+//
+//    static def max(x: GMatrix){x.n==1 || x.m==1}: Int {
+//        return 1;
+//    }
+
+
+//    static def max(x: Matrix(n, m)): HVector(x.m) {
+//        return null;
+//    }
+//
+//    static def max(x: Vector(n)): Int {
+//        return 1;
+//    }
+
+//    static def mmax(x: Matrix(np, mp)): HVector(mp) {
+//        return null;
+//    }
+//
+//    static def vmax(x: Vector(np)): Int {
+//        return 1;
+//    }

@@ -1,0 +1,20 @@
+<component name="libraryTable">
+  <library name="cs179e">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/src/cs179e" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$PROJECT_DIR$/src/cs179e/cs179e/Compiler/out/old/lesani/math/Jama/doc" />
+      <root url="file://$PROJECT_DIR$/src/cs179e/cs179e/Compiler/out/production/Compiler/lesani/math/Jama/doc" />
+      <root url="file://$PROJECT_DIR$/src/cs179e/cs179e/Compiler/src/lesani/math/Jama/doc" />
+      <root url="file://$PROJECT_DIR$/src/cs179e/cs179e/LesaniLib/production/LesaniLib/lesani/math/Jama/doc" />
+      <root url="file://$PROJECT_DIR$/src/cs179e/cs179e/LesaniLib/src/lesani/math/Jama/doc" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/src/cs179e/cs179e/Compiler/src" />
+      <root url="file://$PROJECT_DIR$/src/cs179e/cs179e/Compiler/tests/typechecking/src" />
+      <root url="file://$PROJECT_DIR$/src/cs179e/cs179e/Compiler/tests/vapor/src" />
+      <root url="file://$PROJECT_DIR$/src/cs179e/cs179e/LesaniLib/src" />
+    </SOURCES>
+  </library>
+</component>

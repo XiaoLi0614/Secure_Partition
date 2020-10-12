@@ -1,0 +1,204 @@
+const BBSVTable
+	:BBS.Print
+	:BBS.Init
+	:BBS.Start
+	:BBS.Sort
+
+func BBS.Start(this sz)
+	if this goto :L.1
+		Error("Null pointer")
+	L.1:
+	t.1 = [this]
+	t.2 = [t.1+4]
+	t.3 = call t.2(this sz)
+	aux01 = t.3
+	if this goto :L.2
+		Error("Null pointer")
+	L.2:
+	t.4 = [this]
+	t.5 = [t.4+0]
+	t.6 = call t.5(this)
+	aux01 = t.6
+	PrintIntS(99999)
+	if this goto :L.3
+		Error("Null pointer")
+	L.3:
+	t.7 = [this]
+	t.8 = [t.7+12]
+	t.9 = call t.8(this)
+	aux01 = t.9
+	if this goto :L.4
+		Error("Null pointer")
+	L.4:
+	t.10 = [this]
+	t.11 = [t.10+0]
+	t.12 = call t.11(this)
+	aux01 = t.12
+	ret 0
+
+func BBS.Sort(this)
+	t.13 = [this+8]
+	t.14 = Sub(t.13 1)
+	i = t.14
+	t.15 = Sub(0 1)
+	aux02 = t.15
+	L.5:
+	t.16 = LtS(aux02 i)
+	if0 t.16 goto :L.6
+		j = 1
+		L.7:
+		t.17 = Add(i 1)
+		t.18 = LtS(j t.17)
+		if0 t.18 goto :L.8
+			t.19 = Sub(j 1)
+			aux07 = t.19
+			t.20 = [this+4]
+			t.21 = [t.20]
+			t.22 = Lt(aux07 t.21)
+			if t.22 goto :L.9
+			Error("Array index out of bounds")
+			L.9:
+			t.23 = MulS(aux07 4)
+			t.24 = Add(t.20 t.23)
+			t.25 = [t.24+4]
+			aux04 = t.25
+			t.26 = [this+4]
+			t.27 = [t.26]
+			t.28 = Lt(j t.27)
+			if t.28 goto :L.10
+			Error("Array index out of bounds")
+			L.10:
+			t.29 = MulS(j 4)
+			t.30 = Add(t.26 t.29)
+			t.31 = [t.30+4]
+			aux05 = t.31
+			t.32 = LtS(aux05 aux04)
+			if0 t.32 goto :L.12
+			L.11:
+				t.33 = Sub(j 1)
+				aux06 = t.33
+				t.34 = [this+4]
+				t.35 = [t.34]
+				t.36 = Lt(aux06 t.35)
+				if t.36 goto :L.14
+				Error("Array index out of bounds")
+				L.14:
+				t.37 = MulS(aux06 4)
+				t.38 = Add(t.34 t.37)
+				t.39 = [t.38+4]
+				t = t.39
+				t.40 = [this+4]
+				t.41 = [this+4]
+				t.42 = [t.41]
+				t.43 = Lt(j t.42)
+				if t.43 goto :L.15
+				Error("Array index out of bounds")
+				L.15:
+				t.44 = MulS(j 4)
+				t.45 = Add(t.41 t.44)
+				t.46 = [t.45+4]
+				t.47 = MulS(aux06 4)
+				t.48 = Add(t.40 t.47)
+				[t.48+4] = t.46
+				t.49 = [this+4]
+				t.50 = MulS(j 4)
+				t.51 = Add(t.49 t.50)
+				[t.51+4] = t
+			goto :L.13
+			L.12:
+				nt = 0
+			L.13:
+			t.52 = Add(j 1)
+			j = t.52
+		goto :L.7
+		L.8:
+		t.53 = Sub(i 1)
+		i = t.53
+	goto :L.5
+	L.6:
+	ret 0
+
+func BBS.Print(this)
+	j = 0
+	L.16:
+	t.54 = [this+8]
+	t.55 = LtS(j t.54)
+	if0 t.55 goto :L.17
+		t.56 = [this+4]
+		t.57 = [t.56]
+		t.58 = Lt(j t.57)
+		if t.58 goto :L.18
+		Error("Array index out of bounds")
+		L.18:
+		t.59 = MulS(j 4)
+		t.60 = Add(t.56 t.59)
+		t.61 = [t.60+4]
+		PrintIntS(t.61)
+		t.62 = Add(j 1)
+		j = t.62
+	goto :L.16
+	L.17:
+	ret 0
+
+func BBS.Init(this sz)
+	[this+8] = sz
+	t.63 = MulS(sz 4)
+	t.64 = Add(t.63 4)
+	t.65 = HeapAllocZ(t.64)
+	[t.65] = sz
+	[this+4] = t.65
+	t.66 = [this+4]
+	t.67 = MulS(0 4)
+	t.68 = Add(t.66 t.67)
+	[t.68+4] = 20
+	t.69 = [this+4]
+	t.70 = MulS(1 4)
+	t.71 = Add(t.69 t.70)
+	[t.71+4] = 7
+	t.72 = [this+4]
+	t.73 = MulS(2 4)
+	t.74 = Add(t.72 t.73)
+	[t.74+4] = 12
+	t.75 = [this+4]
+	t.76 = MulS(3 4)
+	t.77 = Add(t.75 t.76)
+	[t.77+4] = 18
+	t.78 = [this+4]
+	t.79 = MulS(4 4)
+	t.80 = Add(t.78 t.79)
+	[t.80+4] = 2
+	t.81 = [this+4]
+	t.82 = MulS(5 4)
+	t.83 = Add(t.81 t.82)
+	[t.83+4] = 11
+	t.84 = [this+4]
+	t.85 = MulS(6 4)
+	t.86 = Add(t.84 t.85)
+	[t.86+4] = 6
+	t.87 = [this+4]
+	t.88 = MulS(7 4)
+	t.89 = Add(t.87 t.88)
+	[t.89+4] = 9
+	t.90 = [this+4]
+	t.91 = MulS(8 4)
+	t.92 = Add(t.90 t.91)
+	[t.92+4] = 19
+	t.93 = [this+4]
+	t.94 = MulS(9 4)
+	t.95 = Add(t.93 t.94)
+	[t.95+4] = 5
+	ret 0
+
+
+func Main()
+	t.96 = HeapAllocZ(12)
+	[t.96] = :BBSVTable
+	if t.96 goto :L.19
+		Error("Null pointer")
+	L.19:
+	t.97 = [t.96]
+	t.98 = [t.97+8]
+	t.99 = call t.98(t.96 10)
+	PrintIntS(t.99)
+	ret
+

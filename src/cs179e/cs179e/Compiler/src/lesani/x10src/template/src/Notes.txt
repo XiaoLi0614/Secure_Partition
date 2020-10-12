@@ -1,0 +1,47 @@
+-------------------------------------------------------
+The files without prefix are copied to the result files with
+the same names.
+
+SDT files substitute combinations of Int, Double, Boolean.
+
+NDT files substitute combinations of Int and Double.
+
+NDT3 files substitute combinations of Int and Double to their result.
+
+Rel files substitute REL with relational operations and their
+corresponding method names. The result types are Boolean or
+BooleanMatrix.
+
+Logic files substitute LOGIC with logical operations and NAME
+with their corresponding method names. The numeric types are
+converted to boolean type by (_ != 0) ? true : false. And then
+the logical operation is applied to the operands.
+
+Math files substitute MATH with math operations and NAME with
+their corresponding method names. The boolean type is converted
+to integer type by (_) ? 1 : 0. An then the math operation
+is applied.
+
+We extract the methods for two matrices out of Math and put
+them in MathMM to be able to benefit from Math for * and /
+too. They have specific procedure for two matrices.
+
+MathFun files are similar to Math files with the difference
+that instead of the infix syntax, they have a method call
+syntax. They substitute FUN with math method call and NAME
+with their corresponding method names.
+
+
+For operations that should be applied to cross of
+BooleanAndNumeric X BooleanAndNumeric types, the
+part for Numeric X Numberic goes to NDT3 files, the
+part for Numeric X Boolean and Boolean X Numberic goes
+to NDT files and the part for Boolean X Boolean goes
+to the files without prefix.
+
+
+
+-------------------------------------------------------
+The current implementation of A/B where A and B are matrices
+works only when B is a square matrix.
+-------------------------------------------------------

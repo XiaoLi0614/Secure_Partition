@@ -1,0 +1,103 @@
+package j.gui.frames;
+
+import j.core.image.GrayScaleImage;
+import j.util.ui.ImageBrowsePanel;
+import j.util.ImageUtil;
+import j.util.ui.GrayScaleMaskPanel;
+import j.util.exception.NotAnImageFileException;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+
+import lesani.gui.frame.MFrame;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Mohsen Lesani
+ * Date: Apr 15, 2005
+ * Time: 4:36:02 PM
+ */
+public class GrayScaleDilationAndErosionFrame extends MFrame
+{
+	private JPanel mainPanel;
+	private JPanel imageBrowseBackPanel;
+	private ImageBrowsePanel imageBrowsePanel;
+	private JPanel backMaskPanel;
+	private GrayScaleMaskPanel maskPanel;
+	private JButton dilateButton;
+	private JButton erodeButton;
+
+	public GrayScaleDilationAndErosionFrame()
+	{
+		super("Dilation and Erosion", "Dilation and Erosion for Gray Scale Images");
+		setMainPanel(mainPanel);
+		setExitOnClose();
+
+		imageBrowsePanel = new ImageBrowsePanel("Select Original Image");
+		imageBrowseBackPanel.add(imageBrowsePanel, BorderLayout.CENTER);
+        maskPanel = new GrayScaleMaskPanel(5, "Define Probe");
+		backMaskPanel.add(maskPanel, BorderLayout.CENTER);
+
+		dilateButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					BufferedImage image = imageBrowsePanel.getImage();
+					GrayScaleImage grayScaleImage = new GrayScaleImage(image);
+
+					//ImageUtil.showImageFrame("Test", grayScaleImage);
+
+					GrayScaleImage dilatedImage = ImageUtil.grayScaleDilate(grayScaleImage, maskPanel.getMask());
+					ImageUtil.showImageFrame("Dilated Image", dilatedImage.getBufferedImage());
+				}
+				catch (NotAnImageFileException e1)
+				{
+					JOptionPane.showMessageDialog(GrayScaleDilationAndErosionFrame.this,
+							"The file is not of a recognizable format.",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+		});
+
+		erodeButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					BufferedImage image = imageBrowsePanel.getImage();
+					GrayScaleImage grayScaleImage = new GrayScaleImage(image);
+
+					GrayScaleImage erodedImage = ImageUtil.grayScaleErode(grayScaleImage, maskPanel.getMask());
+					ImageUtil.showImageFrame("Eroded Image", erodedImage.getBufferedImage());
+				}
+				catch (NotAnImageFileException e1)
+				{
+					JOptionPane.showMessageDialog(GrayScaleDilationAndErosionFrame.this,
+							"The file is not of a recognizable format.",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+		});
+	}
+
+
+	public static void main(String[] args)
+	{
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		JDialog.setDefaultLookAndFeelDecorated(true);
+
+		MFrame grayScaleDilationAndErosionFrame = new GrayScaleDilationAndErosionFrame();
+		grayScaleDilationAndErosionFrame.view();
+	}
+
+}

@@ -1,0 +1,212 @@
+const empty_LS
+
+func Main [in 0, out 0, local 1]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	$t0 = HeapAllocZ(8)
+	if $t0 goto :null1
+	Error("null pointer")
+null1:
+	local[0] = $t1
+	$a0 = $t0
+	$a1 = 10
+	call :LS.Start
+	$t1 = local[0]
+	$t1 = $v0
+	PrintIntS($t1)
+	ret
+
+
+func LS.Start [in 0, out 0, local 2]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	local[0] = $t0
+	$a0 = $t0
+	$a1 = $t1
+	call :LS.Init
+	$t0 = local[0]
+	$t2 = $v0
+	local[0] = $t0
+	$a0 = $t0
+	call :LS.Print
+	$t0 = local[0]
+	$t2 = $v0
+	PrintIntS(9999)
+	local[0] = $t2
+	local[1] = $t0
+	$a0 = $t0
+	$a1 = 8
+	call :LS.Search
+	$t2 = local[0]
+	$t0 = local[1]
+	$t2 = $v0
+	PrintIntS($t2)
+	local[0] = $t2
+	local[1] = $t0
+	$a0 = $t0
+	$a1 = 12
+	call :LS.Search
+	$t2 = local[0]
+	$t0 = local[1]
+	$t2 = $v0
+	PrintIntS($t2)
+	local[0] = $t2
+	local[1] = $t0
+	$a0 = $t0
+	$a1 = 17
+	call :LS.Search
+	$t2 = local[0]
+	$t0 = local[1]
+	$t2 = $v0
+	PrintIntS($t2)
+	local[0] = $t2
+	$a0 = $t0
+	$a1 = 50
+	call :LS.Search
+	$t2 = local[0]
+	$t2 = $v0
+	PrintIntS($t2)
+	$v0 = 55
+	ret
+
+
+func LS.Print [in 0, out 0, local 0]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	$t1 = 1
+while1_top:
+	$t2 = [$t0+4]
+	$t3 = LtS($t1 $t2)
+	if0 $t3 goto :while1_end
+	$t3 = [$t0]
+	if $t3 goto :null2
+	Error("null pointer")
+null2:
+	$t2 = [$t3]
+	$t2 = Lt($t1 $t2)
+	if $t2 goto :bounds1
+	Error("array index out of bounds")
+bounds1:
+	$t2 = MulS($t1 4)
+	$t2 = Add($t2 $t3)
+	$t3 = [$t2+4]
+	PrintIntS($t3)
+	$t1 = Add($t1 1)
+	goto :while1_top
+while1_end:
+	$v0 = 0
+	ret
+
+
+func LS.Search [in 0, out 0, local 1]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	local[0] = $s0
+	$t2 = 1
+	$t3 = 0
+	$t4 = 0
+while2_top:
+	$t5 = [$t0+4]
+	$t6 = LtS($t2 $t5)
+	if0 $t6 goto :while2_end
+	$t6 = [$t0]
+	if $t6 goto :null3
+	Error("null pointer")
+null3:
+	$t5 = [$t6]
+	$t5 = Lt($t2 $t5)
+	if $t5 goto :bounds2
+	Error("array index out of bounds")
+bounds2:
+	$t5 = MulS($t2 4)
+	$t5 = Add($t5 $t6)
+	$t6 = [$t5+4]
+	$t5 = Add($t1 1)
+	$t7 = LtS($t6 $t1)
+	if0 $t7 goto :if1_else
+	$t7 = 0
+	goto :if1_end
+if1_else:
+	$s0 = LtS($t6 $t5)
+	if $s0 goto :if2_else
+	$t7 = 0
+	goto :if2_end
+if2_else:
+	$t3 = 1
+	$t4 = 1
+	$t2 = [$t0+4]
+if2_end:
+if1_end:
+	$t2 = Add($t2 1)
+	goto :while2_top
+while2_end:
+	$v0 = $t4
+	local[0] = $s0
+	ret
+
+
+func LS.Init [in 0, out 0, local 2]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	[$t0+4] = $t1
+	local[0] = $t2
+	local[1] = $t0
+	$a0 = $t1
+	call :AllocArray
+	$t2 = local[0]
+	$t0 = local[1]
+	$t2 = $v0
+	[$t0] = $t2
+	$t2 = 1
+	$t1 = [$t0+4]
+	$t3 = Add($t1 1)
+while3_top:
+	$t1 = [$t0+4]
+	$t4 = LtS($t2 $t1)
+	if0 $t4 goto :while3_end
+	$t4 = MulS(2 $t2)
+	$t1 = Sub($t3 3)
+	$t5 = [$t0]
+	if $t5 goto :null4
+	Error("null pointer")
+null4:
+	$t6 = [$t5]
+	$t6 = Lt($t2 $t6)
+	if $t6 goto :bounds3
+	Error("array index out of bounds")
+bounds3:
+	$t6 = MulS($t2 4)
+	$t6 = Add($t6 $t5)
+	$t5 = Add($t4 $t1)
+	[$t6+4] = $t5
+	$t2 = Add($t2 1)
+	$t3 = Sub($t3 1)
+	goto :while3_top
+while3_end:
+	$v0 = 0
+	ret
+
+
+func AllocArray [in 0, out 0, local 0]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	$t1 = MulS($t0 4)
+	$t1 = Add($t1 4)
+	$t2 = HeapAllocZ($t1)
+	[$t2] = $t0
+	$v0 = $t2
+	ret
+
+

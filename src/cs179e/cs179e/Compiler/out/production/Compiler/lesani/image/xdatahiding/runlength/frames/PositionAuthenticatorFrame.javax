@@ -1,0 +1,93 @@
+package j.xdatahiding.runlength.frames;
+
+import j.core.image.BinaryImage;
+import j.util.ui.ImageBrowsePanel;
+import j.util.ui.ImageFrame;
+import lesani.gui.frame.MFrame;
+
+import javax.swing.*;
+
+import j.util.ImageUtil;
+import j.util.exception.NotAnImageFileException;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import j.xdatahiding.runlength.core.PositionRunLengthAuthenticator;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Mohsen Lesani
+ * Date: Jun 11, 2005
+ * Time: 2:50:30 PM
+ */
+
+public class PositionAuthenticatorFrame extends MFrame
+{
+	private JPanel mainPanel;
+	private JPanel originalImageBrowsePanelBackPanel;
+	private JPanel logoImageBrowsePanelBackPanel;
+	private JButton authenticateButton;
+
+
+	public PositionAuthenticatorFrame()
+	{
+		super("Authentication");
+		setExitOnClose();
+		setMainPanel(mainPanel);
+		final ImageBrowsePanel originalImageBrowsePanel = new ImageBrowsePanel("Select Original Image");
+		originalImageBrowsePanelBackPanel.add(originalImageBrowsePanel);
+
+		final ImageBrowsePanel logoImageBrowsePanel = new ImageBrowsePanel("Select Logo Image");
+		logoImageBrowsePanelBackPanel.add(logoImageBrowsePanel);
+
+		authenticateButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					BinaryImage originalImage = new BinaryImage(originalImageBrowsePanel.getImage());
+					BinaryImage logoImage = new BinaryImage(logoImageBrowsePanel.getImage());
+
+					PositionRunLengthAuthenticator runLengthAuthenticator = new PositionRunLengthAuthenticator(originalImage, logoImage,
+							PositionDataHiderFrame.WINDOW_WIDTH, PositionDataHiderFrame.WINDOW_HEIGHT);
+
+					BinaryImage markedImage = runLengthAuthenticator.getMarkedImage();
+					ImageFrame imageFrame = ImageUtil.showImageFrame("Marked Image", markedImage);
+
+					if (runLengthAuthenticator.isAuthenticated())
+						JOptionPane.showMessageDialog(imageFrame,
+							"The Image is authenticated.",
+							"Error",
+							JOptionPane.WARNING_MESSAGE);
+					else
+						JOptionPane.showMessageDialog(imageFrame,
+							"The Image is not authenticated.",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+
+				}
+				catch (NotAnImageFileException e1)
+				{
+					JOptionPane.showMessageDialog(PositionAuthenticatorFrame.this,
+							"The file is not of a recognizable format.",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+			}
+		});
+	}
+
+	public static void main(String[] args)
+	{
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		JDialog.setDefaultLookAndFeelDecorated(true);
+
+		MFrame frame = new PositionAuthenticatorFrame();
+		frame.view();
+	}
+
+}

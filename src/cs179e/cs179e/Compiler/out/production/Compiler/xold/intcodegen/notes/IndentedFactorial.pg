@@ -1,0 +1,88 @@
+MAIN
+	PRINT
+		CALL
+			BEGIN  // Call on TEMP 22 below.
+				MOVE
+					TEMP 23
+					BEGIN  // new Fac()
+						MOVE  // For class descriptor
+							TEMP 24
+							HALLOCATE
+								4
+						MOVE  // For object space
+							TEMP 25
+							HALLOCATE
+								4
+						HSTORE
+							TEMP 24
+							0
+							Fac_ComputeFac
+						HSTORE
+							TEMP 25
+							0
+							TEMP 24 
+						RETURN
+							TEMP 25 
+					END
+				HLOAD
+					TEMP 21
+					TEMP 23
+					0
+				HLOAD
+					TEMP 22
+					TEMP 21
+					0 
+				RETURN
+					TEMP 22
+			END
+		(
+			TEMP 23  // this, 1st param
+			10  // 10, 2nd param
+		)
+END
+
+Fac_ComputeFac  [ 2 ] 
+	BEGIN 
+		CJUMP
+			LT
+				TEMP 1
+				1
+			L2 
+		MOVE
+			TEMP 20
+			1 
+		JUMP L3 
+L2		MOVE
+			TEMP 20
+			TIMES
+				TEMP 1
+				CALL
+					BEGIN
+						MOVE
+							TEMP 29
+							TEMP 0  // this
+						HLOAD  // Loading class descriptor.
+							TEMP 27
+							TEMP 29
+							0
+						HLOAD  // Reading the first method in it.
+							TEMP 28
+							TEMP 27
+							0
+						RETURN
+							TEMP 28
+					END
+				(
+					TEMP 29
+					MINUS
+						TEMP 1
+						1
+				)
+L3		NOOP 
+		RETURN
+			TEMP 20
+END
+------------------------------------------------------------------------------
+Notes
+"TEMP 23" is this.
+------------------------------------------------------------------------------

@@ -1,0 +1,66 @@
+package j.gui.frames;
+
+import j.util.ui.ImageBrowsePanel;
+import j.util.ImageUtil;
+import j.util.exception.NotAnImageFileException;
+
+import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import j.core.image.BinaryImage;
+import lesani.gui.frame.MFrame;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Mohsen Lesani
+ * Date: Apr 15, 2005
+ * Time: 4:06:47 PM
+ */
+public class BorderDetectionFrame extends MFrame
+{
+	private JPanel imageBrowsePanelBackPanel;
+	private JPanel mainPanel;
+	private JButton detectBorderButton;
+
+	public BorderDetectionFrame()
+	{
+		super("Border Detection");
+		setExitOnClose();
+		setMainPanel(mainPanel);
+		final ImageBrowsePanel imageBrowsePanel = new ImageBrowsePanel("Select Original Image");
+		imageBrowsePanelBackPanel.add(imageBrowsePanel);
+
+		detectBorderButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					BinaryImage binaryImage = new BinaryImage(imageBrowsePanel.getImage());
+					BinaryImage borderImage = ImageUtil.detectBorder(binaryImage, 3);
+					ImageUtil.showImageFrame("Border Image", borderImage.getBufferedImage());
+				}
+				catch (NotAnImageFileException e1)
+				{
+					JOptionPane.showMessageDialog(BorderDetectionFrame.this,
+							"The file is not of a recognizable format.",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+			}
+		});
+	}
+
+	public static void main(String[] args)
+	{
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		JDialog.setDefaultLookAndFeelDecorated(true);
+
+		MFrame borderDetectionFrame = new BorderDetectionFrame();
+		borderDetectionFrame.view();
+	}
+
+}

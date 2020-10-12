@@ -1,0 +1,194 @@
+const empty_Main
+
+func Main [in 0, out 0, local 0]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	PrintIntS(1)
+	ret
+
+
+func Main.run1 [in 0, out 0, local 0]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	if0 $t1 goto :ss1_else
+	if0 $t2 goto :ss1_else
+	$t2 = 1
+	goto :ss1_end
+ss1_else:
+	$t2 = $t3
+ss1_end:
+	$v0 = $t2
+	ret
+
+
+func Main.run2 [in 0, out 0, local 0]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	if0 $t1 goto :ss3_else
+	if0 $t2 goto :ss4_else
+	$t2 = 1
+	goto :ss4_end
+ss4_else:
+	$t2 = $t3
+ss4_end:
+	$t3 = $t2
+	goto :ss3_end
+ss3_else:
+	$t3 = 0
+ss3_end:
+	$v0 = $t3
+	ret
+
+
+func Main.run3 [in 0, out 0, local 0]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	if $t1 goto :ss5_then
+	if0 $t2 goto :ss5_else
+ss5_then:
+	$t2 = $t3
+	goto :ss5_end
+ss5_else:
+	$t2 = 0
+ss5_end:
+	$v0 = $t2
+	ret
+
+
+func Main.run4 [in 0, out 0, local 0]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	if0 $t1 goto :ss7_else
+	$t1 = 1
+	goto :ss7_end
+ss7_else:
+	if0 $t2 goto :ss8_else
+	$t2 = $t3
+	goto :ss8_end
+ss8_else:
+	$t2 = 0
+ss8_end:
+	$t1 = $t2
+ss7_end:
+	$v0 = $t1
+	ret
+
+
+func Main.if1 [in 0, out 0, local 0]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	if0 $t1 goto :ss9
+	if $t2 goto :if1_then
+ss9:
+	if0 $t3 goto :if1_else
+if1_then:
+	PrintIntS(1)
+	goto :if1_end
+if1_else:
+if1_end:
+	$v0 = 1
+	ret
+
+
+func Main.if2 [in 0, out 0, local 0]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	if0 $t1 goto :if2_else
+	if $t2 goto :if2_then
+	if0 $t3 goto :if2_else
+if2_then:
+	PrintIntS(2)
+	goto :if2_end
+if2_else:
+if2_end:
+	$v0 = 1
+	ret
+
+
+func Main.if3 [in 0, out 0, local 0]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	if $t1 goto :ss13
+	if0 $t2 goto :if3_else
+ss13:
+	if0 $t3 goto :if3_else
+if3_then:
+	PrintIntS(3)
+	goto :if3_end
+if3_else:
+if3_end:
+	$v0 = 1
+	ret
+
+
+func Main.if4 [in 0, out 0, local 0]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	if $t1 goto :if4_then
+	if0 $t2 goto :if4_else
+	if0 $t3 goto :if4_else
+if4_then:
+	PrintIntS(4)
+	goto :if4_end
+if4_else:
+if4_end:
+	$v0 = 1
+	ret
+
+
+func Main.if5 [in 1, out 0, local 0]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	$t4 = in[0]
+	if $t1 goto :if5_then
+	if $t2 goto :if5_then
+	if $t3 goto :if5_then
+	if0 $t4 goto :if5_else
+if5_then:
+	PrintIntS(5)
+	goto :if5_end
+if5_else:
+if5_end:
+	$v0 = 1
+	ret
+
+
+func Main.if6 [in 1, out 0, local 0]
+	$t0 = $a0
+	$t1 = $a1
+	$t2 = $a2
+	$t3 = $a3
+	$t4 = in[0]
+	if0 $t1 goto :if6_else
+	if0 $t2 goto :if6_else
+	if0 $t3 goto :if6_else
+	if0 $t4 goto :if6_else
+if6_then:
+	PrintIntS(6)
+	goto :if6_end
+if6_else:
+if6_end:
+	$v0 = 1
+	ret
+
+

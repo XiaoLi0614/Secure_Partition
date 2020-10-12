@@ -1,0 +1,42 @@
+const MT4VTable
+	:MT4.Start
+	:MT4.Change
+
+func MT4.Start(this p1 p2 p3 p4 p5 p6)
+	PrintIntS(p1)
+	PrintIntS(p2)
+	PrintIntS(p3)
+	PrintIntS(p4)
+	PrintIntS(p5)
+	PrintIntS(p6)
+	if this goto :L.1
+		Error("Null pointer")
+	L.1:
+	t.1 = [this]
+	t.2 = [t.1+4]
+	t.3 = call t.2(this p6 p5 p4 p3 p2 p1)
+	aux = t.3
+	ret aux
+
+func MT4.Change(this p1 p2 p3 p4 p5 p6)
+	PrintIntS(p1)
+	PrintIntS(p2)
+	PrintIntS(p3)
+	PrintIntS(p4)
+	PrintIntS(p5)
+	PrintIntS(p6)
+	ret 0
+
+
+func Main()
+	t.4 = HeapAllocZ(4)
+	[t.4] = :MT4VTable
+	if t.4 goto :L.2
+		Error("Null pointer")
+	L.2:
+	t.5 = [t.4]
+	t.6 = [t.5+0]
+	t.7 = call t.6(t.4 1 2 3 4 5 6)
+	PrintIntS(t.7)
+	ret
+

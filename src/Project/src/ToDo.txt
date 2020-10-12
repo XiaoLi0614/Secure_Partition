@@ -1,0 +1,5 @@
+Ask if it is ok to change norm(A) to norm(A, 1) in cosamp
+
+By value or reference
+    Passing arguments and
+    Assignment

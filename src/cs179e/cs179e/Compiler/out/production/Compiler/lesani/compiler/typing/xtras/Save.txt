@@ -1,0 +1,98 @@
+package lesani.compiler.typing;
+
+import lesani.collection.func.Fun;
+import lesani.compiler.typing.substitution.Substitution;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+public class TypeScheme {
+//    public Set<TypeVar> typeVars;
+    public TypeVar[] typeVars;
+    public Type type;
+
+    public TypeScheme(TypeVar[] typeVars, Type type) {
+        this.typeVars = typeVars;
+        this.type = type;
+    }
+
+    public TypeScheme(Type type) {
+        this.typeVars = new TypeVar[0];
+        this.type = type;
+    }
+
+    public TypeScheme(Type type, TypeVar... typeVars) {
+        this.typeVars = new TypeVar[typeVars.length];
+        int i = -1;
+        for (TypeVar typeVar : typeVars) {
+            i++;
+            this.typeVars[i] = typeVar;
+        }
+        this.type = type;
+    }
+
+    public TypeScheme(TypeVar typeVar1, Type type) {
+        this.typeVars = new TypeVar[1];
+        this.typeVars[0] = typeVar1;
+        this.type = type;
+    }
+
+    public TypeScheme(TypeVar typeVar1, TypeVar typeVar2, Type type) {
+        this.typeVars = new TypeVar[2];
+        this.typeVars[0] = typeVar1;
+        this.typeVars[1] = typeVar2;
+        this.type = type;
+    }
+
+    public TypeScheme(TypeVar typeVar1, TypeVar typeVar2, TypeVar typeVar3, Type type) {
+        this.typeVars = new TypeVar[3];
+        this.typeVars[0] = typeVar1;
+        this.typeVars[1] = typeVar2;
+        this.typeVars[2] = typeVar3;
+        this.type = type;
+    }
+
+    public TypeScheme(TypeVar typeVar1, TypeVar typeVar2, TypeVar typeVar3, TypeVar typeVar4, Type type) {
+        this.typeVars = new TypeVar[4];
+        this.typeVars[0] = typeVar1;
+        this.typeVars[1] = typeVar2;
+        this.typeVars[2] = typeVar3;
+        this.typeVars[3] = typeVar4;
+        this.type = type;
+    }
+
+    public TypeScheme(TypeVar typeVar1, TypeVar typeVar2, TypeVar typeVar3, TypeVar typeVar4, TypeVar typeVar5, Type type) {
+        this.typeVars = new TypeVar[5];
+        this.typeVars[0] = typeVar1;
+        this.typeVars[1] = typeVar2;
+        this.typeVars[2] = typeVar3;
+        this.typeVars[3] = typeVar4;
+        this.typeVars[4] = typeVar5;
+        this.type = type;
+    }
+
+    public Type instantiate() {
+        Substitution substitution = new Substitution();
+        for (TypeVar typeVar : typeVars) {
+            TypeVar newTypeVar = typeVar.iFresh();
+            substitution.add(typeVar, newTypeVar);
+        }
+        return substitution.apply(type).apply(
+            new Fun<Type, Type>() {
+                public Type apply(Type input) {
+                    return input;
+                }
+            },
+            new Fun<Integer, Type>() {
+                public Type apply(Integer input) {
+                    throw new RuntimeException();
+                }
+            }
+        );
+    }
+}
+
+
+//        Substitution substitution;
+//        return substitution.apply(type);

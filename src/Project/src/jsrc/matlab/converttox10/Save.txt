@@ -1,0 +1,217 @@
+    /**
+     * f0 -> ( FunctionHeader() )?
+     * f1 -> ( Statement() )*
+     * f2 -> <EOF>
+     */
+    public Node visit(jsrc.frontend.matlab.syntaxanalysis.syntaxtree.File n) {
+
+        NodeList<BlockSt> blockStatementList = (NodeList<BlockSt>) visitDispatch(n.f1);
+        BlockSt[] statements = NodeList.blockStatementArray(blockStatementList);
+        Block block = new Block(statements);
+
+        Type outputType;
+        Id name;
+        FormalParam[] formalParams;
+        OptionalNode fileHeader = (OptionalNode)visitDispatch(n.f0);
+        if (fileHeader.isPresent()) {
+            FunHeader funHeader = ((SomeNode<FunHeader>)fileHeader).get();
+
+            Option<FunOutput> funOutputOption = funHeader.funOutputOption;
+            if (funOutputOption.isPresent()) {
+                FunOutput funOutput = ((Some<FunOutput>)funOutputOption).get();
+                if (funOutput.isSingle()) {
+                    outputType = UnknownType.instance();
+                } else {
+                    int outputCount = funOutput.getIds().length;
+                    outputType = new DefinedType("Tuple" + outputCount);
+                }
+            } else
+                outputType = VoidType.instance();
+
+            name = funHeader.name;
+
+            formalParams = funHeader.formalParams;
+
+        } else {
+            outputType = VoidType.instance();
+
+            formalParams = new FormalParam[] {
+                new FormalParam(new ArrayType(StringType.instance()), new Id("args"))
+            };
+
+            name = new Id("main");
+        }
+
+        MethodDecl method = new MethodDecl(
+                Visibility.PUBLIC, true, false, outputType, name, formalParams, block);
+
+        String firstChar = name.name.substring(0, 1).toUpperCase();
+        String capName = firstChar + name.name.substring(1);
+
+        Id className = new Id(capName);
+
+        return new ClassDecl(className, new MethodDecl[]{method});
+    }
+
+
+
+
+
+
+
+
+
+    /**
+     * f0 -> "specification"
+     * f1 -> [ OutputClause() ]
+     * f2 -> Identifier()
+     * f3 -> "("
+     * f4 -> ( IdentifierList() )?
+     * f5 -> ")"
+     * f6 -> ( ";" )?
+     */
+    public Node visit(jsrc.frontend.matlab.syntaxanalysis.syntaxtree.FunctionHeader n) {
+        OptionalNode optionalFunOutput = (OptionalNode)visitDispatch(n.f1);
+
+        Option<FunOutput> funOutputOption;
+        if (optionalFunOutput.isPresent()) {
+            FunOutput funOutput = ((SomeNode<FunOutput>)optionalFunOutput).get();
+            funOutputOption = new Some<FunOutput>(funOutput);
+        } else
+            funOutputOption = None.instance();
+
+        Id funName = (Id)visitDispatch(n.f2);
+
+        FormalParam formalParams[] = null;
+        OptionalNode optionalParamList = (OptionalNode)visitDispatch(n.f4);
+        if (optionalParamList.isPresent()) {
+            NodeList<FormalParam> formalParamList = ((SomeNode<NodeList<FormalParam>>)optionalParamList).get();
+            formalParams = NodeList.formalParamArray(formalParamList);
+        } else
+            formalParams = new FormalParam[0];
+
+        return new FunHeader(funOutputOption, funName, formalParams);
+    }
+
+
+    /**
+     * f0 -> Output()
+     * f1 -> "="
+     */
+    public Node visit(jsrc.frontend.matlab.syntaxanalysis.syntaxtree.OutputClause n) {
+        return visitDispatch(n.f0);
+    }
+
+    /**
+     * f0 -> Identifier()
+     *       | MultiOutput()
+     */
+    public Node visit(jsrc.frontend.matlab.syntaxanalysis.syntaxtree.Output n) {
+        Node node = visitDispatch(n.f0);
+        if (node instanceof Identifier)
+            return new FunOutput((Id) node);
+        else {
+            NodeList<Id> identifierNodeList = (NodeList<Id>)node;
+            Id[] ids = NodeList.idArray(identifierNodeList);
+            return new FunOutput(ids);
+        }
+    }
+
+    /**
+     * f0 -> "["
+     * f1 -> IdentifierList()
+     * f2 -> "]"
+     */
+    public Node visit(jsrc.frontend.matlab.syntaxanalysis.syntaxtree.MultiOutput n) {
+        return visitDispatch(n.f1);
+    }
+
+
+    /**
+     * f0 -> CommandList()
+     *       | ArrayUpdate()
+     *       | CallSt()
+     *       | AssignmentSt()
+     *       | CallAndMultipleAssignmentSt()
+     *       | IfSt()
+     *       | ForSt()
+     *       | WhileSt()
+     *       | SwitchSt()
+     *       | BreakSt()
+     *       | NodeeturnSt()
+     */
+    public Node visit(jsrc.frontend.matlab.syntaxanalysis.syntaxtree.Statement n) {
+        return visitDispatch(n.f0);
+    }
+
+    /**
+     *    Identifier f0;
+     *    NodeOptional f1;
+     */
+    public Node visit(jsrc.frontend.matlab.syntaxanalysis.syntaxtree.Command n) {
+        Id name = (Id)visitDispatch(n.f0);
+
+        Expression[] args;
+        OptionalNode optionalId = (OptionalNode)visitDispatch(n.f1);
+        if (optionalId.isPresent()) {
+            StringLiteral argument = new StringLiteral(((SomeNode<Id>)optionalId).get().name);
+            args = new Expression[] {argument};
+        } else
+            args = new Expression[0];
+
+        return new MethodCall(name, args);
+    }
+
+    /**
+     * f0 -> Call()
+     * f1 -> [ ";" ]
+     */
+    public Node visit(jsrc.frontend.matlab.syntaxanalysis.syntaxtree.CallSt n) {
+        MethodCall methodCall = (MethodCall)visitDispatch(n.f0);
+        return new ExpSt(methodCall);
+    }
+
+    /**
+     * f0 -> Identifier()
+     * f1 -> "="
+     * f2 -> Expression()
+     * f3 -> [ ";" ]
+     */
+    public Node visit(jsrc.frontend.matlab.syntaxanalysis.syntaxtree.AssignmentSt n) {
+        Id id = (Id)visitDispatch(n.f0);
+        Expression exp = (Expression)visitDispatch(n.f3);
+        return new Assignment(id, exp);
+    }
+
+    /**
+     * f0 -> "["
+     * f1 -> IdentifierList()
+     * f2 -> "]"
+     * f3 -> "="
+     * f4 -> Call()
+     * f5 -> [ ";" ]
+     */
+    public Node visit(jsrc.frontend.matlab.syntaxanalysis.syntaxtree.CallAndMultiAssignmentSt n) {
+        NodeList<Id> idsList = (NodeList<Id>)visitDispatch(n.f1);
+        Id[] ids = NodeList.idArray(idsList);
+
+        Id var = new Id("tuple" + uniqueNum());
+        MethodCall methodCall = (MethodCall)visitDispatch(n.f4);
+        VarDecl varDecl = new VarDecl(new DefinedType("Tuple" + ids.length), var, methodCall);
+        for (int i = 0; i < ids.length; i++) {
+            Id id = ids[i];
+
+        }
+
+
+        return new BlockStatement[] {varDecl, methodCall};
+    }
+
+
+    int numCounter = 0;
+    public int uniqueNum() {
+        numCounter++;
+        return numCounter;
+    }
+}
+

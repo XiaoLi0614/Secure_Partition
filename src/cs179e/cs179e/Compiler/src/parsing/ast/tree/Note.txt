@@ -1,0 +1,1 @@
+To report location of errors, tokens of each ASTNode should be stored inside it.

@@ -1,0 +1,82 @@
+package j.util.ui;
+import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+
+import j.core.image.Image;
+import j.util.ImageUtil;
+import j.util.exception.NotAnImageFileException;
+import j.util.ui.BrowsePanel;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Mohsen Lesani
+ * Date: Apr 13, 2005
+ * Time: 2:38:16 PM
+ */
+
+public class ImageBrowsePanel extends JPanel
+{
+	private JButton viewButton;
+	private JPanel backBrowsePanel;
+	private BrowsePanel browsePanel;
+	private JPanel mainPanel;
+
+	public ImageBrowsePanel()
+	{
+		browsePanel = new BrowsePanel();
+		init();
+	}
+
+	public ImageBrowsePanel(String text)
+	{
+		browsePanel = new BrowsePanel(text);
+		init();
+	}
+
+	private void init()
+	{
+		this.add(mainPanel);
+		browsePanel.setRunnableAfterBrowse(new Runnable()
+		{
+			public void run()
+			{
+				view();
+			}
+		});
+		backBrowsePanel.add(browsePanel);
+		viewButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) {
+				view();
+            }
+		});
+	}
+
+	private void view()
+	{
+		try
+		{
+			ImageUtil.showImageFrame("Image", getImage());
+		}
+		catch (NotAnImageFileException ioe)
+		{
+			JOptionPane.showMessageDialog(ImageBrowsePanel.this,
+					"The file is not of a recognizable format.",
+					"Error",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+	}
+
+	public String getPathFileName()
+	{
+		return browsePanel.getPathFileName();
+	}
+
+	public BufferedImage getImage() throws NotAnImageFileException
+	{
+		return ImageUtil.getImage(getPathFileName());
+	}
+}

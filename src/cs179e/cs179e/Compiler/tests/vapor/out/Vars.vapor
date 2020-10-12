@@ -1,0 +1,42 @@
+const AVTable
+	:A.helper
+	:A.run
+
+func A.run(this)
+	if this goto :L.1
+		Error("Null pointer")
+	L.1:
+	t.1 = [this]
+	t.2 = [t.1+0]
+	t.3 = call t.2(this 12)
+	a = t.3
+	if this goto :L.2
+		Error("Null pointer")
+	L.2:
+	t.4 = [this]
+	t.5 = [t.4+0]
+	t.6 = call t.5(this 15)
+	b = t.6
+	t.7 = Add(a b)
+	ret t.7
+
+func A.helper(this param)
+	x = param
+	t.8 = Add(param 1)
+	param = t.8
+	PrintIntS(x)
+	ret x
+
+
+func Main()
+	t.9 = HeapAllocZ(4)
+	[t.9] = :AVTable
+	if t.9 goto :L.3
+		Error("Null pointer")
+	L.3:
+	t.10 = [t.9]
+	t.11 = [t.10+4]
+	t.12 = call t.11(t.9)
+	PrintIntS(t.12)
+	ret
+

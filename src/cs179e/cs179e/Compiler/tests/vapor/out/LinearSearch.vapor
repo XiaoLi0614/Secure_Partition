@@ -1,0 +1,170 @@
+const LSVTable
+	:LS.Print
+	:LS.Init
+	:LS.Start
+	:LS.Search
+
+func LS.Start(this sz)
+	if this goto :L.1
+		Error("Null pointer")
+	L.1:
+	t.1 = [this]
+	t.2 = [t.1+4]
+	t.3 = call t.2(this sz)
+	aux01 = t.3
+	if this goto :L.2
+		Error("Null pointer")
+	L.2:
+	t.4 = [this]
+	t.5 = [t.4+0]
+	t.6 = call t.5(this)
+	aux02 = t.6
+	PrintIntS(9999)
+	if this goto :L.3
+		Error("Null pointer")
+	L.3:
+	t.7 = [this]
+	t.8 = [t.7+12]
+	t.9 = call t.8(this 8)
+	PrintIntS(t.9)
+	if this goto :L.4
+		Error("Null pointer")
+	L.4:
+	t.10 = [this]
+	t.11 = [t.10+12]
+	t.12 = call t.11(this 12)
+	PrintIntS(t.12)
+	if this goto :L.5
+		Error("Null pointer")
+	L.5:
+	t.13 = [this]
+	t.14 = [t.13+12]
+	t.15 = call t.14(this 17)
+	PrintIntS(t.15)
+	if this goto :L.6
+		Error("Null pointer")
+	L.6:
+	t.16 = [this]
+	t.17 = [t.16+12]
+	t.18 = call t.17(this 50)
+	PrintIntS(t.18)
+	ret 55
+
+func LS.Print(this)
+	j = 1
+	L.7:
+	t.19 = [this+8]
+	t.20 = LtS(j t.19)
+	if0 t.20 goto :L.8
+		t.21 = [this+4]
+		t.22 = [t.21]
+		t.23 = Lt(j t.22)
+		if t.23 goto :L.9
+		Error("Array index out of bounds")
+		L.9:
+		t.24 = MulS(j 4)
+		t.25 = Add(t.21 t.24)
+		t.26 = [t.25+4]
+		PrintIntS(t.26)
+		t.27 = Add(j 1)
+		j = t.27
+	goto :L.7
+	L.8:
+	ret 0
+
+func LS.Search(this num)
+	j = 1
+	ls01 = 0
+	ifound = 0
+	L.10:
+	t.28 = [this+8]
+	t.29 = LtS(j t.28)
+	if0 t.29 goto :L.11
+		t.30 = [this+4]
+		t.31 = [t.30]
+		t.32 = Lt(j t.31)
+		if t.32 goto :L.12
+		Error("Array index out of bounds")
+		L.12:
+		t.33 = MulS(j 4)
+		t.34 = Add(t.30 t.33)
+		t.35 = [t.34+4]
+		aux01 = t.35
+		t.36 = Add(num 1)
+		aux02 = t.36
+		t.37 = LtS(aux01 num)
+		if0 t.37 goto :L.14
+		L.13:
+			nt = 0
+		goto :L.15
+		L.14:
+			t.39 = LtS(aux01 aux02)
+			if0 t.39 goto :L.20
+			L.19:
+				t.38 = 0
+			goto :L.21
+			L.20:
+				t.38 = 1
+			L.21:
+			if0 t.38 goto :L.17
+			L.16:
+				nt = 0
+			goto :L.18
+			L.17:
+				ls01 = 1
+				ifound = 1
+				t.40 = [this+8]
+				j = t.40
+			L.18:
+		L.15:
+		t.41 = Add(j 1)
+		j = t.41
+	goto :L.10
+	L.11:
+	ret ifound
+
+func LS.Init(this sz)
+	[this+8] = sz
+	t.42 = MulS(sz 4)
+	t.43 = Add(t.42 4)
+	t.44 = HeapAllocZ(t.43)
+	[t.44] = sz
+	[this+4] = t.44
+	j = 1
+	t.45 = [this+8]
+	t.46 = Add(t.45 1)
+	k = t.46
+	L.22:
+	t.47 = [this+8]
+	t.48 = LtS(j t.47)
+	if0 t.48 goto :L.23
+		t.49 = MulS(2 j)
+		aux01 = t.49
+		t.50 = Sub(k 3)
+		aux02 = t.50
+		t.51 = [this+4]
+		t.52 = Add(aux01 aux02)
+		t.53 = MulS(j 4)
+		t.54 = Add(t.51 t.53)
+		[t.54+4] = t.52
+		t.55 = Add(j 1)
+		j = t.55
+		t.56 = Sub(k 1)
+		k = t.56
+	goto :L.22
+	L.23:
+	ret 0
+
+
+func Main()
+	t.57 = HeapAllocZ(12)
+	[t.57] = :LSVTable
+	if t.57 goto :L.24
+		Error("Null pointer")
+	L.24:
+	t.58 = [t.57]
+	t.59 = [t.58+8]
+	t.60 = call t.59(t.57 10)
+	PrintIntS(t.60)
+	ret
+

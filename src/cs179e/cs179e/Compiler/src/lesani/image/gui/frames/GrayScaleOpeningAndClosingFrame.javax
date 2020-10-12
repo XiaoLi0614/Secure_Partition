@@ -1,0 +1,100 @@
+package j.gui.frames;
+
+import j.util.ui.ImageBrowsePanel;
+import j.util.ImageUtil;
+import j.util.exception.NotAnImageFileException;
+
+import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+
+import j.core.image.GrayScaleImage;
+import lesani.gui.frame.MFrame;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Mohsen Lesani
+ * Date: Apr 15, 2005
+ * Time: 4:36:33 PM
+ */
+
+public class GrayScaleOpeningAndClosingFrame extends MFrame
+{
+	private ImageBrowsePanel imageBrowsePanel;
+	private JPanel imageBrowsePanelBackPanel;
+	private JButton openButton;
+	private JButton closeButton;
+	private JPanel mainPanel;
+	private JTextField maskLengthTextField;
+
+	public GrayScaleOpeningAndClosingFrame()
+	{
+		super("Opening and Closing Gray Scale Images");
+		setMainPanel(mainPanel);
+		imageBrowsePanel = new ImageBrowsePanel("Select Original Image");
+		imageBrowsePanelBackPanel.add(imageBrowsePanel);
+		setExitOnClose();
+
+		openButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					BufferedImage image = imageBrowsePanel.getImage();
+					GrayScaleImage grayScaleImage = new GrayScaleImage(image);
+
+					//ImageUtil.showImageFrame("Test", grayScaleImage);
+
+					GrayScaleImage openedImage = ImageUtil.grayScaleOpen(grayScaleImage, Integer.parseInt(maskLengthTextField.getText()));
+					ImageUtil.showImageFrame("Opened Image", openedImage.getBufferedImage());
+				}
+				catch (NotAnImageFileException e1)
+				{
+					JOptionPane.showMessageDialog(GrayScaleOpeningAndClosingFrame.this,
+							"The file is not of a recognizable format.",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+		});
+
+		closeButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					BufferedImage image = imageBrowsePanel.getImage();
+					GrayScaleImage grayScaleImage = new GrayScaleImage(image);
+
+					//ImageUtil.showImageFrame("Test", binaryImage);
+
+					GrayScaleImage closedImage = ImageUtil.grayScaleClose(grayScaleImage, Integer.parseInt(maskLengthTextField.getText()));
+					ImageUtil.showImageFrame("Closed Image", closedImage.getBufferedImage());
+				}
+				catch (NotAnImageFileException e1)
+				{
+					JOptionPane.showMessageDialog(GrayScaleOpeningAndClosingFrame.this,
+							"The file is not of a recognizable format.",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+		});
+	}
+
+	public static void main(String[] args)
+	{
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		JDialog.setDefaultLookAndFeelDecorated(true);
+
+		MFrame grayScaleOpeniningAndClosingFrame = new GrayScaleOpeningAndClosingFrame();
+		grayScaleOpeniningAndClosingFrame.view();
+	}
+
+
+}
