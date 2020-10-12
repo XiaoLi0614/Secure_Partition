@@ -614,6 +614,10 @@ public class CPSPrinter {
                         return null;
                     }
 
+                    public Object visit(Var var) {
+                        return null;
+                    }
+
 //                    public Object visit(Parenthesized parenthesized) {
 //                        return expressionVisitor.visitDispatch(parenthesized.expression);
 //                    }

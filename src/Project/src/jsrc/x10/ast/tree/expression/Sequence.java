@@ -10,7 +10,7 @@ public class Sequence implements Expression{
         this.exp2 = Exp2;
     }
 
-    public Object accept(CPSPrinter.FileVisitor.ClassVisitor.ExpressionVisitor expressionVisitor) {
-        return expressionVisitor.visit(this);
+    public Object accept(CPSPrinter.FileVisitor.ClassVisitor.ExpressionVisitor sequenceVisitor) {
+        return sequenceVisitor.visit(this);
     }
 }

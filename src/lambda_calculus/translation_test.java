@@ -1,9 +1,6 @@
 package lambda_calculus;
 
-import jsrc.x10.ast.tree.expression.Conditional;
-import jsrc.x10.ast.tree.expression.Expression;
-import jsrc.x10.ast.tree.expression.ObjectMethod;
-import jsrc.x10.ast.tree.expression.Sequence;
+import jsrc.x10.ast.tree.expression.*;
 import jsrc.x10.ast.tree.expression.literal.IntLiteral;
 import jsrc.x10.ast.tree.statement.If;
 import jsrc.x10.ast.tree.statement.Statement;
@@ -56,7 +53,9 @@ public class translation_test {
             Expression oftUseCase = new Conditional(
                     new ObjectMethod("read", "a", emptyArg),
                     new Sequence(new ObjectMethod("write", "a", trueArg),
-                            new Conditional(, , )),
+                            new Conditional(new Var("x"),
+                                    new ObjectMethod("read", "i1", emptyArg),
+                                    new ObjectMethod("read", "i2", emptyArg))),
                     new IntLiteral(0));
             return oftUseCase;
         }
