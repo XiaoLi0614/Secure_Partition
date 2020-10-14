@@ -1,18 +1,13 @@
 package lambda_calculus;
 
-import jsrc.x10.ast.tree.expression.*;
-import jsrc.x10.ast.tree.expression.literal.IntLiteral;
-import jsrc.x10.ast.tree.statement.If;
-import jsrc.x10.ast.tree.statement.Statement;
-import jsrc.x10.ast.tree.type.IntType;
-import jsrc.x10.ast.tree.xtras.IfThen;
-import jsrc.x10.ast.visitor.CPSPrinter;
-import jsrc.x10.ast.*;
-import jsrc.x10.ast.tree.type.*;
-import jsrc.x10.ast.visitor.StatementVisitor;
-
-
 //import javax.swing.plaf.nimbus.State;
+import lambda_calculus.source_ast.tree.expression.Conditional;
+import lambda_calculus.source_ast.tree.expression.Expression;
+import lambda_calculus.source_ast.tree.expression.ObjectMethod;
+import lambda_calculus.source_ast.tree.expression.Var;
+import lambda_calculus.source_ast.tree.expression.literal.IntLiteral;
+import lambda_calculus.source_ast.tree.expression.op.Sequence;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
@@ -23,7 +18,7 @@ public class translation_test {
     public static void main(String[] args)
     {
         Expression lambda1 = createOFTUseCase();;
-        printToFile(lambda1., "oft_cps");
+        //printToFile(lambda1., "oft_cps");
     }
 
 //        public static String cpsTransformation(lambda_usecase useCase)

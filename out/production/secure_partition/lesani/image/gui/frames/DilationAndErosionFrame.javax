@@ -1,0 +1,103 @@
+package j.gui.frames;
+
+import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
+import j.util.ui.ImageBrowsePanel;
+import j.util.ui.MaskPanel;
+import j.util.ImageUtil;
+import j.util.exception.NotAnImageFileException;
+import lesani.gui.frame.MFrame;
+
+import j.core.image.BinaryImage;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Mohsen Lesani
+ * Date: Apr 13, 2005
+ * Time: 2:28:44 PM
+ */
+
+public class DilationAndErosionFrame extends MFrame
+{
+	private JPanel mainPanel;
+	private JPanel backImageBowsePanel;
+	private ImageBrowsePanel imageBrowsePanel;
+	private JPanel backMaskPanel;
+	private MaskPanel maskPanel;
+	private JButton dilateButton;
+	private JButton erodeButton;
+
+	public DilationAndErosionFrame()
+	{
+		super("Dilation and Erosion", "Dilation and Erosion for Binary Images");
+		setMainPanel(mainPanel);
+		setExitOnClose();
+
+		imageBrowsePanel = new ImageBrowsePanel("Select Original Image");
+		backImageBowsePanel.add(imageBrowsePanel, BorderLayout.CENTER);
+        maskPanel = new MaskPanel(3, "Define Probe");
+		backMaskPanel.add(maskPanel, BorderLayout.CENTER);
+
+		dilateButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					BufferedImage image = imageBrowsePanel.getImage();
+					BinaryImage binaryImage = new BinaryImage(image);
+
+					//ImageUtil.showImageFrame("Test", binaryImage);
+
+					j.core.image.Image dilatedImage = ImageUtil.dilate(binaryImage, maskPanel.getMask());
+					ImageUtil.showImageFrame("Dilated Image", dilatedImage);
+				}
+				catch (NotAnImageFileException e1)
+				{
+					JOptionPane.showMessageDialog(DilationAndErosionFrame.this,
+							"The file is not of a recognizable format.",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+		});
+
+		erodeButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					BufferedImage image = imageBrowsePanel.getImage();
+					BinaryImage binaryImage = new BinaryImage(image);
+
+					j.core.image.Image erodedImage = ImageUtil.erode(binaryImage, maskPanel.getMask());
+					ImageUtil.showImageFrame("Eroded Image", erodedImage);
+				}
+				catch (NotAnImageFileException e1)
+				{
+					JOptionPane.showMessageDialog(DilationAndErosionFrame.this,
+							"The file is not of a recognizable format.",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+		});
+	}
+
+
+	public static void main(String[] args)
+	{
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		JDialog.setDefaultLookAndFeelDecorated(true);
+
+		MFrame dilationFrame = new DilationAndErosionFrame();
+		dilationFrame.view();
+	}
+}

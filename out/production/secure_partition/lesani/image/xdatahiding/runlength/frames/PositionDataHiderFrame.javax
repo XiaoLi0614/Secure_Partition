@@ -1,0 +1,79 @@
+package j.xdatahiding.runlength.frames;
+
+import j.core.image.BinaryImage;
+import lesani.gui.frame.MFrame;
+
+import javax.swing.*;
+
+import j.util.ui.ImageBrowsePanel;
+import j.util.ImageUtil;
+import j.util.exception.NotAnImageFileException;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Mohsen Lesani
+ * Date: Jun 11, 2005
+ * Time: 10:46:57 AM
+ */
+
+public class PositionDataHiderFrame extends MFrame
+{
+	private JPanel mainPanel;
+	private JPanel originalImageBrowsePanelBackPanel;
+	private JPanel logoImageBrowsePanelBackPanel;
+	private JButton hideButton;
+
+	public static final int WINDOW_WIDTH = 20;
+	public static final int WINDOW_HEIGHT = 20;
+
+
+	public PositionDataHiderFrame()
+	{
+		super("Data Hiding");
+		setExitOnClose();
+		setMainPanel(mainPanel);
+		final ImageBrowsePanel originalImageBrowsePanel = new ImageBrowsePanel("Select Original Image");
+		originalImageBrowsePanelBackPanel.add(originalImageBrowsePanel);
+
+		final ImageBrowsePanel logoImageBrowsePanel = new ImageBrowsePanel("Select Logo Image");
+		logoImageBrowsePanelBackPanel.add(logoImageBrowsePanel);
+
+		hideButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					BinaryImage originalImage = new BinaryImage(originalImageBrowsePanel.getImage());
+					BinaryImage logoImage = new BinaryImage(logoImageBrowsePanel.getImage());
+
+					BinaryImage embeddingImage = ImageUtil.runLengthHide(originalImage, logoImage, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+					ImageUtil.showImageFrame("Embedding Image", embeddingImage.getBufferedImage());
+				}
+				catch (NotAnImageFileException e1)
+				{
+					JOptionPane.showMessageDialog(PositionDataHiderFrame.this,
+							"The file is not of a recognizable format.",
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+			}
+		});
+	}
+
+	public static void main(String[] args)
+	{
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		JDialog.setDefaultLookAndFeelDecorated(true);
+
+		MFrame frame = new PositionDataHiderFrame();
+		frame.view();
+	}
+
+}

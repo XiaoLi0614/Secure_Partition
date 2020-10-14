@@ -1,0 +1,186 @@
+-----------------------------------------------------
+&, |, and ~
+    The logical array operators AND, OR, and NOT
+
+&& ||
+    http://www.mathworks.com/help/techdoc/ref/logicaloperatorsshortcircuit.html
+    Logical operations, with short-circuiting capability
+
+.* ./
+    http://www.mathworks.com/help/techdoc/ref/arithmeticoperators.html
+    two different types of arithmetic operations. Matrix arithmetic operations are defined by the rules of linear algebra. Array arithmetic operations are carried out element by element, and can be used with multidimensional arrays. The period character (.) distinguishes the array operations from the matrix operations. However, since the matrix and array operations are the same for addition and subtraction, the character pairs .+ and .- are not used.
+.^
+    Array power. A.^B is the matrix with elements A(i,j) to the B(i,j) power. A and B must have the same size, unless one of them is a scalar.    
+'
+    Matrix transpose. A' is the linear algebraic transpose of A. For complex matrices, this is the complex conjugate transpose.
+
+:
+    http://www.mathworks.com/help/techdoc/learn_matlab/f2-12841.html#f2-428
+    The colon by itself refers to all the elements in a row or column of a matrix.
+end
+    http://www.mathworks.com/help/techdoc/math/f1-85462.html#f1-85564
+	The keyword end refers to the last row or column.
+    sum(A(:,end))
+
+IdStatement
+    Used to print the value of the variable.
+
+specification
+    http://www.mathworks.com/help/techdoc/ref/specification.html
+    http://www.mathworks.com/help/techdoc/ref/syntax.html
+    http://www.mathworks.com/help/techdoc/learn_matlab/f4-2525.html
+    http://www.mathworks.com/help/techdoc/matlab_prog/f7-58170.html
+
+switch
+    can switch on string also.
+
+Matrix Indexing
+    http://www.mathworks.com/help/techdoc/math/f1-85462.html
+Indexing on Assignment
+    http://www.mathworks.com/help/techdoc/math/f1-85462.html#f1-85564
+matrix
+    Linear indexing
+        http://www.mathworks.com/help/techdoc/math/f1-85462.html
+        You can refer to the elements of a MATLAB matrix with a single subscript, A(k). MATLAB stores matrices and arrays not in the shape that they appear when displayed in the MATLAB Command Window, but as a single column of elements. This single column is composed of all of the columns from the matrix, each appended to the last.
+
+    (1:m, n)
+        refers to the elements in rows 1 through m of column n of matrix A.
+
+    Nonconsecutive Elements
+        To refer to nonconsecutive elements in a matrix, use the colon operator with a step value. The m:3:n in this expression means to make the assignment to every third element in the matrix. Note that this example uses linear indexing
+        Here is an example of value-based indexing where array B indexes into elements 1, 3, 6, 7, and 10 of array A. In this case, the numeric values of array B designate the intended elements of A:
+        A = 5:5:50
+        A =
+             5    10    15    20    25    30    35    40    45    50
+        B = [1 3 6 7 10];
+
+        A(B)
+        ans =
+             5    15    30    35    50
+        If you index into a vector with another vector, the orientation of the indexed vector is honored for the output:
+
+        A(B')
+        ans =
+
+             5    15    30    35    50
+        A1 = A'; A1(B)
+        ans =
+
+             5
+            15
+            30
+            35
+            50
+        If you index into a vector with a nonvector, the shape of the indices is honored.:
+
+        C = [1 3 6; 7 9 10];
+        A(C)
+        ans =
+
+             5    15    30
+            35    45    50
+
+    Logical array index
+        By using the colon with linear indexing, you can refer to all elements in the entire matrix. This example displays all the elements of matrix A, returning them in a column-wise order:
+        A(:)
+        ans =
+            16
+             5
+             9
+             4
+             .
+             .
+             1
+        In this masking type of operation, every true element in the indexing array is treated as a positional index into the array being accessed.
+
+        In the following example, B is a matrix of logical ones and zeros. The position of these elements in B determines which elements of A are designated by the expression A(B):
+
+        A = [1 2 3; 4 5 6; 7 8 9]
+        A =
+             1     2     3
+             4     5     6
+             7     8     9
+
+        B = logical([0 1 0; 1 0 1; 0 0 1]);
+        B =
+             0     1     0
+             1     0     1
+             0     0     1
+
+        A(B)
+        ans =
+             4
+             2
+             6
+             9
+        The find specification can be useful with logical arrays as it returns the linear indices of nonzero elements in B, and thus helps to interpret A(B):
+
+        find(B)
+        ans =
+             2
+             4
+             8
+             9
+
+    Indexing on Assignment
+        When assigning values from one matrix to another matrix, you can use any of the styles of indexing covered in this section. Matrix assignment statements also have the following requirement.
+
+        In the assignment A(J,K,...) = B(M,N,...), subscripts J, K, M, N, etc. may be scalar, vector, or array, provided that all of the following are true:
+
+        The number of subscripts specified for B, not including trailing subscripts equal to 1, does not exceed ndims(B).
+
+        The number of nonscalar subscripts specified for A equals the number of nonscalar subscripts specified for B. For example, A(5, 1:4, 1, 2) = B(5:8) is valid because both sides of the equation use one nonscalar subscript.
+
+        The order and length of all nonscalar subscripts specified for A matches the order and length of nonscalar subscripts specified for B. For example, A(1:4, 3, 3:9) = B(5:8, 1:7) is valid because both sides of the equation (ignoring the one scalar subscript 3) use a 4-element subscript followed by a 7-element subscript.
+	
+=====================================================
+-----------------------------------------------------
+We need to know these algorithms
+
+We need to have a language to specify the algorithms (We can start with
+matlab language and then move to our own). If the grammar is not ideal,
+no worries. Just pass the parsing phase.
+We can later have our own syntax and compile between the two.
+Two points in the domain specific language
+    Matrix support and functions
+        Direct language support for matrices
+        We need to have these functions in our language anyways. (We can start
+        with the names that matlab uses).
+    Untyped
+        The domain experts like untype programming. We infer the types for efficiency.
+        We can analyse the ast and compile to a scheduled program.
+
+-----------------------------------------------------
+On compilation
+    * on matrix
+        MatType: has a times method
+            NumericType interface
+                Matrix<T extends NumericType>
+                Double
+                Integer
+            String
+                throws an exception on times method
+                We can have an abstract MatType class that has a default implementation for each method.
+
+        This essentially means that we also do the typing at runtime.
+
+        Can we compile to static types?
+            We need to infer types. May be possible for local vars.
+            But what about specification parameters?
+            We need to infer the type according to the operations that they are applied to.
+
+        Can we do this by overloading?
+            We need the static type for overloading. No dispatch is done.
+
+    MultiAssignment
+        We compile it to an assignment to a matrix var, then write separate assignments for each element.
+        How do we recognize matrix indexing from specification call? If we can recognize that, then we can treat : appropriately.
+        In one path, we can find the functions that are defined in the program.
+        We can make a list of functions that we recognize and then if the id  is not one of them, we generate a matrix access code.
+
+        Reference can not be a Call. It can be an array indexing.
+        We can check if it is an array indexing and generate a write call on it.
+
+
+
+

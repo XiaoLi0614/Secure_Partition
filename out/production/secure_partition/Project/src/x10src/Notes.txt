@@ -1,0 +1,4 @@
+
+
+Creating a region by (0..9)*(0..9) gives a region of type Region not Region(2).
+To get a region of type Region(2) use Region.make([0..9, 0..9]).

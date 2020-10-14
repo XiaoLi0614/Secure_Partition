@@ -1,0 +1,138 @@
+====================================
+Single Place:
+------------------------------------
+Passed:
+    1. crypt
+    2. fragstream
+    3. linpack
+    4. mapreduce
+    5. mg
+    6. moldyn
+    7. montecarlo
+    8.
+    9. raytracer (precision difference)
+    10. series
+    11. sor
+    12. sparsemm
+    13. stream
+------------------------------------
+Runtime Exception:
+    8. frontend.plasmax10
+        Runtime error:
+        PGAS Runtime Error -1: Cannot register id=1000 for AmSend
+------------------------------------
+====================================
+Multiple Places:
+------------------------------------
+Passed:
+    1.
+    2. fragstream
+    3. linpack
+    4. mapreduce
+    5.
+    6.
+    7.
+    8.
+    9.
+    10. series
+    11. sor
+    12.
+    13. stream
+------------------------------------
+Runtime Exception:
+    1. crypt
+        Uncaught exception at place 0: x10.lang.MultipleExceptions
+        x10.lang.ClassCastException: x10.lang.Rail[T]{_self2483612.home==here}
+	        at No stacktrace recorded.
+        x10.lang.ClassCastException: x10.lang.Rail[T]{_self2483612.home==here}
+	        at No stacktrace recorded.
+        x10.lang.ClassCastException: x10.lang.Rail[T]{_self2483612.home==here}
+	        at No stacktrace recorded.
+        job terminated with exit code 1
+    7. montecarlo
+        Uncaught exception at place 0: x10.lang.MultipleExceptions
+        x10.lang.BadPlaceException: point (250) not defined at (Place 0)
+            at x10::lang::Throwable::fillInStackTrace()
+            at x10::array::BaseRegion::check(x10aux::ref<x10::lang::Fun_0_1<x10aux::ref<x10::lang::Point>, x10aux::ref<x10::lang::RuntimeException> > >, x10aux::ref<x10::lang::Point>)
+            at x10::array::RectRegion::check(x10aux::ref<x10::lang::Fun_0_1<x10aux::ref<x10::lang::Point>, x10aux::ref<x10::lang::RuntimeException> > >, x10aux::ref<x10::lang::Point>)
+            at x10::array::BaseArray<double>::checkPlace(x10aux::ref<x10::lang::Point>)
+            at x10::array::BaseArray<double>::apply(x10aux::ref<x10::lang::Point>)
+            at x10::array::DistArray<double>::apply(x10aux::ref<x10::lang::Point>)
+            at COMPILER_INSERTED_LIB__closure__4::apply()
+            at x10::lang::Activity::run()
+            at x10_lang_Runtime__Worker__closure__0::apply()
+            at x10::lang::Runtime::runAtLocal(int, x10aux::ref<x10::lang::VoidFun_0_0>)
+            at x10::lang::Runtime__Worker::loop(x10aux::ref<x10::lang::Runtime__Latch>, bool)
+            at x10::lang::Runtime__Worker::apply()
+            at x10::lang::Thread::thread_start_routine(void*)
+            at GC_inner_start_routine
+            at GC_call_with_stack_base
+            at GC_start_routine
+            at /lib/tls/i686/cmov/libpthread.so.0 [0x13480e]
+            at clone
+        x10.lang.BadPlaceException: point (0) not defined at (Place 1)
+            at No stacktrace recorded.
+        x10.lang.BadPlaceException: point (0) not defined at (Place 2)
+            at No stacktrace recorded.
+        x10.lang.BadPlaceException: point (0) not defined at (Place 3)
+            at No stacktrace recorded.
+        job terminated with exit code 1
+    11. sor
+        Uncaught exception at place 0: x10.lang.RuntimeException: Incomplete method.
+        x10.lang.RuntimeException: Incomplete method.
+            at x10::lang::Throwable::fillInStackTrace()
+            at x10::array::UnionRegion::projection(int)
+            at SOR::SORrun(double, x10aux::ref<x10::lang::Array<double> >, int)
+            at SOR::kernel()
+            at SOR::run()
+            at SORMain::main(x10aux::ref<x10::lang::Rail<x10aux::ref<x10::lang::String> > >)
+            at x10aux::BootStrapClosure::apply()
+            at x10_lang_Runtime__closure__1::apply()
+            at x10::lang::Activity::run()
+            at x10_lang_Runtime__Worker__closure__0::apply()
+            at x10::lang::Runtime::runAtLocal(int, x10aux::ref<x10::lang::VoidFun_0_0>)
+            at x10::lang::Runtime__Worker::loop(x10aux::ref<x10::lang::Runtime__Latch>, bool)
+            at x10::lang::Runtime__Worker::apply()
+            at x10::lang::Runtime__Pool::apply()
+            at x10::lang::Runtime::start(x10aux::ref<x10::lang::VoidFun_0_0>, x10aux::ref<x10::lang::VoidFun_0_0>)
+            at int x10aux::template_main<x10::lang::Runtime, SORMain>(int, char**)
+            at main
+            at __libc_start_main
+            at ./SORMain [0x8236661]
+        job terminated with exit code 1
+    12. sparsemm
+        Uncaught exception at place 0: x10.lang.MultipleExceptions
+        x10.lang.BadPlaceException: point (369) not defined at (Place 3)
+            at No stacktrace recorded.
+        x10.lang.BadPlaceException: point (116) not defined at (Place 1)
+            at No stacktrace recorded.
+        x10.lang.BadPlaceException: point (240) not defined at (Place 2)
+            at No stacktrace recorded.
+        job terminated with exit code 1
+    8. frontend.plasmax10
+        PGAS Runtime Error -1: Cannot register id=1000 for AmSend
+        PGAS Runtime Error -1: Cannot register id=1000 for AmSend
+        PGAS Runtime Error -1: Cannot register id=1000 for AmSend
+        PGAS Runtime Error -1: Cannot register id=1000 for AmSend
+        job terminated with exit code 1
+ Segmentation fault:
+    5. mg 
+    6. moldyn
+    9. raytracer
+====================================
+
+Multiple Places
+
+To do:
+
+Run all with multiple places.
+    Seemingly there are problems
+        With the runtime itslef or the programs
+            segmentation fault
+            slow execution
+        With the programs
+            wrong place casts!
+
+
+Done:
+Find the problem of raytracer in single place.

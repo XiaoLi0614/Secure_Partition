@@ -1,0 +1,32 @@
+#!/bin/sh
+export CURRENT="/media/MOHSENHD/1.Works/3.Research/0.Research/2.Plasma/2.Project/Project/src/x10/translatedbenchs/hand/mapreduce"
+export SET_DIR="/media/MOHSENHD/1.Works/3.Research/0.Research/2.Plasma/2.Project/Project/LaunchBenchmarks"
+clear
+clear
+echo ===============================================================
+echo MapReduce benchmark
+echo --------------------------------
+echo Version: 1.5
+cd $SET_DIR
+. ./SetEnvForV1.5
+cd $CURRENT/V1.5
+echo Compile:
+x10c MapReduce.x10
+echo Run:
+x10 MapReduce
+echo --------------------------------
+echo Version: 2.0
+cd $SET_DIR
+. ./SetEnvForV2
+cd $CURRENT/V2.0
+echo Compile:
+#x10c++ Timer.x10
+#x10c++ Mapper.x10
+#x10c++ Reducer.x10
+#x10c++ MapReducer.x10
+x10c++ -MAIN_CLASS=MapReduce MapReduce.x10
+echo Run:
+runx10 ./MapReduce
+cd $CURRENT
+echo ===============================================================
+

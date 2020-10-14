@@ -1,0 +1,63 @@
+package j.util.ui;
+
+import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: Mohsen Lesani
+ * Date: Apr 13, 2005
+ * Time: 2:19:02 PM
+ */
+
+public class BrowsePanel extends JPanel
+{
+	private JButton browseButton;
+	private JTextField fileNameTextField;
+	private JFileChooser fileChooser = new JFileChooser();
+	private JLabel textLabel;
+	private JPanel mainPanel;
+
+	private Runnable runnable = null;
+
+	public BrowsePanel()
+	{
+		init();
+	}
+
+	public BrowsePanel(String text)
+	{
+		textLabel.setText(text);
+		init();
+	}
+
+	private void init()
+	{
+		this.add(mainPanel);
+		browseButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				int returnVal = fileChooser.showOpenDialog(BrowsePanel.this);
+				if (returnVal == JFileChooser.APPROVE_OPTION)
+				{
+					fileNameTextField.setText(fileChooser.getSelectedFile().getPath());
+					runnable.run();
+				}
+				else
+					; //do nothing
+			}
+		});
+	}
+
+	public String getPathFileName()
+	{
+		return fileNameTextField.getText();
+	}
+
+	public void setRunnableAfterBrowse(Runnable runnable)
+	{
+		this.runnable = runnable;
+	}                           
+}
