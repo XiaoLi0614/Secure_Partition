@@ -2,6 +2,7 @@ package lambda_calculus.source_ast.tree.expression;
 
 import lambda_calculus.source_ast.tree.expression.id.Id;
 import lambda_calculus.source_ast.visitor.CPSPrinter;
+import lambda_calculus.source_ast.visitor.SourceVisitor;
 import lesani.collection.option.None;
 import lesani.collection.option.Option;
 import lesani.collection.option.Some;
@@ -14,7 +15,7 @@ public class Var implements Expression{
         //this.type = type;
         this.name = new Id(name);
     }
-    public Object accept(CPSPrinter.ExpressionVisitor varVisitor) {
+    public <R> R accept(SourceVisitor.ExpressionVisitor<R> varVisitor) {
         return varVisitor.visit(this);
     }
 }

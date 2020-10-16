@@ -1,6 +1,7 @@
 package lambda_calculus.source_ast.tree.expression.literal;
 
 import lambda_calculus.source_ast.visitor.CPSPrinter;
+import lambda_calculus.source_ast.visitor.SourceVisitor;
 
 public class IntLiteral extends Literal {
 
@@ -12,7 +13,11 @@ public class IntLiteral extends Literal {
         this.lexeme = Integer.toString(i);
     }
 
-    public Object accept(CPSPrinter.ExpressionVisitor.LiteralVisitor v) {
+    public <R> R accept(SourceVisitor.ExpressionVisitor.LiteralVisitor<R> intLiteralVisitor){
+        return intLiteralVisitor.visit(this);
+    }
+
+    public <R> R accept(SourceVisitor.ExpressionVisitor<R> v){
         return v.visit(this);
     }
 }

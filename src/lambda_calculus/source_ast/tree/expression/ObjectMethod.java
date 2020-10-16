@@ -3,6 +3,7 @@ package lambda_calculus.source_ast.tree.expression;
 import lambda_calculus.source_ast.tree.expression.id.GId;
 import lambda_calculus.source_ast.tree.expression.id.Id;
 import lambda_calculus.source_ast.visitor.CPSPrinter;
+import lambda_calculus.source_ast.visitor.SourceVisitor;
 
 public class ObjectMethod implements Expression{
     //public Option<Expression> receiver = None.instance();
@@ -31,7 +32,11 @@ public class ObjectMethod implements Expression{
         this.args = args;
     }
 
-    public Object accept(CPSPrinter.ExpressionVisitor objectMethodVisitor) {
+    public <R> R accept(SourceVisitor.ExpressionVisitor<R> objectMethodVisitor) {
         return objectMethodVisitor.visit(this);
     }
 }
+
+//    public <R> R accept(Visitor.ExpVisitor.ZOpVisitor<R> v) {
+//        return v.visit(this);
+//    }

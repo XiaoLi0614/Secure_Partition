@@ -1,7 +1,6 @@
 package lambda_calculus.cps_ast.tree.expression.id;
 
 import lambda_calculus.cps_ast.visitor.BetaReduction;
-import lambda_calculus.cps_ast.visitor.CPSPrinter;
 
 public class Id extends GId {
 

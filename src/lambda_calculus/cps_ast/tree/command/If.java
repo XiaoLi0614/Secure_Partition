@@ -1,22 +1,21 @@
 package lambda_calculus.cps_ast.tree.command;
 
-
-import lambda_calculus.source_ast.tree.expression.Expression;
+import lambda_calculus.cps_ast.tree.expression.Expression;
+import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lesani.collection.option.*;
 
 
-public class If extends Statement {
+public class If extends Command {
     public Expression condition;
-    public Statement ifStatement;
-    public Statement elseStatement;
+    public Command command1;
+    public Command command2;
 
-    public If(Expression expression, Statement ifStatement, Statement elseStatement) {
-        this.condition = expression;
-        this.ifStatement = ifStatement;
-        this.elseStatement = elseStatement;
+    public If(Command c1, Command c2) {
+        this.command1 = c1;
+        this.command2 = c2;
     }
 
-    public Object accept(StatementVisitor statementVisitor) {
-        return statementVisitor.visit(this);
+    public Object accept(BetaReduction betaVisitor) {
+        return betaVisitor.visit(this);
     }
 }

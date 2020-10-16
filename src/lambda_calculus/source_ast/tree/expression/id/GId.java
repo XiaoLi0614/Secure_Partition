@@ -2,11 +2,8 @@ package lambda_calculus.source_ast.tree.expression.id;
 
 import lambda_calculus.source_ast.tree.expression.Expression;
 import lambda_calculus.source_ast.visitor.CPSPrinter;
+import lambda_calculus.source_ast.visitor.SourceVisitor;
 
-
-/**
- * User: lesani, Date: 5-Nov-2009, Time: 10:08:25 AM
- */
 public abstract class GId implements Expression {
     public String lexeme;
 
@@ -14,15 +11,5 @@ public abstract class GId implements Expression {
         this.lexeme = lexeme;
     }
 
-//    public abstract Object accept(DFSVisitor.FileVisitor.ClassVisitor.Shared.GIdVisitor gIdVisitor);
-//
-//    public Object accept(DFSVisitor.FileVisitor.ClassVisitor.Shared.ExpressionVisitor v) {
-//        return v.visit(this);
-//    }
-    public abstract Object accept(CPSPrinter.ExpressionVisitor.GIdVisitor gIdVisitor);
-
-    public Object accept(CPSPrinter.ExpressionVisitor v) {
-        return v.visit(this);
-    }
-
+    public abstract <R> R accept(SourceVisitor.ExpressionVisitor.GIdVisitor<R> v);
 }

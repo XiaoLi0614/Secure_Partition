@@ -1,6 +1,7 @@
 package lambda_calculus.source_ast.tree.expression;
 
 import lambda_calculus.source_ast.visitor.CPSPrinter;
+import lambda_calculus.source_ast.visitor.SourceVisitor;
 
 
 public class Conditional implements Expression {
@@ -14,8 +15,7 @@ public class Conditional implements Expression {
         this.ifExp = ifExp;
         this.elseExp = elseExp;
     }
-
-    public Object accept(CPSPrinter.ExpressionVisitor expressionVisitor) {
-        return expressionVisitor.visit(this);
+    public <R> R accept(SourceVisitor.ExpressionVisitor<R> conditionalVisitor) {
+        return conditionalVisitor.visit(this);
     }
 }

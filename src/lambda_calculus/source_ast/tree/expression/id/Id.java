@@ -1,6 +1,8 @@
 package lambda_calculus.source_ast.tree.expression.id;
 
+import lambda_calculus.source_ast.tree.expression.Expression;
 import lambda_calculus.source_ast.visitor.CPSPrinter;
+import lambda_calculus.source_ast.visitor.SourceVisitor;
 
 public class Id extends GId {
 
@@ -8,13 +10,11 @@ public class Id extends GId {
         super(name);
     }
 
-//    @Override
-//    public Object accept(DFSVisitor.FileVisitor.ClassVisitor.Shared.GIdVisitor gIdVisitor) {
-//        return gIdVisitor.visit(this);
-//    }
+    public <R> R accept(SourceVisitor.ExpressionVisitor.GIdVisitor<R> id){
+        return id.visit(this);
+    }
 
-    @Override
-    public Object accept(CPSPrinter.ExpressionVisitor.GIdVisitor gIdVisitor) {
-        return gIdVisitor.visit(this);
+    public <R> R accept(SourceVisitor.ExpressionVisitor<R> v){
+        return v.visit(this);
     }
 }
