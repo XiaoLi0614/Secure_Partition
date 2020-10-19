@@ -2,6 +2,7 @@ package lambda_calculus.cps_ast.tree.expression.id;
 
 import lambda_calculus.cps_ast.tree.expression.Expression;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
+import lambda_calculus.cps_ast.visitor.CPSVisitor;
 
 public abstract class GId implements Expression {
     public String lexeme;
@@ -10,10 +11,10 @@ public abstract class GId implements Expression {
         this.lexeme = lexeme;
     }
 
-    public abstract Object accept(BetaReduction.ExpressionVisitor.GIdVisitor gIdVisitor);
-
-    public Object accept(BetaReduction.ExpressionVisitor v) {
+    public <R> R accept(CPSVisitor.ExpressionVisitor<R> v){
         return v.visit(this);
     }
+
+    public abstract <R> R accept(CPSVisitor.ExpressionVisitor.GIdVisitor<R> v);
 
 }

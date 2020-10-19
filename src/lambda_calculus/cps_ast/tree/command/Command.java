@@ -2,7 +2,15 @@ package lambda_calculus.cps_ast.tree.command;
 
 import lambda_calculus.cps_ast.tree.Node;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
+import lambda_calculus.cps_ast.visitor.CPSVisitor;
 
 public abstract class Command implements Node {
-    public abstract Object accept(BetaReduction BetaVisitor);
+/*    public <R> R accept(CPSVisitor<R> v){
+        return v.visit(this);
+    }*/
+
+    public <R> R accept(CPSVisitor<R> v){
+        return v.visit(this);
+    }
+    public abstract <R> R accept(CPSVisitor.CommandVisitor<R> v);
 }

@@ -1,6 +1,7 @@
 package lambda_calculus.cps_ast.tree.expression.id;
 
 import lambda_calculus.cps_ast.visitor.BetaReduction;
+import lambda_calculus.cps_ast.visitor.CPSVisitor;
 
 public class Id extends GId {
 
@@ -8,8 +9,7 @@ public class Id extends GId {
         super(name);
     }
 
-    @Override
-    public Object accept(BetaReduction.ExpressionVisitor.GIdVisitor gIdVisitor) {
-        return gIdVisitor.visit(this);
+    public <R> R accept(CPSVisitor.ExpressionVisitor.GIdVisitor<R> id){
+        return id.visit(this);
     }
 }

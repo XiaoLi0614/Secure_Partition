@@ -2,6 +2,7 @@ package lambda_calculus.cps_ast.tree.expression;
 
 import lambda_calculus.cps_ast.tree.expression.id.Id;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
+import lambda_calculus.cps_ast.visitor.CPSVisitor;
 import lesani.collection.option.None;
 import lesani.collection.option.Option;
 import lesani.collection.option.Some;
@@ -12,7 +13,7 @@ public class Var implements Expression{
     public Var(String name) {
         this.name = new Id(name);
     }
-    public Object accept(BetaReduction.ExpressionVisitor varVisitor) {
+    public <R> R accept(CPSVisitor.ExpressionVisitor<R> varVisitor) {
         return varVisitor.visit(this);
     }
 }

@@ -2,6 +2,7 @@ package lambda_calculus.cps_ast.tree.expression;
 
 
 import lambda_calculus.cps_ast.visitor.BetaReduction;
+import lambda_calculus.cps_ast.visitor.CPSVisitor;
 
 public class Conditional implements Expression {
 
@@ -15,7 +16,7 @@ public class Conditional implements Expression {
         this.elseExp = elseExp;
     }
 
-    public Object accept(BetaReduction.ExpressionVisitor expressionVisitor) {
-        return expressionVisitor.visit(this);
+    public <R> R accept(CPSVisitor.ExpressionVisitor<R> conditionalVisitor) {
+        return conditionalVisitor.visit(this);
     }
 }

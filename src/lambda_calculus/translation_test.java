@@ -7,6 +7,7 @@ import lambda_calculus.source_ast.tree.expression.ObjectMethod;
 import lambda_calculus.source_ast.tree.expression.Var;
 import lambda_calculus.source_ast.tree.expression.literal.IntLiteral;
 import lambda_calculus.source_ast.tree.expression.op.Sequence;
+import lambda_calculus.source_ast.visitor.CPSPrinter;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,7 +18,8 @@ public class translation_test {
     static String outputPath = "/home/xiao/IdeaProjects/secure_partition/out/lambda_calculus/";
     public static void main(String[] args)
     {
-        Expression lambda1 = createOFTUseCase();;
+        Expression lambda1 = createOFTUseCase();
+        CPSPrinter.print(lambda1);
         //printToFile(lambda1., "oft_cps");
     }
 

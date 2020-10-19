@@ -42,106 +42,6 @@ public class CPSPrinter implements SourceVisitor{
         return "x" + String.valueOf(administrativeX++);
     }
 
-/*
-    public static Pair<Command, Context> CPS_Translation(Expression e){
-        CPSPrinter p = new CPSPrinter();
-        p.visitDispatch(e);
-    }
-*/
-
-    /*public ExpressionVisitor expressionVisitor =  new ExpressionVisitor();
-    public class ExpressionVisitor {
-        public Object visitDispatch(Expression expression) {
-            return expression.accept(this);
-        }
-
-        public Object visit(GId id) {
-            return gIdVisitor.visitDispatch(id);
-        }
-
-        public Object visit(Literal literal) {
-            return literalVisitor.visitDispatch(literal);
-        }
-
-        public Object visit(BinaryOp binaryOp) {
-            return binaryOpVisitor.visitDispatch(binaryOp);
-        }
-
-        public Object visit(ObjectMethod objectMethod) {
-            GId objectName = objectMethod.objectName;
-            GId methodName = objectMethod.methodName;
-            Expression[] args = objectMethod.args;
-
-            //evaluate the argument first
-            if(args.length == 0 || args == null){
-                seq.put("(call x" + administrativeX + ":= ");
-                expressionVisitor.visitDispatch(objectName);
-                seq.put(".");
-                expressionVisitor.visitDispatch(methodName);
-                seq.put("() in ");
-                //seq.put(k);
-                seq.put(" x" + administrativeX + ")");
-            }
-            else {
-                for (Expression arg : args) {
-                    seq.put("lambda ");
-                    expressionVisitor.visitDispatch(arg);
-                }
-            }
-            seq.put("(lambda x" + administrativeX + "call x");
-            expressionVisitor.visitDispatch(objectName);
-            expressionVisitor.visitDispatch(methodName);
-            return null;
-        }
-
-        public Object visit(Conditional conditional) {
-            Expression condition = conditional.condition;
-            Expression ifExp = conditional.ifExp;
-            Expression elseExp = conditional.elseExp;
-            expressionVisitor.visitDispatch(condition);
-            expressionVisitor.visitDispatch(ifExp);
-            expressionVisitor.visitDispatch(elseExp);
-            return null;
-        }
-
-        public Object visit(Var var) {
-            return null;
-        }
-
-        public GIdVisitor gIdVisitor = new GIdVisitor();
-        public class GIdVisitor {
-            public Object visitDispatch(GId gId) {
-                return gId.accept(this);
-            }
-
-            public Object visit(Id id) { return null; }
-        }
-
-        public LiteralVisitor literalVisitor = new LiteralVisitor();
-        public class LiteralVisitor {
-            public Object visitDispatch(Literal literal) {
-                return literal.accept(this);
-            }
-
-            public Object visit(IntLiteral intLiteral) { return null; }
-        }
-
-        public BinaryOpVisitor binaryOpVisitor =  new BinaryOpVisitor();
-        public class BinaryOpVisitor {
-            public Object visitDispatch(BinaryOp binaryOp) {
-                expressionVisitor.visitDispatch(binaryOp.operand1);
-                expressionVisitor.visitDispatch(binaryOp.operand2);
-                return binaryOp.accept(this);
-            }
-
-            public Object visit(lambda_calculus.source_ast.tree.expression.op.Plus plus) { return null; }
-
-            public Object visit(lambda_calculus.source_ast.tree.expression.op.Sequence sequence) {
-                return null;
-            }
-        }
-    }*/
-
     public Object visitDispatch(Expression expression) {
         return expression.accept(expressionT);
     }
@@ -149,7 +49,7 @@ public class CPSPrinter implements SourceVisitor{
     public class ExpressionT implements ExpressionVisitor<Object>{
 
         //For these two functions, we produce an application ast node in the target language
-        public class GIdT implements ExpressionVisitor.GIdVisitor<Object>{
+        public class GIdT implements GIdVisitor<Object>{
             //[x]k = k x
             @Override
             public Object visit(Id id){
@@ -162,7 +62,11 @@ public class CPSPrinter implements SourceVisitor{
             }
         }
 
-        public class LiteralT implements ExpressionVisitor.LiteralVisitor<Object>{
+        GIdT gIdT = new GIdT();
+        @Override
+        public Object visit(GId gId){ return gId.accept(gIdT); }
+
+        public class LiteralT implements LiteralVisitor<Object>{
             //[n]k = k n
             @Override
             public Object visit(IntLiteral intLiteral){
@@ -175,7 +79,11 @@ public class CPSPrinter implements SourceVisitor{
             }
         }
 
-        public class BinaryOpT implements ExpressionVisitor.BinaryOpVisitor<Object>{
+        LiteralT literalT = new LiteralT();
+        @Override
+        public Object visit(Literal literal){ return literal.accept(literalT); }
+
+        public class BinaryOpT implements BinaryOpVisitor<Object>{
             //[e1 + e2]k = [e1](lambda x1. [e2]( lambda x2. k(x1 + x2)))
             //this is a non-terminal node
             @Override
@@ -254,6 +162,10 @@ public class CPSPrinter implements SourceVisitor{
                 //return resultCommand;}
                 }
         }
+
+        BinaryOpT binaryT = new BinaryOpT();
+        @Override
+        public Object visit(BinaryOp binaryOp){ return binaryOp.accept(binaryT); }
 
         //[o.m(e)] k = [e] (lambda x1. call x2 = o.m(x1) in k x2)
         @Override

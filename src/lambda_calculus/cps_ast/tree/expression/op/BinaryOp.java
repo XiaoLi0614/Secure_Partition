@@ -2,6 +2,7 @@ package lambda_calculus.cps_ast.tree.expression.op;
 
 import lambda_calculus.cps_ast.tree.expression.Expression;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
+import lambda_calculus.cps_ast.visitor.CPSVisitor;
 
 public abstract class BinaryOp implements Expression {
 
@@ -15,9 +16,9 @@ public abstract class BinaryOp implements Expression {
         this.operand2 = operand2;
     }
 
-    public Object accept(BetaReduction.ExpressionVisitor expressionVisitor) {
-        return expressionVisitor.visit(this);
+    public <R> R accept(CPSVisitor.ExpressionVisitor<R> v){
+        return v.visit(this);
     }
 
-    public abstract Object accept(BetaReduction.ExpressionVisitor.BinaryOpVisitor binaryOpVisitor);
+    public abstract <R> R accept(CPSVisitor.ExpressionVisitor.BinaryOpVisitor<R> v);
 }

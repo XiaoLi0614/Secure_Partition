@@ -1,5 +1,6 @@
 package lambda_calculus.cps_ast.visitor;
 
+import lambda_calculus.cps_ast.tree.command.*;
 import lambda_calculus.cps_ast.tree.expression.Conditional;
 import lambda_calculus.cps_ast.tree.expression.Expression;
 import lambda_calculus.cps_ast.tree.expression.Var;
@@ -8,6 +9,8 @@ import lambda_calculus.cps_ast.tree.expression.id.Id;
 import lambda_calculus.cps_ast.tree.expression.literal.IntLiteral;
 import lambda_calculus.cps_ast.tree.expression.literal.Literal;
 import lambda_calculus.cps_ast.tree.expression.op.BinaryOp;
+import lambda_calculus.cps_ast.tree.expression.op.Plus;
+import lambda_calculus.source_ast.tree.expression.ObjectMethod;
 import lesani.compiler.texttree.seq.TextSeq;
 
 public class BetaReduction implements CPSVisitor{
@@ -21,107 +24,69 @@ public class BetaReduction implements CPSVisitor{
         administrativeX = 0;
     }
 
-//    //print method for all th expressions
-//    public static String print(Expression expression){
-//        CPSPrinter p = new CPSPrinter();
-//        p.visitDispatch(expression);
-//        return p.getText();
-//    }
-
-    public ExpressionVisitor expressionVisitor =  new ExpressionVisitor();
-    public class ExpressionVisitor {
-        public Object visitDispatch(Expression expression) {
-            return expression.accept(this);
-        }
-
-        public Object visit(GId id) {
-            return gIdVisitor.visitDispatch(id);
-        }
-
-        public Object visit(Literal literal) {
-            return literalVisitor.visitDispatch(literal);
-        }
-
-        public Object visit(BinaryOp binaryOp) {
-            return binaryOpVisitor.visitDispatch(binaryOp);
-        }
-
-//        public Object visit(ObjectMethod objectMethod) {
-//            GId objectName = objectMethod.objectName;
-//            GId methodName = objectMethod.methodName;
-//            Expression[] args = objectMethod.args;
-//
-//            //evaluate the argument first
-//            if(args.length == 0 || args == null){
-//                seq.put("(call x" + administrativeX + ":= ");
-//                expressionVisitor.visitDispatch(objectName);
-//                seq.put(".");
-//                expressionVisitor.visitDispatch(methodName);
-//                seq.put("() in ");
-//                //seq.put(k);
-//                seq.put(" x" + administrativeX + ")");
-//            }
-//            else {
-//                for (Expression arg : args) {
-//                    seq.put("lambda ");
-//                    expressionVisitor.visitDispatch(arg);
-//                }
-//            }
-//            seq.put("(lambda x" + administrativeX + "call x");
-//            expressionVisitor.visitDispatch(objectName);
-//            expressionVisitor.visitDispatch(methodName);
-//            return null;
-//        }
-
-        public Object visit(Conditional conditional) {
-            Expression condition = conditional.condition;
-            Expression ifExp = conditional.ifExp;
-            Expression elseExp = conditional.elseExp;
-            expressionVisitor.visitDispatch(condition);
-            expressionVisitor.visitDispatch(ifExp);
-            expressionVisitor.visitDispatch(elseExp);
-            return null;
-        }
-
-        public Object visit(Var var) {
-            return null;
-        }
-
-        public GIdVisitor gIdVisitor = new GIdVisitor();
-        public class GIdVisitor {
-            public Object visitDispatch(GId gId) {
-                return gId.accept(this);
-            }
-
-            public Object visit(Id id) { return null; }
-        }
-
-        public LiteralVisitor literalVisitor = new LiteralVisitor();
-        public class LiteralVisitor {
-            public Object visitDispatch(Literal literal) {
-                return literal.accept(this);
-            }
-
-            public Object visit(IntLiteral intLiteral) { return null; }
-        }
-
-
-
-        public BinaryOpVisitor binaryOpVisitor =  new BinaryOpVisitor();
-        public class BinaryOpVisitor {
-            public Object visitDispatch(BinaryOp binaryOp) {
-                expressionVisitor.visitDispatch(binaryOp.operand1);
-                expressionVisitor.visitDispatch(binaryOp.operand2);
-                return binaryOp.accept(this);
-            }
-
-            public Object visit(lambda_calculus.source_ast.tree.expression.op.Plus plus) { return null; }
-
-            public Object visit(lambda_calculus.source_ast.tree.expression.op.Sequence sequence) {
-                return null;
-            }
-        }
+    public Object visitDispatch(Expression expression) {
+        return expression.accept(expressionB);
     }
+    public ExpressionB expressionB =  new ExpressionB();
+    public class ExpressionB implements ExpressionVisitor<Object> {
+        public class GIdB implements GIdVisitor<Object>{
+            @Override
+            public Object visit(Id id){ return null;}
+        }
+        GIdB gIdB = new GIdB();
+        @Override
+        public Object visit(GId gId){ return gId.accept(gIdB); }
+
+        public class LiteralB implements LiteralVisitor<Object>{
+            @Override
+            public Object visit(IntLiteral intLiteral){ return null;}
+        }
+        LiteralB literalB = new LiteralB();
+        @Override
+        public Object visit(Literal literal){ return literal.accept(literalB); }
+
+        public class BinaryOpB implements BinaryOpVisitor<Object>{
+            @Override
+            public Object visit(Plus plus){ return null;}
+        }
+        BinaryOpB binaryOpB = new BinaryOpB();
+        @Override
+        public Object visit(BinaryOp binaryOp){ return binaryOp.accept(binaryOpB); }
+
+        @Override
+        public Object visit(Var var){ return  null; }
+
+        @Override
+        public Object visit(Conditional conditional){ return null; }
+    }
+
+    /*public Object visitDispatch(Command command) {
+        return command.accept(commandB);
+    }
+    public CommandB commandB =  new CommandB();*/
+    public class CommandB implements CommandVisitor<Object> {
+        @Override
+        public Object visit(Application application){ return null; }
+
+        @Override
+        public Object visit(Abstraction abstraction){ return null; }
+
+        @Override
+        public Object visit(ExpSt expSt){ return null; }
+
+        @Override
+        public Object visit(If iF){ return null; }
+
+        @Override
+        public Object visit(Sequence sequence){ return null; }
+
+        @Override
+        public Object visit(SingleCall singleCall){ return null; }
+    }
+
+    CommandB commandB = new CommandB();
+    @Override
+    public Object visit(Command command){ return command.accept(commandB); }
 }
 
 

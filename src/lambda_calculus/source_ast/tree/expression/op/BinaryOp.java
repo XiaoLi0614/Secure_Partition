@@ -19,4 +19,6 @@ public abstract class BinaryOp implements Expression {
     public <R> R accept(SourceVisitor.ExpressionVisitor<R> v){
         return v.visit(this);
     }
+
+    public abstract <R> R accept(SourceVisitor.ExpressionVisitor.BinaryOpVisitor<R> v);
 }

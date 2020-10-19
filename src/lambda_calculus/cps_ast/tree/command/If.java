@@ -2,6 +2,7 @@ package lambda_calculus.cps_ast.tree.command;
 
 import lambda_calculus.cps_ast.tree.expression.Expression;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
+import lambda_calculus.cps_ast.visitor.CPSVisitor;
 import lesani.collection.option.*;
 
 
@@ -16,7 +17,7 @@ public class If extends Command {
         this.command2 = c2;
     }
 
-    public Object accept(BetaReduction betaVisitor) {
-        return betaVisitor.visit(this);
+    public <R> R accept(CPSVisitor.CommandVisitor<R> iF){
+        return iF.visit(this);
     }
 }

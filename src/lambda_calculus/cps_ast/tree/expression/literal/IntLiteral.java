@@ -2,6 +2,7 @@ package lambda_calculus.cps_ast.tree.expression.literal;
 
 import lambda_calculus.cps_ast.tree.expression.literal.Literal;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
+import lambda_calculus.cps_ast.visitor.CPSVisitor;
 
 public class IntLiteral extends Literal {
 
@@ -13,7 +14,7 @@ public class IntLiteral extends Literal {
         this.lexeme = Integer.toString(i);
     }
 
-    public Object accept(BetaReduction.ExpressionVisitor.LiteralVisitor v) {
-        return v.visit(this);
+    public <R> R accept(CPSVisitor.ExpressionVisitor.LiteralVisitor<R> intLiteralVisitor){
+        return intLiteralVisitor.visit(this);
     }
 }

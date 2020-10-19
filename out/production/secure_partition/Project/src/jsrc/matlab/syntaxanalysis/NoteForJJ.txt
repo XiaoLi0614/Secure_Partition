@@ -1,9 +1,0 @@
-Run JTB on matlab.jj
-
-Go to parser folder and then in jtb.out.jj, add the following
-  package jsrc.matlab.syntaxanalysis.parser;
-after
-PARSER_BEGIN(MatlabParser)
-
-Run JavaCC on jtb.out.jj
-

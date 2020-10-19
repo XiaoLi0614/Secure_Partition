@@ -14,4 +14,6 @@ public abstract class GId implements Expression {
     public <R> R accept(SourceVisitor.ExpressionVisitor<R> v){
         return v.visit(this);
     }
+
+    public abstract <R> R accept(SourceVisitor.ExpressionVisitor.GIdVisitor<R> v);
 }

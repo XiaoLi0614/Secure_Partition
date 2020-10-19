@@ -6,6 +6,7 @@ import lambda_calculus.cps_ast.tree.expression.Var;
 import lambda_calculus.cps_ast.tree.expression.id.GId;
 import lambda_calculus.cps_ast.tree.expression.id.Id;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
+import lambda_calculus.cps_ast.visitor.CPSVisitor;
 
 public class SingleCall extends Command {
     public Var administrativeX; // this is the administrative x for the object method
@@ -23,8 +24,8 @@ public class SingleCall extends Command {
         this.administrativeX = aX;
     }
 
-    public Object accept(BetaReduction statementVisitor) {
-        return statementVisitor.visit(this);
+    public <R> R accept(CPSVisitor.CommandVisitor<R> singleCall){
+        return singleCall.visit(this);
     }
 }
 
