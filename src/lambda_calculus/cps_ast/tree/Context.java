@@ -42,7 +42,7 @@ public class Context {
         return c;
     }*/
 
-    public HashMap<Var, Expression> contextMap;
+    public HashMap<Var, Command> contextMap;
     //public Command scope;
     //public Context parent;
 
@@ -51,11 +51,11 @@ public class Context {
         this.contextMap = new HashMap<>();
     }
 
-    public Context(HashMap<Var, Expression> cMap){
+    public Context(HashMap<Var, Command> cMap){
         this.contextMap = cMap;
     }
 
-    public Expression getValueInContext(Var v){
+    public Command getValueInContext(Var v){
         if( this.contextMap.containsKey(v)){
             return this.contextMap.get(v);
         }
@@ -64,7 +64,7 @@ public class Context {
         }
     }
 
-    public void bindValueToContext(Var v, Expression e){
+    public void bindValueToContext(Var v, Command e){
         //there is already a binding for the variable, throw an error
         if(this.contextMap.containsKey(v)){
             if(this.contextMap.get(v) != null){

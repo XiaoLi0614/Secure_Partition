@@ -1,7 +1,7 @@
 package lambda_calculus.cps_ast.tree.command;
 
 import lambda_calculus.cps_ast.visitor.BetaReduction;
-import lambda_calculus.source_ast.tree.expression.Expression;
+import lambda_calculus.cps_ast.tree.expression.Expression;
 
 public class ExpSt extends Command {
     public Expression expression;

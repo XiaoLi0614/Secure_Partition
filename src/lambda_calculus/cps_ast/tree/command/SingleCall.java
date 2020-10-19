@@ -15,12 +15,12 @@ public class SingleCall extends Command {
     public Command nestedCommand; // call x = o.m(e) in c
     //todo: we need to add binding here
 
-    public SingleCall(String oName, String mName, Expression[] args, String aX, Command nCommand) {
+    public SingleCall(String oName, String mName, Expression[] args, Var aX, Command nCommand) {
         this.methodName = new Id(mName);
         this.objectName = new Id(oName);
         this.args = args;
         this.nestedCommand = nCommand;
-        this.administrativeX = new Var(aX);
+        this.administrativeX = aX;
     }
 
     public Object accept(BetaReduction statementVisitor) {
