@@ -10,7 +10,7 @@ import lambda_calculus.cps_ast.tree.expression.literal.Literal;
 import lambda_calculus.cps_ast.tree.expression.op.BinaryOp;
 import lesani.compiler.texttree.seq.TextSeq;
 
-public class BetaReduction {
+public class BetaReduction implements CPSVisitor{
 
     TextSeq seq;
     //TextSeq k;

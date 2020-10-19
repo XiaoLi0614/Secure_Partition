@@ -177,38 +177,44 @@ public class CPSPrinter implements SourceVisitor{
 
         public class BinaryOpT implements ExpressionVisitor.BinaryOpVisitor<Object>{
             //[e1 + e2]k = [e1](lambda x1. [e2]( lambda x2. k(x1 + x2)))
+            //this is a non-terminal node
             @Override
             public Object visit(Plus plus){
-                // lambda x1
                 lambda_calculus.cps_ast.tree.expression.Var[] lambda1Var = new lambda_calculus.cps_ast.tree.expression.Var[1];
                 lambda1Var[0] = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
-                resultContext.addVariableToContext(lambda1Var[0]);
-                //lambda x2
                 lambda_calculus.cps_ast.tree.expression.Var[] lambda2Var = new lambda_calculus.cps_ast.tree.expression.Var[1];
                 lambda2Var[0] = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
-                resultContext.addVariableToContext(lambda2Var[0]);
+
                 //x1 + x2
                 lambda_calculus.cps_ast.tree.expression.op.Plus varPlus = new lambda_calculus.cps_ast.tree.expression.op.Plus(lambda1Var[0], lambda2Var[0]);
                 Command[] plusBody = new Command[1];
                 plusBody[0] = new ExpSt(varPlus);
 
+                //lambda x2
+                resultContext.addVariableToContext(lambda2Var[0]);
+                //lambda x2 . k(x1 + x2)
                 Command body2 = new Abstraction(lambda2Var, new Application(continuationMap.get(plus), plusBody));
-                Command[] body2AsVar = new Command[1];
-                body2AsVar[0] = body2;
-
-                Command body1 = new Abstraction(lambda1Var, new Application((Command) visitDispatch(plus.operand2), body2AsVar));
-                Command[] body1AsVar = new Command[1];
-                body1AsVar[0] = body1;
-                Command resultCommand = new Application((Command) visitDispatch(plus.operand1), body1AsVar);
-
-                //update the continuation map for future use
-                continuationMap.put(plus.operand1, body1);
                 continuationMap.put(plus.operand2, body2);
-                //update context for evaluation
-                resultContext.bindValueToContext(lambda1Var[0], (Command) visitDispatch(plus.operand1));
-                resultContext.bindValueToContext(lambda2Var[0], (Command) visitDispatch(plus.operand2));
+                Command e2Evaluation = (Command) visitDispatch(plus.operand2);
+                resultContext.bindValueToContext(lambda2Var[0], e2Evaluation);
 
-                return resultCommand;
+                //-----------------------------------------------------------------
+                // lambda x1
+                resultContext.addVariableToContext(lambda1Var[0]);
+                //lambda x1. [e2] (lambda x2.k( x1 + x2))
+                Command body1 = new Abstraction(lambda1Var, e2Evaluation);
+                continuationMap.put(plus.operand1, body1);
+                Command e1Evaluation = (Command) visitDispatch(plus.operand1);
+                resultContext.bindValueToContext(lambda1Var[0], e1Evaluation);
+                //todo: I think the bindings are not correct now. I confuse the evaluation and the translation part
+
+                //Command[] body2AsVar = new Command[1];
+                //body2AsVar[0] = body2;
+                //Command[] body1AsVar = new Command[1];
+                //body1AsVar[0] = body1;
+                //Command resultCommand = new Application((Command) visitDispatch(plus.operand1), body1AsVar);
+
+                return null;
             }
 
             //[e1; e2]k = [e1]([e2] (lambda x. k x))
@@ -225,23 +231,28 @@ public class CPSPrinter implements SourceVisitor{
                 lambdaAsVar2[0] = new ExpSt(lambdaVar);
 
                 Command bodyForE2 = new Abstraction(lambdaAsVar1, new Application(continuationMap.get(sequence), lambdaAsVar2));
-                Command[] bodyAsVar = new Command[1];
-                bodyAsVar[0] = bodyForE2;
-                Command[] bodyAsVar2 = new Command[1];
-                bodyAsVar2[0] = new Application(
-                        (Command) visitDispatch(sequence.operand2),
-                        bodyAsVar);
+                //Command[] bodyAsVar = new Command[1];
+                //bodyAsVar[0] = bodyForE2;
+                //Command[] bodyAsVar2 = new Command[1];
+                //bodyAsVar2[0] = new Application(
+                        //(Command) visitDispatch(sequence.operand2),
+                        //bodyAsVar);
+
+                visitDispatch(sequence.operand1);
+                continuationMap.put(sequence.operand2, bodyForE2);
+                Command e2Evaluation = (Command) visitDispatch(sequence.operand2);
 
                 //add continuation and context
-                continuationMap.put(sequence.operand2, bodyForE2);
-                continuationMap.put(sequence.operand1, bodyAsVar2[0]);
-                resultContext.bindValueToContext(lambdaVar, (Command) visitDispatch(sequence.operand2));
+                //continuationMap.put(sequence.operand1, bodyAsVar2[0]);
+                resultContext.bindValueToContext(lambdaVar, e2Evaluation);
 
-                Command resultCommand = new Application(
-                        (Command) visitDispatch(sequence.operand1),
-                        bodyAsVar2);
+                //Command resultCommand = new Application(
+                        //(Command) visitDispatch(sequence.operand1),
+                        //bodyAsVar2);
 
-                return resultCommand;}
+                return null;
+                //return resultCommand;}
+                }
         }
 
         //[o.m(e)] k = [e] (lambda x1. call x2 = o.m(x1) in k x2)
@@ -255,14 +266,14 @@ public class CPSPrinter implements SourceVisitor{
             Application kX2 = new Application(continuationMap.get(objectMethod), x2AsVar);
 
             //[o.m()] k = call x = o.m() in (k x)
+            //this is a termination
             if(objectMethod.args.length == 0 || objectMethod.args == null){
                 SingleCall call = new SingleCall(
                         objectMethod.objectName.lexeme, objectMethod.methodName.lexeme, null, lambda2, kX2);
                 resultContext.bindValueToContext(lambda2, call);
-                //todo: what is the continuation for the termination?
                 return call;
             }
-            // if there are arguments
+            // if there are arguments, this is not a termination
             else {
                 //x1
                 lambda_calculus.cps_ast.tree.expression.Var lambda1 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
@@ -276,17 +287,17 @@ public class CPSPrinter implements SourceVisitor{
                         lambda1AsVar,
                         lambda2,
                         kX2);
-                Abstraction bodyForE = new Abstraction(lambda1AsVar2, call2);
-                Command[] bodyForEAsValue = new Command[1];
-                bodyForEAsValue[0] = bodyForE;
-                Application resultCommand = new Application((Command) visitDispatch(objectMethod.args[0]), bodyForEAsValue);
-
                 resultContext.bindValueToContext(lambda2, call2);
-                resultContext.bindValueToContext(lambda1, (Command) visitDispatch(objectMethod.args[0]));
 
+                Abstraction bodyForE = new Abstraction(lambda1AsVar2, call2);
+                //Command[] bodyForEAsValue = new Command[1];
+                //bodyForEAsValue[0] = bodyForE;
+                //Application resultCommand = new Application((Command) visitDispatch(objectMethod.args[0]), bodyForEAsValue);
                 continuationMap.put(objectMethod.args[0], bodyForE);
-
-                return resultCommand;
+                Command eEvaluation = (Command) visitDispatch(objectMethod.args[0]);
+                resultContext.bindValueToContext(lambda1, eEvaluation);
+                //return resultCommand;
+                return null;
             }
         }
 
@@ -294,12 +305,48 @@ public class CPSPrinter implements SourceVisitor{
         //[if e0 then e1 else e2] k = [e0] (lambda x. if x neq 0 then [e1]( lambda x1. k x1) else [e2] (lambda x2. k x2))
         @Override
         public Object visit(Conditional conditional) {
-            Expression condition = conditional.condition;
-            Expression ifExp = conditional.ifExp;
-            Expression elseExp = conditional.elseExp;
-            visitDispatch(condition);
-            visitDispatch(ifExp);
-            visitDispatch(elseExp);
+            //produce lambda
+            lambda_calculus.cps_ast.tree.expression.Var lambda0 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
+            lambda_calculus.cps_ast.tree.expression.Var lambda1 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
+            lambda_calculus.cps_ast.tree.expression.Var lambda2 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
+            resultContext.addVariableToContext(lambda0);
+            resultContext.addVariableToContext(lambda1);
+            resultContext.addVariableToContext(lambda2);
+
+            resultContext.bindValueToContext(lambda0, (Command) visitDispatch(conditional.condition));
+            resultContext.bindValueToContext(lambda1, (Command) visitDispatch(conditional.ifExp));
+            resultContext.bindValueToContext(lambda2, (Command) visitDispatch(conditional.elseExp));
+
+            //x neq 0
+
+
+            //k x1
+            Command[] x1AsVar = new Command[1];
+            x1AsVar[0] = new ExpSt(lambda1);
+            lambda_calculus.cps_ast.tree.expression.Var[] x1AsVar2 = new lambda_calculus.cps_ast.tree.expression.Var[1];
+            x1AsVar2[0] = lambda1;
+            Application kX1 = new Application(continuationMap.get(conditional), x1AsVar);
+            Abstraction thenBody = new Abstraction(x1AsVar2, kX1);
+
+            continuationMap.put(conditional.ifExp, thenBody);
+
+            //k x2
+            Command[] x2AsVar = new Command[1];
+            x2AsVar[0] = new ExpSt(lambda2);
+            lambda_calculus.cps_ast.tree.expression.Var[] x2AsVar2 = new lambda_calculus.cps_ast.tree.expression.Var[1];
+            x2AsVar2[0] = lambda2;
+            Application kX2 = new Application(continuationMap.get(conditional), x2AsVar);
+            Abstraction elseBody = new Abstraction(x2AsVar2, kX2);
+
+            continuationMap.put(conditional.elseExp, elseBody);
+
+            //when we have more to evaluate[], we do not return anything , we simply dispatch.
+            lambda_calculus.cps_ast.tree.expression.Var[] x0AsVar = new lambda_calculus.cps_ast.tree.expression.Var[1];
+            x0AsVar[0] = lambda0;
+            Abstraction continuationForE0 = new Abstraction(x0AsVar, new If(lambda0, (Command) visitDispatch(conditional.ifExp), (Command) visitDispatch(conditional.elseExp)));
+            continuationMap.put(conditional.condition, continuationForE0);
+            visitDispatch(conditional.condition);
+
             return null;
         }
 

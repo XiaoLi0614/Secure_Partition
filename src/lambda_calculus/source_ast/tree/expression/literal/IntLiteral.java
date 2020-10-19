@@ -16,8 +16,4 @@ public class IntLiteral extends Literal {
     public <R> R accept(SourceVisitor.ExpressionVisitor.LiteralVisitor<R> intLiteralVisitor){
         return intLiteralVisitor.visit(this);
     }
-
-    public <R> R accept(SourceVisitor.ExpressionVisitor<R> v){
-        return v.visit(this);
-    }
 }

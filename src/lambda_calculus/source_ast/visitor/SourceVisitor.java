@@ -13,18 +13,19 @@ import lambda_calculus.source_ast.tree.expression.op.Sequence;
 
 public interface SourceVisitor<R> {
     interface ExpressionVisitor<R>{
+        R visit(GId gId);
+        R visit(Literal literal);
+        R visit(BinaryOp binaryOp);
+
         interface GIdVisitor<R>{
-            //R visit(GId gId);
             R visit(Id id);
         }
 
         interface LiteralVisitor<R>{
-            //R visit(Literal literal);
             R visit(IntLiteral intLiteral);
         }
 
         interface BinaryOpVisitor<R>{
-            //R visit(BinaryOp binaryOp);
             R visit(Plus plus);
             R visit(Sequence sequence);
         }

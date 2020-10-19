@@ -11,8 +11,4 @@ public class Sequence extends BinaryOp {
     public <R> R accept(SourceVisitor.ExpressionVisitor.BinaryOpVisitor<R> binaryOpVisitor){
         return binaryOpVisitor.visit(this);
     }
-
-    public <R> R accept(SourceVisitor.ExpressionVisitor<R> v){
-        return v.visit(this);
-    }
 }

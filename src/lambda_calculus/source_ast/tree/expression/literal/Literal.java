@@ -7,5 +7,7 @@ import lambda_calculus.source_ast.visitor.SourceVisitor;
 public abstract class Literal implements Expression {
     public String lexeme;
 
-    public abstract <R> R accept(SourceVisitor.ExpressionVisitor.LiteralVisitor<R> v);
+    public <R> R accept(SourceVisitor.ExpressionVisitor<R> v){
+        return v.visit(this);
+    }
 }

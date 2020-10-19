@@ -13,8 +13,4 @@ public class Id extends GId {
     public <R> R accept(SourceVisitor.ExpressionVisitor.GIdVisitor<R> id){
         return id.visit(this);
     }
-
-    public <R> R accept(SourceVisitor.ExpressionVisitor<R> v){
-        return v.visit(this);
-    }
 }

@@ -5,13 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c8eb5f03-e017-4c19-b817-0c18d5b49b0d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/visitor/CPSVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cs179e/cs179e/LesaniLib" beforeDir="false" afterPath="$PROJECT_DIR$/cs179e/cs179e/LesaniLib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/Context.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/Context.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/ExpSt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/ExpSt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/SingleCall.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/SingleCall.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/expression/literal/Literal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/expression/literal/Literal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/Expression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/Expression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/If.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/If.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/visitor/BetaReduction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/visitor/BetaReduction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/id/GId.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/id/GId.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/id/Id.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/id/Id.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/literal/IntLiteral.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/literal/IntLiteral.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/literal/Literal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/literal/Literal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/BinaryOp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/BinaryOp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/Plus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/Plus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/Sequence.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/Sequence.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lambda_calculus/source_ast/visitor/CPSPrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/source_ast/visitor/CPSPrinter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/source_ast/visitor/SourceVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/source_ast/visitor/SourceVisitor.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -22,11 +29,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/graph/lang/visitor/CVCIPrinter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2004">
-              <caret line="926" lean-forward="true" selection-start-line="926" selection-end-line="926" />
+            <state relative-caret-position="297">
+              <caret line="764" column="35" selection-start-line="764" selection-start-column="32" selection-end-line="764" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#24943#24944#0" expanded="true" />
@@ -36,28 +43,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/visitor/CPSPrinter.java">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/graph/lang/visitor/Visitor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2197">
-              <caret line="311" column="32" selection-start-line="311" selection-start-column="32" selection-end-line="311" selection-end-column="32" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1510#1511#0" expanded="true" />
-                <element signature="e#1555#1556#0" expanded="true" />
-                <element signature="e#4997#4998#0" expanded="true" />
-                <element signature="e#7626#7627#0" expanded="true" />
-                <element signature="e#7666#7667#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="-743">
+              <caret line="48" column="23" selection-start-line="48" selection-start-column="23" selection-end-line="48" selection-end-column="23" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/SingleCall.java">
+        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/visitor/SourceVisitor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="22" column="31" lean-forward="true" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
+            <state relative-caret-position="300">
+              <caret line="20" selection-start-line="20" selection-end-line="20" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -66,36 +65,37 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/Context.java">
+        <entry file="file://$PROJECT_DIR$/src/graph/lang/ast/And.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="930">
-              <caret line="66" column="49" selection-start-line="66" selection-start-column="49" selection-end-line="66" selection-end-column="49" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="75">
+              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/ExpSt.java">
+        <entry file="file://$PROJECT_DIR$/src/graph/lang/ast/BOp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#375#376#0" expanded="true" />
-                <element signature="e#421#422#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="75">
+              <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/Application.java">
+        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/Plus.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="16" column="5" lean-forward="true" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
+            <state relative-caret-position="180">
+              <caret line="17" selection-start-line="17" selection-end-line="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/Sequence.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="12" column="5" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -116,33 +116,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/expression/literal/IntLiteral.java">
+        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/BinaryOp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="15" column="38" selection-start-line="15" selection-start-column="38" selection-end-line="15" selection-end-column="38" />
+            <state relative-caret-position="255">
+              <caret line="19" column="29" selection-start-line="19" selection-start-column="29" selection-end-line="19" selection-end-column="29" />
               <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lesani/compiler/texttree/seq/TextSeq.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/id/GId.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-              <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#649#650#0" expanded="true" />
+                <element signature="e#680#681#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -169,6 +149,7 @@
       <find>id</find>
       <find>apply</find>
       <find>typeprinter</find>
+      <find>Bop</find>
     </findStrings>
     <replaceStrings>
       <replace>cpsPrinter</replace>
@@ -180,7 +161,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/Project/src/jsrc/x10/ast/tree/expression/Sequence.java" />
         <option value="$PROJECT_DIR$/src/Project/src/jsrc/x10/ast/tree/expression/Var.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/usecase_factory.java" />
         <option value="$PROJECT_DIR$/src/graph/lang/visitor/BoundInference.java" />
@@ -201,7 +181,6 @@
         <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/expression/op/BinaryOp.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/expression/op/Plus.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/expression/Conditional.java" />
-        <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/visitor/BetaReduction.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/expression/Var.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/application.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/abstraction.java" />
@@ -210,32 +189,34 @@
         <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/Node.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/expression/Expression.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/expression/id/Id.java" />
-        <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/If.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/Abstraction.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/Node.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/ObjectMethod.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/Var.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/Conditional.java" />
-        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/id/GId.java" />
-        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/BinaryOp.java" />
         <option value="$PROJECT_DIR$/src/graph/lang/ast/ArrayAssign.java" />
-        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/id/Id.java" />
-        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/literal/Literal.java" />
-        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/literal/IntLiteral.java" />
-        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/Plus.java" />
-        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/Sequence.java" />
-        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/visitor/SourceVisitor.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/Expression.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/ExpSt.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/expression/literal/Literal.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/Context.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/SingleCall.java" />
+        <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/If.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/visitor/CPSPrinter.java" />
+        <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/visitor/BetaReduction.java" />
+        <option value="$PROJECT_DIR$/src/lambda_calculus/cps_ast/visitor/CPSVisitor.java" />
+        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/visitor/SourceVisitor.java" />
+        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/Plus.java" />
+        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/BinaryOp.java" />
+        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/Sequence.java" />
+        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/literal/Literal.java" />
+        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/literal/IntLiteral.java" />
+        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/id/Id.java" />
+        <option value="$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/id/GId.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="4">
-    <option name="x" value="65" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="1312" />
     <option name="y" value="24" />
     <option name="width" value="1248" />
     <option name="height" value="1576" />
@@ -258,6 +239,17 @@
             <path>
               <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
               <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
+              <item name="Project" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
+              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
+              <item name="Project" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
+              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -292,30 +284,6 @@
               <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="lambda_calculus" type="462c0819:PsiDirectoryNode" />
-              <item name="cps_ast" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lambda_calculus" type="462c0819:PsiDirectoryNode" />
-              <item name="cps_ast" type="462c0819:PsiDirectoryNode" />
-              <item name="tree" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lambda_calculus" type="462c0819:PsiDirectoryNode" />
-              <item name="cps_ast" type="462c0819:PsiDirectoryNode" />
-              <item name="tree" type="462c0819:PsiDirectoryNode" />
-              <item name="command" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lambda_calculus" type="462c0819:PsiDirectoryNode" />
               <item name="source_ast" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -334,44 +302,6 @@
               <item name="source_ast" type="462c0819:PsiDirectoryNode" />
               <item name="tree" type="462c0819:PsiDirectoryNode" />
               <item name="expression" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lambda_calculus" type="462c0819:PsiDirectoryNode" />
-              <item name="source_ast" type="462c0819:PsiDirectoryNode" />
-              <item name="tree" type="462c0819:PsiDirectoryNode" />
-              <item name="expression" type="462c0819:PsiDirectoryNode" />
-              <item name="id" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lambda_calculus" type="462c0819:PsiDirectoryNode" />
-              <item name="source_ast" type="462c0819:PsiDirectoryNode" />
-              <item name="tree" type="462c0819:PsiDirectoryNode" />
-              <item name="expression" type="462c0819:PsiDirectoryNode" />
-              <item name="literal" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lambda_calculus" type="462c0819:PsiDirectoryNode" />
-              <item name="source_ast" type="462c0819:PsiDirectoryNode" />
-              <item name="tree" type="462c0819:PsiDirectoryNode" />
-              <item name="expression" type="462c0819:PsiDirectoryNode" />
-              <item name="op" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lambda_calculus" type="462c0819:PsiDirectoryNode" />
-              <item name="source_ast" type="462c0819:PsiDirectoryNode" />
-              <item name="visitor" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -386,7 +316,7 @@
     <property name="$PROJECT_DIR$/src/Test.g4::/language" value="Java" />
     <property name="$PROJECT_DIR$/src/Test.g4::/output-dir" value="$PROJECT_DIR$/src" />
     <property name="$PROJECT_DIR$/src/Test.g4::/package" value="test.parser" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1603062001624" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1603092059511" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/cs179e" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -428,10 +358,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1248" height="1576" extended-state="4" />
+    <frame x="65" y="-4" width="2495" height="1604" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3327787" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16333197" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -441,7 +371,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Messages" sideWeight="0.49916804" weight="0.32300276" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.33567417" />
+      <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.3292011" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -469,59 +399,6 @@
     </ignored-roots>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/Statement.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/expression/op/BinaryOp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/visitor/BetaReduction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1560">
-          <caret line="104" column="36" selection-start-line="104" selection-start-column="36" selection-end-line="104" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#659#660#0" expanded="true" />
-            <element signature="e#713#714#0" expanded="true" />
-            <element signature="e#752#753#0" expanded="true" />
-            <element signature="e#811#812#0" expanded="true" />
-            <element signature="e#859#860#0" expanded="true" />
-            <element signature="e#927#928#0" expanded="true" />
-            <element signature="e#977#978#0" expanded="true" />
-            <element signature="e#1047#1048#0" expanded="true" />
-            <element signature="e#2567#2568#0" expanded="true" />
-            <element signature="e#2602#2603#0" expanded="true" />
-            <element signature="e#2745#2746#0" expanded="true" />
-            <element signature="e#2800#2801#0" expanded="true" />
-            <element signature="e#3034#3035#0" expanded="true" />
-            <element signature="e#3093#3094#0" expanded="true" />
-            <element signature="e#3755#3756#0" expanded="true" />
-            <element signature="e#3798#3799#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/expression/id/GId.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/expression/Var.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -530,13 +407,6 @@
             <element signature="imports" expanded="true" />
             <element signature="e#404#405#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/expression/Conditional.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="38" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
         </state>
       </provider>
     </entry>
@@ -564,30 +434,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/If.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/Sequence.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/Abstraction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -650,16 +500,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/Conditional.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="26" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/graph/lang/ast/Eq.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -695,93 +535,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/literal/Literal.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="9" column="86" selection-start-line="9" selection-start-column="86" selection-end-line="9" selection-end-column="86" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/literal/IntLiteral.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="53" lean-forward="true" selection-start-line="2" selection-start-column="53" selection-end-line="2" selection-end-column="53" />
-          <folding>
-            <element signature="e#585#586#0" expanded="true" />
-            <element signature="e#621#622#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/BinaryOp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="18" column="73" selection-start-line="18" selection-start-column="73" selection-end-line="18" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/id/Id.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="12" column="7" lean-forward="true" selection-start-line="12" selection-start-column="4" selection-end-line="18" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#492#493#0" expanded="true" />
-            <element signature="e#528#529#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/Plus.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
-          <folding>
-            <element signature="e#560#561#0" expanded="true" />
-            <element signature="e#596#597#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/Sequence.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="11" column="30" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#502#503#0" expanded="true" />
-            <element signature="e#538#539#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/graph/lang/visitor/Visitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="48" column="23" lean-forward="true" selection-start-line="48" selection-start-column="23" selection-end-line="48" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/id/GId.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/visitor/SourceVisitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" column="14" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/graph/lang/ast/Var.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -793,13 +546,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/graph/lang/ast/Exp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" selection-end-column="57" />
         </state>
       </provider>
     </entry>
@@ -825,38 +571,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/graph/lang/visitor/CVCIPrinter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2004">
-          <caret line="926" lean-forward="true" selection-start-line="926" selection-end-line="926" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#24943#24944#0" expanded="true" />
-            <element signature="e#24983#24984#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/Node.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="55" lean-forward="true" selection-start-line="5" selection-start-column="55" selection-end-line="5" selection-end-column="55" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/Expression.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="42" selection-start-line="6" selection-start-column="42" selection-end-line="6" selection-end-column="42" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -909,16 +623,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/Context.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="930">
-          <caret line="66" column="49" selection-start-line="66" selection-start-column="49" selection-end-line="66" selection-end-column="49" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/SingleCall.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -929,10 +633,67 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/If.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="27" selection-start-line="13" selection-start-column="27" selection-end-line="13" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/expression/Conditional.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="38" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/Node.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="55" lean-forward="true" selection-start-line="5" selection-start-column="55" selection-end-line="5" selection-end-column="55" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/visitor/BetaReduction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-683">
+          <caret line="12" column="48" selection-start-line="12" selection-start-column="48" selection-end-line="12" selection-end-column="48" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/command/Abstraction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="38" selection-start-line="16" selection-start-column="38" selection-end-line="16" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/visitor/CPSVisitor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="32" column="39" selection-start-line="32" selection-start-column="39" selection-end-line="32" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/visitor/CPSPrinter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2197">
-          <caret line="311" column="32" selection-start-line="311" selection-start-column="32" selection-end-line="311" selection-end-column="32" />
+        <state relative-caret-position="3120">
+          <caret line="208" column="115" selection-start-line="208" selection-start-column="115" selection-end-line="208" selection-end-column="115" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1510#1511#0" expanded="true" />
@@ -940,6 +701,157 @@
             <element signature="e#4997#4998#0" expanded="true" />
             <element signature="e#7626#7627#0" expanded="true" />
             <element signature="e#7666#7667#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/cps_ast/tree/Context.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="930">
+          <caret line="66" column="49" selection-start-line="66" selection-start-column="49" selection-end-line="66" selection-end-column="49" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/graph/lang/ast/Exp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" selection-start-line="9" selection-end-line="9" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/Expression.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="42" selection-start-line="6" selection-start-column="42" selection-end-line="6" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/graph/lang/ast/And.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/graph/lang/ast/BOp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/Plus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/literal/IntLiteral.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="17" column="5" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/literal/Literal.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="9" column="55" selection-start-line="9" selection-start-column="55" selection-end-line="9" selection-end-column="55" />
+          <folding>
+            <element signature="e#392#393#0" expanded="true" />
+            <element signature="e#423#424#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/Sequence.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="5" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/id/Id.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="14" column="5" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/id/GId.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="13" column="55" selection-start-line="13" selection-start-column="55" selection-end-line="13" selection-end-column="55" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#451#452#0" expanded="true" />
+            <element signature="e#482#483#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/Conditional.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="26" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/tree/expression/op/BinaryOp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="19" column="29" selection-start-line="19" selection-start-column="29" selection-end-line="19" selection-end-column="29" />
+          <folding>
+            <element signature="e#649#650#0" expanded="true" />
+            <element signature="e#680#681#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/source_ast/visitor/SourceVisitor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/graph/lang/visitor/Visitor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-743">
+          <caret line="48" column="23" selection-start-line="48" selection-start-column="23" selection-end-line="48" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/graph/lang/visitor/CVCIPrinter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="764" column="35" selection-start-line="764" selection-start-column="32" selection-end-line="764" selection-end-column="35" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#24943#24944#0" expanded="true" />
+            <element signature="e#24983#24984#0" expanded="true" />
           </folding>
         </state>
       </provider>

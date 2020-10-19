@@ -11,5 +11,7 @@ public abstract class GId implements Expression {
         this.lexeme = lexeme;
     }
 
-    public abstract <R> R accept(SourceVisitor.ExpressionVisitor.GIdVisitor<R> v);
+    public <R> R accept(SourceVisitor.ExpressionVisitor<R> v){
+        return v.visit(this);
+    }
 }

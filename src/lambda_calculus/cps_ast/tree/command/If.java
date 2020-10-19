@@ -10,7 +10,8 @@ public class If extends Command {
     public Command command1;
     public Command command2;
 
-    public If(Command c1, Command c2) {
+    public If(Expression e, Command c1, Command c2) {
+        this.condition = e;
         this.command1 = c1;
         this.command2 = c2;
     }

@@ -16,7 +16,4 @@ public class Plus extends BinaryOp {
         return binaryOpVisitor.visit(this);
     }
 
-    public <R> R accept(SourceVisitor.ExpressionVisitor<R> v){
-        return v.visit(this);
-    }
 }
