@@ -1,6 +1,7 @@
 package lambda_calculus;
 
 //import javax.swing.plaf.nimbus.State;
+import lambda_calculus.cps_ast.tree.command.Command;
 import lambda_calculus.source_ast.tree.expression.Conditional;
 import lambda_calculus.source_ast.tree.expression.Expression;
 import lambda_calculus.source_ast.tree.expression.ObjectMethod;
@@ -19,7 +20,9 @@ public class translation_test {
     public static void main(String[] args)
     {
         Expression lambda1 = createOFTUseCase();
-        CPSPrinter.print(lambda1);
+        System.out.println("Complete create use-case");
+        Command resultAST = CPSPrinter.print(lambda1);
+        System.out.println("Complete translation");
         //printToFile(lambda1., "oft_cps");
     }
 
