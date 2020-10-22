@@ -37,7 +37,7 @@ public class BetaReduction implements CPSVisitor{
 
         public class LiteralB implements LiteralVisitor<Object>{
             @Override
-            public Object visit(IntLiteral intLiteral){ return null;}
+            public Object visit(IntLiteral intLiteral){ return intLiteral;}
         }
         LiteralB literalB = new LiteralB();
         @Override
@@ -45,17 +45,17 @@ public class BetaReduction implements CPSVisitor{
 
         public class BinaryOpB implements BinaryOpVisitor<Object>{
             @Override
-            public Object visit(Plus plus){ return null;}
+            public Object visit(Plus plus){ return plus;}
         }
         BinaryOpB binaryOpB = new BinaryOpB();
         @Override
         public Object visit(BinaryOp binaryOp){ return binaryOp.accept(binaryOpB); }
 
         @Override
-        public Object visit(Var var){ return  null; }
+        public Object visit(Var var){ return  var; }
 
         @Override
-        public Object visit(Conditional conditional){ return null; }
+        public Object visit(Conditional conditional){ return conditional; }
     }
 
     public Object visitDispatch(Command command) {
@@ -75,16 +75,16 @@ public class BetaReduction implements CPSVisitor{
         public Object visit(Abstraction abstraction){ return null; }
 
         @Override
-        public Object visit(ExpSt expSt){ return null; }
+        public Object visit(ExpSt expSt){ return expSt; }
 
         @Override
-        public Object visit(If iF){ return null; }
+        public Object visit(If iF){ return iF; }
 
         @Override
-        public Object visit(Sequence sequence){ return null; }
+        public Object visit(Sequence sequence){ return sequence; }
 
         @Override
-        public Object visit(SingleCall singleCall){ return null; }
+        public Object visit(SingleCall singleCall){ return singleCall; }
     }
 
     //CommandB commandB = new CommandB();
