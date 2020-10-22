@@ -17,4 +17,17 @@ public class IntLiteral extends Literal {
     public <R> R accept(CPSVisitor.ExpressionVisitor.LiteralVisitor<R> intLiteralVisitor){
         return intLiteralVisitor.visit(this);
     }
+
+    @Override
+    public String toString(){
+        return lexeme;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        return (lexeme == ((IntLiteral) o).toString());
+    }
 }

@@ -12,4 +12,8 @@ public abstract class Literal implements Expression {
     }
 
     public abstract <R> R accept(CPSVisitor.ExpressionVisitor.LiteralVisitor<R> v);
+
+    public abstract String toString();
+
+    public abstract boolean equals(Object o);
 }

@@ -17,4 +17,7 @@ public abstract class GId implements Expression {
 
     public abstract <R> R accept(CPSVisitor.ExpressionVisitor.GIdVisitor<R> v);
 
+    public abstract String toString();
+
+    public abstract boolean equals(Object o);
 }

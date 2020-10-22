@@ -19,4 +19,21 @@ public class Conditional implements Expression {
     public <R> R accept(CPSVisitor.ExpressionVisitor<R> conditionalVisitor) {
         return conditionalVisitor.visit(this);
     }
+
+    @Override
+    public String toString(){
+        return "If (" + condition + ") then (" + ifExp +") else (" + elseExp + ")";
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Conditional that = (Conditional) o;
+
+        if(!condition.equals(that.condition)) return false;
+        else if (! ifExp.equals(that.ifExp)) return false;
+        else return elseExp.equals(that.elseExp);
+    }
 }

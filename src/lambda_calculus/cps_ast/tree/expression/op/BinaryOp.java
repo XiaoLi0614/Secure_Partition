@@ -21,4 +21,8 @@ public abstract class BinaryOp implements Expression {
     }
 
     public abstract <R> R accept(CPSVisitor.ExpressionVisitor.BinaryOpVisitor<R> v);
+
+    public abstract String toString();
+
+    public abstract boolean equals(Object o);
 }

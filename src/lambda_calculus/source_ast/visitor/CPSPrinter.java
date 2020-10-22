@@ -18,24 +18,26 @@ import java.util.HashMap;
 
 
 public class CPSPrinter implements SourceVisitor{
-    TextSeq seq;
+    //TextSeq seq;
     int administrativeX;
     Command resultAST;
     Context resultContext;
     HashMap<Expression, Command>  continuationMap;
 
     public CPSPrinter() {
-        seq = new TextSeq();
+        //seq = new TextSeq();
         administrativeX = 0;
         resultContext = new Context();
         continuationMap = new HashMap<>();
     }
 
     //print method for all the expressions
-    public static Command print(Expression expression){
+    public Pair<Command, Context> print(Expression expression){
         CPSPrinter p = new CPSPrinter();
         p.continuationMap.put(expression, new ExpSt(new lambda_calculus.cps_ast.tree.expression.Var("k")));
-        return  (Command) p.visitDispatch(expression);
+        resultAST = (Command) p.visitDispatch(expression);
+        Pair<Command, Context> returnPair = new Pair<>(resultAST, resultContext);
+        return returnPair;
         //return p.getText();
     }
 
@@ -54,12 +56,12 @@ public class CPSPrinter implements SourceVisitor{
             //[x]k = k x
             @Override
             public Object visit(Id id){
-                seq.put(id.lexeme);
                 lambda_calculus.cps_ast.tree.expression.id.Id resultId = new lambda_calculus.cps_ast.tree.expression.id.Id(id.lexeme);
-                Command[] resultVar = new Command[1];
-                resultVar[0] = new ExpSt(resultId);
-                Application resultA = new Application(continuationMap.get(id), resultVar);
-                return resultA;
+                //Command[] resultVar = new Command[1];
+                //resultVar[0] = new ExpSt(resultId);
+                //Application resultA = new Application(continuationMap.get(id), resultVar);
+
+                return resultId;
             }
         }
 
@@ -71,7 +73,6 @@ public class CPSPrinter implements SourceVisitor{
             //[n]k = k n
             @Override
             public Object visit(IntLiteral intLiteral){
-                seq.put(intLiteral.lexeme);
                 lambda_calculus.cps_ast.tree.expression.literal.IntLiteral resultInt = new lambda_calculus.cps_ast.tree.expression.literal.IntLiteral(intLiteral.lexeme);
                 Command[] resultVar = new Command[1];
                 resultVar[0] = new ExpSt(resultInt);
@@ -99,22 +100,22 @@ public class CPSPrinter implements SourceVisitor{
                 Command[] plusBody = new Command[1];
                 plusBody[0] = new ExpSt(varPlus);
 
-                //lambda x2
-                resultContext.addVariableToContext(lambda2Var[0]);
                 //lambda x2 . k(x1 + x2)
                 Command body2 = new Abstraction(lambda2Var, new Application(continuationMap.get(plus), plusBody));
+                //lambda x2
+                resultContext.addVariableToContext(lambda2Var[0], body2);
                 continuationMap.put(plus.operand2, body2);
                 Command e2Evaluation = (Command) visitDispatch(plus.operand2);
-                resultContext.bindValueToContext(lambda2Var[0], e2Evaluation);
+                //resultContext.bindValueToContext(lambda2Var[0], e2Evaluation);
 
                 //-----------------------------------------------------------------
-                // lambda x1
-                resultContext.addVariableToContext(lambda1Var[0]);
                 //lambda x1. [e2] (lambda x2.k( x1 + x2))
                 Command body1 = new Abstraction(lambda1Var, e2Evaluation);
+                // lambda x1
+                resultContext.addVariableToContext(lambda1Var[0], body1);
                 continuationMap.put(plus.operand1, body1);
                 Command e1Evaluation = (Command) visitDispatch(plus.operand1);
-                resultContext.bindValueToContext(lambda1Var[0], e1Evaluation);
+                //resultContext.bindValueToContext(lambda1Var[0], e1Evaluation);
                 //todo: I think the bindings are not correct now. I confuse the evaluation and the translation part
 
                 //Command[] body2AsVar = new Command[1];
@@ -132,7 +133,6 @@ public class CPSPrinter implements SourceVisitor{
             public Object visit(Sequence sequence){
                 //lambda x
                 lambda_calculus.cps_ast.tree.expression.Var lambdaVar = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
-                resultContext.addVariableToContext(lambdaVar);
 
                 lambda_calculus.cps_ast.tree.expression.Var[] lambdaAsVar1 = new lambda_calculus.cps_ast.tree.expression.Var[1];
                 lambdaAsVar1[0] = lambdaVar;
@@ -141,6 +141,7 @@ public class CPSPrinter implements SourceVisitor{
                 lambdaAsVar2[0] = new ExpSt(lambdaVar);
 
                 Command bodyForE2 = new Abstraction(lambdaAsVar1, new Application(continuationMap.get(sequence), lambdaAsVar2));
+                resultContext.addVariableToContext(lambdaVar, bodyForE2);
                 //Command[] bodyAsVar = new Command[1];
                 //bodyAsVar[0] = bodyForE2;
                 //Command[] bodyAsVar2 = new Command[1];
@@ -156,7 +157,7 @@ public class CPSPrinter implements SourceVisitor{
 
                 //add continuation and context
                 //continuationMap.put(sequence.operand1, bodyAsVar2[0]);
-                resultContext.bindValueToContext(lambdaVar, e2Evaluation);
+                //resultContext.bindValueToContext(lambdaVar, e2Evaluation);
 
                 //Command resultCommand = new Application(
                         //(Command) visitDispatch(sequence.operand1),
@@ -175,7 +176,6 @@ public class CPSPrinter implements SourceVisitor{
         @Override
         public Object visit(ObjectMethod objectMethod) {
             lambda_calculus.cps_ast.tree.expression.Var lambda2 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
-            resultContext.addVariableToContext(lambda2);
             //k x2
             Command[] x2AsVar = new Command[1];
             x2AsVar[0] = new ExpSt(lambda2);
@@ -186,14 +186,14 @@ public class CPSPrinter implements SourceVisitor{
             if(objectMethod.args.length == 0 || objectMethod.args == null){
                 SingleCall call = new SingleCall(
                         objectMethod.objectName.lexeme, objectMethod.methodName.lexeme, null, lambda2, kX2);
-                resultContext.bindValueToContext(lambda2, call);
+                //resultContext.bindValueToContext(lambda2, call);
+                resultContext.addVariableToContext(lambda2, call);
                 return call;
             }
             // if there are arguments, this is not a termination
             else {
                 //x1
                 lambda_calculus.cps_ast.tree.expression.Var lambda1 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
-                resultContext.addVariableToContext(lambda1);
                 lambda_calculus.cps_ast.tree.expression.Expression[] lambda1AsVar = new lambda_calculus.cps_ast.tree.expression.Expression[1];
                 lambda1AsVar[0] = lambda1;
                 lambda_calculus.cps_ast.tree.expression.Var[] lambda1AsVar2 = new lambda_calculus.cps_ast.tree.expression.Var[1];
@@ -205,15 +205,18 @@ public class CPSPrinter implements SourceVisitor{
                         lambda2,
                         kX2);
 
-                resultContext.bindValueToContext(lambda2, call2);
+                resultContext.addVariableToContext(lambda2, call2);
+
+                //resultContext.bindValueToContext(lambda2, call2);
 
                 Abstraction bodyForE = new Abstraction(lambda1AsVar2, call2);
+                resultContext.addVariableToContext(lambda1, bodyForE);
                 //Command[] bodyForEAsValue = new Command[1];
                 //bodyForEAsValue[0] = bodyForE;
                 //Application resultCommand = new Application((Command) visitDispatch(objectMethod.args[0]), bodyForEAsValue);
                 continuationMap.put(objectMethod.args[0], bodyForE);
                 Command eEvaluation = (Command) visitDispatch(objectMethod.args[0]);
-                resultContext.bindValueToContext(lambda1, eEvaluation);
+                //resultContext.bindValueToContext(lambda1, eEvaluation);
                 //return resultCommand;
                 //return null;
                 return eEvaluation;
@@ -228,9 +231,6 @@ public class CPSPrinter implements SourceVisitor{
             lambda_calculus.cps_ast.tree.expression.Var lambda0 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
             lambda_calculus.cps_ast.tree.expression.Var lambda1 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
             lambda_calculus.cps_ast.tree.expression.Var lambda2 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
-            resultContext.addVariableToContext(lambda0);
-            resultContext.addVariableToContext(lambda1);
-            resultContext.addVariableToContext(lambda2);
 
             //x neq 0
 
@@ -243,9 +243,10 @@ public class CPSPrinter implements SourceVisitor{
             Application kX1 = new Application(continuationMap.get(conditional), x1AsVar);
             Abstraction thenBody = new Abstraction(x1AsVar2, kX1);
 
+            resultContext.addVariableToContext(lambda1, thenBody);
             continuationMap.put(conditional.ifExp, thenBody);
             Command e1Value = (Command) visitDispatch(conditional.ifExp);
-            resultContext.bindValueToContext(lambda1, e1Value);
+            //resultContext.bindValueToContext(lambda1, e1Value);
 
             //k x2
             Command[] x2AsVar = new Command[1];
@@ -255,17 +256,19 @@ public class CPSPrinter implements SourceVisitor{
             Application kX2 = new Application(continuationMap.get(conditional), x2AsVar);
             Abstraction elseBody = new Abstraction(x2AsVar2, kX2);
 
+            resultContext.addVariableToContext(lambda2, elseBody);
             continuationMap.put(conditional.elseExp, elseBody);
             Command e2Value = (Command) visitDispatch(conditional.elseExp);
-            resultContext.bindValueToContext(lambda2, e2Value);
+            //resultContext.bindValueToContext(lambda2, e2Value);
 
             //when we have more to evaluate[], we do not return anything , we simply dispatch.
             lambda_calculus.cps_ast.tree.expression.Var[] x0AsVar = new lambda_calculus.cps_ast.tree.expression.Var[1];
             x0AsVar[0] = lambda0;
             Abstraction continuationForE0 = new Abstraction(x0AsVar, new If(lambda0, e1Value, e2Value));
+            resultContext.addVariableToContext(lambda0, continuationForE0);
             continuationMap.put(conditional.condition, continuationForE0);
             Command e0Value = (Command) visitDispatch(conditional.condition);
-            resultContext.bindValueToContext(lambda0, e0Value);
+            //resultContext.bindValueToContext(lambda0, e0Value);
 
             return e0Value;
             //return null;
@@ -275,14 +278,13 @@ public class CPSPrinter implements SourceVisitor{
         @Override
         public Object visit(Var var) {
             Command[] varAsValue = new Command[1];
-            varAsValue[0] = new ExpSt(new lambda_calculus.cps_ast.tree.expression.Var(var.name.lexeme));
+            visitDispatch(var.name);
+            //varAsValue[0] = new ExpSt(new lambda_calculus.cps_ast.tree.expression.Var(var.name.lexeme));
+            varAsValue[0] = new ExpSt(new lambda_calculus.cps_ast.tree.expression.Var((lambda_calculus.cps_ast.tree.expression.id.Id)visitDispatch(var.name)));
             Application resultCommand = new Application(continuationMap.get(var), varAsValue);
+            //resultContext.bindValueToContext(var, );
             return resultCommand;
         }
-    }
-
-    public String getText() {
-        return seq.get().print();
     }
 }
 

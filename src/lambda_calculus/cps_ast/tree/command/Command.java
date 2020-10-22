@@ -13,4 +13,8 @@ public abstract class Command implements Node {
         return v.visit(this);
     }
     public abstract <R> R accept(CPSVisitor.CommandVisitor<R> v);
+
+    public abstract String toString();
+
+    public abstract boolean equals(Object o);
 }

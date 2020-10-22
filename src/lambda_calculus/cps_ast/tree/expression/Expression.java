@@ -7,6 +7,6 @@ import lambda_calculus.cps_ast.visitor.CPSVisitor;
 import java.io.Serializable;
 
 public interface Expression extends Node{
-    Node continuation = null;
+    //Node continuation = null;
     <R> R accept(CPSVisitor.ExpressionVisitor<R> expressionVisitor);
 }

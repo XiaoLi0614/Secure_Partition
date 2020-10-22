@@ -20,4 +20,21 @@ public class If extends Command {
     public <R> R accept(CPSVisitor.CommandVisitor<R> iF){
         return iF.visit(this);
     }
+
+    @Override
+    public String toString(){
+        return "If (" + condition + ") then (" + command1 +") else (" + command2 + ")";
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        If that = (If) o;
+
+        if(!condition.equals(that.condition)) return false;
+        else if (! command1.equals(that.command1)) return false;
+        else return command2.equals(that.command2);
+    }
 }

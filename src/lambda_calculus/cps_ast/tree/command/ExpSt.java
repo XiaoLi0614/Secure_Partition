@@ -14,4 +14,18 @@ public class ExpSt extends Command {
     public <R> R accept(CPSVisitor.CommandVisitor<R> expSt){
         return expSt.visit(this);
     }
+
+    @Override
+    public String toString(){
+        return expression.toString();
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ExpSt that = (ExpSt) o;
+        return expression.equals(that.expression);
+    }
 }

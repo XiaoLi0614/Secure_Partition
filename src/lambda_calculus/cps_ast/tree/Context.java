@@ -43,16 +43,18 @@ public class Context {
     }*/
 
     public HashMap<Var, Command> contextMap;
-    //public Command scope;
+    public HashMap<Var, Command> scope;
     //public Context parent;
 
     //initialization for the top level ast
     public Context(){
         this.contextMap = new HashMap<>();
+        this.scope = new HashMap<>();
     }
 
-    public Context(HashMap<Var, Command> cMap){
+    public Context(HashMap<Var, Command> cMap, HashMap<Var, Command> s){
         this.contextMap = cMap;
+        this.scope = s;
     }
 
     public Command getValueInContext(Var v){
@@ -79,8 +81,9 @@ public class Context {
         }
     }
 
-    public void addVariableToContext(Var v){
+    public void addVariableToContext(Var v, Command s){
         this.contextMap.put(v, null);
+        this.scope.put(v, s);
     }
 
 }

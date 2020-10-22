@@ -12,4 +12,17 @@ public class Id extends GId {
     public <R> R accept(CPSVisitor.ExpressionVisitor.GIdVisitor<R> id){
         return id.visit(this);
     }
+
+    @Override
+    public String toString(){
+        return lexeme;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        return (lexeme == ((Id) o).toString());
+    }
 }

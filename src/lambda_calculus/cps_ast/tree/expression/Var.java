@@ -13,8 +13,26 @@ public class Var implements Expression{
     public Var(String name) {
         this.name = new Id(name);
     }
+
+    public Var(Id n) {
+        this.name = n;
+    }
+
     public <R> R accept(CPSVisitor.ExpressionVisitor<R> varVisitor) {
         return varVisitor.visit(this);
+    }
+
+    @Override
+    public String toString(){
+        return name.toString();
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        return name.equals(((Var) o).name);
     }
 }
 

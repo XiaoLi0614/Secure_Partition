@@ -1,5 +1,6 @@
 package lambda_calculus.cps_ast.visitor;
 
+import lambda_calculus.cps_ast.tree.Context;
 import lambda_calculus.cps_ast.tree.command.*;
 import lambda_calculus.cps_ast.tree.expression.Conditional;
 import lambda_calculus.cps_ast.tree.expression.Expression;
@@ -10,18 +11,15 @@ import lambda_calculus.cps_ast.tree.expression.literal.IntLiteral;
 import lambda_calculus.cps_ast.tree.expression.literal.Literal;
 import lambda_calculus.cps_ast.tree.expression.op.BinaryOp;
 import lambda_calculus.cps_ast.tree.expression.op.Plus;
-import lambda_calculus.source_ast.tree.expression.ObjectMethod;
 import lesani.compiler.texttree.seq.TextSeq;
 
 public class BetaReduction implements CPSVisitor{
 
-    TextSeq seq;
-    //TextSeq k;
-    int administrativeX;
+    Command resultAST;
+    Context resultContext;
 
-    public BetaReduction() {
-        seq = new TextSeq();
-        administrativeX = 0;
+    public BetaReduction(Context c) {
+        resultContext = c;
     }
 
     public Object visitDispatch(Expression expression) {
@@ -60,13 +58,18 @@ public class BetaReduction implements CPSVisitor{
         public Object visit(Conditional conditional){ return null; }
     }
 
-    /*public Object visitDispatch(Command command) {
+    public Object visitDispatch(Command command) {
         return command.accept(commandB);
     }
-    public CommandB commandB =  new CommandB();*/
+    public CommandB commandB =  new CommandB();
     public class CommandB implements CommandVisitor<Object> {
+        //the only place we need to reduce is in the application of an abstraction
         @Override
-        public Object visit(Application application){ return null; }
+        public Object visit(Application application){
+            if(application.function instanceof Abstraction){
+
+            }
+            else return application;}
 
         @Override
         public Object visit(Abstraction abstraction){ return null; }
@@ -84,9 +87,15 @@ public class BetaReduction implements CPSVisitor{
         public Object visit(SingleCall singleCall){ return null; }
     }
 
-    CommandB commandB = new CommandB();
+    //CommandB commandB = new CommandB();
     @Override
     public Object visit(Command command){ return command.accept(commandB); }
+
+    public Command wholeRedecution(Command c){
+        Command resultTree = c;
+        while(!resultTree.equals((Command)visitDispatch(resultTree))){resultTree = (Command)visitDispatch(resultTree);}
+        return resultTree;
+    }
 }
 
 
