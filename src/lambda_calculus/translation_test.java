@@ -3,6 +3,7 @@ package lambda_calculus;
 //import javax.swing.plaf.nimbus.State;
 import lambda_calculus.cps_ast.tree.Context;
 import lambda_calculus.cps_ast.tree.command.Command;
+import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.source_ast.tree.expression.Conditional;
 import lambda_calculus.source_ast.tree.expression.Expression;
 import lambda_calculus.source_ast.tree.expression.ObjectMethod;
@@ -24,8 +25,11 @@ public class translation_test {
         System.out.println("Complete create use-case");
         CPSPrinter test = new CPSPrinter();
         Command resultAST = test.print(lambda1).element1;
-        Context resultContext = test.print(lambda1).element2;
+        //Context resultContext = test.print(lambda1).element2;
         System.out.println("Complete translation: " + resultAST.toString());
+        BetaReduction test2 = new BetaReduction();
+        Command resultAST2 = test2.wholeReduction(resultAST);
+        System.out.println("Complete reduction: " + resultAST2.toString());
         //printToFile(lambda1., "oft_cps");
     }
 

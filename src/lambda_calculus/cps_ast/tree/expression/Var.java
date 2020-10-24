@@ -1,5 +1,7 @@
 package lambda_calculus.cps_ast.tree.expression;
 
+import lambda_calculus.cps_ast.tree.command.Command;
+import lambda_calculus.cps_ast.tree.command.ExpSt;
 import lambda_calculus.cps_ast.tree.expression.id.Id;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.visitor.CPSVisitor;
@@ -33,6 +35,14 @@ public class Var implements Expression{
         if (o == null || getClass() != o.getClass()) return false;
 
         return name.equals(((Var) o).name);
+    }
+
+    @Override
+    public Expression substitute(Var originalVar, Expression replacer){
+        if(this.equals(originalVar)){
+            return replacer;
+        }
+        else return this;
     }
 }
 

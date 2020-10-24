@@ -1,6 +1,7 @@
 package lambda_calculus.cps_ast.tree.command;
 
 import lambda_calculus.cps_ast.tree.expression.Expression;
+import lambda_calculus.cps_ast.tree.expression.Var;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.visitor.CPSVisitor;
 import lesani.collection.option.*;
@@ -36,5 +37,12 @@ public class If extends Command {
         if(!condition.equals(that.condition)) return false;
         else if (! command1.equals(that.command1)) return false;
         else return command2.equals(that.command2);
+    }
+
+    @Override
+    public Command substitute(Var originalVar, Expression replacer){
+        return new If(condition.substitute(originalVar, replacer),
+                command1.substitute(originalVar, replacer),
+                command2.substitute(originalVar, replacer));
     }
 }

@@ -24,6 +24,14 @@ public class SingleCall extends Command {
         this.administrativeX = aX;
     }
 
+    public SingleCall(Id oName, Id mName, Expression[] args, Var aX, Command nCommand) {
+        this.methodName = mName;
+        this.objectName = oName;
+        this.args = args;
+        this.nestedCommand = nCommand;
+        this.administrativeX = aX;
+    }
+
     public <R> R accept(CPSVisitor.CommandVisitor<R> singleCall){
         return singleCall.visit(this);
     }
@@ -44,17 +52,38 @@ public class SingleCall extends Command {
     }
 
     @Override
-    public boolean equals(Object o){
-        if(this == o) return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         SingleCall that = (SingleCall) o;
 
-        if(!administrativeX.equals(that.administrativeX)) return false;
+        if (!administrativeX.equals(that.administrativeX)) return false;
         else if (!objectName.equals(that.objectName)) return false;
-        else if(!methodName.equals(that.methodName)) return false;
-        else if(!args.equals(that.args)) return false;
-        else return nestedCommand.equals(that.nestedCommand);
+        else if (!methodName.equals(that.methodName)) return false;
+        else if (!nestedCommand.equals(that.nestedCommand)) return false;
+        else if ((args == null || args.length == 0)) {
+            if (!(that.args == null || that.args.length == 0)) return false;
+            else return true;
+        }
+        else return args.equals(that.args);
+    }
+
+    @Override
+    public Command substitute(Var originalVar, Expression replacer){
+        Expression[] resultVar = args;
+        if(args == null || args.length == 0){}
+        else {
+            resultVar = new Expression[args.length];
+            for(int i = 0; i < args.length; i++){
+                resultVar[i] = (Expression) args[i].substitute(originalVar, replacer);
+            }
+        }
+        return new SingleCall((Id) objectName,
+                (Id) methodName,
+                resultVar,
+                administrativeX,
+                nestedCommand.substitute(originalVar, replacer));
     }
 }
 

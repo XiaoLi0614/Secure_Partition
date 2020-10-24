@@ -1,5 +1,6 @@
 package lambda_calculus.cps_ast.tree.command;
 
+import lambda_calculus.cps_ast.tree.expression.Expression;
 import lambda_calculus.cps_ast.tree.expression.Var;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.visitor.CPSVisitor;
@@ -46,5 +47,14 @@ public class Application extends Command {
 
         if(!function.equals(that.function)) return false;
         else return values.equals(that.values);
+    }
+
+    @Override
+    public Command substitute(Var originalVar, Expression replacer){
+        Command[] resultValues = new Command[values.length];
+        for(int i = 0; i < values.length; i++){
+            resultValues[i] = values[i].substitute(originalVar, replacer);
+        }
+        return new Application(function.substitute(originalVar, replacer), resultValues);
     }
 }

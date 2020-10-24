@@ -1,6 +1,7 @@
 package lambda_calculus.cps_ast.tree.expression.op;
 
 import lambda_calculus.cps_ast.tree.expression.Expression;
+import lambda_calculus.cps_ast.tree.expression.Var;
 import lambda_calculus.cps_ast.tree.expression.op.BinaryOp;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.visitor.CPSVisitor;
@@ -29,5 +30,11 @@ public class Plus extends BinaryOp {
         if(!operand1.equals(that.operand1)) return false;
         else if(!operand2.equals(that.operand2)) return false;
         else return (operatorText == that.operatorText);
+    }
+
+    @Override
+    public Expression substitute(Var originalVar, Expression replacer) {
+        return new Plus(this.operand1.substitute(originalVar, replacer),
+                this.operand2.substitute(originalVar, replacer));
     }
 }

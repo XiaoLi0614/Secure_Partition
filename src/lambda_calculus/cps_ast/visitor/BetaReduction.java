@@ -12,14 +12,15 @@ import lambda_calculus.cps_ast.tree.expression.literal.Literal;
 import lambda_calculus.cps_ast.tree.expression.op.BinaryOp;
 import lambda_calculus.cps_ast.tree.expression.op.Plus;
 import lesani.compiler.texttree.seq.TextSeq;
+import sun.nio.ch.AbstractPollArrayWrapper;
 
 public class BetaReduction implements CPSVisitor{
 
     Command resultAST;
-    Context resultContext;
+    //Context resultContext;
 
-    public BetaReduction(Context c) {
-        resultContext = c;
+    public BetaReduction() {
+        //resultContext = c;
     }
 
     public Object visitDispatch(Expression expression) {
@@ -45,7 +46,9 @@ public class BetaReduction implements CPSVisitor{
 
         public class BinaryOpB implements BinaryOpVisitor<Object>{
             @Override
-            public Object visit(Plus plus){ return plus;}
+            public Object visit(Plus plus){
+                return new Plus((Expression) visitDispatch(plus.operand1), (Expression) visitDispatch(plus.operand2));
+            }
         }
         BinaryOpB binaryOpB = new BinaryOpB();
         @Override
@@ -55,7 +58,11 @@ public class BetaReduction implements CPSVisitor{
         public Object visit(Var var){ return  var; }
 
         @Override
-        public Object visit(Conditional conditional){ return conditional; }
+        public Object visit(Conditional conditional){
+            return new Conditional((Expression)visitDispatch(conditional.condition),
+                    (Expression)visitDispatch(conditional.ifExp),
+                    (Expression)visitDispatch(conditional.elseExp));
+        }
     }
 
     public Object visitDispatch(Command command) {
@@ -66,35 +73,87 @@ public class BetaReduction implements CPSVisitor{
         //the only place we need to reduce is in the application of an abstraction
         @Override
         public Object visit(Application application){
-            if(application.function instanceof Abstraction){
-
+            //(lambda x1, x2. (x1 + x2) )v1 v2
+            //when the abstraction has more lambdas to fill than the applications, it is correct and we can proceed to substitution
+            if(application.function instanceof Abstraction ){
+                Command resultCommand = ((Abstraction)application.function).body;
+                if(((Abstraction)application.function).lambdas.length == application.values.length){
+                    //here we need to substitute the value in the function
+                    for(int i = 0; i < application.values.length; i++){
+                        resultCommand = ((Abstraction)application.function).body.substitute(
+                                ((Abstraction)application.function).lambdas[i],
+                                ((ExpSt)application.values[i]).expression);
+                    }
+                    return resultCommand;
+                }
+                ////(lambda x1, x2, x3. (x1 + x2) )v1 v2
+                else if (((Abstraction)application.function).lambdas.length < application.values.length){
+                    Command resultFunction = ((Abstraction)application.function).body;
+                    for(int i = 0; i < application.values.length; i++){
+                        resultFunction = ((Abstraction)application.function).body.substitute(
+                                ((Abstraction)application.function).lambdas[i],
+                                ((ExpSt)application.values[i]).expression);
+                    }
+                    Var[] resultLambdas = new Var[((Abstraction)application.function).lambdas.length - application.values.length];
+                    for(int j = 0; j < resultLambdas.length; j++){
+                        resultLambdas[j] = ((Abstraction)application.function).lambdas[j + application.values.length];
+                    }
+                    resultCommand = new Abstraction(resultLambdas, resultFunction);
+                    return resultCommand;
+                }
+                else {
+                    new Error("More values than lambdas in application");
+                    return new Application((Command) visitDispatch(application.function), application.values);
+                }
             }
-            else return application;}
+            //no application needed
+            else return new Application((Command) visitDispatch(application.function), application.values);
+        }
 
         @Override
-        public Object visit(Abstraction abstraction){ return null; }
+        public Object visit(Abstraction abstraction){
+            return new Abstraction(abstraction.lambdas, (Command)visitDispatch(abstraction.body)); }
 
         @Override
-        public Object visit(ExpSt expSt){ return expSt; }
+        public Object visit(ExpSt expSt){
+            return new ExpSt((Expression)visitDispatch(expSt.expression)); }
 
         @Override
-        public Object visit(If iF){ return iF; }
+        public Object visit(If iF){
+            return new If((Expression)visitDispatch(iF.condition),
+                    (Command)visitDispatch(iF.command1),
+                    (Command)visitDispatch(iF.command2)); }
 
         @Override
-        public Object visit(Sequence sequence){ return sequence; }
+        public Object visit(Sequence sequence){
+            return new Sequence((Command)visitDispatch(sequence.command1),
+                    (Command)visitDispatch(sequence.command2)); }
 
         @Override
-        public Object visit(SingleCall singleCall){ return singleCall; }
+        public Object visit(SingleCall singleCall){
+            return new SingleCall((Id)singleCall.objectName,
+                    (Id)singleCall.methodName,
+                    singleCall.args,
+                    singleCall.administrativeX,
+                    (Command)visitDispatch(singleCall.nestedCommand)); }
     }
 
     //CommandB commandB = new CommandB();
     @Override
     public Object visit(Command command){ return command.accept(commandB); }
 
-    public Command wholeRedecution(Command c){
-        Command resultTree = c;
-        while(!resultTree.equals((Command)visitDispatch(resultTree))){resultTree = (Command)visitDispatch(resultTree);}
-        return resultTree;
+    //can be used not only for beta reduction but also alpha convension
+    //public Command substitute(Var originalVar, Command replacer, Command originalFunction){
+
+    //}
+
+    public Command wholeReduction(Command c){
+        BetaReduction b = new BetaReduction();
+        resultAST = (Command) b.visitDispatch(c);
+        while(!resultAST.equals((Command)b.visitDispatch(resultAST))){
+            resultAST = (Command)b.visitDispatch(resultAST);
+        }
+        return resultAST;
     }
 }
 

@@ -1,5 +1,7 @@
 package lambda_calculus.cps_ast.tree.expression.id;
 
+import lambda_calculus.cps_ast.tree.expression.Expression;
+import lambda_calculus.cps_ast.tree.expression.Var;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.visitor.CPSVisitor;
 
@@ -24,5 +26,10 @@ public class Id extends GId {
         if (o == null || getClass() != o.getClass()) return false;
 
         return (lexeme == ((Id) o).toString());
+    }
+
+    @Override
+    public Expression substitute(Var originalVar, Expression replacer){
+        return this;
     }
 }

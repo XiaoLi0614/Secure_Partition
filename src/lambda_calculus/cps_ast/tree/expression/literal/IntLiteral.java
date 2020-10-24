@@ -1,5 +1,7 @@
 package lambda_calculus.cps_ast.tree.expression.literal;
 
+import lambda_calculus.cps_ast.tree.expression.Expression;
+import lambda_calculus.cps_ast.tree.expression.Var;
 import lambda_calculus.cps_ast.tree.expression.literal.Literal;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.visitor.CPSVisitor;
@@ -29,5 +31,10 @@ public class IntLiteral extends Literal {
         if (o == null || getClass() != o.getClass()) return false;
 
         return (lexeme == ((IntLiteral) o).toString());
+    }
+
+    @Override
+    public Expression substitute(Var originalVar, Expression replacer){
+        return this;
     }
 }

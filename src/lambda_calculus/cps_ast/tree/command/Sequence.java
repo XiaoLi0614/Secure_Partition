@@ -1,7 +1,8 @@
 package lambda_calculus.cps_ast.tree.command;
+import lambda_calculus.cps_ast.tree.expression.Expression;
+import lambda_calculus.cps_ast.tree.expression.Var;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.visitor.CPSVisitor;
-import lambda_calculus.source_ast.tree.expression.Expression;
 import lambda_calculus.source_ast.visitor.CPSPrinter;
 
 public class Sequence extends Command {
@@ -27,9 +28,15 @@ public class Sequence extends Command {
         if(this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        If that = (If) o;
+        Sequence that = (Sequence) o;
 
         if (! command1.equals(that.command1)) return false;
         else return command2.equals(that.command2);
+    }
+
+    @Override
+    public Command substitute(Var originalVar, Expression replacer){
+        return new Sequence(command1.substitute(originalVar, replacer),
+                command2.substitute(originalVar, replacer));
     }
 }

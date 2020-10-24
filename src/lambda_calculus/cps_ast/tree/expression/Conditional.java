@@ -1,6 +1,7 @@
 package lambda_calculus.cps_ast.tree.expression;
 
 
+import lambda_calculus.cps_ast.tree.command.Command;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.visitor.CPSVisitor;
 
@@ -35,5 +36,12 @@ public class Conditional implements Expression {
         if(!condition.equals(that.condition)) return false;
         else if (! ifExp.equals(that.ifExp)) return false;
         else return elseExp.equals(that.elseExp);
+    }
+
+    @Override
+    public Expression substitute(Var originalVar, Expression replacer){
+        return new Conditional(this.condition.substitute(originalVar, replacer),
+                this.ifExp.substitute(originalVar, replacer),
+                this.elseExp.substitute(originalVar, replacer));
     }
 }

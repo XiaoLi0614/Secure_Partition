@@ -3,7 +3,7 @@ package lambda_calculus.cps_ast.tree.command;
 import lambda_calculus.cps_ast.tree.expression.Var;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.visitor.CPSVisitor;
-import lambda_calculus.source_ast.tree.expression.Expression;
+import lambda_calculus.cps_ast.tree.expression.Expression;
 import sun.nio.ch.AbstractPollArrayWrapper;
 
 public class Abstraction extends Command {
@@ -45,5 +45,14 @@ public class Abstraction extends Command {
 
         if(!lambdas.equals(that.lambdas)) return false;
         else return body.equals(that.body);
+    }
+
+    @Override
+    public Command substitute(Var originalVar, Expression replacer){
+        Var[] resultVar = new Var[lambdas.length];
+        for(int i = 0; i < lambdas.length; i++){
+            resultVar[i] = (Var)lambdas[i].substitute(originalVar, replacer);
+        }
+        return new Abstraction(resultVar, body.substitute(originalVar, replacer));
     }
 }

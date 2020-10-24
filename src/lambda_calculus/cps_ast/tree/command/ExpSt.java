@@ -1,5 +1,6 @@
 package lambda_calculus.cps_ast.tree.command;
 
+import lambda_calculus.cps_ast.tree.expression.Var;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.tree.expression.Expression;
 import lambda_calculus.cps_ast.visitor.CPSVisitor;
@@ -27,5 +28,10 @@ public class ExpSt extends Command {
 
         ExpSt that = (ExpSt) o;
         return expression.equals(that.expression);
+    }
+
+    @Override
+    public Command substitute(Var originalVar, Expression replacer) {
+        return new ExpSt(expression.substitute(originalVar, replacer));
     }
 }
