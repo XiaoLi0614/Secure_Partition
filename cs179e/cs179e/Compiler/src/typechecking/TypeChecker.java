@@ -301,7 +301,7 @@ public class TypeChecker implements GSVisitor<Type> {
             symbolTable.put(name, type);
         } catch (DuplicateDefExc exc) {
             // A local variable Declaration may hide a field declaration or a class definition.
-            // What about double local vars? That is checked in the visitor of Method.
+            // What about double local vars? That is checked in the visitor of MethodDefinition.
         }
 		System.err.println(varDecl.toString());
 		return OK.instance;
@@ -328,10 +328,10 @@ public class TypeChecker implements GSVisitor<Type> {
 		//       2. Var name in a var declaration.
 		//          int id;
 		//       3. Name of a Parameter.
-		//          Method: public int methodName(int id)
+		//          MethodDefinition: public int methodName(int id)
         //     To define method names (function names)
-		//       4. Method name
-		//          Method: public int id(int paramName)
+		//       4. MethodDefinition name
+		//          MethodDefinition: public int id(int paramName)
         //   Referring to definitions
         //     Referring to defined types
 		//       5. The type to new
@@ -343,13 +343,13 @@ public class TypeChecker implements GSVisitor<Type> {
 		//       8. Type of Parameter.
 		//          Parameter: int method(Id param)
 		//       9. Return type of a method.
-		//          Method: Id method(...)
+		//          MethodDefinition: Id method(...)
         //     Referring to variables
 		//       10. Var access in an expression.
 		//           reading and writing a variable: id1 = id2
 		//           ArrayAssign: id[1] = ...
         //     Referring to methods (function names)
-		//       11. Method name in a method call
+		//       11. MethodDefinition name in a method call
 		//           MethodCall: a.id(...)
 
 		//    We call visit on an identifier only for var access. Its type should be computed and returned.
@@ -523,7 +523,7 @@ public class TypeChecker implements GSVisitor<Type> {
 	public Type visit(MethodCall methodCall) {
 		Type receiverType = methodCall.receiver.accept(this);
 		if (!(receiverType instanceof Class))
-			throw new MethodCallOnPrimitiveTypeException("Method call on primitive type \"" + receiverType + "\".");
+			throw new MethodCallOnPrimitiveTypeException("MethodDefinition call on primitive type \"" + receiverType + "\".");
 		final Class theClass = (Class) receiverType;
 		final String methodName = methodCall.methodName.token.toString();
 		Method method = theClass.getMethod(methodName).apply(

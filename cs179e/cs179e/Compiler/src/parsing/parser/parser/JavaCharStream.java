@@ -565,7 +565,7 @@ class JavaCharStream
   }
 
   /**
-   * Method to adjust line and column numbers for the start of a token.
+   * MethodDefinition to adjust line and column numbers for the start of a token.
    */
   public void adjustBeginLineColumn(int newLine, int newCol)
   {

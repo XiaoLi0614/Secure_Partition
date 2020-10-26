@@ -114,7 +114,7 @@ public class Class implements Type, Node {
             );
     }
 // -------------------------------------------------------------------
-// Method ------------------------------------------------------------
+// MethodDefinition ------------------------------------------------------------
 
 	public Method[] selfMethods() {
         final Collection<Method> values = methods.values();
