@@ -4,6 +4,9 @@ package lambda_calculus;
 import lambda_calculus.cps_ast.tree.Context;
 import lambda_calculus.cps_ast.tree.command.Command;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
+import lambda_calculus.cps_ast.visitor.translateToOtherAST;
+import lambda_calculus.partition_package.tree.MethodDefinition;
+import lambda_calculus.partition_package.visitor.PartitionMethod;
 import lambda_calculus.source_ast.tree.expression.Conditional;
 import lambda_calculus.source_ast.tree.expression.Expression;
 import lambda_calculus.source_ast.tree.expression.ObjectMethod;
@@ -30,6 +33,15 @@ public class translation_test {
         BetaReduction test2 = new BetaReduction();
         Command resultAST2 = test2.wholeReduction(resultAST);
         System.out.println("Complete reduction: " + resultAST2.toString());
+        translateToOtherAST test3 = new translateToOtherAST();
+        lambda_calculus.partition_package.tree.command.Command translatedAST = test3.getAST(resultAST2);
+        System.out.println("Complete translation 2: " + translatedAST.toString());
+        PartitionMethod test4 = new PartitionMethod();
+        ArrayList<MethodDefinition> resultMethodDefs = test4.methodSeparation(translatedAST);
+        System.out.println("Complete separation: " );
+        for(MethodDefinition d : resultMethodDefs){
+            System.out.println(d.toString());
+        }
         //printToFile(lambda1., "oft_cps");
     }
 

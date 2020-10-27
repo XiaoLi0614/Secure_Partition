@@ -20,6 +20,7 @@ public class MethodDefinition {
     //public GId objectName; //o: the object which this method belongs to
     public Command callBackCommand; // e' : the call back command
     public SingleCall objectCall; // the only object call inside this method
+    public Command body; //the body expression of this method
 
     public MethodDefinition(String thisM, HashSet<Var> fV, SingleCall objectCall, Command nCommand) {
         this.thisMethodName = new Id(thisM);
@@ -43,6 +44,10 @@ public class MethodDefinition {
         //this.administrativeX = aX;
     }
 
+    public void addBody(Command b){
+        this.body = b;
+    }
+
     @Override
     public String toString(){
         StringBuilder resultString = new StringBuilder();
@@ -64,7 +69,7 @@ public class MethodDefinition {
             }
             resultString.deleteCharAt(resultString.lastIndexOf(", "));
         }
-        resultString.append(") in " + callBackCommand);
+        resultString.append(") in " + body);
         return  resultString.toString();
     }
 

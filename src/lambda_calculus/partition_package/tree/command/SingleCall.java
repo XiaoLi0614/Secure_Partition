@@ -6,6 +6,8 @@ import lambda_calculus.partition_package.tree.expression.id.GId;
 import lambda_calculus.partition_package.tree.expression.id.Id;
 import lambda_calculus.partition_package.visitor.PartitionVisitor;
 
+import java.util.Optional;
+
 public class SingleCall extends Command {
     public Var administrativeX; // this is the administrative x for the object method
     public GId methodName; ////name of the user declared method
@@ -30,6 +32,19 @@ public class SingleCall extends Command {
         this.administrativeX = aX;
     }
 
+    //for callback functions
+    public SingleCall(Id mName, Expression[] args) {
+        this.methodName = mName;
+        this.objectName = new Id("this");
+        this.args = args;
+    }
+
+    public SingleCall(String mName, Expression[] args) {
+        this.methodName = new Id(mName);
+        this.objectName = new Id("this");
+        this.args = args;
+    }
+
     public <R> R accept(PartitionVisitor.CommandVisitor<R> singleCall){
         return singleCall.visit(this);
     }
@@ -37,15 +52,28 @@ public class SingleCall extends Command {
     @Override
     public String toString(){
         StringBuilder resultString = new StringBuilder();
-        resultString.append("let " + administrativeX + " = " + objectName +"." + methodName + "(");
-        if(args == null || args.length == 0){}
-        else{
-            for(Expression e: args){
-                resultString.append(e + ", ");
+        if(this.objectName.toString() == "this"){
+            resultString.append( objectName +"." + methodName + "(");
+            if(args == null || args.length == 0){}
+            else{
+                for(Expression e: args){
+                    resultString.append(e + ", ");
+                }
+                resultString.deleteCharAt(resultString.lastIndexOf(", "));
             }
-            resultString.deleteCharAt(resultString.lastIndexOf(", "));
+            resultString.append(")");
         }
-        resultString.append(") in " + nestedCommand);
+        else {
+            resultString.append("let " + administrativeX + " = " + objectName +"." + methodName + "(");
+            if(args == null || args.length == 0){}
+            else{
+                for(Expression e: args){
+                    resultString.append(e + ", ");
+                }
+                resultString.deleteCharAt(resultString.lastIndexOf(", "));
+            }
+            resultString.append(") in " + nestedCommand);
+        }
         return  resultString.toString();
     }
 
