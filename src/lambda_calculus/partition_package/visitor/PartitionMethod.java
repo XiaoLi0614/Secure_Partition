@@ -132,7 +132,7 @@ public class PartitionMethod implements PartitionVisitor{
             return resultCommand;
         }
 
-        @Override
+        /*@Override
         public Object visit(Sequence sequence){
             Command resultCommand = new Sequence((Command)visitDispatch(sequence.command1),
                     (Command)visitDispatch(sequence.command2));
@@ -142,6 +142,35 @@ public class PartitionMethod implements PartitionVisitor{
             resultFreeVars.addAll(partitionIntermediate.get(sequence.command2).getFreeVariables());
             Sequence callBackCommand = new Sequence(partitionIntermediate.get(sequence.command1).getCallBackName(),
                     partitionIntermediate.get(sequence.command2).getCallBackName());
+
+            PartitionProcess resultProcess = new PartitionProcess(resultDefs, resultFreeVars, callBackCommand);
+            partitionIntermediate.put(sequence, resultProcess);
+
+            return resultCommand;
+        }*/
+        //Change the sequence to the form more aligned with call instead of if
+        //The only difference between call and sequence is that we do not pass more free variables to the continuation(in this situation the second statement in the sequence)
+        @Override
+        public Object visit(Sequence sequence){
+            Command resultCommand = new Sequence((Command)visitDispatch(sequence.command1),
+                    (Command)visitDispatch(sequence.command2));
+            ArrayList<MethodDefinition> resultDefs = new ArrayList<>(partitionIntermediate.get(sequence.command1).getMethodDefinitions());
+            resultDefs.addAll(partitionIntermediate.get(sequence.command2).getMethodDefinitions());
+
+            HashSet<Var> resultFreeVars = new HashSet<>(partitionIntermediate.get(sequence.command1).getFreeVariables());
+            resultFreeVars.addAll(partitionIntermediate.get(sequence.command2).getFreeVariables());
+
+            //call back is the continuation
+            Sequence callBackCommand = new Sequence(partitionIntermediate.get(sequence.command1).getCallBackName(),
+                    partitionIntermediate.get(sequence.command2).getCallBackName());
+
+            //we declare a new method 
+            MethodDefinition newDefinition = new MethodDefinition((Id) new Id(newMName()),
+                    freeVarSet,
+                    singleCall,
+                    callBackName);
+            newDefinition.addBody(partitionIntermediate.get(singleCall.nestedCommand).getCallBackName());
+            resultDefinitions.add(newDefinition);
 
             PartitionProcess resultProcess = new PartitionProcess(resultDefs, resultFreeVars, callBackCommand);
             partitionIntermediate.put(sequence, resultProcess);
