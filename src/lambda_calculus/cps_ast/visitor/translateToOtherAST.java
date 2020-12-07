@@ -80,6 +80,7 @@ public class translateToOtherAST implements CPSVisitor {
                 return null;
             }
             else if(application.values.length == 1){
+                //there is no application in the target language, we eliminate the k in this step
                 lambda_calculus.partition_package.tree.command.Command resultCommand = (lambda_calculus.partition_package.tree.command.Command)visitDispatch(application.values[0]);
                 return resultCommand;
             }
