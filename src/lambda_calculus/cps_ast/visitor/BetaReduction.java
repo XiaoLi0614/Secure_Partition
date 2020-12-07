@@ -101,14 +101,23 @@ public class BetaReduction implements CPSVisitor{
                     resultCommand = new Abstraction(resultLambdas, resultFunction);
                     return resultCommand;
                 }
+                //(x1 + x2) v1
+                //when there are more values than the lambdas, it can be sequence situation
                 else {
                     new Error("More values than lambdas in application");
                     return new Application((Command) visitDispatch(application.function), application.values);
+                    //todo: this return is only the first function in order for sequence to work. May need to be generalized. For instance, the lambdas and values paired up and the rest of values are ignored
+                    //return visitDispatch(application.function);
                 }
             }
             //no application needed
-            else return new Application((Command) visitDispatch(application.function), application.values);
+            //else return new Application((Command) visitDispatch(application.function), application.values);
+            //continuation situation
+            else if (application.function.toString() == "k"){return new Application((Command) visitDispatch(application.function), application.values);}
+            ////It can be the sequence situation here.
+            else { return visitDispatch(application.function);}
         }
+
 
         @Override
         public Object visit(Abstraction abstraction){

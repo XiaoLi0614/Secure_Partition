@@ -132,7 +132,7 @@ public class PartitionMethod implements PartitionVisitor{
             return resultCommand;
         }
 
-        /*@Override
+        @Override
         public Object visit(Sequence sequence){
             Command resultCommand = new Sequence((Command)visitDispatch(sequence.command1),
                     (Command)visitDispatch(sequence.command2));
@@ -147,13 +147,14 @@ public class PartitionMethod implements PartitionVisitor{
             partitionIntermediate.put(sequence, resultProcess);
 
             return resultCommand;
-        }*/
+        }
         //Change the sequence to the form more aligned with call instead of if
         //The only difference between call and sequence is that we do not pass more free variables to the continuation(in this situation the second statement in the sequence)
-        @Override
+/*        @Override
         public Object visit(Sequence sequence){
             Command resultCommand = new Sequence((Command)visitDispatch(sequence.command1),
                     (Command)visitDispatch(sequence.command2));
+
             ArrayList<MethodDefinition> resultDefs = new ArrayList<>(partitionIntermediate.get(sequence.command1).getMethodDefinitions());
             resultDefs.addAll(partitionIntermediate.get(sequence.command2).getMethodDefinitions());
 
@@ -164,9 +165,9 @@ public class PartitionMethod implements PartitionVisitor{
             Sequence callBackCommand = new Sequence(partitionIntermediate.get(sequence.command1).getCallBackName(),
                     partitionIntermediate.get(sequence.command2).getCallBackName());
 
-            //we declare a new method 
-            MethodDefinition newDefinition = new MethodDefinition((Id) new Id(newMName()),
-                    freeVarSet,
+            //we declare a new method
+            MethodDefinition newDefinition = new MethodDefinition(newMName(),
+                    resultFreeVars,
                     singleCall,
                     callBackName);
             newDefinition.addBody(partitionIntermediate.get(singleCall.nestedCommand).getCallBackName());
@@ -176,7 +177,7 @@ public class PartitionMethod implements PartitionVisitor{
             partitionIntermediate.put(sequence, resultProcess);
 
             return resultCommand;
-        }
+        }*/
 
         @Override
         public Object visit(SingleCall singleCall){

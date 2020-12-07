@@ -128,7 +128,7 @@ public class CPSPrinter implements SourceVisitor{
                 //return null;
             }
 
-            //[e1; e2]k = [e1]([e2] (lambda x. k x))
+/*            //[e1; e2]k = [e1]([e2] (lambda x. k x))
             @Override
             public Object visit(Sequence sequence){
                 //lambda x
@@ -152,6 +152,47 @@ public class CPSPrinter implements SourceVisitor{
                 Command e1Evaluation = (Command) visitDispatch(sequence.operand1);
                 continuationMap.put(sequence.operand2, bodyForE2);
                 Command e2Evaluation = (Command) visitDispatch(sequence.operand2);
+
+                lambda_calculus.cps_ast.tree.command.Sequence resultSequence = new lambda_calculus.cps_ast.tree.command.Sequence(e1Evaluation, e2Evaluation);
+
+                //add continuation and context
+                //continuationMap.put(sequence.operand1, bodyAsVar2[0]);
+                //resultContext.bindValueToContext(lambdaVar, e2Evaluation);
+
+                //Command resultCommand = new Application(
+                        //(Command) visitDispatch(sequence.operand1),
+                        //bodyAsVar2);
+                return resultSequence;
+                //return null;
+                //return resultCommand;}
+            }
+        }*/
+
+            //[e1; e2]k = [e1]([e2] (lambda x. k x))
+            @Override
+            public Object visit(Sequence sequence){
+                //lambda x
+                lambda_calculus.cps_ast.tree.expression.Var lambdaVar = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
+
+                lambda_calculus.cps_ast.tree.expression.Var[] lambdaAsVar1 = new lambda_calculus.cps_ast.tree.expression.Var[1];
+                lambdaAsVar1[0] = lambdaVar;
+
+                Command[] lambdaAsVar2 = new Command[1];
+                lambdaAsVar2[0] = new ExpSt(lambdaVar);
+
+                Command bodyForE2 = new Abstraction(lambdaAsVar1, new Application(continuationMap.get(sequence), lambdaAsVar2));
+                resultContext.addVariableToContext(lambdaVar, bodyForE2);
+                //Command[] bodyAsVar = new Command[1];
+                //bodyAsVar[0] = bodyForE2;
+                //Command[] bodyAsVar2 = new Command[1];
+                //bodyAsVar2[0] = new Application(
+                        //(Command) visitDispatch(sequence.operand2),
+                        //bodyAsVar);
+                continuationMap.put(sequence.operand2, bodyForE2);
+                Command e2Evaluation = (Command) visitDispatch(sequence.operand2);
+
+                continuationMap.put(sequence.operand1, e2Evaluation);
+                Command e1Evaluation = (Command) visitDispatch(sequence.operand1);
 
                 lambda_calculus.cps_ast.tree.command.Sequence resultSequence = new lambda_calculus.cps_ast.tree.command.Sequence(e1Evaluation, e2Evaluation);
 
