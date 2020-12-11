@@ -79,7 +79,8 @@ public class translateToOtherAST implements CPSVisitor {
             if(application.values == null || application.values.length == 0){
                 return null;
             }
-            else  if(application.values.length == 1){
+            else if(application.values.length == 1){
+                //there is no application in the target language, we eliminate the k in this step
                 lambda_calculus.partition_package.tree.command.Command resultCommand = (lambda_calculus.partition_package.tree.command.Command)visitDispatch(application.values[0]);
                 return resultCommand;
             }
@@ -106,11 +107,19 @@ public class translateToOtherAST implements CPSVisitor {
                     resultElse);
         }
 
-        @Override
+        /*@Override
         public Object visit(Sequence sequence){
             lambda_calculus.partition_package.tree.command.Command result1 = (lambda_calculus.partition_package.tree.command.Command)visitDispatch(sequence.command1);
             lambda_calculus.partition_package.tree.command.Command result2 = (lambda_calculus.partition_package.tree.command.Command)visitDispatch(sequence.command2);
             return new lambda_calculus.partition_package.tree.command.Sequence(result1, result2);
+        }*/
+
+        //the sequence should be translated to a single call, because the second statement is contained in the continuation of the first one.
+        @Override
+        public Object visit(Sequence sequence){
+            lambda_calculus.partition_package.tree.command.Command result1 = (lambda_calculus.partition_package.tree.command.Command)visitDispatch(sequence.command1);
+            //lambda_calculus.partition_package.tree.command.Command result2 = (lambda_calculus.partition_package.tree.command.Command)visitDispatch(sequence.command2);
+            return result1;
         }
 
         @Override

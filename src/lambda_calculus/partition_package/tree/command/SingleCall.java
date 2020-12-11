@@ -59,7 +59,7 @@ public class SingleCall extends Command {
                 for(Expression e: args){
                     resultString.append(e + ", ");
                 }
-                resultString.deleteCharAt(resultString.lastIndexOf(", "));
+                resultString.delete(resultString.lastIndexOf(", "), resultString.lastIndexOf(", ") + 2);
             }
             resultString.append(")");
         }
@@ -70,7 +70,7 @@ public class SingleCall extends Command {
                 for(Expression e: args){
                     resultString.append(e + ", ");
                 }
-                resultString.deleteCharAt(resultString.lastIndexOf(", "));
+                resultString.delete(resultString.lastIndexOf(", "), resultString.lastIndexOf(", ") + 2);
             }
             resultString.append(") in " + nestedCommand);
         }

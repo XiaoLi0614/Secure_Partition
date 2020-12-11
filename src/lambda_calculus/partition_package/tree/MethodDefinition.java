@@ -57,7 +57,8 @@ public class MethodDefinition {
             for(Var v: freeVars){
                 resultString.append(v + ", ");
             }
-            resultString.deleteCharAt(resultString.lastIndexOf(", "));
+            //resultString.deleteCharAt(resultString.lastIndexOf(", "));
+            resultString.delete(resultString.lastIndexOf(", "), resultString.lastIndexOf(", ") + 2);
         }
         resultString.append(") := ");
 
