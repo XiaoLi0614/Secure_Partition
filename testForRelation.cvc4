@@ -1,0 +1,21 @@
+% EXPECT: unsat
+OPTION "logic" "ALL_SUPPORTED";
+BaseType: TYPE = SET OF INT;
+IntPair1: TYPE = SET OF [BaseType, BOOLEAN];
+IntPair2: TYPE = SET OF [BaseType, BOOLEAN];
+
+x : IntPair1;
+y : IntPair2;
+
+z : BaseType;
+ASSERT z = {1, 2, 3, 4, 5};
+ASSERT x = {(z, TRUE), ({8, 9}, TRUE)};
+zt : BaseType;
+ASSERT zt = {6, 7};
+ASSERT y = {(zt, TRUE)};
+
+TRANSFORM y;
+TRANSFORM x JOIN (TRANSPOSE (y));
+%TRANSFORM (x PRODUCT y);
+
+%CHECKSAT;
