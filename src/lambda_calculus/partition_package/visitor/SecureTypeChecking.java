@@ -19,28 +19,21 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class SecureTypeChecking implements PartitionVisitor{
-    //Command resultAST;
-    HashMap<Node, PartitionProcess> partitionIntermediate; // each node has a three element intermediate structure
-    int administrativeM;
-
-    public String newMName(){
-        return "m" + String.valueOf(administrativeM++);
-    }
+    HashMap<Node, envForTypeCheck> environment; // each node has an environment for type checking
 
     public SecureTypeChecking(){
-        partitionIntermediate = new HashMap<>();
-        administrativeM = 0;
+        environment = new HashMap<>();
     }
 
     public Object visitDispatch(Expression expression) {
-        return expression.accept(expressionP);
+        return expression.accept(expressionT);
     }
-    public ExpressionP expressionP =  new ExpressionP();
-    public class ExpressionP implements ExpressionVisitor<Object> {
+    public ExpressionT expressionT =  new ExpressionT();
+    public class ExpressionT implements ExpressionVisitor<Object> {
         public class GIdB implements GIdVisitor<Object>{
             @Override
             public Object visit(Id id){
-                return null;}
+                return true;}
         }
         GIdB gIdB = new GIdB();
         @Override
@@ -49,9 +42,8 @@ public class SecureTypeChecking implements PartitionVisitor{
         public class LiteralB implements LiteralVisitor<Object>{
             @Override
             public Object visit(IntLiteral intLiteral){
-                PartitionProcess resultP = new PartitionProcess(new ArrayList<>(), new HashSet<>(), new ExpSt(intLiteral));
-                partitionIntermediate.put(intLiteral, resultP);
-                return intLiteral;
+                //TODO: how to show the lowest and highest?
+                return true;
             }
         }
         LiteralB literalB = new LiteralB();
@@ -61,13 +53,24 @@ public class SecureTypeChecking implements PartitionVisitor{
         public class BinaryOpB implements BinaryOpVisitor<Object>{
             @Override
             public Object visit(Plus plus){
-                Expression resultExpression = new Plus((Expression) visitDispatch(plus.operand1), (Expression) visitDispatch(plus.operand2));
-                //add the free variables from two different operators
-                HashSet<Var> resultFreeVariables = new HashSet<>(partitionIntermediate.get(plus.operand1).getFreeVariables());
-                resultFreeVariables.addAll(partitionIntermediate.get(plus.operand2).getFreeVariables());
-                PartitionProcess resultP = new PartitionProcess(new ArrayList<>(), resultFreeVariables, new ExpSt(plus));
-                partitionIntermediate.put(plus, resultP);
-                return resultExpression;
+                environment.put(plus.operand1, environment.get(plus).clone());
+                environment.put(plus.operand2, environment.get(plus).clone());
+                Boolean resultB = (Boolean) visitDispatch(plus.operand1) & (Boolean) visitDispatch(plus.operand2);
+
+                if(environment.get(plus).getGamma().get(plus.toString()) != null){
+                    Boolean inter = environment.get(plus.operand1).getGamma().get(plus.operand1.toString()).
+                            ciaJoin(environment.get(plus.operand2).getGamma().get(plus.operand2.toString())).
+                            ciaLeq(environment.get(plus).getGamma().get(plus.toString()));
+                    return resultB & inter;
+                }
+                //currently we do not let user specify the type for intermediate result.
+                //Instead we infer them
+                else {
+                    environment.get(plus).getGamma().put(plus.toString(),
+                            environment.get(plus.operand1).getGamma().get(plus.operand1.toString()).
+                            ciaJoin(environment.get(plus.operand2).getGamma().get(plus.operand2.toString())));
+                    return resultB;
+                }
             }
         }
         BinaryOpB binaryOpB = new BinaryOpB();
@@ -76,12 +79,13 @@ public class SecureTypeChecking implements PartitionVisitor{
 
         @Override
         public Object visit(Var var){
-            HashSet<Var> resultFreeVariables = new HashSet<>();
-            resultFreeVariables.add(var);
+            if(environment.get(var).getGamma().get(var.toString()) != null){
 
-            PartitionProcess resultP = new PartitionProcess(new ArrayList<MethodDefinition>(), resultFreeVariables, new ExpSt(var));
-            partitionIntermediate.put(var, resultP);
-            return var;
+            }
+            else {
+                //todo: the same as int, have the bottom type
+            }
+            return true;
         }
 
         @Override
@@ -114,22 +118,19 @@ public class SecureTypeChecking implements PartitionVisitor{
 
         @Override
         public Object visit(If iF){
-            Command resultCommand = new If((Expression)visitDispatch(iF.condition),
-                    (Command)visitDispatch(iF.command1),
-                    (Command)visitDispatch(iF.command2));
-            ArrayList<MethodDefinition> resultDefs = new ArrayList<>(partitionIntermediate.get(iF.command1).getMethodDefinitions());
-            resultDefs.addAll(partitionIntermediate.get(iF.command2).getMethodDefinitions());
-            HashSet<Var> resultFreeVars = new HashSet<>(partitionIntermediate.get(iF.command1).getFreeVariables());
-            resultFreeVars.addAll(partitionIntermediate.get(iF.command2).getFreeVariables());
-            resultFreeVars.addAll(partitionIntermediate.get(iF.condition).getFreeVariables());
-            If callBackCommand = new If(iF.condition,
-                    partitionIntermediate.get(iF.command1).getCallBackName(),
-                    partitionIntermediate.get(iF.command2).getCallBackName());
+            //the first step is to set the environment for the dispatched commands
+            environment.put(iF.condition, environment.get(iF).clone());
+            Boolean resultB = (Boolean) visitDispatch(iF.condition);
 
-            PartitionProcess resultProcess = new PartitionProcess(resultDefs, resultFreeVars, callBackCommand);
-            partitionIntermediate.put(iF, resultProcess);
+            environment.put(iF.command1, environment.get(iF).clone());
+            CIAType temp1 = environment.get(iF.command1).getCurrentContext().ciaJoin(environment.get(iF.condition).getGamma().get(iF.condition));
+            
+            environment.put(iF.command2, environment.get(iF).clone());
 
-            return resultCommand;
+            resultB &= (Boolean)visitDispatch(iF.command1) & (Boolean)visitDispatch(iF.command2);
+
+
+            return resultB;
         }
 
         @Override
@@ -148,36 +149,6 @@ public class SecureTypeChecking implements PartitionVisitor{
 
             return resultCommand;
         }
-        //Change the sequence to the form more aligned with call instead of if
-        //The only difference between call and sequence is that we do not pass more free variables to the continuation(in this situation the second statement in the sequence)
-/*        @Override
-        public Object visit(Sequence sequence){
-            Command resultCommand = new Sequence((Command)visitDispatch(sequence.command1),
-                    (Command)visitDispatch(sequence.command2));
-
-            ArrayList<MethodDefinition> resultDefs = new ArrayList<>(partitionIntermediate.get(sequence.command1).getMethodDefinitions());
-            resultDefs.addAll(partitionIntermediate.get(sequence.command2).getMethodDefinitions());
-
-            HashSet<Var> resultFreeVars = new HashSet<>(partitionIntermediate.get(sequence.command1).getFreeVariables());
-            resultFreeVars.addAll(partitionIntermediate.get(sequence.command2).getFreeVariables());
-
-            //call back is the continuation
-            Sequence callBackCommand = new Sequence(partitionIntermediate.get(sequence.command1).getCallBackName(),
-                    partitionIntermediate.get(sequence.command2).getCallBackName());
-
-            //we declare a new method
-            MethodDefinition newDefinition = new MethodDefinition(newMName(),
-                    resultFreeVars,
-                    singleCall,
-                    callBackName);
-            newDefinition.addBody(partitionIntermediate.get(singleCall.nestedCommand).getCallBackName());
-            resultDefinitions.add(newDefinition);
-
-            PartitionProcess resultProcess = new PartitionProcess(resultDefs, resultFreeVars, callBackCommand);
-            partitionIntermediate.put(sequence, resultProcess);
-
-            return resultCommand;
-        }*/
 
         @Override
         public Object visit(SingleCall singleCall){
@@ -222,15 +193,11 @@ public class SecureTypeChecking implements PartitionVisitor{
     @Override
     public Object visit(Command command){ return command.accept(commandP); }
 
-    public ArrayList<MethodDefinition> methodSeparation(Command c){
+    public Boolean classTypeChck(ArrayList<MethodDefinition> methods){
         SecureTypeChecking b = new SecureTypeChecking();
         b.visitDispatch(c);
         ArrayList<MethodDefinition> currentDefinitions = b.partitionIntermediate.get(c).getMethodDefinitions();
-        /*ArrayList<MethodDefinition> resultSeparation = new ArrayList<>();
-        for(MethodDefinition d: currentDefinitions){
-            if(d)
-        }*/
 
-        return currentDefinitions;
+        return ;
     }
 }

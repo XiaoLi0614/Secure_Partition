@@ -5,7 +5,7 @@ import java.util.HashSet;
 /**
  * User: lesani, Date: Nov 3, 2009, Time: 11:56:53 AM
  */
-public class Pair<T1, T2> {
+public class Pair<T1, T2>{
     public T1 element1;
     public T2 element2;
 
