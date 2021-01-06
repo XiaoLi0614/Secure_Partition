@@ -38,7 +38,7 @@ public class LableTest {
         System.out.println(i2);*/
 
         //test for quorum and B
-        quorumDef QTest = new quorumDef();
+        /*quorumDef QTest = new quorumDef();
         HashSet<HashSet<Integer>> Q = new HashSet<>();
         HashSet<Integer> qs1 = new HashSet<>();
         Q.add(qs1);
@@ -91,6 +91,6 @@ public class LableTest {
 
 
         return;
-        //HashSet<Integer> i2_qs2 = new HashSet<>();
+        //HashSet<Integer> i2_qs2 = new HashSet<>();*/
     }
 }
