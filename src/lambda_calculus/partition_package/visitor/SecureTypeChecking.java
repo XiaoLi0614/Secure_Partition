@@ -352,6 +352,7 @@ public class SecureTypeChecking implements PartitionVisitor{
         return resultB;
     }
 
+    //We does not supply all the intermediate method signature, we need to infer some of the signature
     public Boolean classTypeCheck(ArrayList<MethodDefinition> methods,
                                   ArrayList<Pair<nodeSet, quorumDef>> methodsSig,
                                   HashMap<String, HashMap<String, HashMap<String, CIAType>>> objSigs,
@@ -361,6 +362,32 @@ public class SecureTypeChecking implements PartitionVisitor{
         //set the M(H, Q) and O(Q1, Q2) and object signature
         for(int i = 0; i < methods.size(); i++){
             b.MMap.put(methods.get(i).thisMethodName.toString(), methodsSig.get(i));
+        }
+        this.OMap = objHosts;
+        this.objectMethodType = objSigs;
+
+        //first do field check then we do method check
+        for(String oname : objSigs.keySet()){
+            r &= fieldCheck(oname);
+        }
+        for(int i = methods.size() - 1; i >= 0; i--){
+            r &= methodCheck(methods.get(i), i);
+        }
+        return r;
+    }
+
+    //we only need to do type checking, all the methods signatures are supplied.
+    public Boolean classTypeCheck(ArrayList<MethodDefinition> methods,
+                                  ArrayList<Pair<nodeSet, quorumDef>> methodsSig,
+                                  ArrayList<Pair<ArrayList<CIAType>, HashMap<String, CIAType>>> methodTypes,
+                                  HashMap<String, HashMap<String, HashMap<String, CIAType>>> objSigs,
+                                  HashMap<String, Pair<quorumDef, quorumDef>> objHosts){
+        Boolean r = true;
+        SecureTypeChecking b = new SecureTypeChecking();
+        //set the M(H, Q) and O(Q1, Q2) and object signature
+        for(int i = 0; i < methods.size(); i++){
+            b.MMap.put(methods.get(i).thisMethodName.toString(), methodsSig.get(i));
+            b.methodType.put(methods.get(i).thisMethodName.toString(), methodTypes.get(i));
         }
         this.OMap = objHosts;
         this.objectMethodType = objSigs;
