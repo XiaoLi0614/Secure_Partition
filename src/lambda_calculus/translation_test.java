@@ -7,10 +7,7 @@ import lambda_calculus.cps_ast.tree.command.Command;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.visitor.translateToOtherAST;
 import lambda_calculus.partition_package.tree.MethodDefinition;
-import lambda_calculus.partition_package.visitor.CIAType;
-import lambda_calculus.partition_package.visitor.PartitionMethod;
-import lambda_calculus.partition_package.visitor.nodeSet;
-import lambda_calculus.partition_package.visitor.quorumDef;
+import lambda_calculus.partition_package.visitor.*;
 import lambda_calculus.source_ast.tree.expression.Conditional;
 import lambda_calculus.source_ast.tree.expression.Expression;
 import lambda_calculus.source_ast.tree.expression.ObjectMethod;
@@ -56,15 +53,33 @@ public class translation_test {
         HashSet<Integer> b2 = new HashSet<Integer>(Arrays.asList(1, 2, 9));
         HashSet<Integer> b3 = new HashSet<Integer>(Arrays.asList(1, 3, 8));
         HashSet<Integer> b4 = new HashSet<Integer>(Arrays.asList(1, 3, 9));
+        HashSet<nodeSet> B = new HashSet<>();
+        B.add(new nodeSet(b1));
+        B.add(new nodeSet(b2));
+        B.add(new nodeSet(b3));
+        B.add(new nodeSet(b4));
+
         HashSet<Integer> i1B1 = new HashSet<>(Arrays.asList(1, 2, 8, 9, 10, 11));
         HashSet<Integer> i1B2 = new HashSet<>(Arrays.asList(1, 3, 8, 9, 10, 11));
+        HashSet<nodeSet> Bi1 = new HashSet<>();
+        Bi1.add(new nodeSet(i1B1));
+        Bi1.add(new nodeSet(i1B2));
+
         HashSet<Integer> i2B1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8));
         HashSet<Integer> i2B2 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 9));
+        HashSet<nodeSet> Bi2 = new HashSet<>();
+        Bi2.add(new nodeSet(i2B1));
+        Bi2.add(new nodeSet(i2B2));
 
         //confidentiality information for objects
         HashSet<Integer> c1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 12));
         HashSet<Integer> c2 = new HashSet<>(Arrays.asList(8, 9, 10, 11, 12));
         HashSet<Integer> cx = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+        HashSet<Integer> cret = new HashSet<>(Arrays.asList(12));
+
+        //context type for m4, which is the bottom
+        HashSet<nodeSet> m4context = new HashSet<>();
+        m4context.add(new nodeSet(cx));
 
         //host and quorum information
         HashSet<Integer> Hm1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6));
@@ -119,11 +134,56 @@ public class translation_test {
         methodsInfo.add(m4Info);
 
         ArrayList<Pair<ArrayList<CIAType>, HashMap<String, CIAType>>> methodSig = new ArrayList<>();
+        CIAType m1retType = new CIAType(new nodeSet(cret), new quorumDef(B), new quorumDef(B));
+        CIAType m2retType = m1retType.clone();
+        CIAType m3retType = m1retType.clone();
+        CIAType m4retType = m1retType.clone();
+        CIAType m4Context = new CIAType(new nodeSet(cx), new quorumDef(m4context), new quorumDef(m4context));
+
+
+
         //input the object host information and signature manually
         HashMap<String, HashMap<String, HashMap<String, CIAType>>> objSigs = new HashMap<>();
-        HashMap<String, Pair<quorumDef, quorumDef>> objInfo = new HashMap<>();
+        //for object a
+        HashMap<String, CIAType> awriteArg = new HashMap<>();
+        awriteArg.put("wInput", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        awriteArg.put("ret", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        HashMap<String, HashMap<String, CIAType>> amethods = new HashMap<>();
+        amethods.put("write", awriteArg);
+        HashMap<String, CIAType> aread = new HashMap<>();
+        aread.put("ret", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        amethods.put("read", aread);
+        objSigs.put("a", amethods);
+        //for object i1 and i2
+        HashMap<String, HashMap<String, CIAType>> i1methods = new HashMap<>();
+        HashMap<String, CIAType>
+        i1methods.put("read", new HashMap<>());
+        objSigs.put("i1", i1methods);
+        HashMap<String, HashMap<String, CIAType>> i2methods = new HashMap<>();
+        i2methods.put("read", new HashMap<>());
+        objSigs.put("i2", i2methods);
 
+        HashMap<String, Pair<quorumDef, quorumDef>> objInfo = new HashMap<>();
+        Pair<quorumDef, quorumDef> i1Info = new Pair<>(new quorumDef(Qi1),new quorumDef());
+        objInfo.put("i1", i1Info);
+        Pair<quorumDef, quorumDef> i2Info = new Pair<>(new quorumDef(Qi2), new quorumDef());
+        objInfo.put("i2", i2Info);
+        Pair<quorumDef, quorumDef> aInfo = new Pair<>(new quorumDef(Qa), new quorumDef());
+        objInfo.put("a", aInfo);
+
+        //input the predefined variable information
+        HashMap<String, CIAType> p = new HashMap<>();
+        p.put("x", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        //input predefine umbrella for the objects
+        HashMap<String, CIAType> u = new HashMap<>();
+        u.put("i1", new CIAType(new nodeSet(c1), new quorumDef(Bi1), new quorumDef(Bi1)));
+        u.put("i2", new CIAType(new nodeSet(c2), new quorumDef(Bi2), new quorumDef(Bi2)));
+        u.put("a", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
         //printToFile(lambda1., "oft_cps");
+
+        SecureTypeChecking test5 = new SecureTypeChecking();
+        Boolean r =test5.classTypeCheck(resultMethodDefs, methodsInfo, methodSig, objSigs, objInfo, p, u);
+        System.out.println("The type checking result for the program:" + r.toString());
     }
 
 //        public static String cpsTransformation(lambda_usecase useCase)

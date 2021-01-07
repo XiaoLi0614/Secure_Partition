@@ -1,6 +1,7 @@
 package lambda_calculus.partition_package.visitor;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import fj.Hash;
 import lambda_calculus.partition_package.tree.MethodDefinition;
 import lambda_calculus.partition_package.tree.Node;
 import lambda_calculus.partition_package.tree.PartitionProcess;
@@ -271,10 +272,10 @@ public class SecureTypeChecking implements PartitionVisitor{
                                 ciaJoin(environment.get(args).getGamma().get(args.toString()));
                         objectMethodType.get(Oname).get(OMName).put(args.toString(), temp);
                         //todo: don't forget to initialization
-                        if(!OMap.get(Oname + OMName).element2.
+                        /*if(!OMap.get(Oname).element2.
                                 availabilityProj(temp.getAvailability().getQuorum(), environment.get(singleCall).getCurrentHost())){
                             System.out.println("Inferred availability does not mee the requirement.");
-                        }
+                        }*/
                     }
                     return resultB;
                 }
@@ -356,7 +357,8 @@ public class SecureTypeChecking implements PartitionVisitor{
     public Boolean classTypeCheck(ArrayList<MethodDefinition> methods,
                                   ArrayList<Pair<nodeSet, quorumDef>> methodsSig,
                                   HashMap<String, HashMap<String, HashMap<String, CIAType>>> objSigs,
-                                  HashMap<String, Pair<quorumDef, quorumDef>> objHosts){
+                                  HashMap<String, Pair<quorumDef, quorumDef>> objHosts, HashMap<String, CIAType> predefinedVar,
+                                  HashMap<String, CIAType> predefinedUmb){
         Boolean r = true;
         SecureTypeChecking b = new SecureTypeChecking();
         //set the M(H, Q) and O(Q1, Q2) and object signature
@@ -365,12 +367,14 @@ public class SecureTypeChecking implements PartitionVisitor{
         }
         this.OMap = objHosts;
         this.objectMethodType = objSigs;
+        this.objUmb = predefinedUmb;
 
         //first do field check then we do method check
         for(String oname : objSigs.keySet()){
             r &= fieldCheck(oname);
         }
         for(int i = methods.size() - 1; i >= 0; i--){
+            environment.get(methods.get(i).body).setGamma(predefinedVar);
             r &= methodCheck(methods.get(i), i);
         }
         return r;
@@ -381,7 +385,8 @@ public class SecureTypeChecking implements PartitionVisitor{
                                   ArrayList<Pair<nodeSet, quorumDef>> methodsSig,
                                   ArrayList<Pair<ArrayList<CIAType>, HashMap<String, CIAType>>> methodTypes,
                                   HashMap<String, HashMap<String, HashMap<String, CIAType>>> objSigs,
-                                  HashMap<String, Pair<quorumDef, quorumDef>> objHosts){
+                                  HashMap<String, Pair<quorumDef, quorumDef>> objHosts, HashMap<String, CIAType> predefinedVar,
+                                  HashMap<String, CIAType> predefinedUmb){
         Boolean r = true;
         SecureTypeChecking b = new SecureTypeChecking();
         //set the M(H, Q) and O(Q1, Q2) and object signature
@@ -391,12 +396,14 @@ public class SecureTypeChecking implements PartitionVisitor{
         }
         this.OMap = objHosts;
         this.objectMethodType = objSigs;
+        this.objUmb = predefinedUmb;
 
         //first do field check then we do method check
         for(String oname : objSigs.keySet()){
             r &= fieldCheck(oname);
         }
         for(int i = methods.size() - 1; i >= 0; i--){
+            environment.get(methods.get(i).body).setGamma(predefinedVar);
             r &= methodCheck(methods.get(i), i);
         }
         return r;
