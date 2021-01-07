@@ -7,15 +7,15 @@ import java.util.HashSet;
 
 public class envForTypeCheck {
     public HashMap<String, CIAType> Gamma;
-    public HashMap<String, Pair<quorumDef, quorumDef>> OMap;
-    public HashMap<String, Pair<nodeSet, quorumDef>> MMap;
+    //public HashMap<String, Pair<quorumDef, quorumDef>> OMap;
+    //public HashMap<String, Pair<nodeSet, quorumDef>> MMap;
     public nodeSet currentHosts;
     public CIAType currentContext;
 
     public envForTypeCheck(){
         Gamma = new HashMap<>();
-        OMap = new HashMap<>();
-        MMap = new HashMap<>();
+        //OMap = new HashMap<>();
+        //MMap = new HashMap<>();
         currentHosts = new nodeSet();
         currentContext = new CIAType();
         return;
@@ -33,6 +33,7 @@ public class envForTypeCheck {
         return;
     }
 
+/*
     public HashMap<String, Pair<quorumDef, quorumDef>> getOMap(){
         return this.OMap;
     }
@@ -58,6 +59,7 @@ public class envForTypeCheck {
         }
         return;
     }
+*/
 
     public nodeSet getCurrentHost(){
         return this.currentHosts;
@@ -83,8 +85,8 @@ public class envForTypeCheck {
         if (o == null || getClass() != o.getClass()) return false;
         envForTypeCheck that = (envForTypeCheck) o;
         if(!Gamma.equals(that.Gamma)) return false;
-        else if(!OMap.equals(that.OMap)) return false;
-        else if(!MMap.equals(that.MMap)) return false;
+        //else if(!OMap.equals(that.OMap)) return false;
+        //else if(!MMap.equals(that.MMap)) return false;
         else if(!currentHosts.equals(that.currentHosts)) return false;
         else return currentContext.equals(that.currentContext);
     }
@@ -93,8 +95,8 @@ public class envForTypeCheck {
     public envForTypeCheck clone(){
         envForTypeCheck r = new envForTypeCheck();
         r.setGamma(this.Gamma);
-        r.setOMap(this.OMap);
-        r.setMMap(this.MMap);
+        //r.setOMap(this.OMap);
+        //r.setMMap(this.MMap);
         r.setCurrentHost(this.currentHosts);
         r.setCurrentContext(this.currentContext);
         return r;

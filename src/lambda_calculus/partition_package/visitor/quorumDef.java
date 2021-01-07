@@ -96,6 +96,14 @@ public class quorumDef {
         return true;
     }
 
+    public nodeSet unionQuorum(){
+        nodeSet r = new nodeSet();
+        for(nodeSet s : this.quorum){
+            r.nSet.addAll(s.nSet);
+        }
+        return r;
+    }
+
     @Override
     public String toString(){
         return quorum.toString();

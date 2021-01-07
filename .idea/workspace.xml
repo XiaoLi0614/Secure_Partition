@@ -7,19 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c8eb5f03-e017-4c19-b817-0c18d5b49b0d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cs179e/cs179e/LesaniLib" beforeDir="false" afterPath="$PROJECT_DIR$/cs179e/cs179e/LesaniLib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/LableTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/LableTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/CIAType.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/CIAType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/SecureTypeChecking$CommandP.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/SecureTypeChecking$ExpressionP$BinaryOpB.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/SecureTypeChecking$ExpressionP$GIdB.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/SecureTypeChecking$ExpressionP$LiteralB.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/SecureTypeChecking$ExpressionP.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/SecureTypeChecking.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/quorumDef.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/quorumDef.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/LableTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/LableTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/envForTypeCheck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/envForTypeCheck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/quorumDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/quorumDef.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -55,8 +46,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/quorumDef.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2210">
-              <caret line="132" column="17" selection-start-line="132" selection-start-column="17" selection-end-line="132" selection-end-column="17" />
+            <state relative-caret-position="1190">
+              <caret line="102" column="9" lean-forward="true" selection-start-line="102" selection-start-column="9" selection-end-line="102" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2917#2918#0" expanded="true" />
@@ -132,16 +123,12 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/envForTypeCheck.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="29" column="65" selection-start-line="29" selection-start-column="65" selection-end-line="29" selection-end-column="65" />
+            <state relative-caret-position="170">
+              <caret line="10" column="8" selection-start-line="9" selection-start-column="6" selection-end-line="10" selection-end-column="60" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#694#695#0" expanded="true" />
                 <element signature="e#721#722#0" expanded="true" />
-                <element signature="e#1011#1012#0" expanded="true" />
-                <element signature="e#1044#1045#0" expanded="true" />
-                <element signature="e#1522#1523#0" expanded="true" />
-                <element signature="e#1554#1555#0" expanded="true" />
                 <element signature="e#1976#1977#0" expanded="true" />
                 <element signature="e#2016#2017#0" expanded="true" />
                 <element signature="e#2156#2157#0" expanded="true" />
@@ -154,8 +141,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="779">
-              <caret line="328" column="95" selection-start-line="328" selection-start-column="95" selection-end-line="328" selection-end-column="95" />
+            <state relative-caret-position="685">
+              <caret line="128" column="52" selection-start-line="128" selection-start-column="52" selection-end-line="128" selection-end-column="52" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1282#1283#0" expanded="true" />
@@ -269,20 +256,20 @@
         <option value="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/EnvForTypeChecking.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/envForTC.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/nodeSet.java" />
-        <option value="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/quorumDef.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/CIAType.java" />
         <option value="$PROJECT_DIR$/src/lesani/collection/Pair.java" />
-        <option value="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/envForTypeCheck.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/LableTest.java" />
+        <option value="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/envForTypeCheck.java" />
+        <option value="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/quorumDef.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="4">
-    <option name="x" value="65" />
-    <option name="y" value="24" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="281" />
+    <option name="y" value="-4" />
     <option name="width" value="1248" />
-    <option name="height" value="1576" />
+    <option name="height" value="1568" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -360,7 +347,7 @@
     <property name="$PROJECT_DIR$/src/Test.g4::/language" value="Java" />
     <property name="$PROJECT_DIR$/src/Test.g4::/output-dir" value="$PROJECT_DIR$/src" />
     <property name="$PROJECT_DIR$/src/Test.g4::/package" value="test.parser" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1609887243616" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1609982013317" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/cs179e" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15" />
@@ -422,10 +409,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1248" height="1576" extended-state="4" />
+    <frame x="65" y="-4" width="2495" height="1604" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26955074" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1322989" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -435,7 +422,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.3286517" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49001664" visible="true" weight="0.2394663" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49081257" visible="true" weight="0.23484848" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7079867" weight="0.4002809" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -444,7 +431,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Tool Output" order="9" />
       <window_info anchor="bottom" id="Terminal" order="10" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50998336" side_tool="true" visible="true" weight="0.2394663" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5091874" side_tool="true" visible="true" weight="0.23484848" />
       <window_info anchor="bottom" id="ANTLR Preview" order="12" weight="0.32959327" />
       <window_info anchor="bottom" id="Run with VisualVM" order="13" />
       <window_info anchor="bottom" id="JProfiler" order="14" />
@@ -479,12 +466,6 @@
           <line>37</line>
           <properties />
           <option name="timeStamp" value="33" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/quorumDef.java</url>
-          <line>79</line>
-          <properties />
-          <option name="timeStamp" value="36" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -934,18 +915,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/quorumDef.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2210">
-          <caret line="132" column="17" selection-start-line="132" selection-start-column="17" selection-end-line="132" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2917#2918#0" expanded="true" />
-            <element signature="e#2945#2946#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/PartitionVisitor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="680">
@@ -968,16 +937,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/envForTypeCheck.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="65" selection-start-line="29" selection-start-column="65" selection-end-line="29" selection-end-column="65" />
+        <state relative-caret-position="170">
+          <caret line="10" column="8" selection-start-line="9" selection-start-column="6" selection-end-line="10" selection-end-column="60" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#694#695#0" expanded="true" />
             <element signature="e#721#722#0" expanded="true" />
-            <element signature="e#1011#1012#0" expanded="true" />
-            <element signature="e#1044#1045#0" expanded="true" />
-            <element signature="e#1522#1523#0" expanded="true" />
-            <element signature="e#1554#1555#0" expanded="true" />
             <element signature="e#1976#1977#0" expanded="true" />
             <element signature="e#2016#2017#0" expanded="true" />
             <element signature="e#2156#2157#0" expanded="true" />
@@ -986,10 +951,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/quorumDef.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1190">
+          <caret line="102" column="9" lean-forward="true" selection-start-line="102" selection-start-column="9" selection-end-line="102" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2917#2918#0" expanded="true" />
+            <element signature="e#2945#2946#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="779">
-          <caret line="328" column="95" selection-start-line="328" selection-start-column="95" selection-end-line="328" selection-end-column="95" />
+        <state relative-caret-position="685">
+          <caret line="128" column="52" selection-start-line="128" selection-start-column="52" selection-end-line="128" selection-end-column="52" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1282#1283#0" expanded="true" />
