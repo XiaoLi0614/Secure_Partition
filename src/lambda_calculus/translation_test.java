@@ -139,7 +139,27 @@ public class translation_test {
         CIAType m3retType = m1retType.clone();
         CIAType m4retType = m1retType.clone();
         CIAType m4Context = new CIAType(new nodeSet(cx), new quorumDef(m4context), new quorumDef(m4context));
-
+        CIAType m3Context = m4Context.ciaJoin(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        CIAType m2Context = m3Context.clone();
+        CIAType m1Context = m3Context.clone();
+        ArrayList<CIAType> m1 = new ArrayList<>();
+        m1.add(m1Context);
+        m1.add(m1retType);
+        methodSig.add(new Pair<>(m1, new HashMap<>()));
+        ArrayList<CIAType> m2 = new ArrayList<>();
+        m2.add(m2Context);
+        m2.add(m2retType);
+        methodSig.add(new Pair<>(m2, new HashMap<>()));
+        ArrayList<CIAType> m3 = new ArrayList<>();
+        m3.add(m3Context);
+        m3.add(m3retType);
+        methodSig.add(new Pair<>(m3, new HashMap<>()));
+        methodSig.get(2).element2.put("x", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        ArrayList<CIAType> m4 = new ArrayList<>();
+        m4.add(m4Context);
+        m4.add(m4retType);
+        methodSig.add(new Pair<>(m4, new HashMap<>()));
+        methodSig.get(3).element2.put("x", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
 
 
         //input the object host information and signature manually
@@ -156,11 +176,14 @@ public class translation_test {
         objSigs.put("a", amethods);
         //for object i1 and i2
         HashMap<String, HashMap<String, CIAType>> i1methods = new HashMap<>();
-        HashMap<String, CIAType>
-        i1methods.put("read", new HashMap<>());
+        HashMap<String, CIAType> i1read = new HashMap<>();
+        i1read.put("ret", new CIAType(new nodeSet(c1), new quorumDef(Bi1), new quorumDef(Bi1)));
+        i1methods.put("read", i1read);
         objSigs.put("i1", i1methods);
         HashMap<String, HashMap<String, CIAType>> i2methods = new HashMap<>();
-        i2methods.put("read", new HashMap<>());
+        HashMap<String, CIAType> i2read = new HashMap<>();
+        i2read.put("ret", new CIAType(new nodeSet(c2), new quorumDef(Bi2), new quorumDef(Bi2)));
+        i2methods.put("read", i2read);
         objSigs.put("i2", i2methods);
 
         HashMap<String, Pair<quorumDef, quorumDef>> objInfo = new HashMap<>();
@@ -182,7 +205,7 @@ public class translation_test {
         //printToFile(lambda1., "oft_cps");
 
         SecureTypeChecking test5 = new SecureTypeChecking();
-        Boolean r =test5.classTypeCheck(resultMethodDefs, methodsInfo, methodSig, objSigs, objInfo, p, u);
+        Boolean r = test5.classTypeCheck(resultMethodDefs, methodsInfo, methodSig, objSigs, objInfo, p, u);
         System.out.println("The type checking result for the program:" + r.toString());
     }
 

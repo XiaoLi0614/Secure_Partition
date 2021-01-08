@@ -37,6 +37,10 @@ public class SecureTypeChecking implements PartitionVisitor{
     public SecureTypeChecking(){
         environment = new HashMap<>();
         methodType = new HashMap<>();
+        objectMethodType = new HashMap<>();
+        objUmb = new HashMap<>();
+        OMap = new HashMap<>();
+        MMap = new HashMap<>();
     }
 
     public Object visitDispatch(Expression expression) {
@@ -403,6 +407,7 @@ public class SecureTypeChecking implements PartitionVisitor{
             r &= fieldCheck(oname);
         }
         for(int i = methods.size() - 1; i >= 0; i--){
+            environment.put(methods.get(i).body, new envForTypeCheck());
             environment.get(methods.get(i).body).setGamma(predefinedVar);
             r &= methodCheck(methods.get(i), i);
         }
