@@ -94,4 +94,9 @@ public class SingleCall extends Command {
         }
         else return args.equals(that.args);
     }
+
+    @Override
+    public int hashCode(){
+        return methodName.hashCode() + objectName.hashCode();
+    }
 }

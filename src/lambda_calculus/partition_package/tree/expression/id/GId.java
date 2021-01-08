@@ -19,4 +19,6 @@ public abstract class GId implements Expression {
     public abstract String toString();
 
     public abstract boolean equals(Object o);
+
+    public abstract int hashCode();
 }

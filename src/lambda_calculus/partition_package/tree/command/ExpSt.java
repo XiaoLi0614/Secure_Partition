@@ -27,4 +27,9 @@ public class ExpSt extends Command {
         ExpSt that = (ExpSt) o;
         return expression.equals(that.expression);
     }
+
+    @Override
+    public int hashCode(){
+        return expression.hashCode();
+    }
 }

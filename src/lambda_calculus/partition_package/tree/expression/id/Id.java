@@ -24,5 +24,10 @@ public class Id extends GId {
 
         return (lexeme == ((Id) o).toString());
     }
+
+    @Override
+    public int hashCode(){
+        return lexeme.hashCode();
+    }
 }
 

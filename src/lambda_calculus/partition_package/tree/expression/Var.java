@@ -30,4 +30,9 @@ public class Var implements Expression{
 
         return name.equals(((Var) o).name);
     }
+
+    @Override
+    public int hashCode(){
+        return name.hashCode();
+    }
 }

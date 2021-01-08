@@ -27,4 +27,9 @@ public class Plus extends BinaryOp {
         else if(!operand2.equals(that.operand2)) return false;
         else return (operatorText == that.operatorText);
     }
+
+    @Override
+    public int hashCode(){
+        return operand1.hashCode() + operand2.hashCode();
+    }
 }

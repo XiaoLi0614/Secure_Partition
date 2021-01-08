@@ -35,4 +35,9 @@ public class Conditional implements Expression {
         else if (! ifExp.equals(that.ifExp)) return false;
         else return elseExp.equals(that.elseExp);
     }
+
+    @Override
+    public int hashCode(){
+        return condition.hashCode() + ifExp.hashCode() + elseExp.hashCode();
+    }
 }

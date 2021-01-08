@@ -28,4 +28,9 @@ public class IntLiteral extends Literal {
 
         return (lexeme == ((IntLiteral) o).toString());
     }
+
+    @Override
+    public int hashCode(){
+        return lexeme.hashCode();
+    }
 }

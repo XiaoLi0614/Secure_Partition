@@ -34,4 +34,9 @@ public class If extends Command {
         else if (! command1.equals(that.command1)) return false;
         else return command2.equals(that.command2);
     }
+
+    @Override
+    public int hashCode(){
+        return condition.hashCode()+ command1.hashCode() + command2.hashCode();
+    }
 }

@@ -1,9 +1,11 @@
 package lambda_calculus.partition_package.visitor;
 
+import com.sun.org.apache.xerces.internal.parsers.IntegratedParserConfiguration;
 import fj.Hash;
 import graph.lang.ast.False;
 import lesani.compiler.ast.HolderNode;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
 public class CIAType implements Cloneable{
@@ -233,6 +235,16 @@ public class CIAType implements Cloneable{
         this.Integrity = i.clone();
         this.Availability = a.clone();
         return;
+    }
+
+    //instantiate the bottom value for CIA type. The one with least constraints
+    public CIAType CIABot(){
+        HashSet<Integer> all_nodes = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+        HashSet<Integer> all_nodes1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
+        nodeSet ia = new nodeSet(all_nodes1);
+        HashSet<nodeSet> ia1 = new HashSet<>();
+        ia1.add(ia);
+        return new CIAType(new nodeSet(all_nodes), new quorumDef(ia1), new quorumDef(ia1));
     }
 
     public nodeSet getConfidentiality(){
