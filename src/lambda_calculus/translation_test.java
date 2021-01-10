@@ -133,7 +133,11 @@ public class translation_test {
         Pair<nodeSet, quorumDef> m4Info = new Pair<>(new nodeSet(Hm4), new quorumDef(Qm4));
         methodsInfo.add(m4Info);
 
-        ArrayList<Pair<ArrayList<CIAType>, HashMap<String, CIAType>>> methodSig = new ArrayList<>();
+        ArrayList<ArrayList<String>> mANames = new ArrayList<>(4);
+        for(int i = 0; i < 4; i++){
+            mANames.add(new ArrayList<>());
+        }
+        ArrayList<Pair<ArrayList<CIAType>, ArrayList<CIAType>>> methodSig = new ArrayList<>();
         CIAType m1retType = new CIAType(new nodeSet(cret), new quorumDef(B), new quorumDef(B));
         CIAType m2retType = m1retType.clone();
         CIAType m3retType = m1retType.clone();
@@ -145,44 +149,49 @@ public class translation_test {
         ArrayList<CIAType> m1 = new ArrayList<>();
         m1.add(m1Context);
         m1.add(m1retType);
-        methodSig.add(new Pair<>(m1, new HashMap<>()));
+        methodSig.add(new Pair<>(m1, new ArrayList<>()));
         ArrayList<CIAType> m2 = new ArrayList<>();
         m2.add(m2Context);
         m2.add(m2retType);
-        methodSig.add(new Pair<>(m2, new HashMap<>()));
+        methodSig.add(new Pair<>(m2, new ArrayList<>()));
         ArrayList<CIAType> m3 = new ArrayList<>();
         m3.add(m3Context);
         m3.add(m3retType);
-        methodSig.add(new Pair<>(m3, new HashMap<>()));
-        methodSig.get(2).element2.put("x", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        methodSig.add(new Pair<>(m3, new ArrayList<>()));
+        mANames.get(2).add("x");
+        methodSig.get(2).element2.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
         ArrayList<CIAType> m4 = new ArrayList<>();
         m4.add(m4Context);
         m4.add(m4retType);
-        methodSig.add(new Pair<>(m4, new HashMap<>()));
-        methodSig.get(3).element2.put("x", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        methodSig.add(new Pair<>(m4, new ArrayList<>()));
+        mANames.get(3).add("x");
+        methodSig.get(3).element2.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
 
 
         //input the object host information and signature manually
-        HashMap<String, HashMap<String, HashMap<String, CIAType>>> objSigs = new HashMap<>();
+        HashMap<String, HashMap<String, ArrayList<CIAType>>> objSigs = new HashMap<>();
         //for object a
-        HashMap<String, CIAType> awriteArg = new HashMap<>();
-        awriteArg.put("wInput", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
-        awriteArg.put("ret", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
-        HashMap<String, HashMap<String, CIAType>> amethods = new HashMap<>();
+        ArrayList<CIAType> awriteArg = new ArrayList<>();
+        awriteArg.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        //ret is in the last index
+        awriteArg.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        HashMap<String, ArrayList<CIAType>> amethods = new HashMap<>();
         amethods.put("write", awriteArg);
-        HashMap<String, CIAType> aread = new HashMap<>();
-        aread.put("ret", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        ArrayList<CIAType> aread = new ArrayList<>();
+        aread.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
         amethods.put("read", aread);
         objSigs.put("a", amethods);
         //for object i1 and i2
-        HashMap<String, HashMap<String, CIAType>> i1methods = new HashMap<>();
-        HashMap<String, CIAType> i1read = new HashMap<>();
-        i1read.put("ret", new CIAType(new nodeSet(c1), new quorumDef(Bi1), new quorumDef(Bi1)));
+        HashMap<String, ArrayList<CIAType>> i1methods = new HashMap<>();
+        ArrayList<CIAType> i1read = new ArrayList<>();
+        //ret
+        i1read.add(new CIAType(new nodeSet(c1), new quorumDef(Bi1), new quorumDef(Bi1)));
         i1methods.put("read", i1read);
         objSigs.put("i1", i1methods);
-        HashMap<String, HashMap<String, CIAType>> i2methods = new HashMap<>();
-        HashMap<String, CIAType> i2read = new HashMap<>();
-        i2read.put("ret", new CIAType(new nodeSet(c2), new quorumDef(Bi2), new quorumDef(Bi2)));
+        HashMap<String, ArrayList<CIAType>> i2methods = new HashMap<>();
+        ArrayList<CIAType> i2read = new ArrayList<>();
+        //ret
+        i2read.add(new CIAType(new nodeSet(c2), new quorumDef(Bi2), new quorumDef(Bi2)));
         i2methods.put("read", i2read);
         objSigs.put("i2", i2methods);
 
@@ -205,7 +214,7 @@ public class translation_test {
         //printToFile(lambda1., "oft_cps");
 
         SecureTypeChecking test5 = new SecureTypeChecking();
-        Boolean r = test5.classTypeCheck(resultMethodDefs, methodsInfo, methodSig, objSigs, objInfo, p, u);
+        Boolean r = test5.classTypeCheck(resultMethodDefs, methodsInfo, methodSig, mANames, objSigs, objInfo, p, u);
         System.out.println("The type checking result for the program:" + r.toString());
     }
 

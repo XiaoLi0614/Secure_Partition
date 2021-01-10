@@ -25,10 +25,10 @@ public class SecureTypeChecking implements PartitionVisitor{
     HashMap<Node, envForTypeCheck> environment; // each node has an environment for type checking
     // \tau_x * \tau_argus -> \tau_2
     //the arraylist has \tau_x and \tau_2. The hashmap has \tau_1
-    HashMap<String, Pair<ArrayList<CIAType>, HashMap<String, CIAType>>> methodType;
+    HashMap<String, Pair<ArrayList<CIAType>, ArrayList<CIAType>>> methodType;
     // the first string is for object name, the second string is for method name, the last one is for the arguments
     //for return value the string is ret
-    HashMap<String, HashMap<String, HashMap<String, CIAType>>> objectMethodType;
+    HashMap<String, HashMap<String, ArrayList<CIAType>>> objectMethodType;
     HashMap<String, CIAType> objUmb;
     //The object and method map(about host and arguments) does not change during the type inference / type checking
     HashMap<String, Pair<quorumDef, quorumDef>> OMap;
@@ -222,28 +222,35 @@ public class SecureTypeChecking implements PartitionVisitor{
         @Override
         //method and object calls are all in the single call node
         public Object visit(SingleCall singleCall){
+            if(environment.get(singleCall) == null){
+                environment.put(singleCall, new envForTypeCheck());
+            }
+
             //when this is a method call
             Boolean resultB = true;
             if(singleCall.objectName.toString() =="this"){
                 //we need to infer the method type for this method
                 if(methodType.get(singleCall.methodName.toString()) == null ||
                         methodType.get(singleCall.methodName.toString()).element1.size() == 0){
-                    methodType.put(singleCall.methodName.toString(), new Pair<>(new ArrayList<>(), new HashMap<>()));
+                    methodType.put(singleCall.methodName.toString(), new Pair<>(new ArrayList<>(), new ArrayList<>()));
                     methodType.get(singleCall.methodName.toString()).element1.add(environment.get(singleCall).getCurrentContext().clone());
-                    for(Expression args: singleCall.args){
+                    for(int a = 0; a < singleCall.args.length; a++){
+                        Expression args = singleCall.args[a];
                         environment.put(args, environment.get(singleCall).clone());
                         resultB &= (Boolean) visitDispatch(args);
                         //todo: how to infer the a1 out of Availability function
                         //we infer the \tau_1 as the join of \tau and \tau_x
                         CIAType temp = environment.get(singleCall).getCurrentContext().
                                 ciaJoin(environment.get(args).getGamma().get(args.toString()));
-                        methodType.get(singleCall.methodName.toString()).element2.put(args.toString(), temp);
+                        methodType.get(singleCall.methodName.toString()).element2.add(a, temp);
                         if(!MMap.get(singleCall.methodName.toString()).element2.
                                 availabilityProj(temp.getAvailability().getQuorum(), environment.get(singleCall).getCurrentHost())){
                             System.out.println("Inferred availability does not mee the requirement.");
                         }
                     }
                     //set the return value for the method
+                    //todo: we have not set the return type for the method at this point
+                    //methodType.get(singleCall.methodName.toString()).element1.get(1) = null now/
                     environment.get(singleCall).getGamma().put(singleCall.toString(), methodType.get(singleCall.methodName.toString()).element1.get(1));
                     return resultB;
                 }
@@ -254,15 +261,18 @@ public class SecureTypeChecking implements PartitionVisitor{
 
                     //when there is no argument for the method
                     if(singleCall.args == null || singleCall.args.length == 0){
+                        //set the return value for the method
+                        environment.get(singleCall).getGamma().put(singleCall.toString(), methodType.get(singleCall.methodName.toString()).element1.get(1));
                         return resultB;
                     }
                     else {
-                        for(Expression argE : singleCall.args){
+                        for(int a = 0; a < singleCall.args.length; a++){
+                            Expression argE = singleCall.args[a];
                             environment.put(argE, environment.get(singleCall).clone());
                             resultB &= (Boolean) visitDispatch(argE);
                             resultB &= environment.get(argE).getGamma().get(argE.toString()).
                                     ciaJoin(environment.get(singleCall).getCurrentContext()).
-                                    ciaLeq(methodType.get(singleCall.methodName.toString()).element2.get(argE.toString()));
+                                    ciaLeq(methodType.get(singleCall.methodName.toString()).element2.get(a));
                             resultB &= MMap.get(singleCall.methodName.toString()).element2.
                                     availabilityProj(environment.get(argE).getGamma().get(argE.toString()).getAvailability().getQuorum(),
                                             environment.get(singleCall).getCurrentHost());
@@ -279,47 +289,56 @@ public class SecureTypeChecking implements PartitionVisitor{
                 String OMName = singleCall.methodName.toString();
                 //we need to infer the method type for this method
                 if(objectMethodType.get(Oname).get(OMName) == null){
-                    for(Expression args: singleCall.args){
+                    for(int e = 0; e < singleCall.args.length; e++){
+                        Expression args = singleCall.args[e];
                         environment.put(args, environment.get(singleCall).clone());
                         resultB &= (Boolean) visitDispatch(args);
                         //todo: how to infer the a1 out of Availability function
                         //we infer the \tau_1 as the join of \tau and \tau_x
                         CIAType temp = environment.get(singleCall).getCurrentContext().
                                 ciaJoin(environment.get(args).getGamma().get(args.toString()));
-                        objectMethodType.get(Oname).get(OMName).put(args.toString(), temp);
+                        objectMethodType.get(Oname).get(OMName).add(e, temp);
                         //todo: don't forget to initialization
                         /*if(!OMap.get(Oname).element2.
                                 availabilityProj(temp.getAvailability().getQuorum(), environment.get(singleCall).getCurrentHost())){
                             System.out.println("Inferred availability does not mee the requirement.");
                         }*/
                     }
+                    int retIndex = objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).size()-1;
                     //set the object method return value
                     environment.get(singleCall).getGamma().
                             put(singleCall.toString(),
-                                    objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).get("ret"));
+                                    objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).get(retIndex));
                     return resultB;
                 }
                 //we have the typed context for the method
                 else {
                     //when there is no argument for the method
                     if(singleCall.args == null || singleCall.args.length == 0){
+                        int retIndex = objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).size()-1;
+                        //set the object method return value
+                        environment.get(singleCall).getGamma().
+                                put(singleCall.toString(),
+                                        objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).get(retIndex));
                         return resultB;
                     }
                     else {
-                        for(Expression argE : singleCall.args){
+                        for(int a = 0; a < singleCall.args.length; a++){
+                            Expression argE = singleCall.args[a];
                             environment.put(argE, environment.get(singleCall).clone());
                             resultB &= (Boolean) visitDispatch(argE);
                             resultB &= environment.get(argE).getGamma().get(argE.toString()).
                                     ciaJoin(environment.get(singleCall).getCurrentContext()).
-                                    ciaLeq(objectMethodType.get(Oname).get(OMName).get(argE.toString()));
-                            resultB &= OMap.get(singleCall.methodName.toString()).element2.
+                                    ciaLeq(objectMethodType.get(Oname).get(OMName).get(a));
+                            resultB &= OMap.get(singleCall.objectName.toString()).element2.
                                     availabilityProj(environment.get(argE).getGamma().get(argE.toString()).getAvailability().getQuorum(),
                                             environment.get(singleCall).getCurrentHost());
                         }
                         //set the object method return value
+                        int retIndex = objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).size()-1;
                         environment.get(singleCall).getGamma().
                                 put(singleCall.toString(),
-                                        objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).get("ret"));
+                                        objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).get(retIndex));
                         return resultB;
                     }
                 }
@@ -332,20 +351,15 @@ public class SecureTypeChecking implements PartitionVisitor{
 
     public Boolean fieldCheck(String objName, SecureTypeChecking s){
         Boolean resultB = true;
-        HashMap<String, HashMap<String, CIAType>> objSig = s.objectMethodType.get(objName);
+        HashMap<String, ArrayList<CIAType>> objSig = s.objectMethodType.get(objName);
         nodeSet objHosts = s.OMap.get(objName).element1.unionQuorum();
         for(String mName: objSig.keySet()){
-            HashMap<String, CIAType> argTypes = objSig.get(mName);
-            CIAType retVType = argTypes.get("ret");
+            ArrayList<CIAType> argTypes = objSig.get(mName);
+            CIAType retVType = argTypes.get(argTypes.size()-1);
             resultB &= retVType.cLeq(objHosts);
-            for(String argName : argTypes.keySet()){
-                if(argName == "ret"){
-                    continue;
-                }
-                else {
-                    resultB &= s.objUmb.get(objName).ciaLeq(argTypes.get(argName)) & argTypes.get(argName).ciaLeq(retVType);
-                    resultB &= argTypes.get(argName).cLeq(objHosts);
-                }
+            for(int i = 0; i < argTypes.size() - 1; i++){
+                resultB &= s.objUmb.get(objName).ciaLeq(argTypes.get(i)) & argTypes.get(i).ciaLeq(retVType);
+                resultB &= argTypes.get(i).cLeq(objHosts);
             }
         }
         resultB &= s.OMap.get(objName).element1.fieldIntegrity(s.objUmb.get(objName).getIntegrity().getQuorum());
@@ -353,39 +367,45 @@ public class SecureTypeChecking implements PartitionVisitor{
         return resultB;
     }
 
-    public Boolean methodCheck(MethodDefinition m, int n, SecureTypeChecking s){
+    //mArgNames are the corresponding names for arguments in the methods
+    public Boolean methodCheck(MethodDefinition m, int n, SecureTypeChecking s, ArrayList<String> mArgNames){
         Boolean resultB = true;
         //set up the input arguments to type the body of method
         for(Expression arg : m.freeVars){
+            int indexFroArg = mArgNames.indexOf(arg.toString());
             s.environment.get(m.body).getGamma().put(arg.toString(),
-                    s.methodType.get(m.thisMethodName.toString()).element2.get(arg.toString()));
+                    s.methodType.get(m.thisMethodName.toString()).element2.get(indexFroArg));
         }
         //set the current hosts
         s.environment.get(m.body).setCurrentHost(s.MMap.get(m.thisMethodName.toString()).element1);
         s.environment.get(m.body).setCurrentContext(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
 
         //set the administrative x type in the method body
-        resultB &= s.visitDispatch.
+        resultB &= (Boolean) s.visitDispatch(m.objectCall);
+        s.environment.get(m.body).getGamma().put(m.objectCall.administrativeX.toString(),
+                s.environment.get(m.objectCall).getGamma().get(m.objectCall.toString()));
 
         resultB &= (Boolean) s.visitDispatch(m.body);
         resultB &= s.environment.get(m.body).getGamma().get(m.body.toString()).
                 ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(1));
-        for(CIAType argT : s.methodType.get(m.thisMethodName.toString()).element2.values()){
-            resultB &= argT.ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
+        for(CIAType argT : s.methodType.get(m.thisMethodName.toString()).element2){
+            //resultB &= argT.ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
             resultB &= s.MMap.get(m.thisMethodName.toString()).element2.
                     methodIntegrity(argT.getIntegrity().getQuorum());
         }
+//        resultB &= s.methodType.get(m.thisMethodName.toString()).element1.get(0).
+//                ciaJoin(s.methodType.get(m.thisMethodName.toString()).element1.get(1)).
+//                cLeq(s.environment.get(m.body).getCurrentHost());
         resultB &= s.methodType.get(m.thisMethodName.toString()).element1.get(0).
-                ciaJoin(s.methodType.get(m.thisMethodName.toString()).element1.get(1)).
                 cLeq(s.environment.get(m.body).getCurrentHost());
         System.out.println("The method " + m.thisMethodName.toString() + " has been checked " + resultB);
         return resultB;
     }
 
-    //We does not supply all the intermediate method signature, we need to infer some of the signature
+/*    //We does not supply all the intermediate method signature, we need to infer some of the signature
     public Boolean classTypeCheck(ArrayList<MethodDefinition> methods,
                                   ArrayList<Pair<nodeSet, quorumDef>> methodsSig,
-                                  HashMap<String, HashMap<String, HashMap<String, CIAType>>> objSigs,
+                                  HashMap<String, HashMap<String, ArrayList<CIAType>>> objSigs,
                                   HashMap<String, Pair<quorumDef, quorumDef>> objHosts, HashMap<String, CIAType> predefinedVar,
                                   HashMap<String, CIAType> predefinedUmb){
         Boolean r = true;
@@ -407,13 +427,14 @@ public class SecureTypeChecking implements PartitionVisitor{
             r &= methodCheck(methods.get(i), i, b);
         }
         return r;
-    }
+    }*/
 
     //we only need to do type checking, all the methods signatures are supplied.
     public Boolean classTypeCheck(ArrayList<MethodDefinition> methods,
                                   ArrayList<Pair<nodeSet, quorumDef>> methodsSig,
-                                  ArrayList<Pair<ArrayList<CIAType>, HashMap<String, CIAType>>> methodTypes,
-                                  HashMap<String, HashMap<String, HashMap<String, CIAType>>> objSigs,
+                                  ArrayList<Pair<ArrayList<CIAType>, ArrayList<CIAType>>> methodTypes,
+                                  ArrayList<ArrayList<String>> methodArgNames,
+                                  HashMap<String, HashMap<String, ArrayList<CIAType>>> objSigs,
                                   HashMap<String, Pair<quorumDef, quorumDef>> objHosts, HashMap<String, CIAType> predefinedVar,
                                   HashMap<String, CIAType> predefinedUmb){
         Boolean r = true;
@@ -434,7 +455,7 @@ public class SecureTypeChecking implements PartitionVisitor{
         for(int i = methods.size() - 1; i >= 0; i--){
             b.environment.put(methods.get(i).body, new envForTypeCheck());
             b.environment.get(methods.get(i).body).setGamma(predefinedVar);
-            r &= methodCheck(methods.get(i), i, b);
+            r &= methodCheck(methods.get(i), i, b, methodArgNames.get(i));
         }
         return r;
     }
