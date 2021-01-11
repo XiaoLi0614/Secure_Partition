@@ -330,9 +330,10 @@ public class SecureTypeChecking implements PartitionVisitor{
                             resultB &= environment.get(argE).getGamma().get(argE.toString()).
                                     ciaJoin(environment.get(singleCall).getCurrentContext()).
                                     ciaLeq(objectMethodType.get(Oname).get(OMName).get(a));
-                            resultB &= OMap.get(singleCall.objectName.toString()).element2.
-                                    availabilityProj(environment.get(argE).getGamma().get(argE.toString()).getAvailability().getQuorum(),
-                                            environment.get(singleCall).getCurrentHost());
+                            //todo: need to check this later
+                            //resultB &= OMap.get(singleCall.objectName.toString()).element2.
+                                    //availabilityProj(environment.get(argE).getGamma().get(argE.toString()).getAvailability().getQuorum(),
+                                            //environment.get(singleCall).getCurrentHost());
                         }
                         //set the object method return value
                         int retIndex = objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).size()-1;
@@ -370,15 +371,19 @@ public class SecureTypeChecking implements PartitionVisitor{
     //mArgNames are the corresponding names for arguments in the methods
     public Boolean methodCheck(MethodDefinition m, int n, SecureTypeChecking s, ArrayList<String> mArgNames){
         Boolean resultB = true;
-        //set up the input arguments to type the body of method
+        //set up the input arguments to type the body of method and the object call
         for(Expression arg : m.freeVars){
             int indexFroArg = mArgNames.indexOf(arg.toString());
             s.environment.get(m.body).getGamma().put(arg.toString(),
+                    s.methodType.get(m.thisMethodName.toString()).element2.get(indexFroArg));
+            s.environment.get(m.objectCall).getGamma().put(arg.toString(),
                     s.methodType.get(m.thisMethodName.toString()).element2.get(indexFroArg));
         }
         //set the current hosts
         s.environment.get(m.body).setCurrentHost(s.MMap.get(m.thisMethodName.toString()).element1);
         s.environment.get(m.body).setCurrentContext(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
+        s.environment.get(m.objectCall).setCurrentHost(s.MMap.get(m.thisMethodName.toString()).element1);
+        s.environment.get(m.objectCall).setCurrentContext(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
 
         //set the administrative x type in the method body
         resultB &= (Boolean) s.visitDispatch(m.objectCall);
@@ -455,6 +460,8 @@ public class SecureTypeChecking implements PartitionVisitor{
         for(int i = methods.size() - 1; i >= 0; i--){
             b.environment.put(methods.get(i).body, new envForTypeCheck());
             b.environment.get(methods.get(i).body).setGamma(predefinedVar);
+            b.environment.put(methods.get(i).objectCall, new envForTypeCheck());
+            b.environment.get(methods.get(i).objectCall).setGamma(predefinedVar);
             r &= methodCheck(methods.get(i), i, b, methodArgNames.get(i));
         }
         return r;
