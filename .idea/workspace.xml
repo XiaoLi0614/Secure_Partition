@@ -7,10 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c8eb5f03-e017-4c19-b817-0c18d5b49b0d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cs179e/cs179e/LesaniLib" beforeDir="false" afterPath="$PROJECT_DIR$/cs179e/cs179e/LesaniLib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/SecureTypeChecking.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/SecureTypeChecking.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/translation_test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/translation_test.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lambda_calculus/translation_test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/translation_test.java" afterDir="false" />
     </list>
@@ -38,7 +35,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/command/SingleCall.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
+            <state relative-caret-position="816">
               <caret line="48" selection-start-line="48" selection-end-line="48" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -50,23 +47,25 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-13">
-              <caret line="427" column="25" lean-forward="true" selection-start-line="427" selection-start-column="25" selection-end-line="427" selection-end-column="25" />
+            <state relative-caret-position="761">
+              <caret line="345" selection-start-line="345" selection-end-line="345" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#7894#7895#0" expanded="true" />
+                <element signature="e#7941#7942#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/lambda_calculus/translation_test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="850">
-              <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
+            <state relative-caret-position="950">
+              <caret line="266" column="95" selection-start-line="266" selection-start-column="95" selection-end-line="266" selection-end-column="95" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -178,16 +177,16 @@
         <option value="$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/expression/Var.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/command/SingleCall.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/CIAType.java" />
-        <option value="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java" />
         <option value="$PROJECT_DIR$/src/lambda_calculus/translation_test.java" />
+        <option value="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="4">
-    <option name="x" value="65" />
-    <option name="y" value="24" />
-    <option name="width" value="1248" />
-    <option name="height" value="1576" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="596" />
+    <option name="y" value="3" />
+    <option name="width" value="1246" />
+    <option name="height" value="1560" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -265,7 +264,7 @@
     <property name="$PROJECT_DIR$/src/Test.g4::/language" value="Java" />
     <property name="$PROJECT_DIR$/src/Test.g4::/output-dir" value="$PROJECT_DIR$/src" />
     <property name="$PROJECT_DIR$/src/Test.g4::/package" value="test.parser" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1610948598702" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1610953338884" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/cs179e" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15" />
@@ -327,10 +326,9 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1248" height="1576" extended-state="4" />
-    <editor active="true" />
+    <frame x="65" y="-4" width="2495" height="1604" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22212978" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.10902409" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -339,9 +337,9 @@
       <window_info id="Learn" order="6" />
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3285124" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49001664" visible="true" weight="0.23455057" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7079867" weight="0.303719" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32794943" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49001664" weight="0.23002754" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.7079867" visible="true" weight="0.303719" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -385,7 +383,7 @@
           <properties />
           <option name="timeStamp" value="33" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
+        <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java</url>
           <line>225</line>
           <properties />
@@ -393,9 +391,15 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java</url>
-          <line>472</line>
+          <line>475</line>
           <properties />
-          <option name="timeStamp" value="67" />
+          <option name="timeStamp" value="69" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java</url>
+          <line>402</line>
+          <properties />
+          <option name="timeStamp" value="70" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -838,13 +842,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/command/SingleCall.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
+        <state relative-caret-position="816">
           <caret line="48" selection-start-line="48" selection-end-line="48" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1858#1859#0" expanded="true" />
             <element signature="e#3706#3707#0" expanded="true" />
             <element signature="e#3774#3775#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/translation_test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="950">
+          <caret line="266" column="95" selection-start-line="266" selection-start-column="95" selection-end-line="266" selection-end-column="95" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -861,20 +875,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-13">
-          <caret line="427" column="25" lean-forward="true" selection-start-line="427" selection-start-column="25" selection-end-line="427" selection-end-column="25" />
+        <state relative-caret-position="761">
+          <caret line="345" selection-start-line="345" selection-end-line="345" />
           <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/translation_test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="850">
-          <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
-          <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#7894#7895#0" expanded="true" />
+            <element signature="e#7941#7942#0" expanded="true" />
           </folding>
         </state>
       </provider>

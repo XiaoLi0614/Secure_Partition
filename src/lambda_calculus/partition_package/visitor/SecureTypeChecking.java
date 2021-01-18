@@ -322,10 +322,9 @@ public class SecureTypeChecking implements PartitionVisitor{
                     if(singleCall.args == null || singleCall.args.length == 0){
                         //when there is no argument, the type of the dummy argument is the same as current context
                         //\tau_1 = \tau_x for the availability constraints
-                        //todo:
-                        //resultB &= OMap.get(singleCall.methodName.toString()).element2.
-                                //availabilityProj(environment.get(singleCall).getCurrentContext().getAvailability().getQuorum(),
-                                        //environment.get(singleCall).getCurrentHost());
+                        resultB &= OMap.get(singleCall.objectName.toString()).element2.
+                                availabilityProj(environment.get(singleCall).getCurrentContext().getAvailability().getQuorum(),
+                                        environment.get(singleCall).getCurrentHost());
 
                         int retIndex = objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).size()-1;
                         //set the object method return value
@@ -342,10 +341,10 @@ public class SecureTypeChecking implements PartitionVisitor{
                             resultB &= environment.get(argE).getGamma().get(argE.toString()).
                                     ciaJoin(environment.get(singleCall).getCurrentContext()).
                                     ciaLeq(objectMethodType.get(Oname).get(OMName).get(a));
-                            //todo: need to check this later
-                            //resultB &= OMap.get(singleCall.objectName.toString()).element2.
-                                    //availabilityProj(environment.get(argE).getGamma().get(argE.toString()).getAvailability().getQuorum(),
-                                            //environment.get(singleCall).getCurrentHost());
+                            //need to check this later
+                            resultB &= OMap.get(singleCall.objectName.toString()).element2.
+                                    availabilityProj(objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).get(a).getAvailability().getQuorum(),
+                                            environment.get(singleCall).getCurrentHost());
                         }
                         //set the object method return value
                         int retIndex = objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).size()-1;
@@ -375,6 +374,8 @@ public class SecureTypeChecking implements PartitionVisitor{
                 resultB &= argTypes.get(i).cLeq(objHosts);
             }
         }
+        //check the integrity constraints for Cintegrity(Q2)
+        resultB &= s.OMap.get(objName).element2.methodIntegrity(s.objUmb.get(objName).getIntegrity().getQuorum());
         resultB &= s.OMap.get(objName).element1.fieldIntegrity(s.objUmb.get(objName).getIntegrity().getQuorum());
         resultB &= s.OMap.get(objName).element1.availabilityCons(s.objUmb.get(objName).getAvailability().getQuorum());
         return resultB;

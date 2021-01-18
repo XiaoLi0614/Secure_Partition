@@ -170,6 +170,16 @@ public class translation_test {
             Qa.add(new nodeSet(Qa_3));
             Qa.add(new nodeSet(Qa_4));
 
+            HashSet<nodeSet> Q2_i1 = new HashSet<>();
+            HashSet<Integer> Q2_i1_1 = new HashSet<>(Arrays.asList(4, 5, 6));
+            Q2_i1.add(new nodeSet(Q2_i1_1));
+            HashSet<nodeSet> Q2_i2 = new HashSet<>();
+            HashSet<Integer> Q2_i2_1 = new HashSet<>(Arrays.asList(10, 11));
+            Q2_i2.add(new nodeSet(Q2_i2_1));
+            HashSet<nodeSet> Q2_a = new HashSet<>();
+            HashSet<Integer> Q2_a_1 = new HashSet<>(Arrays.asList(4, 5, 6, 10, 11));
+            Q2_a.add(new nodeSet(Q2_a_1));
+
             //input the methods host information and signature manually
             ArrayList<Pair<nodeSet, quorumDef>> methodsInfo = new ArrayList<>();
             Pair<nodeSet, quorumDef> m1Info = new Pair<>(new nodeSet(Hm1), new quorumDef(Qm1));
@@ -250,11 +260,11 @@ public class translation_test {
 
             //the objects hosts and hear from information
             HashMap<String, Pair<quorumDef, quorumDef>> objInfo = new HashMap<>();
-            Pair<quorumDef, quorumDef> i1Info = new Pair<>(new quorumDef(Qi1),new quorumDef());
+            Pair<quorumDef, quorumDef> i1Info = new Pair<>(new quorumDef(Qi1),new quorumDef(Q2_i1));
             objInfo.put("i1", i1Info);
-            Pair<quorumDef, quorumDef> i2Info = new Pair<>(new quorumDef(Qi2), new quorumDef());
+            Pair<quorumDef, quorumDef> i2Info = new Pair<>(new quorumDef(Qi2), new quorumDef(Q2_i2));
             objInfo.put("i2", i2Info);
-            Pair<quorumDef, quorumDef> aInfo = new Pair<>(new quorumDef(Qa), new quorumDef());
+            Pair<quorumDef, quorumDef> aInfo = new Pair<>(new quorumDef(Qa), new quorumDef(Q2_a));
             objInfo.put("a", aInfo);
 
             //input the predefined variable information
