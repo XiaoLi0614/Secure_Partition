@@ -260,7 +260,12 @@ public class SecureTypeChecking implements PartitionVisitor{
                     resultB &= environment.get(singleCall).getCurrentContext().ciaLeq(temp0);
 
                     //when there is no argument for the method
+                    //we need to add dummy argument for the implicit constraints
+                    //for example, \tau_1 can have the same type as \tau_x' and the availability constraint is on the A(\tau_x')
                     if(singleCall.args == null || singleCall.args.length == 0){
+                        resultB &= MMap.get(singleCall.methodName.toString()).element2.
+                                availabilityProj(methodType.get(singleCall.methodName.toString()).element1.get(0).getAvailability().getQuorum(),
+                                        environment.get(singleCall).getCurrentHost());
                         //set the return value for the method
                         environment.get(singleCall).getGamma().put(singleCall.toString(), methodType.get(singleCall.methodName.toString()).element1.get(1));
                         return resultB;
@@ -315,6 +320,13 @@ public class SecureTypeChecking implements PartitionVisitor{
                 else {
                     //when there is no argument for the method
                     if(singleCall.args == null || singleCall.args.length == 0){
+                        //when there is no argument, the type of the dummy argument is the same as current context
+                        //\tau_1 = \tau_x for the availability constraints
+                        //todo:
+                        //resultB &= OMap.get(singleCall.methodName.toString()).element2.
+                                //availabilityProj(environment.get(singleCall).getCurrentContext().getAvailability().getQuorum(),
+                                        //environment.get(singleCall).getCurrentHost());
+
                         int retIndex = objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).size()-1;
                         //set the object method return value
                         environment.get(singleCall).getGamma().
@@ -394,10 +406,11 @@ public class SecureTypeChecking implements PartitionVisitor{
         resultB &= s.environment.get(m.body).getGamma().get(m.body.toString()).
                 ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(1));
         for(CIAType argT : s.methodType.get(m.thisMethodName.toString()).element2){
-            //resultB &= argT.ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
+            resultB &= argT.ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
             resultB &= s.MMap.get(m.thisMethodName.toString()).element2.
                     methodIntegrity(argT.getIntegrity().getQuorum());
         }
+        //double check whether the return value \tau_2 has to be able to hosted on the method hosts
 //        resultB &= s.methodType.get(m.thisMethodName.toString()).element1.get(0).
 //                ciaJoin(s.methodType.get(m.thisMethodName.toString()).element1.get(1)).
 //                cLeq(s.environment.get(m.body).getCurrentHost());
@@ -440,7 +453,8 @@ public class SecureTypeChecking implements PartitionVisitor{
                                   ArrayList<Pair<ArrayList<CIAType>, ArrayList<CIAType>>> methodTypes,
                                   ArrayList<ArrayList<String>> methodArgNames,
                                   HashMap<String, HashMap<String, ArrayList<CIAType>>> objSigs,
-                                  HashMap<String, Pair<quorumDef, quorumDef>> objHosts, HashMap<String, CIAType> predefinedVar,
+                                  HashMap<String, Pair<quorumDef, quorumDef>> objHosts,
+                                  HashMap<String, CIAType> predefinedVar,
                                   HashMap<String, CIAType> predefinedUmb){
         Boolean r = true;
         SecureTypeChecking b = new SecureTypeChecking();
