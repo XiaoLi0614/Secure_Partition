@@ -216,6 +216,11 @@ public class CPSPrinter implements SourceVisitor{
         //[o.m(e)] k = [e] (lambda x1. call x2 = o.m(x1) in k x2)
         @Override
         public Object visit(ObjectMethod objectMethod) {
+            //First, we need to change to multiple output
+            //and bind according to the names
+//            if(objectMethod.adminNames == null || objectMethod.adminNames.length == 0){
+//                lambda_calculus.cps_ast.tree.expression.Var lambda2 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
+//            }
             lambda_calculus.cps_ast.tree.expression.Var lambda2 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
             //k x2
             Command[] x2AsVar = new Command[1];
@@ -227,18 +232,25 @@ public class CPSPrinter implements SourceVisitor{
             if(objectMethod.args.length == 0 || objectMethod.args == null){
                 SingleCall call = new SingleCall(
                         objectMethod.objectName.lexeme, objectMethod.methodName.lexeme, null, lambda2, kX2);
-                //resultContext.bindValueToContext(lambda2, call);
                 resultContext.addVariableToContext(lambda2, call);
                 return call;
             }
             // if there are arguments, this is not a termination
             else {
+                //change this to multiple inputs
+                lambda_calculus.cps_ast.tree.expression.Expression[] lambda1AsVar = new lambda_calculus.cps_ast.tree.expression.Expression[objectMethod.args.length];
+                lambda_calculus.cps_ast.tree.expression.Var[] lambda1AsVar2 = new lambda_calculus.cps_ast.tree.expression.Var[objectMethod.args.length];
+                for(int i = 0; i < objectMethod.args.length; i++){
+                    lambda_calculus.cps_ast.tree.expression.Var lambda1 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
+                    lambda1AsVar[i] = lambda1;
+                    lambda1AsVar2[i] = lambda1;
+                }
                 //x1
-                lambda_calculus.cps_ast.tree.expression.Var lambda1 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
-                lambda_calculus.cps_ast.tree.expression.Expression[] lambda1AsVar = new lambda_calculus.cps_ast.tree.expression.Expression[1];
-                lambda1AsVar[0] = lambda1;
-                lambda_calculus.cps_ast.tree.expression.Var[] lambda1AsVar2 = new lambda_calculus.cps_ast.tree.expression.Var[1];
-                lambda1AsVar2[0] = lambda1;
+                //lambda_calculus.cps_ast.tree.expression.Var lambda1 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
+                //lambda_calculus.cps_ast.tree.expression.Expression[] lambda1AsVar = new lambda_calculus.cps_ast.tree.expression.Expression[1];
+                //lambda1AsVar[0] = lambda1;
+                //lambda_calculus.cps_ast.tree.expression.Var[] lambda1AsVar2 = new lambda_calculus.cps_ast.tree.expression.Var[1];
+                //lambda1AsVar2[0] = lambda1;
                 SingleCall call2 = new SingleCall(
                         objectMethod.objectName.lexeme,
                         objectMethod.methodName.lexeme,
@@ -248,19 +260,29 @@ public class CPSPrinter implements SourceVisitor{
 
                 resultContext.addVariableToContext(lambda2, call2);
 
-                //resultContext.bindValueToContext(lambda2, call2);
-
                 Abstraction bodyForE = new Abstraction(lambda1AsVar2, call2);
-                resultContext.addVariableToContext(lambda1, bodyForE);
-                //Command[] bodyForEAsValue = new Command[1];
-                //bodyForEAsValue[0] = bodyForE;
-                //Application resultCommand = new Application((Command) visitDispatch(objectMethod.args[0]), bodyForEAsValue);
-                continuationMap.put(objectMethod.args[0], bodyForE);
-                Command eEvaluation = (Command) visitDispatch(objectMethod.args[0]);
-                //resultContext.bindValueToContext(lambda1, eEvaluation);
-                //return resultCommand;
-                //return null;
-                return eEvaluation;
+                //[o.m(e1, e2)]k = [e1](lambda x1. ([e2] lambda x2. call x = o.m(x1, x2) in k x))
+                //[o.m(e1, e2)]k = [e2][e1](lambda x1, x2. call x = o.m(x1, x2) in k x)
+
+                //resultContext.addVariableToContext(lambda1, bodyForE);
+                //continuationMap.put(objectMethod.args[0], bodyForE);
+
+                Command interEvaluation = bodyForE;
+                for(int i = 0; i < objectMethod.args.length; i++){
+                    //[e1](\lambda x1, x2. o.m(x1, x2))
+                    if(i == 0){
+                        resultContext.addVariableToContext(lambda1AsVar2[i], bodyForE);
+                        continuationMap.put(objectMethod.args[i], bodyForE);
+                        interEvaluation = (Command) visitDispatch(objectMethod.args[i]);
+                    }
+                    //[e2]([e1](\lambda x1, x2. o.m(x1, x2)))
+                    else {
+                        resultContext.addVariableToContext(lambda1AsVar2[i], interEvaluation);
+                        continuationMap.put(objectMethod.args[i], interEvaluation);
+                        interEvaluation = (Command) visitDispatch(objectMethod.args[i]);
+                    }
+                }
+                return interEvaluation;
             }
         }
 

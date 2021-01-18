@@ -84,20 +84,22 @@ public class translation_test {
             return oftUseCase;
         }
 
-    public static Expression createAuctionseCase()
-    {
-        Expression[] emptyArg = {};
-        Expression[] trueArg = new Expression[1];
-        trueArg[0] = new IntLiteral(1);
-        Expression auctionUseCase = new Conditional(
-                new ObjectMethod("read", "a", emptyArg),
-                new Sequence(new ObjectMethod("write", "a", trueArg),
-                        new Conditional(new Var("x"),
-                                new ObjectMethod("read", "i1", emptyArg),
-                                new ObjectMethod("read", "i2", emptyArg))),
-                new IntLiteral(0));
-        return auctionUseCase;
-    }
+        //because we do not have several return, we need to split the makeOffer methods into two different methods
+/*        public static Expression createAuctionUseCase()
+        {
+            Expression[] emptyArg = {};
+            Expression[]
+            Expression auctionUseCase = new Sequence(new ObjectMethod("update", "user", )
+                    , );
+            Expression auctionUseCase = new Conditional(
+                    new ObjectMethod("read", "a", emptyArg),
+                    new Sequence(new ObjectMethod("write", "a", trueArg),
+                            new Conditional(new Var("x"),
+                                    new ObjectMethod("read", "i1", emptyArg),
+                                    new ObjectMethod("read", "i2", emptyArg))),
+                    new IntLiteral(0));
+            return auctionUseCase;
+        }*/
 
         public static void OneTimeTransferTypeChecing(ArrayList<MethodDefinition> resultMethodDefs){
             //failure situation for return value and m0 and m1
