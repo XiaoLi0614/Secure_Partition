@@ -13,6 +13,7 @@ import lambda_calculus.source_ast.tree.expression.Expression;
 import lambda_calculus.source_ast.tree.expression.ObjectMethod;
 import lambda_calculus.source_ast.tree.expression.Var;
 import lambda_calculus.source_ast.tree.expression.literal.IntLiteral;
+import lambda_calculus.source_ast.tree.expression.op.Plus;
 import lambda_calculus.source_ast.tree.expression.op.Sequence;
 import lambda_calculus.source_ast.visitor.CPSPrinter;
 import lesani.collection.Pair;
@@ -29,7 +30,8 @@ public class translation_test {
     static String outputPath = "/home/xiao/IdeaProjects/secure_partition/out/lambda_calculus/";
     public static void main(String[] args)
     {
-        Expression lambda1 = createOFTUseCase();
+        //Expression lambda1 = createOFTUseCase();
+        Expression lambda1 = createTicketsUseCase();
         System.out.println("Complete create use-case");
         CPSPrinter test = new CPSPrinter();
         Command resultAST = test.print(lambda1).element1;
@@ -47,7 +49,7 @@ public class translation_test {
         for(MethodDefinition d : resultMethodDefs){
             System.out.println(d.toString());
         }
-        OneTimeTransferTypeChecing(resultMethodDefs);
+        //OneTimeTransferTypeChecing(resultMethodDefs);
     }
 
 //        public static String cpsTransformation(lambda_usecase useCase)
@@ -84,22 +86,105 @@ public class translation_test {
             return oftUseCase;
         }
 
-        //because we do not have several return, we need to split the makeOffer methods into two different methods
-/*        public static Expression createAuctionUseCase()
+/*        //because we do not have several return, we need to split the makeOffer methods into two different methods
+        public static Expression createAuctionUseCase()
         {
             Expression[] emptyArg = {};
-            Expression[]
-            Expression auctionUseCase = new Sequence(new ObjectMethod("update", "user", )
-                    , );
-            Expression auctionUseCase = new Conditional(
-                    new ObjectMethod("read", "a", emptyArg),
-                    new Sequence(new ObjectMethod("write", "a", trueArg),
-                            new Conditional(new Var("x"),
-                                    new ObjectMethod("read", "i1", emptyArg),
-                                    new ObjectMethod("read", "i2", emptyArg))),
-                    new IntLiteral(0));
+            Expression[] oAsArg = new Expression[1];
+            oAsArg[0] = new Var("o");
+            Expression[] offerAAsArg = new Expression[1];
+            offerAAsArg[0] = new Var("offerA");
+
+            Expression[] AMakeOfferArgs = new Expression[2];
+            AMakeOfferArgs[0] = new ObjectMethod("read", "user", emptyArg, "u");
+            AMakeOfferArgs[1] = new Var("o");
+
+            Expression[] userUpdate1Args = new Expression[2];
+            userUpdate1Args[0] = new ObjectMethod("makeOffer1", "A", AMakeOfferArgs, "seatInfoA");
+            userUpdate1Args[1] = new ObjectMethod("makeOffer2", "A", AMakeOfferArgs, "offerA");
+
+            Expression[] userUpdate2Args = new Expression[2];
+            userUpdate2Args[0] = new ObjectMethod("makeOffer1", "B", AMakeOfferArgs, "seatInfoB");
+            userUpdate2Args[1] = new ObjectMethod("makeOffer2", "B", AMakeOfferArgs, "offerB");
+
+            //todo: how to make the recursion call in the ast tree?
+            Expression auctionUseCase = new Sequence(new ObjectMethod("update", "user", userUpdate1Args)
+                    , new Conditional(new Plus(new Var("o"),new Var("offerA")),
+                    new ObjectMethod("declareWinner", "user", oAsArg),
+                    new Sequence(new ObjectMethod("update", "user", userUpdate2Args),
+                            new Conditional(new Plus(new Var("offerA"), new Var("offerB")), auctionUseCase
+                                    ,
+                                    new ObjectMethod("declareWinner", "user", offerAAsArg)))));
             return auctionUseCase;
         }*/
+
+        public static Expression createTicketsUseCase(){
+            Expression[] emptyArg = {};
+
+            Expression[] getPriceArg = new Expression[1];
+            getPriceArg[0] = new ObjectMethod("ticketNum", "customer", emptyArg, "num");
+            Expression[] getPriceArg1 = new Expression[1];
+            getPriceArg1[0] = new Var("num");
+
+            Expression[] getBalanceArg = new Expression[1];
+            getBalanceArg[0] = new ObjectMethod("getID", "customer", emptyArg, "ID");
+            Expression[] getBalanceArg1 = new Expression[1];
+            getBalanceArg1[0] = new Var("ID");
+
+            Expression[] decSeatArg = new Expression[1];
+            decSeatArg[0] = new Var("num");
+            Expression[] decBalanceArg = new Expression[1];
+            //todo: may need to change this to the object method call to get ID
+            decBalanceArg[0] = new Var("ID");
+
+            Expression[] updateInfoArgs = new Expression[2];
+            updateInfoArgs[0] = new ObjectMethod("getPrice1", "airline", getPriceArg, "schedule");
+            updateInfoArgs[1] = new ObjectMethod("getPrice2", "airline", getPriceArg1, "price");
+
+            Expression[] updatePaymentArgs = new Expression[2];
+            updatePaymentArgs[0] = new ObjectMethod("getBalance1", "bank", getBalanceArg, "cashback");
+            updatePaymentArgs[1] = new ObjectMethod("getBalance2", "bank", getBalanceArg1, "balance");
+
+            Expression ticketUseCase = new Sequence(new ObjectMethod("updateInfo", "customer", updateInfoArgs),
+                    new Sequence(new ObjectMethod("updatePayment", "customer", updatePaymentArgs),
+                            new Conditional(new Plus(new Var("price"), new Var("balance")),
+                                    new Sequence(new ObjectMethod("decSeat", "airline", decSeatArg),
+                                            new Sequence(new ObjectMethod("decBalance", "bank", decBalanceArg),
+                                                    new IntLiteral(1))),
+                                    new IntLiteral(0))));
+            return ticketUseCase;
+        }
+
+    public static Expression createTestUseCase(){
+        Expression[] emptyArg = {};
+
+        Expression[] getPriceArg = new Expression[1];
+        getPriceArg[0] = new ObjectMethod("ticketNum", "customer", emptyArg, "num");
+        Expression[] getPriceArg1 = new Expression[1];
+        getPriceArg1[0] = new Var("num");
+
+        Expression[] getBalanceArg = new Expression[1];
+        getBalanceArg[0] = new ObjectMethod("getID", "customer", emptyArg, "ID");
+        Expression[] getBalanceArg1 = new Expression[1];
+        getBalanceArg1[0] = new Var("ID");
+
+        Expression[] decSeatArg = new Expression[1];
+        decSeatArg[0] = new Var("num");
+        Expression[] decBalanceArg = new Expression[1];
+        //todo: may need to change this to the object method call to get ID
+        decBalanceArg[0] = new Var("ID");
+
+        Expression[] updateInfoArgs = new Expression[2];
+        updateInfoArgs[0] = new ObjectMethod("getPrice1", "airline", getPriceArg, "schedule");
+        updateInfoArgs[1] = new ObjectMethod("getPrice2", "airline", getPriceArg1, "price");
+
+        Expression[] updatePaymentArgs = new Expression[2];
+        updatePaymentArgs[0] = new ObjectMethod("getBalance1", "bank", getBalanceArg1, "cashback");
+        updatePaymentArgs[1] = new ObjectMethod("getBalance2", "bank", getBalanceArg, "balance");
+
+        Expression ticketUseCase = new ObjectMethod("updateInfo", "customer", updateInfoArgs);
+        return ticketUseCase;
+    }
 
         public static void OneTimeTransferTypeChecing(ArrayList<MethodDefinition> resultMethodDefs){
             //failure situation for return value and m0 and m1
