@@ -195,9 +195,16 @@ public class SecureTypeChecking implements PartitionVisitor{
 
         @Override
         public Object visit(Sequence sequence){
+            //we first type the expression e1, then bind the type \tau_1 with the administrative x
             environment.put(sequence.command1, environment.get(sequence).clone());
             Boolean resultB = (Boolean) visitDispatch(sequence.command1);
             environment.put(sequence.command2, environment.get(sequence).clone());
+            //todo: may need to generalize the to the command instead of only the singlecall
+            if(sequence.command1 instanceof SingleCall){
+                environment.get(sequence.command2).getGamma().put(((SingleCall) sequence.command1).administrativeX.toString(),
+                        environment.get(sequence.command1).getGamma().get(sequence.command1.toString()));
+            }
+
             quorumDef tempA = environment.get(sequence.command2).getCurrentContext().
                     aMeet(environment.get(sequence.command1).getGamma().get(sequence.command1.toString()).getAvailability());
             environment.get(sequence.command2).getCurrentContext().setAvailability(tempA);
@@ -407,7 +414,10 @@ public class SecureTypeChecking implements PartitionVisitor{
         resultB &= s.environment.get(m.body).getGamma().get(m.body.toString()).
                 ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(1));
         for(CIAType argT : s.methodType.get(m.thisMethodName.toString()).element2){
-            resultB &= argT.ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
+            //\tau_1 <= \tau_x
+            //resultB &= argT.ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
+            //\tau_1 <= \tau_2
+            resultB &= argT.ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(1));
             resultB &= s.MMap.get(m.thisMethodName.toString()).element2.
                     methodIntegrity(argT.getIntegrity().getQuorum());
         }
