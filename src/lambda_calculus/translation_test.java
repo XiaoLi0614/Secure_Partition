@@ -369,6 +369,7 @@ public class translation_test {
             System.out.println("The type checking result for one time transfer program:" + r.toString());
         }
 
+
     public static void TicketTypeChecking(ArrayList<MethodDefinition> resultMethodDefs){
         //failure situation B0:{{1, 2, 8}, {1, 2, 9}, {1, 3, 8}, {1, 3, 9}}
         HashSet<Integer> b1 = new HashSet<Integer>(Arrays.asList(1, 2, 8));
@@ -404,67 +405,104 @@ public class translation_test {
         HashSet<Integer> c1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 12));
         HashSet<Integer> c2 = new HashSet<>(Arrays.asList(8, 9, 10, 11, 12));
         HashSet<Integer> cret = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+        HashSet<Integer> c3 = new HashSet<>(Arrays.asList(12));
 
         //construct the types
         CIAType t0 = new CIAType(new nodeSet(cret), new quorumDef(B3), new quorumDef(B3));
         CIAType tp = new CIAType(new nodeSet(cret), new quorumDef(B1), new quorumDef(B1));
         CIAType ts = new CIAType(new nodeSet(c1), new quorumDef(B1), new quorumDef(B1));
         CIAType td = new CIAType(new nodeSet(cret), new quorumDef(B0), new quorumDef(B0));
-        CIAType tc = new CIAType(new nodeSet(c2), new quorumDef())
+        CIAType tc = new CIAType(new nodeSet(c2), new quorumDef(B0), new quorumDef(B0));
+        CIAType tnum1 = new CIAType(new nodeSet(cret), new quorumDef(B3), new quorumDef(B1));
+        CIAType tu1 = new CIAType(new nodeSet(c1), new quorumDef(B1), new quorumDef(B1));
+        CIAType tu2 = new CIAType(new nodeSet(c2), new quorumDef(B0), new quorumDef(B0));
+
+        //define \bot integrity and availability
+        HashSet<Integer> b = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
+        HashSet<nodeSet> bot = new HashSet<>();
+        bot.add(new nodeSet(b));
 
         //host and quorum information
-        HashSet<Integer> Hm1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6));
-        HashSet<Integer> Hm2 = new HashSet<>(Arrays.asList(9, 10, 11));
-        HashSet<Integer> Hm3 = new HashSet<>(Arrays.asList(4, 5, 6, 7, 10, 11));
-        HashSet<Integer> Hm4 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 8, 10, 11));
-        HashSet<nodeSet> Qm1 = new HashSet<>();
-        HashSet<Integer> Qm1_1 = new HashSet<>(Arrays.asList(4, 5, 6));
-        HashSet<Integer> Qm1_2 = new HashSet<>(Arrays.asList(5, 6, 7));
-        Qm1.add(new nodeSet(Qm1_1));
-        Qm1.add(new nodeSet(Qm1_2));
-        HashSet<nodeSet> Qm2 = new HashSet<>();
-        HashSet<Integer> Qm2_1 = new HashSet<>(Arrays.asList(10, 11));
-        Qm2.add(new nodeSet(Qm2_1));
+        HashSet<Integer> Hm9 = new HashSet<>(Arrays.asList(12));
+        HashSet<Integer> Hm8 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5));
+        HashSet<Integer> Hm7 = Hm8;
+        HashSet<Integer> Hm6 = new HashSet<>(Arrays.asList(12));
+        HashSet<Integer> Hm5 = new HashSet<>(Arrays.asList(12));
+        HashSet<Integer> Hm4 = new HashSet<>(Arrays.asList(8, 9, 10));
+        HashSet<Integer> Hm3 = Hm4;
+        HashSet<Integer> Hm2 = new HashSet<>(Arrays.asList(12));
+        HashSet<Integer> Hm1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5));
+        HashSet<Integer> Hm0 = new HashSet<>(Arrays.asList(8, 9, 10));
+
+        HashSet<nodeSet> Qm9 = new HashSet<>();
+        HashSet<Integer> Qm9_1 = new HashSet<>(Arrays.asList(12));
+        Qm9.add(new nodeSet(Qm9_1));
+        HashSet<nodeSet> Qm8 = Qm9;
+        HashSet<nodeSet> Qm7 = new HashSet<>();
+        HashSet<Integer> Qm7_1 = new HashSet<>(Arrays.asList(1, 2, 3));
+        HashSet<Integer> Qm7_2 = new HashSet<>(Arrays.asList(1, 2, 4));
+        HashSet<Integer> Qm7_3 = new HashSet<>(Arrays.asList(1, 2, 5));
+        HashSet<Integer> Qm7_4 = new HashSet<>(Arrays.asList(1, 3, 4));
+        HashSet<Integer> Qm7_5 = new HashSet<>(Arrays.asList(1, 3, 5));
+        HashSet<Integer> Qm7_6 = new HashSet<>(Arrays.asList(1, 4, 5));
+        HashSet<Integer> Qm7_7 = new HashSet<>(Arrays.asList(2, 3, 4));
+        HashSet<Integer> Qm7_8 = new HashSet<>(Arrays.asList(2, 3, 5));
+        HashSet<Integer> Qm7_9 = new HashSet<>(Arrays.asList(3, 4, 5));
+        Qm7.add(new nodeSet(Qm7_1));
+        Qm7.add(new nodeSet(Qm7_2));
+        Qm7.add(new nodeSet(Qm7_3));
+        Qm7.add(new nodeSet(Qm7_4));
+        Qm7.add(new nodeSet(Qm7_5));
+        Qm7.add(new nodeSet(Qm7_6));
+        Qm7.add(new nodeSet(Qm7_7));
+        Qm7.add(new nodeSet(Qm7_8));
+        Qm7.add(new nodeSet(Qm7_9));
+        HashSet<nodeSet> Qm6 = Qm7;
+        HashSet<nodeSet> Qm5 = Qm9;
+        HashSet<nodeSet> Qm4 = Qm9;
         HashSet<nodeSet> Qm3 = new HashSet<>();
-        HashSet<Integer> Qm3_1 = new HashSet<>(Arrays.asList(4, 5, 6, 10, 11));
+        HashSet<Integer> Qm3_1 = new HashSet<>(Arrays.asList(8, 9));
+        HashSet<Integer> Qm3_2 = new HashSet<>(Arrays.asList(8, 10));
+        HashSet<Integer> Qm3_3 = new HashSet<>(Arrays.asList(9, 10));
         Qm3.add(new nodeSet(Qm3_1));
-        HashSet<nodeSet> Qm4 = new HashSet<>();
-        HashSet<Integer> Qm4_1 = new HashSet<>(Arrays.asList(4, 5, 6, 10, 11));
-        Qm4.add(new nodeSet(Qm4_1));
+        Qm3.add(new nodeSet(Qm3_2));
+        Qm3.add(new nodeSet(Qm3_3));
+        HashSet<nodeSet> Qm2 = Qm3;
+        HashSet<nodeSet> Qm1 = Qm9;
+        HashSet<nodeSet> Qm0 = Qm7;
 
         //object replication information
-        HashSet<nodeSet> Qi1 = new HashSet<>();
-        HashSet<Integer> Qi1_1 = new HashSet<>(Arrays.asList(3, 4, 5, 6, 7));
+        HashSet<nodeSet> Qairline = new HashSet<>();
+        HashSet<Integer> Qi1_1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5));
         HashSet<Integer> Qi1_2 = new HashSet<>(Arrays.asList(2, 4, 5, 6, 7));
-        Qi1.add(new nodeSet(Qi1_1));
-        Qi1.add(new nodeSet(Qi1_2));
-        HashSet<nodeSet> Qi2 = new HashSet<>();
+        Qairline.add(new nodeSet(Qi1_1));
+        Qairline.add(new nodeSet(Qi1_2));
+        HashSet<nodeSet> Qbank = new HashSet<>();
         HashSet<Integer> Qi2_1 = new HashSet<>(Arrays.asList(8, 10, 11));
         HashSet<Integer> Qi2_2 = new HashSet<>(Arrays.asList(9, 10, 11));
-        Qi2.add(new nodeSet(Qi2_1));
-        Qi2.add(new nodeSet(Qi2_2));
-        HashSet<nodeSet> Qa = new HashSet<>();
-        HashSet<Integer> Qa_1 = new HashSet<>(Arrays.asList(3, 4, 5, 6, 7, 8, 10, 11));
-        HashSet<Integer> Qa_2 = new HashSet<>(Arrays.asList(3, 4, 5, 6, 7, 9, 10, 11));
-        HashSet<Integer> Qa_3 = new HashSet<>(Arrays.asList(2, 4, 5, 6, 7, 8, 10, 11));
-        HashSet<Integer> Qa_4 = new HashSet<>(Arrays.asList(2, 4, 5, 6, 7, 9, 10, 11));
-        Qa.add(new nodeSet(Qa_1));
-        Qa.add(new nodeSet(Qa_2));
-        Qa.add(new nodeSet(Qa_3));
-        Qa.add(new nodeSet(Qa_4));
+        HashSet<Integer> Qi2_3 = new HashSet<>(Arrays.asList(8, 9, 10));
+        Qbank.add(new nodeSet(Qi2_1));
+        Qbank.add(new nodeSet(Qi2_2));
+        Qbank.add(new nodeSet(Qi2_3));
+        HashSet<nodeSet> Qcustomer = new HashSet<>();
+        HashSet<Integer> Qa_1 = new HashSet<>(Arrays.asList(12));
+        Qcustomer.add(new nodeSet(Qa_1));
 
-        HashSet<nodeSet> Q2_i1 = new HashSet<>();
-        HashSet<Integer> Q2_i1_1 = new HashSet<>(Arrays.asList(4, 5, 6));
-        Q2_i1.add(new nodeSet(Q2_i1_1));
-        HashSet<nodeSet> Q2_i2 = new HashSet<>();
-        HashSet<Integer> Q2_i2_1 = new HashSet<>(Arrays.asList(10, 11));
-        Q2_i2.add(new nodeSet(Q2_i2_1));
-        HashSet<nodeSet> Q2_a = new HashSet<>();
-        HashSet<Integer> Q2_a_1 = new HashSet<>(Arrays.asList(4, 5, 6, 10, 11));
-        Q2_a.add(new nodeSet(Q2_a_1));
+
+        HashSet<nodeSet> Q2_airline = new HashSet<>();
+        HashSet<Integer> Q2_i1_1 = new HashSet<>(Arrays.asList(12, 1, 2, 3));
+        Q2_airline.add(new nodeSet(Q2_i1_1));
+        HashSet<nodeSet> Q2_bank = new HashSet<>();
+        HashSet<Integer> Q2_i2_1 = new HashSet<>(Arrays.asList(8, 9, 12));
+        Q2_bank.add(new nodeSet(Q2_i2_1));
+        HashSet<nodeSet> Q2_customer = new HashSet<>();
+        HashSet<Integer> Q2_a_1 = new HashSet<>(Arrays.asList(12, 1, 2, 3, 8, 9));
+        Q2_customer.add(new nodeSet(Q2_a_1));
 
         //input the methods host information and signature manually
         ArrayList<Pair<nodeSet, quorumDef>> methodsInfo = new ArrayList<>();
+        Pair<nodeSet, quorumDef> m0Info = new Pair<>(new nodeSet(Hm0), new quorumDef(Qm0));
+        methodsInfo.add(m0Info);
         Pair<nodeSet, quorumDef> m1Info = new Pair<>(new nodeSet(Hm1), new quorumDef(Qm1));
         methodsInfo.add(m1Info);
         Pair<nodeSet, quorumDef> m2Info = new Pair<>(new nodeSet(Hm2), new quorumDef(Qm2));
@@ -473,26 +511,48 @@ public class translation_test {
         methodsInfo.add(m3Info);
         Pair<nodeSet, quorumDef> m4Info = new Pair<>(new nodeSet(Hm4), new quorumDef(Qm4));
         methodsInfo.add(m4Info);
+        Pair<nodeSet, quorumDef> m5Info = new Pair<>(new nodeSet(Hm5), new quorumDef(Qm5));
+        methodsInfo.add(m5Info);
+        Pair<nodeSet, quorumDef> m6Info = new Pair<>(new nodeSet(Hm6), new quorumDef(Qm6));
+        methodsInfo.add(m6Info);
+        Pair<nodeSet, quorumDef> m7Info = new Pair<>(new nodeSet(Hm7), new quorumDef(Qm7));
+        methodsInfo.add(m7Info);
+        Pair<nodeSet, quorumDef> m8Info = new Pair<>(new nodeSet(Hm8), new quorumDef(Qm8));
+        methodsInfo.add(m8Info);
+        Pair<nodeSet, quorumDef> m9Info = new Pair<>(new nodeSet(Hm9), new quorumDef(Qm9));
+        methodsInfo.add(m9Info);
 
-        ArrayList<ArrayList<String>> mANames = new ArrayList<>(4);
-        for(int i = 0; i < 4; i++){
+        //input the return type for all the methods
+        ArrayList<ArrayList<String>> mANames = new ArrayList<>(10);
+        for(int i = 0; i < 10; i++){
             mANames.add(new ArrayList<>());
         }
+        //notice the the type for a method maybe stronger than the return type of the whole class because of sequence.
         ArrayList<Pair<ArrayList<CIAType>, ArrayList<CIAType>>> methodSig = new ArrayList<>();
-        CIAType m1retType = new CIAType(new nodeSet(cret), new quorumDef(B), new quorumDef(B));
-        CIAType m2retType = m1retType.clone();
-        CIAType m3retType = m1retType.clone();
-        CIAType m4retType = m1retType.clone();
+        CIAType m0retType = new CIAType(new nodeSet(cret), new quorumDef(B0), new quorumDef(B0));
+        CIAType m1retType = m0retType;
+        CIAType m2retType = new CIAType(new nodeSet(c2), new quorumDef(B0), new quorumDef(B0));
+        CIAType m3retType = m2retType;
+        CIAType m4retType = m2retType;
+        CIAType m5retType = m2retType;
+        CIAType m6retType = new CIAType(new nodeSet(c3), new quorumDef(B0), new quorumDef(B0));
+        CIAType m7retType = m6retType;
+        CIAType m8retType = m6retType;
+        CIAType m9retType = m6retType;
 
-        //context type for m4, which is the bottom
-        //HashSet<nodeSet> m4context = new HashSet<>();
-        //context type for m4 should be higher than the type of x
-        //m4context.add(new nodeSet(cx));
-        CIAType m4Context = new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B));
-        CIAType m3Context = m4Context.ciaJoin(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
-        CIAType m2Context = m3Context.clone();
-        CIAType m1Context = m3Context.clone();
-        ArrayList<CIAType> m1 = new ArrayList<>();
+        CIAType m9Context = t0;
+        CIAType m8Context = t0;
+        CIAType m7Context = tnum1;
+        CIAType m6Context = tnum1;
+        CIAType m5Context = tnum1;
+        CIAType m4Context = tnum1;
+        CIAType m3Context = td;
+        CIAType m2Context = td;
+        CIAType m1Context = td;
+        CIAType m0Context = td;
+
+
+        ArrayList<CIAType> m9 = new ArrayList<>();
         m1.add(m1Context);
         m1.add(m1retType);
         methodSig.add(new Pair<>(m1, new ArrayList<>()));
@@ -543,22 +603,22 @@ public class translation_test {
 
         //the objects hosts and hear from information
         HashMap<String, Pair<quorumDef, quorumDef>> objInfo = new HashMap<>();
-        Pair<quorumDef, quorumDef> i1Info = new Pair<>(new quorumDef(Qi1),new quorumDef(Q2_i1));
-        objInfo.put("i1", i1Info);
-        Pair<quorumDef, quorumDef> i2Info = new Pair<>(new quorumDef(Qi2), new quorumDef(Q2_i2));
-        objInfo.put("i2", i2Info);
-        Pair<quorumDef, quorumDef> aInfo = new Pair<>(new quorumDef(Qa), new quorumDef(Q2_a));
-        objInfo.put("a", aInfo);
+        Pair<quorumDef, quorumDef> airlineInfo = new Pair<>(new quorumDef(Qairline),new quorumDef(Q2_airline));
+        objInfo.put("airline", airlineInfo);
+        Pair<quorumDef, quorumDef> bankInfo = new Pair<>(new quorumDef(Qbank), new quorumDef(Q2_bank));
+        objInfo.put("bank", bankInfo);
+        Pair<quorumDef, quorumDef> customerInfo = new Pair<>(new quorumDef(Qcustomer), new quorumDef(Q2_customer));
+        objInfo.put("customer", customerInfo);
 
         //input the predefined variable information
         HashMap<String, CIAType> p = new HashMap<>();
-        p.put("x", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        //p.put("x", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+
         //input predefine umbrella for the objects
         HashMap<String, CIAType> u = new HashMap<>();
-        u.put("i1", new CIAType(new nodeSet(c1), new quorumDef(Bi1), new quorumDef(Bi1)));
-        u.put("i2", new CIAType(new nodeSet(c2), new quorumDef(Bi2), new quorumDef(Bi2)));
-        u.put("a", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
-        //printToFile(lambda1., "oft_cps");
+        u.put("airline", new CIAType(new nodeSet(c1), new quorumDef(bot), new quorumDef(bot)));
+        u.put("bank", new CIAType(new nodeSet(c2), new quorumDef(bot), new quorumDef(bot)));
+        u.put("customer", new CIAType(new nodeSet(cret), new quorumDef(bot), new quorumDef(bot)));
 
         SecureTypeChecking test5 = new SecureTypeChecking();
         Boolean r = test5.classTypeCheck(resultMethodDefs, methodsInfo, methodSig, mANames, objSigs, objInfo, p, u);
