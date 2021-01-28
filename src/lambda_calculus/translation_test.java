@@ -135,7 +135,7 @@ public class translation_test {
             decSeatArg[0] = new Var("num");
             Expression[] decBalanceArg = new Expression[1];
             //todo: may need to change this to the object method call to get ID
-            decBalanceArg[0] = new Var("ID");
+            decBalanceArg[0] = new Var("price");
 
             Expression[] updateInfoArgs = new Expression[2];
             updateInfoArgs[0] = new ObjectMethod("getPrice1", "airline", getPriceArg, "schedule");
@@ -186,6 +186,8 @@ public class translation_test {
         return ticketUseCase;
     }
 
+    //todo: we need to add the dummy variable "bot" for typing.
+    //todo: right now we have to add one. Maybe this can be inferred later.
         public static void OneTimeTransferTypeChecking(ArrayList<MethodDefinition> resultMethodDefs){
             //failure situation for return value and m0 and m1
             HashSet<Integer> b1 = new HashSet<Integer>(Arrays.asList(1, 2, 8));
@@ -523,6 +525,7 @@ public class translation_test {
         methodsInfo.add(m9Info);
 
         //input the return type for all the methods
+        //input the arguments for all the methods
         ArrayList<ArrayList<String>> mANames = new ArrayList<>(10);
         for(int i = 0; i < 10; i++){
             mANames.add(new ArrayList<>());
@@ -551,55 +554,163 @@ public class translation_test {
         CIAType m1Context = td;
         CIAType m0Context = td;
 
+        //the order of the arguments matters, they are defined in mANames
+        ArrayList<CIAType> m0 = new ArrayList<>();
+        m0.add(m0Context);
+        m0.add(m0retType);
+        methodSig.add(new Pair<>(m0, new ArrayList<>()));
+        mANames.get(0).add("price");
+        methodSig.get(0).element2.add(td);
 
-        ArrayList<CIAType> m9 = new ArrayList<>();
+        ArrayList<CIAType> m1 = new ArrayList<>();
         m1.add(m1Context);
         m1.add(m1retType);
         methodSig.add(new Pair<>(m1, new ArrayList<>()));
+        mANames.get(1).add("price");
+        mANames.get(1).add("num");
+        methodSig.get(1).element2.add(td);
+        methodSig.get(1).element2.add(td);
+
         ArrayList<CIAType> m2 = new ArrayList<>();
         m2.add(m2Context);
         m2.add(m2retType);
         methodSig.add(new Pair<>(m2, new ArrayList<>()));
+        mANames.get(2).add("balance");
+        mANames.get(2).add("price");
+        mANames.get(2).add("num");
+        mANames.get(2).add("cashback");
+        methodSig.get(2).element2.add(td);
+        methodSig.get(2).element2.add(td);
+        methodSig.get(2).element2.add(td);
+        methodSig.get(2).element2.add(tc);
+
+        //this is the first split of two methods
         ArrayList<CIAType> m3 = new ArrayList<>();
         m3.add(m3Context);
         m3.add(m3retType);
         methodSig.add(new Pair<>(m3, new ArrayList<>()));
-        mANames.get(2).add("x");
-        methodSig.get(2).element2.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        mANames.get(3).add("price");
+        mANames.get(3).add("num");
+        mANames.get(3).add("ID");
+        mANames.get(3).add("cashback");
+        methodSig.get(3).element2.add(td);
+        methodSig.get(3).element2.add(td);
+        methodSig.get(3).element2.add(td);
+        methodSig.get(3).element2.add(tc);
+
         ArrayList<CIAType> m4 = new ArrayList<>();
         m4.add(m4Context);
         m4.add(m4retType);
         methodSig.add(new Pair<>(m4, new ArrayList<>()));
-        mANames.get(3).add("x");
-        methodSig.get(3).element2.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        mANames.get(4).add("price");
+        mANames.get(4).add("num");
+        mANames.get(4).add("ID");
+        methodSig.get(4).element2.add(tp);
+        methodSig.get(4).element2.add(tnum1);
+        methodSig.get(4).element2.add(tnum1);
+
+        ArrayList<CIAType> m5 = new ArrayList<>();
+        m5.add(m5Context);
+        m5.add(m5retType);
+        methodSig.add(new Pair<>(m5, new ArrayList<>()));
+        mANames.get(5).add("price");
+        mANames.get(5).add("num");
+        methodSig.get(5).element2.add(tp);
+        methodSig.get(5).element2.add(tnum1);
+
+        ArrayList<CIAType> m6 = new ArrayList<>();
+        m6.add(m6Context);
+        m6.add(m6retType);
+        methodSig.add(new Pair<>(m6, new ArrayList<>()));
+        mANames.get(6).add("schedule");
+        mANames.get(6).add("price");
+        mANames.get(6).add("num");
+        methodSig.get(6).element2.add(ts);
+        methodSig.get(6).element2.add(tp);
+        methodSig.get(6).element2.add(tnum1);
+
+        ArrayList<CIAType> m7 = new ArrayList<>();
+        m7.add(m7Context);
+        m7.add(m7retType);
+        methodSig.add(new Pair<>(m7, new ArrayList<>()));
+        mANames.get(7).add("schedule");
+        mANames.get(7).add("num");
+        methodSig.get(7).element2.add(ts);
+        methodSig.get(7).element2.add(tnum1);
+
+        ArrayList<CIAType> m8 = new ArrayList<>();
+        m8.add(m8Context);
+        m8.add(m8retType);
+        methodSig.add(new Pair<>(m8, new ArrayList<>()));
+        mANames.get(8).add("num");
+        methodSig.get(8).element2.add(t0);
+
+        ArrayList<CIAType> m9 = new ArrayList<>();
+        m9.add(m9Context);
+        m9.add(m9retType);
+        methodSig.add(new Pair<>(m9, new ArrayList<>()));
+        mANames.get(9).add("bot");
+        methodSig.get(9).element2.add(t0);
 
 
         //input the object host information and signature manually
         HashMap<String, HashMap<String, ArrayList<CIAType>>> objSigs = new HashMap<>();
-        //for object a
-        ArrayList<CIAType> awriteArg = new ArrayList<>();
-        awriteArg.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        //for object airline
+        ArrayList<CIAType> getPrice1Arg = new ArrayList<>();
+        getPrice1Arg.add(t0);
         //ret is in the last index
-        awriteArg.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+        getPrice1Arg.add(ts);
         HashMap<String, ArrayList<CIAType>> amethods = new HashMap<>();
-        amethods.put("write", awriteArg);
-        ArrayList<CIAType> aread = new ArrayList<>();
-        aread.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
-        amethods.put("read", aread);
-        objSigs.put("a", amethods);
-        //for object i1 and i2
-        HashMap<String, ArrayList<CIAType>> i1methods = new HashMap<>();
-        ArrayList<CIAType> i1read = new ArrayList<>();
-        //ret
-        i1read.add(new CIAType(new nodeSet(c1), new quorumDef(Bi1), new quorumDef(Bi1)));
-        i1methods.put("read", i1read);
-        objSigs.put("i1", i1methods);
-        HashMap<String, ArrayList<CIAType>> i2methods = new HashMap<>();
-        ArrayList<CIAType> i2read = new ArrayList<>();
-        //ret
-        i2read.add(new CIAType(new nodeSet(c2), new quorumDef(Bi2), new quorumDef(Bi2)));
-        i2methods.put("read", i2read);
-        objSigs.put("i2", i2methods);
+        amethods.put("getPrice1", getPrice1Arg);
+        ArrayList<CIAType> getPrice2Arg = new ArrayList<>();
+        getPrice2Arg.add(t0);
+        getPrice2Arg.add(tp);
+        amethods.put("getPrice2", getPrice2Arg);
+        ArrayList<CIAType> decSeatArg = new ArrayList<>();
+        decSeatArg.add(td);
+        decSeatArg.add(td);
+        amethods.put("decSeat", decSeatArg);
+        objSigs.put("airline", amethods);
+
+        //for object Bank
+        ArrayList<CIAType> getBalance1Arg = new ArrayList<>();
+        getBalance1Arg.add(tnum1);
+        //ret is in the last index
+        getBalance1Arg.add(tc);
+        HashMap<String, ArrayList<CIAType>> bmethods = new HashMap<>();
+        bmethods.put("getBalance1", getBalance1Arg);
+        ArrayList<CIAType> getBalance2Arg = new ArrayList<>();
+        getBalance2Arg.add(tnum1);
+        getBalance2Arg.add(td);
+        bmethods.put("getBalance2", getBalance2Arg);
+        ArrayList<CIAType> decBalanceArg = new ArrayList<>();
+        decBalanceArg.add(td);
+        decBalanceArg.add(td);
+        bmethods.put("decBalance", decBalanceArg);
+        objSigs.put("bank", bmethods);
+
+        //for object customer
+        ArrayList<CIAType> ticketNumArg = new ArrayList<>();
+        ticketNumArg.add(t0);
+        //ret is in the last index
+        ticketNumArg.add(t0);
+        HashMap<String, ArrayList<CIAType>> cmethods = new HashMap<>();
+        cmethods.put("ticketNum", ticketNumArg);
+        ArrayList<CIAType> getIDArg = new ArrayList<>();
+        getIDArg.add(tnum1);
+        getIDArg.add(tnum1);
+        cmethods.put("getID", getIDArg);
+        ArrayList<CIAType> updateInfoArg = new ArrayList<>();
+        updateInfoArg.add(ts);
+        updateInfoArg.add(tp);
+        updateInfoArg.add(tu1);
+        cmethods.put("updateInfo", updateInfoArg);
+        ArrayList<CIAType> updatePaymentArg = new ArrayList<>();
+        updatePaymentArg.add(tc);
+        updatePaymentArg.add(td);
+        updatePaymentArg.add(tu2);
+        cmethods.put("updatePayment", updatePaymentArg);
+        objSigs.put("customer", cmethods);
 
         //the objects hosts and hear from information
         HashMap<String, Pair<quorumDef, quorumDef>> objInfo = new HashMap<>();
@@ -615,10 +726,12 @@ public class translation_test {
         //p.put("x", new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
 
         //input predefine umbrella for the objects
+        //todo: we have to input tight umbrella type for the objects.
+        // If there is no requirement, we can infer one
         HashMap<String, CIAType> u = new HashMap<>();
-        u.put("airline", new CIAType(new nodeSet(c1), new quorumDef(bot), new quorumDef(bot)));
-        u.put("bank", new CIAType(new nodeSet(c2), new quorumDef(bot), new quorumDef(bot)));
-        u.put("customer", new CIAType(new nodeSet(cret), new quorumDef(bot), new quorumDef(bot)));
+        u.put("airline", t0);
+        u.put("bank", tnum1);
+        u.put("customer", t0);
 
         SecureTypeChecking test5 = new SecureTypeChecking();
         Boolean r = test5.classTypeCheck(resultMethodDefs, methodsInfo, methodSig, mANames, objSigs, objInfo, p, u);

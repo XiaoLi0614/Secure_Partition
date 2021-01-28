@@ -270,9 +270,16 @@ public class SecureTypeChecking implements PartitionVisitor{
                     //we need to add dummy argument for the implicit constraints
                     //for example, \tau_1 can have the same type as \tau_x' and the availability constraint is on the A(\tau_x')
                     if(singleCall.args == null || singleCall.args.length == 0){
+                        //resultB &= MMap.get(singleCall.methodName.toString()).element2.
+                                //availabilityProj(methodType.get(singleCall.methodName.toString()).element1.get(0).getAvailability().getQuorum(),
+                                        //environment.get(singleCall).getCurrentHost());
+                        //now we have changed the dummy variable to the argument named "bot" in the mAName
+                        //now all the implicit constraints are forced by the bot argument
                         resultB &= MMap.get(singleCall.methodName.toString()).element2.
-                                availabilityProj(methodType.get(singleCall.methodName.toString()).element1.get(0).getAvailability().getQuorum(),
+                                availabilityProj(methodType.get(singleCall.methodName.toString()).element2.get(0).getAvailability().getQuorum(),
                                         environment.get(singleCall).getCurrentHost());
+                        resultB &= environment.get(singleCall).getCurrentContext().ciaLeq(methodType.get(singleCall.methodName.toString()).element2.get(0));
+
                         //set the return value for the method
                         environment.get(singleCall).getGamma().put(singleCall.toString(), methodType.get(singleCall.methodName.toString()).element1.get(1));
                         return resultB;
@@ -329,9 +336,16 @@ public class SecureTypeChecking implements PartitionVisitor{
                     if(singleCall.args == null || singleCall.args.length == 0){
                         //when there is no argument, the type of the dummy argument is the same as current context
                         //\tau_1 = \tau_x for the availability constraints
-                        resultB &= OMap.get(singleCall.objectName.toString()).element2.
-                                availabilityProj(environment.get(singleCall).getCurrentContext().getAvailability().getQuorum(),
+                        //resultB &= OMap.get(singleCall.objectName.toString()).element2.
+                                //availabilityProj(environment.get(singleCall).getCurrentContext().getAvailability().getQuorum(),
+                                        //environment.get(singleCall).getCurrentHost());
+
+                        //now we have changed the dummy variable to the argument named "bot" in the mAName
+                        //now all the implicit constraints are forced by the bot argument
+                        resultB &= MMap.get(singleCall.methodName.toString()).element2.
+                                availabilityProj(methodType.get(singleCall.methodName.toString()).element2.get(0).getAvailability().getQuorum(),
                                         environment.get(singleCall).getCurrentHost());
+                        resultB &= environment.get(singleCall).getCurrentContext().ciaLeq(methodType.get(singleCall.methodName.toString()).element2.get(0));
 
                         int retIndex = objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).size()-1;
                         //set the object method return value
@@ -368,6 +382,7 @@ public class SecureTypeChecking implements PartitionVisitor{
     @Override
     public Object visit(Command command){ return command.accept(commandT); }
 
+    //the last element in the array is the return type.
     public Boolean fieldCheck(String objName, SecureTypeChecking s){
         Boolean resultB = true;
         HashMap<String, ArrayList<CIAType>> objSig = s.objectMethodType.get(objName);
