@@ -478,7 +478,7 @@ public class translation_test {
 
         //object replication information
         HashSet<nodeSet> Qairline = new HashSet<>();
-        HashSet<Integer> Qi1_1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5));
+        HashSet<Integer> Qi1_1 = new HashSet<>(Arrays.asList(3, 4, 5, 6, 7));
         HashSet<Integer> Qi1_2 = new HashSet<>(Arrays.asList(2, 4, 5, 6, 7));
         Qairline.add(new nodeSet(Qi1_1));
         Qairline.add(new nodeSet(Qi1_2));
@@ -497,30 +497,30 @@ public class translation_test {
         HashSet<nodeSet> Q2_airline = new HashSet<>();
         HashSet<Integer> Q2_i1_1 = new HashSet<>(Arrays.asList(2, 4, 5));
         Q2_airline.add(new nodeSet(Q2_i1_1));
-        HashSet<Integer> Q2_i1_2 = new HashSet<>(Arrays.asList(12));
-        Q2_airline.add(new nodeSet(Q2_i1_2));
+        //HashSet<Integer> Q2_i1_2 = new HashSet<>(Arrays.asList(12));
+        //Q2_airline.add(new nodeSet(Q2_i1_2));
         HashSet<Integer> Q2_i1_3 = new HashSet<>(Arrays.asList(3, 4, 5));
         Q2_airline.add(new nodeSet(Q2_i1_3));
 
         HashSet<nodeSet> Q2_bank = new HashSet<>();
         HashSet<Integer> Q2_i2_1 = new HashSet<>(Arrays.asList(9, 10));
         Q2_bank.add(new nodeSet(Q2_i2_1));
-        HashSet<Integer> Q2_i2_2 = new HashSet<>(Arrays.asList(12));
-        Q2_bank.add(new nodeSet(Q2_i2_2));
+        //HashSet<Integer> Q2_i2_2 = new HashSet<>(Arrays.asList(12));
+        //Q2_bank.add(new nodeSet(Q2_i2_2));
         HashSet<Integer> Q2_i2_3 = new HashSet<>(Arrays.asList(8, 10));
         Q2_bank.add(new nodeSet(Q2_i2_3));
 
         HashSet<nodeSet> Q2_customer = new HashSet<>();
         HashSet<Integer> Q2_a_1 = new HashSet<>(Arrays.asList(12));
         Q2_customer.add(new nodeSet(Q2_a_1));
-        HashSet<Integer> Q2_a_2 = new HashSet<>(Arrays.asList(2, 4, 5));
-        Q2_customer.add(new nodeSet(Q2_a_2));
-        HashSet<Integer> Q2_a_3 = new HashSet<>(Arrays.asList(9, 10));
-        Q2_customer.add(new nodeSet(Q2_a_3));
-        HashSet<Integer> Q2_a_4 = new HashSet<>(Arrays.asList(3, 4, 5));
-        Q2_customer.add(new nodeSet(Q2_a_4));
-        HashSet<Integer> Q2_a_5 = new HashSet<>(Arrays.asList(8, 10));
-        Q2_customer.add(new nodeSet(Q2_a_5));
+        //HashSet<Integer> Q2_a_2 = new HashSet<>(Arrays.asList(2, 4, 5));
+        //Q2_customer.add(new nodeSet(Q2_a_2));
+        //HashSet<Integer> Q2_a_3 = new HashSet<>(Arrays.asList(9, 10));
+        //Q2_customer.add(new nodeSet(Q2_a_3));
+        //HashSet<Integer> Q2_a_4 = new HashSet<>(Arrays.asList(3, 4, 5));
+        //Q2_customer.add(new nodeSet(Q2_a_4));
+        //HashSet<Integer> Q2_a_5 = new HashSet<>(Arrays.asList(8, 10));
+        //Q2_customer.add(new nodeSet(Q2_a_5));
 
         //input the methods host information and signature manually
         ArrayList<Pair<nodeSet, quorumDef>> methodsInfo = new ArrayList<>();

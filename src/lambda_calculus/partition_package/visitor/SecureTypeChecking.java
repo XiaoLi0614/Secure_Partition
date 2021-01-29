@@ -403,15 +403,22 @@ public class SecureTypeChecking implements PartitionVisitor{
             ArrayList<CIAType> argTypes = objSig.get(mName);
             CIAType retVType = argTypes.get(argTypes.size()-1);
             resultB &= retVType.cLeq(objHosts);
+            resultB &= s.OMap.get(objName).element1.fieldIntegrity(retVType.getIntegrity().getQuorum());
+            resultB &= s.OMap.get(objName).element1.availabilityCons(retVType.getAvailability().getQuorum());
             for(int i = 0; i < argTypes.size() - 1; i++){
-                resultB &= s.objUmb.get(objName).ciaLeq(argTypes.get(i)) & argTypes.get(i).ciaLeq(retVType);
-                resultB &= argTypes.get(i).cLeq(objHosts);
+                //resultB &= s.objUmb.get(objName).ciaLeq(argTypes.get(i)) & argTypes.get(i).ciaLeq(retVType);
+                resultB &= argTypes.get(i).ciaLeq(retVType);
+                //todo: this is not needed
+                //resultB &= argTypes.get(i).cLeq(objHosts);
+                resultB &= s.OMap.get(objName).element2.methodIntegrity(argTypes.get(i).getIntegrity().getQuorum());
             }
         }
         //check the integrity constraints for Cintegrity(Q2)
-        resultB &= s.OMap.get(objName).element2.methodIntegrity(s.objUmb.get(objName).getIntegrity().getQuorum());
-        resultB &= s.OMap.get(objName).element1.fieldIntegrity(s.objUmb.get(objName).getIntegrity().getQuorum());
-        resultB &= s.OMap.get(objName).element1.availabilityCons(s.objUmb.get(objName).getAvailability().getQuorum());
+        //todo: the umbrella is to general
+        //resultB &= s.OMap.get(objName).element2.methodIntegrity(s.objUmb.get(objName).getIntegrity().getQuorum());
+        //resultB &= s.OMap.get(objName).element1.fieldIntegrity(s.objUmb.get(objName).getIntegrity().getQuorum());
+        //resultB &= s.OMap.get(objName).element1.availabilityCons(s.objUmb.get(objName).getAvailability().getQuorum());
+        System.out.println("the field check for " + objName + " is " + resultB.toString());
         return resultB;
     }
 
