@@ -293,7 +293,7 @@ public class SecureTypeChecking implements PartitionVisitor{
                                     ciaJoin(environment.get(singleCall).getCurrentContext()).
                                     ciaLeq(methodType.get(singleCall.methodName.toString()).element2.get(a));
                             resultB &= MMap.get(singleCall.methodName.toString()).element2.
-                                    availabilityProj(environment.get(argE).getGamma().get(argE.toString()).getAvailability().getQuorum(),
+                                    availabilityProj(methodType.get(singleCall.methodName.toString()).element2.get(a).getAvailability().getQuorum(),
                                             environment.get(singleCall).getCurrentHost());
                         }
                         //set the return value for the method
@@ -328,6 +328,10 @@ public class SecureTypeChecking implements PartitionVisitor{
                     environment.get(singleCall).getGamma().
                             put(singleCall.toString(),
                                     objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).get(retIndex));
+                    //set the administrative  x's type in the environment
+                    environment.get(singleCall).getGamma().
+                            put(singleCall.administrativeX.toString(),
+                                    objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).get(retIndex));
                     return resultB;
                 }
                 //we have the typed context for the method
@@ -342,15 +346,19 @@ public class SecureTypeChecking implements PartitionVisitor{
 
                         //now we have changed the dummy variable to the argument named "bot" in the mAName
                         //now all the implicit constraints are forced by the bot argument
-                        resultB &= MMap.get(singleCall.methodName.toString()).element2.
-                                availabilityProj(methodType.get(singleCall.methodName.toString()).element2.get(0).getAvailability().getQuorum(),
+                        resultB &= OMap.get(Oname).element2.
+                                availabilityProj(objectMethodType.get(Oname).get(OMName).get(0).getAvailability().getQuorum(),
                                         environment.get(singleCall).getCurrentHost());
-                        resultB &= environment.get(singleCall).getCurrentContext().ciaLeq(methodType.get(singleCall.methodName.toString()).element2.get(0));
+                        resultB &= environment.get(singleCall).getCurrentContext().ciaLeq(objectMethodType.get(Oname).get(OMName).get(0));
 
                         int retIndex = objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).size()-1;
                         //set the object method return value
                         environment.get(singleCall).getGamma().
                                 put(singleCall.toString(),
+                                        objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).get(retIndex));
+                        //set the administrative  x's type in the environment
+                        environment.get(singleCall).getGamma().
+                                put(singleCall.administrativeX.toString(),
                                         objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).get(retIndex));
                         return resultB;
                     }
@@ -371,6 +379,10 @@ public class SecureTypeChecking implements PartitionVisitor{
                         int retIndex = objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).size()-1;
                         environment.get(singleCall).getGamma().
                                 put(singleCall.toString(),
+                                        objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).get(retIndex));
+                        //set the administrative  x's type in the environment
+                        environment.get(singleCall).getGamma().
+                                put(singleCall.administrativeX.toString(),
                                         objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).get(retIndex));
                         return resultB;
                     }
@@ -497,12 +509,22 @@ public class SecureTypeChecking implements PartitionVisitor{
         for(String oname : objSigs.keySet()){
             r &= fieldCheck(oname, b);
         }
+        HashMap<String, CIAType> preGamma = new HashMap<>();
         for(int i = methods.size() - 1; i >= 0; i--){
-            b.environment.put(methods.get(i).body, new envForTypeCheck());
-            b.environment.get(methods.get(i).body).setGamma(predefinedVar);
-            b.environment.put(methods.get(i).objectCall, new envForTypeCheck());
-            b.environment.get(methods.get(i).objectCall).setGamma(predefinedVar);
+            if(i == methods.size() - 1){
+                b.environment.put(methods.get(i).body, new envForTypeCheck());
+                b.environment.get(methods.get(i).body).setGamma(predefinedVar);
+                b.environment.put(methods.get(i).objectCall, new envForTypeCheck());
+                b.environment.get(methods.get(i).objectCall).setGamma(predefinedVar);
+            }
+            else {
+                b.environment.put(methods.get(i).body, new envForTypeCheck());
+                b.environment.get(methods.get(i).body).setGamma(preGamma);
+                b.environment.put(methods.get(i).objectCall, new envForTypeCheck());
+                b.environment.get(methods.get(i).objectCall).setGamma(preGamma);
+            }
             r &= methodCheck(methods.get(i), i, b, methodArgNames.get(i));
+            preGamma = b.environment.get(methods.get(i).body).getGamma();
         }
         return r;
     }

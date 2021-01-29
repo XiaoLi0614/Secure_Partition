@@ -60,6 +60,7 @@ public class quorumDef {
     }
 
     //for all qsb in B, there exists qs in quorum, such that q is the subset of H / b
+    //todo: the availability may need to be checked
     public Boolean availabilityProj(HashSet<nodeSet> B, nodeSet H){
         for(nodeSet qsb : B){
             Boolean findQS = false;

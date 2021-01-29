@@ -49,6 +49,7 @@ public class translation_test {
         for(MethodDefinition d : resultMethodDefs){
             System.out.println(d.toString());
         }
+        TicketTypeChecking(resultMethodDefs);
         //OneTimeTransferTypeChecking(resultMethodDefs);
     }
 
@@ -450,6 +451,7 @@ public class translation_test {
         HashSet<Integer> Qm7_7 = new HashSet<>(Arrays.asList(2, 3, 4));
         HashSet<Integer> Qm7_8 = new HashSet<>(Arrays.asList(2, 3, 5));
         HashSet<Integer> Qm7_9 = new HashSet<>(Arrays.asList(3, 4, 5));
+        HashSet<Integer> Qm7_10 = new HashSet<>(Arrays.asList(2, 4, 5));
         Qm7.add(new nodeSet(Qm7_1));
         Qm7.add(new nodeSet(Qm7_2));
         Qm7.add(new nodeSet(Qm7_3));
@@ -459,6 +461,7 @@ public class translation_test {
         Qm7.add(new nodeSet(Qm7_7));
         Qm7.add(new nodeSet(Qm7_8));
         Qm7.add(new nodeSet(Qm7_9));
+        Qm7.add(new nodeSet(Qm7_10));
         HashSet<nodeSet> Qm6 = Qm7;
         HashSet<nodeSet> Qm5 = Qm9;
         HashSet<nodeSet> Qm4 = Qm9;
@@ -492,14 +495,32 @@ public class translation_test {
 
 
         HashSet<nodeSet> Q2_airline = new HashSet<>();
-        HashSet<Integer> Q2_i1_1 = new HashSet<>(Arrays.asList(12, 1, 2, 3));
+        HashSet<Integer> Q2_i1_1 = new HashSet<>(Arrays.asList(2, 4, 5));
         Q2_airline.add(new nodeSet(Q2_i1_1));
+        HashSet<Integer> Q2_i1_2 = new HashSet<>(Arrays.asList(12));
+        Q2_airline.add(new nodeSet(Q2_i1_2));
+        HashSet<Integer> Q2_i1_3 = new HashSet<>(Arrays.asList(3, 4, 5));
+        Q2_airline.add(new nodeSet(Q2_i1_3));
+
         HashSet<nodeSet> Q2_bank = new HashSet<>();
-        HashSet<Integer> Q2_i2_1 = new HashSet<>(Arrays.asList(8, 9, 12));
+        HashSet<Integer> Q2_i2_1 = new HashSet<>(Arrays.asList(9, 10));
         Q2_bank.add(new nodeSet(Q2_i2_1));
+        HashSet<Integer> Q2_i2_2 = new HashSet<>(Arrays.asList(12));
+        Q2_bank.add(new nodeSet(Q2_i2_2));
+        HashSet<Integer> Q2_i2_3 = new HashSet<>(Arrays.asList(8, 10));
+        Q2_bank.add(new nodeSet(Q2_i2_3));
+
         HashSet<nodeSet> Q2_customer = new HashSet<>();
-        HashSet<Integer> Q2_a_1 = new HashSet<>(Arrays.asList(12, 1, 2, 3, 8, 9));
+        HashSet<Integer> Q2_a_1 = new HashSet<>(Arrays.asList(12));
         Q2_customer.add(new nodeSet(Q2_a_1));
+        HashSet<Integer> Q2_a_2 = new HashSet<>(Arrays.asList(2, 4, 5));
+        Q2_customer.add(new nodeSet(Q2_a_2));
+        HashSet<Integer> Q2_a_3 = new HashSet<>(Arrays.asList(9, 10));
+        Q2_customer.add(new nodeSet(Q2_a_3));
+        HashSet<Integer> Q2_a_4 = new HashSet<>(Arrays.asList(3, 4, 5));
+        Q2_customer.add(new nodeSet(Q2_a_4));
+        HashSet<Integer> Q2_a_5 = new HashSet<>(Arrays.asList(8, 10));
+        Q2_customer.add(new nodeSet(Q2_a_5));
 
         //input the methods host information and signature manually
         ArrayList<Pair<nodeSet, quorumDef>> methodsInfo = new ArrayList<>();
@@ -606,8 +627,8 @@ public class translation_test {
         mANames.get(4).add("num");
         mANames.get(4).add("ID");
         methodSig.get(4).element2.add(tp);
-        methodSig.get(4).element2.add(tnum1);
-        methodSig.get(4).element2.add(tnum1);
+        methodSig.get(4).element2.add(tp);
+        methodSig.get(4).element2.add(tp);
 
         ArrayList<CIAType> m5 = new ArrayList<>();
         m5.add(m5Context);
@@ -616,7 +637,7 @@ public class translation_test {
         mANames.get(5).add("price");
         mANames.get(5).add("num");
         methodSig.get(5).element2.add(tp);
-        methodSig.get(5).element2.add(tnum1);
+        methodSig.get(5).element2.add(tp);
 
         ArrayList<CIAType> m6 = new ArrayList<>();
         m6.add(m6Context);
@@ -627,7 +648,7 @@ public class translation_test {
         mANames.get(6).add("num");
         methodSig.get(6).element2.add(ts);
         methodSig.get(6).element2.add(tp);
-        methodSig.get(6).element2.add(tnum1);
+        methodSig.get(6).element2.add(tp);
 
         ArrayList<CIAType> m7 = new ArrayList<>();
         m7.add(m7Context);
@@ -636,7 +657,7 @@ public class translation_test {
         mANames.get(7).add("schedule");
         mANames.get(7).add("num");
         methodSig.get(7).element2.add(ts);
-        methodSig.get(7).element2.add(tnum1);
+        methodSig.get(7).element2.add(tp);
 
         ArrayList<CIAType> m8 = new ArrayList<>();
         m8.add(m8Context);
@@ -657,13 +678,13 @@ public class translation_test {
         HashMap<String, HashMap<String, ArrayList<CIAType>>> objSigs = new HashMap<>();
         //for object airline
         ArrayList<CIAType> getPrice1Arg = new ArrayList<>();
-        getPrice1Arg.add(t0);
+        getPrice1Arg.add(tp);
         //ret is in the last index
         getPrice1Arg.add(ts);
         HashMap<String, ArrayList<CIAType>> amethods = new HashMap<>();
         amethods.put("getPrice1", getPrice1Arg);
         ArrayList<CIAType> getPrice2Arg = new ArrayList<>();
-        getPrice2Arg.add(t0);
+        getPrice2Arg.add(tp);
         getPrice2Arg.add(tp);
         amethods.put("getPrice2", getPrice2Arg);
         ArrayList<CIAType> decSeatArg = new ArrayList<>();
@@ -674,13 +695,13 @@ public class translation_test {
 
         //for object Bank
         ArrayList<CIAType> getBalance1Arg = new ArrayList<>();
-        getBalance1Arg.add(tnum1);
+        getBalance1Arg.add(td);
         //ret is in the last index
         getBalance1Arg.add(tc);
         HashMap<String, ArrayList<CIAType>> bmethods = new HashMap<>();
         bmethods.put("getBalance1", getBalance1Arg);
         ArrayList<CIAType> getBalance2Arg = new ArrayList<>();
-        getBalance2Arg.add(tnum1);
+        getBalance2Arg.add(td);
         getBalance2Arg.add(td);
         bmethods.put("getBalance2", getBalance2Arg);
         ArrayList<CIAType> decBalanceArg = new ArrayList<>();
