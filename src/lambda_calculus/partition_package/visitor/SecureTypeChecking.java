@@ -33,6 +33,7 @@ public class SecureTypeChecking implements PartitionVisitor{
     //The object and method map(about host and arguments) does not change during the type inference / type checking
     HashMap<String, Pair<quorumDef, quorumDef>> OMap;
     HashMap<String, Pair<nodeSet, quorumDef>> MMap;
+    Statistics statistics;
 
     public SecureTypeChecking(){
         environment = new HashMap<>();
@@ -41,6 +42,7 @@ public class SecureTypeChecking implements PartitionVisitor{
         objUmb = new HashMap<>();
         OMap = new HashMap<>();
         MMap = new HashMap<>();
+        statistics = new Statistics();
     }
 
     public Object visitDispatch(Expression expression) {
@@ -85,6 +87,7 @@ public class SecureTypeChecking implements PartitionVisitor{
                     CIAType inter = environment.get(plus.operand1).getGamma().get(plus.operand1.toString()).
                             ciaJoin(environment.get(plus.operand2).getGamma().get(plus.operand2.toString()));
                     Boolean interB = inter.ciaLeq(environment.get(plus).getGamma().get(plus.toString()));
+                    statistics.addCons();
                     return resultB & interB;
                 }
                 //currently we do not let user specify the type for intermediate result.
@@ -93,6 +96,7 @@ public class SecureTypeChecking implements PartitionVisitor{
                     environment.get(plus).getGamma().put(plus.toString(),
                             environment.get(plus.operand1).getGamma().get(plus.operand1.toString()).
                             ciaJoin(environment.get(plus.operand2).getGamma().get(plus.operand2.toString())));
+                    statistics.addCons();
                     return resultB;
                 }
             }
@@ -133,6 +137,7 @@ public class SecureTypeChecking implements PartitionVisitor{
                         ciaJoin(environment.get(conditional.elseExp).getGamma().get(conditional.elseExp.toString())).
                         ciaJoin(environment.get(conditional.condition).getGamma().get(conditional.toString()));
                 Boolean interB = inter.ciaLeq(environment.get(conditional).getGamma().get(conditional.toString()));
+                statistics.addCons();
                 return resultB & interB;
             }
             //currently we do not let user specify the type for intermediate result.
@@ -142,6 +147,7 @@ public class SecureTypeChecking implements PartitionVisitor{
                         environment.get(conditional.ifExp).getGamma().get(conditional.ifExp.toString()).
                                 ciaJoin(environment.get(conditional.elseExp).getGamma().get(conditional.elseExp.toString())).
                                 ciaJoin(environment.get(conditional.condition).getGamma().get(conditional.condition.toString())));
+                statistics.addCons();
                 return resultB;
             }
         }
@@ -180,6 +186,7 @@ public class SecureTypeChecking implements PartitionVisitor{
                         ciaJoin(environment.get(iF.command2).getGamma().get(iF.command2.toString())).
                         ciaJoin(environment.get(iF.condition).getGamma().get(iF.toString()));
                 Boolean interB = inter.ciaLeq(environment.get(iF).getGamma().get(iF.toString()));
+                statistics.addCons();
                 return resultB & interB;
             }
             //currently we do not let user specify the type for intermediate result.
@@ -189,6 +196,7 @@ public class SecureTypeChecking implements PartitionVisitor{
                         environment.get(iF.command1).getGamma().get(iF.command1.toString()).
                                 ciaJoin(environment.get(iF.command2).getGamma().get(iF.command2.toString())).
                                 ciaJoin(environment.get(iF.condition).getGamma().get(iF.condition.toString())));
+                statistics.addCons();
                 return resultB;
             }
         }
@@ -214,6 +222,7 @@ public class SecureTypeChecking implements PartitionVisitor{
                 CIAType inter = environment.get(sequence.command1).getGamma().get(sequence.command1.toString()).
                         ciaJoin(environment.get(sequence.command2).getGamma().get(sequence.command2.toString()));
                 Boolean interB = inter.ciaLeq(environment.get(sequence).getGamma().get(sequence.toString()));
+                statistics.addCons();
                 return resultB & interB;
             }
             //currently we do not let user specify the type for intermediate result.
@@ -222,6 +231,7 @@ public class SecureTypeChecking implements PartitionVisitor{
                 environment.get(sequence).getGamma().put(sequence.toString(),
                         environment.get(sequence.command1).getGamma().get(sequence.command1.toString()).
                                 ciaJoin(environment.get(sequence.command2).getGamma().get(sequence.command2.toString())));
+                statistics.addCons();
                 return resultB;
             }
         }
@@ -250,10 +260,13 @@ public class SecureTypeChecking implements PartitionVisitor{
                         CIAType temp = environment.get(singleCall).getCurrentContext().
                                 ciaJoin(environment.get(args).getGamma().get(args.toString()));
                         methodType.get(singleCall.methodName.toString()).element2.add(a, temp);
+                        statistics.startACheck();
                         if(!MMap.get(singleCall.methodName.toString()).element2.
                                 availabilityProj(temp.getAvailability().getQuorum(), environment.get(singleCall).getCurrentHost())){
                             System.out.println("Inferred availability does not mee the requirement.");
                         }
+                        statistics.endACheck();
+                        statistics.addCons();
                     }
                     //set the return value for the method
                     //todo: we have not set the return type for the method at this point
@@ -265,6 +278,7 @@ public class SecureTypeChecking implements PartitionVisitor{
                 else {
                     CIAType temp0 = methodType.get(singleCall.methodName.toString()).element1.get(0);
                     resultB &= environment.get(singleCall).getCurrentContext().ciaLeq(temp0);
+                    statistics.addCons();
 
                     //when there is no argument for the method
                     //we need to add dummy argument for the implicit constraints
@@ -275,10 +289,14 @@ public class SecureTypeChecking implements PartitionVisitor{
                                         //environment.get(singleCall).getCurrentHost());
                         //now we have changed the dummy variable to the argument named "bot" in the mAName
                         //now all the implicit constraints are forced by the bot argument
+                        statistics.startACheck();
                         resultB &= MMap.get(singleCall.methodName.toString()).element2.
                                 availabilityProj(methodType.get(singleCall.methodName.toString()).element2.get(0).getAvailability().getQuorum(),
                                         environment.get(singleCall).getCurrentHost());
+                        statistics.endACheck();
+                        statistics.addCons();
                         resultB &= environment.get(singleCall).getCurrentContext().ciaLeq(methodType.get(singleCall.methodName.toString()).element2.get(0));
+                        statistics.addCons();
 
                         //set the return value for the method
                         environment.get(singleCall).getGamma().put(singleCall.toString(), methodType.get(singleCall.methodName.toString()).element1.get(1));
@@ -292,9 +310,13 @@ public class SecureTypeChecking implements PartitionVisitor{
                             resultB &= environment.get(argE).getGamma().get(argE.toString()).
                                     ciaJoin(environment.get(singleCall).getCurrentContext()).
                                     ciaLeq(methodType.get(singleCall.methodName.toString()).element2.get(a));
+                            statistics.addCons();
+                            statistics.startACheck();
                             resultB &= MMap.get(singleCall.methodName.toString()).element2.
                                     availabilityProj(methodType.get(singleCall.methodName.toString()).element2.get(a).getAvailability().getQuorum(),
                                             environment.get(singleCall).getCurrentHost());
+                            statistics.endACheck();
+                            statistics.addCons();
                         }
                         //set the return value for the method
                         environment.get(singleCall).getGamma().put(singleCall.toString(), methodType.get(singleCall.methodName.toString()).element1.get(1));
@@ -346,10 +368,14 @@ public class SecureTypeChecking implements PartitionVisitor{
 
                         //now we have changed the dummy variable to the argument named "bot" in the mAName
                         //now all the implicit constraints are forced by the bot argument
+                        statistics.startACheck();
                         resultB &= OMap.get(Oname).element2.
                                 availabilityProj(objectMethodType.get(Oname).get(OMName).get(0).getAvailability().getQuorum(),
                                         environment.get(singleCall).getCurrentHost());
+                        statistics.endACheck();
+                        statistics.addCons();
                         resultB &= environment.get(singleCall).getCurrentContext().ciaLeq(objectMethodType.get(Oname).get(OMName).get(0));
+                        statistics.addCons();
 
                         int retIndex = objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).size()-1;
                         //set the object method return value
@@ -370,10 +396,14 @@ public class SecureTypeChecking implements PartitionVisitor{
                             resultB &= environment.get(argE).getGamma().get(argE.toString()).
                                     ciaJoin(environment.get(singleCall).getCurrentContext()).
                                     ciaLeq(objectMethodType.get(Oname).get(OMName).get(a));
+                            statistics.addCons();
                             //need to check this later
+                            statistics.startACheck();
                             resultB &= OMap.get(singleCall.objectName.toString()).element2.
                                     availabilityProj(objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).get(a).getAvailability().getQuorum(),
                                             environment.get(singleCall).getCurrentHost());
+                            statistics.endACheck();
+                            statistics.addCons();
                         }
                         //set the object method return value
                         int retIndex = objectMethodType.get(singleCall.objectName.toString()).get(singleCall.methodName.toString()).size()-1;
@@ -403,14 +433,25 @@ public class SecureTypeChecking implements PartitionVisitor{
             ArrayList<CIAType> argTypes = objSig.get(mName);
             CIAType retVType = argTypes.get(argTypes.size()-1);
             resultB &= retVType.cLeq(objHosts);
+            statistics.addCons();
+            statistics.startSIntegrityCheck();
             resultB &= s.OMap.get(objName).element1.fieldIntegrity(retVType.getIntegrity().getQuorum());
+            statistics.endSIntegrityCheck();
+            statistics.addCons();
+            statistics.startACheck();
             resultB &= s.OMap.get(objName).element1.availabilityCons(retVType.getAvailability().getQuorum());
+            statistics.endACheck();
+            statistics.addCons();
             for(int i = 0; i < argTypes.size() - 1; i++){
                 //resultB &= s.objUmb.get(objName).ciaLeq(argTypes.get(i)) & argTypes.get(i).ciaLeq(retVType);
                 resultB &= argTypes.get(i).ciaLeq(retVType);
+                statistics.addCons();
                 //todo: this is not needed
                 //resultB &= argTypes.get(i).cLeq(objHosts);
+                statistics.startCIntegrityCheck();
                 resultB &= s.OMap.get(objName).element2.methodIntegrity(argTypes.get(i).getIntegrity().getQuorum());
+                statistics.endCIntegrityCheck();
+                statistics.addCons();
             }
         }
         //check the integrity constraints for Cintegrity(Q2)
@@ -447,13 +488,18 @@ public class SecureTypeChecking implements PartitionVisitor{
         resultB &= (Boolean) s.visitDispatch(m.body);
         resultB &= s.environment.get(m.body).getGamma().get(m.body.toString()).
                 ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(1));
+        statistics.addCons();
         for(CIAType argT : s.methodType.get(m.thisMethodName.toString()).element2){
             //\tau_1 <= \tau_x
             //resultB &= argT.ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
             //\tau_1 <= \tau_2
             resultB &= argT.ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(1));
+            statistics.addCons();
+            statistics.startCIntegrityCheck();
             resultB &= s.MMap.get(m.thisMethodName.toString()).element2.
                     methodIntegrity(argT.getIntegrity().getQuorum());
+            statistics.endCIntegrityCheck();
+            statistics.addCons();
         }
         //double check whether the return value \tau_2 has to be able to hosted on the method hosts
 //        resultB &= s.methodType.get(m.thisMethodName.toString()).element1.get(0).
@@ -461,6 +507,7 @@ public class SecureTypeChecking implements PartitionVisitor{
 //                cLeq(s.environment.get(m.body).getCurrentHost());
         resultB &= s.methodType.get(m.thisMethodName.toString()).element1.get(0).
                 cLeq(s.environment.get(m.body).getCurrentHost());
+        statistics.addCons();
         System.out.println("The method " + m.thisMethodName.toString() + " has been checked " + resultB);
         return resultB;
     }
@@ -503,6 +550,7 @@ public class SecureTypeChecking implements PartitionVisitor{
                                   HashMap<String, CIAType> predefinedUmb){
         Boolean r = true;
         SecureTypeChecking b = new SecureTypeChecking();
+        b.statistics.startCheck();
         //set the M(H, Q) and O(Q1, Q2) and object signature
         for(int i = 0; i < methods.size(); i++){
             b.MMap.put(methods.get(i).thisMethodName.toString(), methodsSig.get(i));
@@ -533,6 +581,8 @@ public class SecureTypeChecking implements PartitionVisitor{
             r &= methodCheck(methods.get(i), i, b, methodArgNames.get(i));
             preGamma = b.environment.get(methods.get(i).body).getGamma();
         }
+        b.statistics.endCheck();
+        b.statistics.printStatistics();
         return r;
     }
 }
