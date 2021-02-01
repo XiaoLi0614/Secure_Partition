@@ -30,8 +30,8 @@ public class translation_test {
     static String outputPath = "/home/xiao/IdeaProjects/secure_partition/out/lambda_calculus/";
     public static void main(String[] args)
     {
-        //Expression lambda1 = createOFTUseCase();
-        Expression lambda1 = createTicketsUseCase();
+        Expression lambda1 = createOFTUseCase();
+        //Expression lambda1 = createTicketsUseCase();
         System.out.println("Complete create use-case");
         CPSPrinter test = new CPSPrinter();
         Command resultAST = test.print(lambda1).element1;
@@ -49,8 +49,8 @@ public class translation_test {
         for(MethodDefinition d : resultMethodDefs){
             System.out.println(d.toString());
         }
-        TicketTypeChecking(resultMethodDefs);
-        //OneTimeTransferTypeChecking(resultMethodDefs);
+        OneTimeTransferTypeChecking(resultMethodDefs);
+        //TicketTypeChecking(resultMethodDefs);
     }
 
 //        public static String cpsTransformation(lambda_usecase useCase)
@@ -213,11 +213,19 @@ public class translation_test {
             Bi2.add(new nodeSet(i2B1));
             Bi2.add(new nodeSet(i2B2));
 
+            //context integrity and availability for methods
+            HashSet<Integer> b0 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
+            HashSet<nodeSet> B0 = new HashSet<>();
+            B0.add(new nodeSet(b0));
+
             //confidentiality information for objects
             HashSet<Integer> c1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 12));
             HashSet<Integer> c2 = new HashSet<>(Arrays.asList(8, 9, 10, 11, 12));
             HashSet<Integer> cx = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
             HashSet<Integer> cret = new HashSet<>(Arrays.asList(12));
+
+            //context types
+            CIAType t0 = new CIAType(new nodeSet(cx), new quorumDef(B0), new quorumDef(B0));
 
             //host and quorum information
             HashSet<Integer> Hm1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6));
@@ -292,10 +300,11 @@ public class translation_test {
             CIAType m4retType = m1retType.clone();
 
             //context type for m4, which is the bottom
-            //HashSet<nodeSet> m4context = new HashSet<>();
-            //context type for m4 should be higher than the type of x
-            //m4context.add(new nodeSet(cx));
-            CIAType m4Context = new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B));
+            //CIAType m4Context = new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B));
+            //CIAType m3Context = m4Context.ciaJoin(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+            //CIAType m2Context = m3Context.clone();
+            //CIAType m1Context = m3Context.clone();
+            CIAType m4Context = t0;
             CIAType m3Context = m4Context.ciaJoin(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
             CIAType m2Context = m3Context.clone();
             CIAType m1Context = m3Context.clone();
@@ -303,10 +312,14 @@ public class translation_test {
             m1.add(m1Context);
             m1.add(m1retType);
             methodSig.add(new Pair<>(m1, new ArrayList<>()));
+            mANames.get(0).add("bot");
+            methodSig.get(0).element2.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
             ArrayList<CIAType> m2 = new ArrayList<>();
             m2.add(m2Context);
             m2.add(m2retType);
             methodSig.add(new Pair<>(m2, new ArrayList<>()));
+            mANames.get(1).add("bot");
+            methodSig.get(1).element2.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
             ArrayList<CIAType> m3 = new ArrayList<>();
             m3.add(m3Context);
             m3.add(m3retType);
@@ -332,19 +345,24 @@ public class translation_test {
             amethods.put("write", awriteArg);
             ArrayList<CIAType> aread = new ArrayList<>();
             aread.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+            aread.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
             amethods.put("read", aread);
             objSigs.put("a", amethods);
             //for object i1 and i2
             HashMap<String, ArrayList<CIAType>> i1methods = new HashMap<>();
             ArrayList<CIAType> i1read = new ArrayList<>();
             //ret
-            i1read.add(new CIAType(new nodeSet(c1), new quorumDef(Bi1), new quorumDef(Bi1)));
+            i1read.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
+            //i1read.add(new CIAType(new nodeSet(c1), new quorumDef(Bi1), new quorumDef(Bi1)));
+            i1read.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
             i1methods.put("read", i1read);
             objSigs.put("i1", i1methods);
             HashMap<String, ArrayList<CIAType>> i2methods = new HashMap<>();
             ArrayList<CIAType> i2read = new ArrayList<>();
+            i2read.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
             //ret
-            i2read.add(new CIAType(new nodeSet(c2), new quorumDef(Bi2), new quorumDef(Bi2)));
+            //i2read.add(new CIAType(new nodeSet(c2), new quorumDef(Bi2), new quorumDef(Bi2)));
+            i1read.add(new CIAType(new nodeSet(cx), new quorumDef(B), new quorumDef(B)));
             i2methods.put("read", i2read);
             objSigs.put("i2", i2methods);
 
