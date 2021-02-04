@@ -105,6 +105,28 @@ public class quorumDef {
         return r;
     }
 
+    //A \times_union B
+    public quorumDef crossUnion(quorumDef Q){
+        quorumDef rev = new quorumDef();
+        for(nodeSet qs1 : this.quorum){
+            for(nodeSet qs2 : Q.quorum){
+                nodeSet qs = qs1.clone();
+                qs.nSet.addAll(qs2.nSet);
+                rev.quorum.add(qs);
+            }
+        }
+        return rev;
+    }
+
+    //A union B
+    public quorumDef union(quorumDef Q){
+        quorumDef rev = this.clone();
+        for(nodeSet qs2 : Q.quorum){
+            rev.quorum.add(qs2);
+        }
+        return rev;
+    }
+
     @Override
     public String toString(){
         return quorum.toString();

@@ -238,14 +238,14 @@ public class CIAType implements Cloneable{
     }
 
     //instantiate the bottom value for CIA type. The one with least constraints
-    public CIAType CIABot(){
-        HashSet<Integer> all_nodes = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
-        HashSet<Integer> all_nodes1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
+/*    public CIAType CIABot(){
+        HashSet<Integer> all_nodes = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18));
+        HashSet<Integer> all_nodes1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17));
         nodeSet ia = new nodeSet(all_nodes1);
         HashSet<nodeSet> ia1 = new HashSet<>();
         ia1.add(ia);
         return new CIAType(new nodeSet(all_nodes), new quorumDef(ia1), new quorumDef(ia1));
-    }
+    }*/
 
     public nodeSet getConfidentiality(){
         return this.Confidentiality;

@@ -34,6 +34,7 @@ public class SecureTypeChecking implements PartitionVisitor{
     HashMap<String, Pair<quorumDef, quorumDef>> OMap;
     HashMap<String, Pair<nodeSet, quorumDef>> MMap;
     Statistics statistics;
+    CIAType botType;
 
     public SecureTypeChecking(){
         environment = new HashMap<>();
@@ -53,9 +54,9 @@ public class SecureTypeChecking implements PartitionVisitor{
         public class GIdB implements GIdVisitor<Object>{
             @Override
             public Object visit(Id id){
-                CIAType dummy = new CIAType();
-                //environment.put(intLiteral, new envForTypeCheck());
-                environment.get(id).getGamma().put(id.toString(), dummy.CIABot());
+                //CIAType dummy = new CIAType();
+                //environment.get(id).getGamma().put(id.toString(), dummy.CIABot());
+                environment.get(id).getGamma().put(id.toString(), botType);
                 return true;}
         }
         GIdB gIdB = new GIdB();
@@ -65,10 +66,9 @@ public class SecureTypeChecking implements PartitionVisitor{
         public class LiteralB implements LiteralVisitor<Object>{
             @Override
             public Object visit(IntLiteral intLiteral){
-                //TODO: how to show the lowest and highest?
-                CIAType dummy = new CIAType();
-                //environment.put(intLiteral, new envForTypeCheck());
-                environment.get(intLiteral).getGamma().put(intLiteral.toString(), dummy.CIABot());
+                //CIAType dummy = new CIAType();
+                //environment.get(intLiteral).getGamma().put(intLiteral.toString(), dummy.CIABot());
+                environment.get(intLiteral).getGamma().put(intLiteral.toString(), botType);
                 return true;
             }
         }
@@ -111,8 +111,9 @@ public class SecureTypeChecking implements PartitionVisitor{
             }
             else {
                 //todo: the same as int, have the bottom type
-                CIAType dummy = new CIAType();
-                environment.get(var).getGamma().put(var.toString(), dummy.CIABot());
+                //CIAType dummy = new CIAType();
+                //environment.get(var).getGamma().put(var.toString(), dummy.CIABot());
+                environment.get(var).getGamma().put(var.toString(), botType);
             }
             return true;
         }
@@ -547,7 +548,8 @@ public class SecureTypeChecking implements PartitionVisitor{
                                   HashMap<String, HashMap<String, ArrayList<CIAType>>> objSigs,
                                   HashMap<String, Pair<quorumDef, quorumDef>> objHosts,
                                   HashMap<String, CIAType> predefinedVar,
-                                  HashMap<String, CIAType> predefinedUmb){
+                                  HashMap<String, CIAType> predefinedUmb,
+                                  CIAType botT){
         Boolean r = true;
         SecureTypeChecking b = new SecureTypeChecking();
         b.statistics.startCheck();
@@ -559,6 +561,7 @@ public class SecureTypeChecking implements PartitionVisitor{
         b.OMap = objHosts;
         b.objectMethodType = objSigs;
         b.objUmb = predefinedUmb;
+        b.botType = botT;
 
         //first do field check then we do method check
         for(String oname : objSigs.keySet()){
