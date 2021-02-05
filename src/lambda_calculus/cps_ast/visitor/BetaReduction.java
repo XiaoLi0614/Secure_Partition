@@ -145,6 +145,12 @@ public class BetaReduction implements CPSVisitor{
                     singleCall.args,
                     singleCall.administrativeX,
                     (Command)visitDispatch(singleCall.nestedCommand)); }
+
+        @Override
+        public Object visit(ThisMethod thismethod){
+            return new ThisMethod(
+                    (Id)thismethod.methodName,
+                    thismethod.args); }
     }
 
     //CommandB commandB = new CommandB();

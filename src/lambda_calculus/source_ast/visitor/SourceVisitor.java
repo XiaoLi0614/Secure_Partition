@@ -2,6 +2,7 @@ package lambda_calculus.source_ast.visitor;
 
 import lambda_calculus.source_ast.tree.expression.Conditional;
 import lambda_calculus.source_ast.tree.expression.ObjectMethod;
+import lambda_calculus.source_ast.tree.expression.ThisMethod;
 import lambda_calculus.source_ast.tree.expression.Var;
 import lambda_calculus.source_ast.tree.expression.id.GId;
 import lambda_calculus.source_ast.tree.expression.id.Id;
@@ -32,6 +33,7 @@ public interface SourceVisitor<R> {
 
         R visit(Conditional conditional);
         R visit(ObjectMethod objectmethod);
+        R visit(ThisMethod thismethod);
         R visit(Var var);
     }
 }

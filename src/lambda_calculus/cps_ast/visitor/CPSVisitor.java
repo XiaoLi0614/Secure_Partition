@@ -40,5 +40,6 @@ public interface CPSVisitor<R> {
         R visit(If iF);
         R visit(Sequence sequence);
         R visit(SingleCall singleCall);
+        R visit(ThisMethod thisMethod);
     }
 }

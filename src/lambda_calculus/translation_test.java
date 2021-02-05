@@ -34,7 +34,8 @@ public class translation_test {
     public static void main(String[] args)
     {
         //Expression lambda1 = createOFTUseCase();
-        Expression lambda1 = createTicketsUseCase();
+        //Expression lambda1 = createTicketsUseCase();
+        Expression lambda1 = createObliviousTransferUseCase();
         System.out.println("Complete create use-case");
         CPSPrinter test = new CPSPrinter();
         Command resultAST = test.print(lambda1).element1;
@@ -54,7 +55,8 @@ public class translation_test {
         }
         //OneTimeTransferTypeCheckingP(resultMethodDefs);
         //TicketTypeChecking(resultMethodDefs);
-        TicketTypeCheckingP(resultMethodDefs);
+        //TicketTypeCheckingP(resultMethodDefs);
+        ObliviousTransferTypeCheckingP(resultMethodDefs);
 
         //test for powersets
 /*        HashSet<Integer> in = new HashSet<>(Arrays.asList(1, 2, 3, 4));
@@ -95,6 +97,21 @@ public class translation_test {
                                     new ObjectMethod("read", "i2", emptyArg))),
                     new IntLiteral(0));
             return oftUseCase;
+        }
+
+        public static Expression createObliviousTransferUseCase()
+        {
+            Expression[] emptyArg = {};
+            Expression[] trueArg = new Expression[1];
+            trueArg[0] = new IntLiteral(1);
+            Expression otUseCase = new Conditional(
+                    new ObjectMethod("read", "a", emptyArg),
+                    new Sequence(new ObjectMethod("write", "a", trueArg),
+                            new Sequence(new ObjectMethod("read", "i1", emptyArg, "temp1"),
+                                    new Sequence(new ObjectMethod("read", "i2", emptyArg, "temp2"),
+                                            new Conditional(new Var("x"), new Var("temp1"), new Var("temp2"))))),
+                    new IntLiteral(0));
+            return otUseCase;
         }
 
 /*        //because we do not have several return, we need to split the makeOffer methods into two different methods
@@ -564,6 +581,177 @@ public class translation_test {
         System.out.println("The type checking result for one time transfer program:" + r.toString());
     }
 
+    public static void ObliviousTransferTypeCheckingP(ArrayList<MethodDefinition> resultMethodDefs){
+        HashSet<Integer> A0 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
+        nodeSet A = new nodeSet(A0);
+        HashSet<Integer> B0 = new HashSet<>(Arrays.asList(8, 9, 10, 11));
+        nodeSet B = new nodeSet(B0);
+        HashSet<Integer> C0 = new HashSet<>(Arrays.asList(12, 13, 14, 15));
+        nodeSet C = new nodeSet(C0);
+        quorumDef P_2A = getPowerSet(A, 2);
+        quorumDef P_1B = getPowerSet(B, 1);
+        quorumDef P_1C = getPowerSet(C, 1);
+        quorumDef SingletonA = new quorumDef();
+        SingletonA.quorum.add(A);
+        quorumDef SingletonB = new quorumDef();
+        SingletonB.quorum.add(B);
+        quorumDef SingletonC = new quorumDef();
+        SingletonC.quorum.add(C);
+
+        //failure situation
+        quorumDef P2AP1BP1C = P_2A.crossUnion(P_1B).crossUnion(P_1C);
+        quorumDef P1BAC = SingletonA.crossUnion(P_1B).crossUnion(SingletonC);
+        quorumDef P2ABC = SingletonB.crossUnion(P_2A).crossUnion(SingletonC);
+        quorumDef P2AP1BC = P_2A.crossUnion(P_1B).crossUnion(SingletonC);
+        quorumDef P2ABP1C = P_2A.crossUnion(SingletonB).crossUnion(P_1C);
+        quorumDef AP1BP1C = SingletonA.crossUnion(P_1B).crossUnion(P_1C);
+        quorumDef ABP1C = SingletonA.crossUnion(SingletonB).crossUnion(P_1C);
+
+        //confidentiality information for objects
+        HashSet<Integer> c1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 12, 13, 14, 15));
+        HashSet<Integer> c2 = new HashSet<>(Arrays.asList(8, 9, 10, 11, 12, 13, 14, 15));
+        HashSet<Integer> cx = new HashSet<>(Arrays.asList(12, 13, 14, 15));
+        HashSet<Integer> c0 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15));
+
+        //communication quorum
+        quorumDef P_2C = getPowerSet(C, 2);
+
+        //object replication quorum
+        quorumDef P_5A = getPowerSet(A, 5);
+        quorumDef P_3B = getPowerSet(B, 3);
+        quorumDef P5AP3B = P_5A.crossUnion(P_3B);
+
+        //context types
+        CIAType t0 = new CIAType(new nodeSet(c0), ABP1C, ABP1C);
+
+        //variable type
+        CIAType t1 = new CIAType(new nodeSet(c1), P2ABC, P2ABC);
+        CIAType t2 = new CIAType(new nodeSet(c2), P1BAC, P1BAC);
+        CIAType t3 = new CIAType(new nodeSet(c0), P2AP1BC, P2AP1BC);
+        CIAType t4 = new CIAType(new nodeSet(c1), P2AP1BP1C, P2AP1BP1C);
+        CIAType t5 = new CIAType(new nodeSet(c2), P2AP1BP1C, P2AP1BP1C);
+        CIAType t6 = new CIAType(new nodeSet(c0), P2AP1BP1C, P2AP1BP1C);
+        CIAType t7 = new CIAType(new nodeSet(cx), ABP1C, ABP1C);
+        CIAType t8 = new CIAType(new nodeSet(cx), P2AP1BP1C, P2AP1BP1C);
+
+        //host and quorum information
+        HashSet<Integer> Hm1 = new HashSet<>(Arrays.asList(12, 13, 14));
+        HashSet<Integer> Hm2 = Hm1;
+        HashSet<Integer> Hm3 = Hm1;
+        HashSet<Integer> Hm4 = Hm1;
+
+        //input the methods host information and signature manually
+        ArrayList<Pair<nodeSet, quorumDef>> methodsInfo = new ArrayList<>();
+        Pair<nodeSet, quorumDef> m1Info = new Pair<>(new nodeSet(Hm1), P_2C);
+        methodsInfo.add(m1Info);
+        Pair<nodeSet, quorumDef> m2Info = new Pair<>(new nodeSet(Hm2), P_2C);
+        methodsInfo.add(m2Info);
+        Pair<nodeSet, quorumDef> m3Info = new Pair<>(new nodeSet(Hm3), P_2C);
+        methodsInfo.add(m3Info);
+        Pair<nodeSet, quorumDef> m4Info = new Pair<>(new nodeSet(Hm4), P_2C);
+        methodsInfo.add(m4Info);
+
+        ArrayList<ArrayList<String>> mANames = new ArrayList<>(resultMethodDefs.size());
+        for(int i = 0; i < resultMethodDefs.size(); i++){
+            mANames.add(new ArrayList<>());
+        }
+        ArrayList<Pair<ArrayList<CIAType>, ArrayList<CIAType>>> methodSig = new ArrayList<>();
+        CIAType m1retType = new CIAType(new nodeSet(cx), P2AP1BP1C, P2AP1BP1C);
+        CIAType m2retType = m1retType.clone();
+        CIAType m3retType = m1retType.clone();
+        CIAType m4retType = m1retType.clone();
+
+        //context type for m4, which is the bottom
+        CIAType m4Context = t0;
+        CIAType m3Context = t6;
+        CIAType m2Context = t6;
+        CIAType m1Context = t6;
+
+        ArrayList<CIAType> m1 = new ArrayList<>();
+        m1.add(m1Context);
+        m1.add(m1retType);
+        methodSig.add(new Pair<>(m1, new ArrayList<>()));
+        mANames.get(0).add("x");
+        methodSig.get(0).element2.add(t8);
+        mANames.get(0).add("temp1");
+        methodSig.get(0).element2.add(t4);
+
+        ArrayList<CIAType> m2 = new ArrayList<>();
+        m2.add(m2Context);
+        m2.add(m2retType);
+        methodSig.add(new Pair<>(m2, new ArrayList<>()));
+        mANames.get(1).add("x");
+        methodSig.get(1).element2.add(t8);
+
+        ArrayList<CIAType> m3 = new ArrayList<>();
+        m3.add(m3Context);
+        m3.add(m3retType);
+        methodSig.add(new Pair<>(m3, new ArrayList<>()));
+        mANames.get(2).add("x");
+        methodSig.get(2).element2.add(t8);
+
+        ArrayList<CIAType> m4 = new ArrayList<>();
+        m4.add(m4Context);
+        m4.add(m4retType);
+        methodSig.add(new Pair<>(m4, new ArrayList<>()));
+        mANames.get(3).add("x");
+        methodSig.get(3).element2.add(t7);
+
+        //input the object host information and signature manually
+        HashMap<String, HashMap<String, ArrayList<CIAType>>> objSigs = new HashMap<>();
+        //for object a
+        ArrayList<CIAType> awriteArg = new ArrayList<>();
+        awriteArg.add(t6);
+        //ret is in the last index
+        awriteArg.add(t6);
+        HashMap<String, ArrayList<CIAType>> amethods = new HashMap<>();
+        amethods.put("write", awriteArg);
+        ArrayList<CIAType> aread = new ArrayList<>();
+        aread.add(t0);
+        aread.add(t6);
+        amethods.put("read", aread);
+        objSigs.put("a", amethods);
+
+        //for object i1 and i2
+        HashMap<String, ArrayList<CIAType>> i1methods = new HashMap<>();
+        ArrayList<CIAType> i1read = new ArrayList<>();
+        //ret
+        i1read.add(t6);
+        //i1read.add(new CIAType(new nodeSet(c1), new quorumDef(Bi1), new quorumDef(Bi1)));
+        i1read.add(t4);
+        i1methods.put("read", i1read);
+        objSigs.put("i1", i1methods);
+        HashMap<String, ArrayList<CIAType>> i2methods = new HashMap<>();
+        ArrayList<CIAType> i2read = new ArrayList<>();
+        i2read.add(t6);
+        //ret
+        //i2read.add(new CIAType(new nodeSet(c2), new quorumDef(Bi2), new quorumDef(Bi2)));
+        i2read.add(t5);
+        i2methods.put("read", i2read);
+        objSigs.put("i2", i2methods);
+
+        //the objects hosts and hear from information
+        HashMap<String, Pair<quorumDef, quorumDef>> objInfo = new HashMap<>();
+        Pair<quorumDef, quorumDef> i1Info = new Pair<>(P_5A, P_2C);
+        objInfo.put("i1", i1Info);
+        Pair<quorumDef, quorumDef> i2Info = new Pair<>(P_3B, P_2C);
+        objInfo.put("i2", i2Info);
+        Pair<quorumDef, quorumDef> aInfo = new Pair<>(P5AP3B, P_2C);
+        objInfo.put("a", aInfo);
+
+        //input the predefined variable information
+        HashMap<String, CIAType> p = new HashMap<>();
+        p.put("x", t7);
+        //input predefine umbrella for the objects
+        HashMap<String, CIAType> u = new HashMap<>();
+        u.put("i1", t1);
+        u.put("i2", t2);
+        u.put("a", t3);
+
+        SecureTypeChecking test5 = new SecureTypeChecking();
+        Boolean r = test5.classTypeCheck(resultMethodDefs, methodsInfo, methodSig, mANames, objSigs, objInfo, p, u, t0);
+        System.out.println("The type checking result for oblivious transfer program:" + r.toString());
+    }
 
     public static void TicketTypeChecking(ArrayList<MethodDefinition> resultMethodDefs){
         //failure situation B0:{{1, 2, 8}, {1, 2, 9}, {1, 3, 8}, {1, 3, 9}}
@@ -959,7 +1147,6 @@ public class translation_test {
         nodeSet A = new nodeSet(A0);
         nodeSet B = new nodeSet(B0);
         nodeSet C = new nodeSet(C0);
-
 
         //confidentiality information for objects
         HashSet<Integer> c1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 18));
