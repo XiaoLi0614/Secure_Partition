@@ -114,7 +114,7 @@ public class translation_test {
             return otUseCase;
         }
 
-/*        //because we do not have several return, we need to split the makeOffer methods into two different methods
+        //because we do not have several return, we need to split the makeOffer methods into two different methods
         public static Expression createAuctionUseCase()
         {
             Expression[] emptyArg = {};
@@ -144,7 +144,7 @@ public class translation_test {
                                     ,
                                     new ObjectMethod("declareWinner", "user", offerAAsArg)))));
             return auctionUseCase;
-        }*/
+        }
 
         public static Expression createTicketsUseCase(){
             Expression[] emptyArg = {};

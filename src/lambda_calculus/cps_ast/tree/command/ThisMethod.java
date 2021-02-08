@@ -16,7 +16,7 @@ public class ThisMethod extends Command{
         this.args = args;
     }
 
-    public ThisMethod(Id mName, Expression[] args, Var aX) {
+    public ThisMethod(Id mName, Expression[] args) {
         this.methodName = mName;
         this.args = args;
     }
@@ -28,7 +28,7 @@ public class ThisMethod extends Command{
     @Override
     public String toString(){
         StringBuilder resultString = new StringBuilder();
-        resultString.append("call " + administrativeX + " = " + objectName +"." + methodName + "(");
+        resultString.append( " this."  + methodName + "(");
         if(args == null || args.length == 0){}
         else{
             for(Expression e: args){
@@ -36,7 +36,7 @@ public class ThisMethod extends Command{
             }
             resultString.deleteCharAt(resultString.lastIndexOf(", "));
         }
-        resultString.append(") in " + nestedCommand);
+        resultString.append(") ");
         return  resultString.toString();
     }
 
@@ -45,12 +45,9 @@ public class ThisMethod extends Command{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SingleCall that = (SingleCall) o;
+        ThisMethod that = (ThisMethod) o;
 
-        if (!administrativeX.equals(that.administrativeX)) return false;
-        else if (!objectName.equals(that.objectName)) return false;
-        else if (!methodName.equals(that.methodName)) return false;
-        else if (!nestedCommand.equals(that.nestedCommand)) return false;
+        if (!methodName.equals(that.methodName)) return false;
         else if ((args == null || args.length == 0)) {
             if (!(that.args == null || that.args.length == 0)) return false;
             else return true;
@@ -68,10 +65,8 @@ public class ThisMethod extends Command{
                 resultVar[i] = (Expression) args[i].substitute(originalVar, replacer);
             }
         }
-        return new SingleCall((Id) objectName,
+        return new ThisMethod(
                 (Id) methodName,
-                resultVar,
-                administrativeX,
-                nestedCommand.substitute(originalVar, replacer));
+                resultVar);
     }
 }

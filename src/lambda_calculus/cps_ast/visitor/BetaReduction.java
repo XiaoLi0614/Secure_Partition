@@ -148,8 +148,7 @@ public class BetaReduction implements CPSVisitor{
 
         @Override
         public Object visit(ThisMethod thismethod){
-            return new ThisMethod(
-                    (Id)thismethod.methodName,
+            return new ThisMethod((Id)thismethod.methodName,
                     thismethod.args); }
     }
 

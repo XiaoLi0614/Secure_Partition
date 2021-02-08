@@ -143,7 +143,27 @@ public class translateToOtherAST implements CPSVisitor {
                     mN,
                     resultArgs,
                     aX,
-                    resultNestedC); }
+                    resultNestedC);
+        }
+
+        @Override
+        public Object visit(ThisMethod thisMethod){
+            lambda_calculus.partition_package.tree.expression.id.Id mN = (lambda_calculus.partition_package.tree.expression.id.Id)visitDispatch(thisMethod.methodName);
+            lambda_calculus.partition_package.tree.expression.Expression[] resultArgs;
+            if(thisMethod.args == null || thisMethod.args.length == 0){
+                resultArgs = null;
+            }
+            else {
+                resultArgs = new lambda_calculus.partition_package.tree.expression.Expression[thisMethod.args.length];
+                for(int i = 0; i < thisMethod.args.length; i++){
+                    resultArgs[i] = (lambda_calculus.partition_package.tree.expression.Expression)visitDispatch(thisMethod.args[i]);
+                }
+            }
+
+            return new lambda_calculus.partition_package.tree.command.SingleCall(mN, resultArgs);
+        }
+
+
     }
 
     //CommandB commandB = new CommandB();

@@ -6,6 +6,9 @@ import lambda_calculus.partition_package.visitor.PartitionVisitor;
 public class Var implements Expression{
     public Id name;
 
+    public Var() {
+    }
+
     public Var(String name) {
         this.name = new Id(name);
     }
