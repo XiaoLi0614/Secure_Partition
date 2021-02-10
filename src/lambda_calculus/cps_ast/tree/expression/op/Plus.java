@@ -1,5 +1,8 @@
 package lambda_calculus.cps_ast.tree.expression.op;
 
+import lambda_calculus.cps_ast.tree.command.Command;
+import lambda_calculus.cps_ast.tree.command.ExpSt;
+import lambda_calculus.cps_ast.tree.command.ThisMethod;
 import lambda_calculus.cps_ast.tree.expression.Expression;
 import lambda_calculus.cps_ast.tree.expression.Var;
 import lambda_calculus.cps_ast.tree.expression.op.BinaryOp;
@@ -36,5 +39,10 @@ public class Plus extends BinaryOp {
     public Expression substitute(Var originalVar, Expression replacer) {
         return new Plus(this.operand1.substitute(originalVar, replacer),
                 this.operand2.substitute(originalVar, replacer));
+    }
+
+    @Override
+    public Command substitute(Var originalVar, ThisMethod replacer) {
+        return new ExpSt(new Var("notValid"));
     }
 }

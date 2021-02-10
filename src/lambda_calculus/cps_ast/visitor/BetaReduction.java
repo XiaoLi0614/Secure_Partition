@@ -80,9 +80,16 @@ public class BetaReduction implements CPSVisitor{
                 if(((Abstraction)application.function).lambdas.length == application.values.length){
                     //here we need to substitute the value in the function
                     for(int i = 0; i < application.values.length; i++){
-                        resultCommand = ((Abstraction)application.function).body.substitute(
-                                ((Abstraction)application.function).lambdas[i],
-                                ((ExpSt)application.values[i]).expression);
+                        if(application.values[i] instanceof ThisMethod){
+                            resultCommand = ((Abstraction)application.function).body.substitute(
+                                    ((Abstraction)application.function).lambdas[i],
+                                    (ThisMethod) application.values[i]);
+                        }
+                        else {
+                            resultCommand = ((Abstraction)application.function).body.substitute(
+                                    ((Abstraction)application.function).lambdas[i],
+                                    ((ExpSt)application.values[i]).expression);
+                        }
                     }
                     return resultCommand;
                 }

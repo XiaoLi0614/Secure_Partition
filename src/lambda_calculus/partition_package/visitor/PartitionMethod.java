@@ -181,6 +181,12 @@ public class PartitionMethod implements PartitionVisitor{
 
         @Override
         public Object visit(SingleCall singleCall){
+            //if this is a method call, we do not need to create a new method call for it. Simply return
+            if(singleCall.objectName.toString() == "this"){
+                PartitionProcess resultP = new PartitionProcess(new ArrayList<>(), new HashSet<>(), singleCall);
+                partitionIntermediate.put(singleCall, resultP);
+                return singleCall;
+            }
             Command resultCommand = new SingleCall((Id)singleCall.objectName,
                     (Id)singleCall.methodName,
                     singleCall.args,
@@ -206,6 +212,8 @@ public class PartitionMethod implements PartitionVisitor{
             freeVarSet.remove(toreRemoved);
             Var[] callBackFreeArgs = new Var[freeVarSet.size()];
 
+            //we need to determine whether the method for the same object call already exist?
+            //No. Because the object all is not functional.
             SingleCall callBackName = new SingleCall(newMName(), freeVarSet.toArray(callBackFreeArgs));
             MethodDefinition newDefinition = new MethodDefinition((Id) callBackName.methodName,
                     freeVarSet,

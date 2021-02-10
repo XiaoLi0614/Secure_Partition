@@ -57,4 +57,13 @@ public class Application extends Command {
         }
         return new Application(function.substitute(originalVar, replacer), resultValues);
     }
+
+    @Override
+    public Command substitute(Var originalVar, ThisMethod replacer){
+        Command[] resultValues = new Command[values.length];
+        for(int i = 0; i < values.length; i++){
+            resultValues[i] = values[i].substitute(originalVar, replacer);
+        }
+        return new Application(function.substitute(originalVar, replacer), resultValues);
+    }
 }

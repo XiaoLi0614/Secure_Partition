@@ -34,4 +34,9 @@ public class ExpSt extends Command {
     public Command substitute(Var originalVar, Expression replacer) {
         return new ExpSt(expression.substitute(originalVar, replacer));
     }
+
+    @Override
+    public Command substitute(Var originalVar, ThisMethod replacer) {
+        return expression.substitute(originalVar, replacer);
+    }
 }

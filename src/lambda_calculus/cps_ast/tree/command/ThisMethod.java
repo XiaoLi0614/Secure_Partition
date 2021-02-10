@@ -28,15 +28,15 @@ public class ThisMethod extends Command{
     @Override
     public String toString(){
         StringBuilder resultString = new StringBuilder();
-        resultString.append( " this."  + methodName + "(");
+        resultString.append( "this."  + methodName + "(");
         if(args == null || args.length == 0){}
         else{
             for(Expression e: args){
                 resultString.append(e + ", ");
             }
-            resultString.deleteCharAt(resultString.lastIndexOf(", "));
+            resultString.delete(resultString.lastIndexOf(", "), resultString.lastIndexOf(", ") + 2);
         }
-        resultString.append(") ");
+        resultString.append(")");
         return  resultString.toString();
     }
 
@@ -57,6 +57,21 @@ public class ThisMethod extends Command{
 
     @Override
     public Command substitute(Var originalVar, Expression replacer){
+        Expression[] resultVar = args;
+        if(args == null || args.length == 0){}
+        else {
+            resultVar = new Expression[args.length];
+            for(int i = 0; i < args.length; i++){
+                resultVar[i] = (Expression) args[i].substitute(originalVar, replacer);
+            }
+        }
+        return new ThisMethod(
+                (Id) methodName,
+                resultVar);
+    }
+
+    @Override
+    public Command substitute(Var originalVar, ThisMethod replacer){
         Expression[] resultVar = args;
         if(args == null || args.length == 0){}
         else {

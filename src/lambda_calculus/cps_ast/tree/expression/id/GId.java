@@ -1,5 +1,7 @@
 package lambda_calculus.cps_ast.tree.expression.id;
 
+import lambda_calculus.cps_ast.tree.command.Command;
+import lambda_calculus.cps_ast.tree.command.ThisMethod;
 import lambda_calculus.cps_ast.tree.expression.Expression;
 import lambda_calculus.cps_ast.tree.expression.Var;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
@@ -23,4 +25,6 @@ public abstract class GId implements Expression {
     public abstract boolean equals(Object o);
 
     public abstract Expression substitute(Var originalVar, Expression replacer);
+
+    public abstract Command substitute(Var originalVar, ThisMethod replacer);
 }

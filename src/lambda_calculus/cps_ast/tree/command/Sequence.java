@@ -39,4 +39,10 @@ public class Sequence extends Command {
         return new Sequence(command1.substitute(originalVar, replacer),
                 command2.substitute(originalVar, replacer));
     }
+
+    @Override
+    public Command substitute(Var originalVar, ThisMethod replacer){
+        return new Sequence(command1.substitute(originalVar, replacer),
+                command2.substitute(originalVar, replacer));
+    }
 }

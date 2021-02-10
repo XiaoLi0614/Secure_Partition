@@ -10,7 +10,7 @@ import lambda_calculus.partition_package.visitor.PartitionVisitor;
 
 import java.util.HashSet;
 
-public class MethodDefinition {
+public class MethodDefinition extends Object{
     //m'(x1, x2) := let x = o.m(e) in e'
     //public Var administrativeX; //x: this is the administrative x for the object method
     //public GId methodName; ////m: name of the user declared method
@@ -75,21 +75,23 @@ public class MethodDefinition {
         return  resultString.toString();
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//
-//        SingleCall that = (SingleCall) o;
-//
-//        if (!administrativeX.equals(that.administrativeX)) return false;
-//        //else if (!objectName.equals(that.objectName)) return false;
-//        else if (!methodName.equals(that.methodName)) return false;
-//        else if (!nestedCommand.equals(that.nestedCommand)) return false;
-//        else if ((args == null || args.length == 0)) {
-//            if (!(that.args == null || that.args.length == 0)) return false;
-//            else return true;
-//        }
-//        else return args.equals(that.args);
-//    }
+/*    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MethodDefinition that = (MethodDefinition) o;
+
+        if (!objectCall.objectName.equals(that.objectCall.objectName)) return false;
+        else if (!objectCall.methodName.equals(that.objectCall.methodName)) return false;
+        else if (!nestedCommand.equals(that.nestedCommand)) return false;
+        else if ((args == null || args.length == 0)) {
+            if (!(that.args == null || that.args.length == 0)) return false;
+            else return true;
+        }
+        else return args.equals(that.args);
+    }
+
+    @Override
+    public int hashCode(){}*/
 }

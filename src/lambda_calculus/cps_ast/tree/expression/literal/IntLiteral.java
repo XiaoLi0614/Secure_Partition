@@ -1,5 +1,8 @@
 package lambda_calculus.cps_ast.tree.expression.literal;
 
+import lambda_calculus.cps_ast.tree.command.Command;
+import lambda_calculus.cps_ast.tree.command.ExpSt;
+import lambda_calculus.cps_ast.tree.command.ThisMethod;
 import lambda_calculus.cps_ast.tree.expression.Expression;
 import lambda_calculus.cps_ast.tree.expression.Var;
 import lambda_calculus.cps_ast.tree.expression.literal.Literal;
@@ -36,5 +39,10 @@ public class IntLiteral extends Literal {
     @Override
     public Expression substitute(Var originalVar, Expression replacer){
         return this;
+    }
+
+    @Override
+    public Command substitute(Var originalVar, ThisMethod replacer){
+        return new ExpSt(this);
     }
 }

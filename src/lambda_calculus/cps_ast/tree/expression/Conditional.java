@@ -2,6 +2,8 @@ package lambda_calculus.cps_ast.tree.expression;
 
 
 import lambda_calculus.cps_ast.tree.command.Command;
+import lambda_calculus.cps_ast.tree.command.If;
+import lambda_calculus.cps_ast.tree.command.ThisMethod;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.visitor.CPSVisitor;
 
@@ -41,6 +43,15 @@ public class Conditional implements Expression {
     @Override
     public Expression substitute(Var originalVar, Expression replacer){
         return new Conditional(this.condition.substitute(originalVar, replacer),
+                this.ifExp.substitute(originalVar, replacer),
+                this.elseExp.substitute(originalVar, replacer));
+    }
+
+    @Override
+    public Command substitute(Var originalVar, ThisMethod replacer){
+        //todo: this condition may need to be dispatched
+        //currently in the if condition, we can not have this method
+        return new If(this.condition,
                 this.ifExp.substitute(originalVar, replacer),
                 this.elseExp.substitute(originalVar, replacer));
     }

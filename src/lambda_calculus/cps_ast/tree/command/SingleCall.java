@@ -45,7 +45,7 @@ public class SingleCall extends Command {
             for(Expression e: args){
                 resultString.append(e + ", ");
             }
-            resultString.deleteCharAt(resultString.lastIndexOf(", "));
+            resultString.delete(resultString.lastIndexOf(", "), resultString.lastIndexOf(", ") + 2);
         }
         resultString.append(") in " + nestedCommand);
         return  resultString.toString();
@@ -71,6 +71,23 @@ public class SingleCall extends Command {
 
     @Override
     public Command substitute(Var originalVar, Expression replacer){
+        Expression[] resultVar = args;
+        if(args == null || args.length == 0){}
+        else {
+            resultVar = new Expression[args.length];
+            for(int i = 0; i < args.length; i++){
+                resultVar[i] = (Expression) args[i].substitute(originalVar, replacer);
+            }
+        }
+        return new SingleCall((Id) objectName,
+                (Id) methodName,
+                resultVar,
+                administrativeX,
+                nestedCommand.substitute(originalVar, replacer));
+    }
+
+    @Override
+    public Command substitute(Var originalVar, ThisMethod replacer){
         Expression[] resultVar = args;
         if(args == null || args.length == 0){}
         else {

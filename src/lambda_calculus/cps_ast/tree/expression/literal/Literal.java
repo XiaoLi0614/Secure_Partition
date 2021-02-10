@@ -1,5 +1,7 @@
 package lambda_calculus.cps_ast.tree.expression.literal;
 
+import lambda_calculus.cps_ast.tree.command.Command;
+import lambda_calculus.cps_ast.tree.command.ThisMethod;
 import lambda_calculus.cps_ast.tree.expression.Var;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.tree.expression.Expression;
@@ -19,4 +21,6 @@ public abstract class Literal implements Expression {
     public abstract boolean equals(Object o);
 
     public abstract Expression substitute(Var originalVar, Expression replacer);
+
+    public abstract Command substitute(Var originalVar, ThisMethod replacer);
 }

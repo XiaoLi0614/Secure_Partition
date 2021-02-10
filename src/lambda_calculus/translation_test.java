@@ -8,10 +8,7 @@ import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.visitor.translateToOtherAST;
 import lambda_calculus.partition_package.tree.MethodDefinition;
 import lambda_calculus.partition_package.visitor.*;
-import lambda_calculus.source_ast.tree.expression.Conditional;
-import lambda_calculus.source_ast.tree.expression.Expression;
-import lambda_calculus.source_ast.tree.expression.ObjectMethod;
-import lambda_calculus.source_ast.tree.expression.Var;
+import lambda_calculus.source_ast.tree.expression.*;
 import lambda_calculus.source_ast.tree.expression.literal.IntLiteral;
 import lambda_calculus.source_ast.tree.expression.op.Plus;
 import lambda_calculus.source_ast.tree.expression.op.Sequence;
@@ -35,12 +32,14 @@ public class translation_test {
     {
         //Expression lambda1 = createOFTUseCase();
         //Expression lambda1 = createTicketsUseCase();
-        Expression lambda1 = createObliviousTransferUseCase();
+        //Expression lambda1 = createObliviousTransferUseCase();
+        Expression lambda1 = createAuctionUseCase();
+        //Expression lambda1 = createTestUseCase();
         System.out.println("Complete create use-case");
         CPSPrinter test = new CPSPrinter();
         Command resultAST = test.print(lambda1).element1;
         //Context resultContext = test.print(lambda1).element2;
-        System.out.println("Complete translation: " + resultAST.toString());
+        System.out.println("Complete ast translation: " + resultAST.toString());
         BetaReduction test2 = new BetaReduction();
         Command resultAST2 = test2.wholeReduction(resultAST);
         System.out.println("Complete reduction: " + resultAST2.toString());
@@ -56,7 +55,8 @@ public class translation_test {
         //OneTimeTransferTypeCheckingP(resultMethodDefs);
         //TicketTypeChecking(resultMethodDefs);
         //TicketTypeCheckingP(resultMethodDefs);
-        ObliviousTransferTypeCheckingP(resultMethodDefs);
+        //ObliviousTransferTypeCheckingP(resultMethodDefs);
+        AuctionTypeCheckingP(resultMethodDefs);
 
         //test for powersets
 /*        HashSet<Integer> in = new HashSet<>(Arrays.asList(1, 2, 3, 4));
@@ -122,26 +122,33 @@ public class translation_test {
             oAsArg[0] = new Var("o");
             Expression[] offerAAsArg = new Expression[1];
             offerAAsArg[0] = new Var("offerA");
+            Expression[] offerBAsArg = new Expression[1];
+            offerBAsArg[0] = new Var("offerB");
 
             Expression[] AMakeOfferArgs = new Expression[2];
             AMakeOfferArgs[0] = new ObjectMethod("read", "user", emptyArg, "u");
             AMakeOfferArgs[1] = new Var("o");
+            Expression[] AMakeOfferArgs2 = new Expression[2];
+            AMakeOfferArgs2[0] = new Var("u");
+            AMakeOfferArgs2[1] = new Var("o");
+            Expression[] BMakeOfferArgs = new Expression[2];
+            BMakeOfferArgs[0] = new Var("u");
+            BMakeOfferArgs[1] = new Var("offerA");
 
             Expression[] userUpdate1Args = new Expression[2];
             userUpdate1Args[0] = new ObjectMethod("makeOffer1", "A", AMakeOfferArgs, "seatInfoA");
-            userUpdate1Args[1] = new ObjectMethod("makeOffer2", "A", AMakeOfferArgs, "offerA");
+            userUpdate1Args[1] = new ObjectMethod("makeOffer2", "A", AMakeOfferArgs2, "offerA");
 
             Expression[] userUpdate2Args = new Expression[2];
-            userUpdate2Args[0] = new ObjectMethod("makeOffer1", "B", AMakeOfferArgs, "seatInfoB");
-            userUpdate2Args[1] = new ObjectMethod("makeOffer2", "B", AMakeOfferArgs, "offerB");
+            userUpdate2Args[0] = new ObjectMethod("makeOffer1", "B", BMakeOfferArgs, "seatInfoB");
+            userUpdate2Args[1] = new ObjectMethod("makeOffer2", "B", BMakeOfferArgs, "offerB");
 
-            //todo: how to make the recursion call in the ast tree?
             Expression auctionUseCase = new Sequence(new ObjectMethod("update", "user", userUpdate1Args)
                     , new Conditional(new Plus(new Var("o"),new Var("offerA")),
                     new ObjectMethod("declareWinner", "user", oAsArg),
                     new Sequence(new ObjectMethod("update", "user", userUpdate2Args),
-                            new Conditional(new Plus(new Var("offerA"), new Var("offerB")), auctionUseCase
-                                    ,
+                            new Conditional(new Plus(new Var("offerA"), new Var("offerB")),
+                                    new ThisMethod("m8", offerBAsArg),
                                     new ObjectMethod("declareWinner", "user", offerAAsArg)))));
             return auctionUseCase;
         }
@@ -185,33 +192,33 @@ public class translation_test {
 
     public static Expression createTestUseCase(){
         Expression[] emptyArg = {};
+        Expression[] oAsArg = new Expression[1];
+        oAsArg[0] = new Var("o");
+        Expression[] offerAAsArg = new Expression[1];
+        offerAAsArg[0] = new Var("offerA");
+        Expression[] offerBAsArg = new Expression[1];
+        offerBAsArg[0] = new Var("offerB");
 
-        Expression[] getPriceArg = new Expression[1];
-        getPriceArg[0] = new ObjectMethod("ticketNum", "customer", emptyArg, "num");
-        Expression[] getPriceArg1 = new Expression[1];
-        getPriceArg1[0] = new Var("num");
+        Expression[] AMakeOfferArgs = new Expression[2];
+        AMakeOfferArgs[0] = new ObjectMethod("read", "user", emptyArg, "u");
+        AMakeOfferArgs[1] = new Var("o");
+        Expression[] AMakeOfferArgs2 = new Expression[2];
+        AMakeOfferArgs2[0] = new Var("u");
+        AMakeOfferArgs2[1] = new Var("o");
 
-        Expression[] getBalanceArg = new Expression[1];
-        getBalanceArg[0] = new ObjectMethod("getID", "customer", emptyArg, "ID");
-        Expression[] getBalanceArg1 = new Expression[1];
-        getBalanceArg1[0] = new Var("ID");
+        Expression[] userUpdate1Args = new Expression[2];
+        userUpdate1Args[0] = new ObjectMethod("makeOffer1", "A", AMakeOfferArgs, "seatInfoA");
+        userUpdate1Args[1] = new ObjectMethod("makeOffer2", "A", AMakeOfferArgs2, "offerA");
 
-        Expression[] decSeatArg = new Expression[1];
-        decSeatArg[0] = new Var("num");
-        Expression[] decBalanceArg = new Expression[1];
-        //todo: may need to change this to the object method call to get ID
-        decBalanceArg[0] = new Var("ID");
+        Expression[] userUpdate2Args = new Expression[2];
+        userUpdate2Args[0] = new ObjectMethod("makeOffer1", "B", AMakeOfferArgs2, "seatInfoB");
+        userUpdate2Args[1] = new ObjectMethod("makeOffer2", "B", AMakeOfferArgs2, "offerB");
 
-        Expression[] updateInfoArgs = new Expression[2];
-        updateInfoArgs[0] = new ObjectMethod("getPrice1", "airline", getPriceArg, "schedule");
-        updateInfoArgs[1] = new ObjectMethod("getPrice2", "airline", getPriceArg1, "price");
-
-        Expression[] updatePaymentArgs = new Expression[2];
-        updatePaymentArgs[0] = new ObjectMethod("getBalance1", "bank", getBalanceArg1, "cashback");
-        updatePaymentArgs[1] = new ObjectMethod("getBalance2", "bank", getBalanceArg, "balance");
-
-        Expression ticketUseCase = new ObjectMethod("updateInfo", "customer", updateInfoArgs);
-        return ticketUseCase;
+        Expression auctionUseCase = new Conditional(new Plus(new Var("offerA"), new Var("offerB")),
+                                new ThisMethod("m0", offerBAsArg),
+                                new ObjectMethod("declareWinner", "user", offerAAsArg));
+        //Expression auctionUseCase = new ThisMethod("m0", offerBAsArg);
+        return auctionUseCase;
     }
 
     public static void OneTimeTransferTypeCheckingP(ArrayList<MethodDefinition> resultMethodDefs){
@@ -1434,6 +1441,276 @@ public class translation_test {
 
         SecureTypeChecking test5 = new SecureTypeChecking();
         Boolean r = test5.classTypeCheck(resultMethodDefs, methodsInfo, methodSig, mANames, objSigs, objInfo, p, u, t0);
+        System.out.println("The type checking result for ticket system program:" + r.toString());
+    }
+
+    public static void AuctionTypeCheckingP(ArrayList<MethodDefinition> resultMethodDefs){
+        //node sets
+        HashSet<Integer> A0 = new HashSet<Integer>(Arrays.asList(1, 2, 3, 4));
+        HashSet<Integer> B0 = new HashSet<Integer>(Arrays.asList(5, 6, 7, 8, 9, 10, 11));
+        HashSet<Integer> C0 = new HashSet<Integer>(Arrays.asList(12));
+        nodeSet A = new nodeSet(A0);
+        nodeSet B = new nodeSet(B0);
+        nodeSet C = new nodeSet(C0);
+
+        //confidentiality information for objects
+        HashSet<Integer> c1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 12));
+        HashSet<Integer> c2 = new HashSet<>(Arrays.asList(5, 6, 7, 8, 9, 10, 11, 12));
+        HashSet<Integer> c3 = new HashSet<>(Arrays.asList(12));
+        HashSet<Integer> cret = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+
+        //failure situations
+        quorumDef SingletonA = new quorumDef();
+        SingletonA.quorum.add(A);
+        quorumDef SingletonB = new quorumDef();
+        SingletonB.quorum.add(B);
+        quorumDef SingletonC = new quorumDef();
+        SingletonC.quorum.add(C);
+        quorumDef P_1A = getPowerSet(A, 1);
+        quorumDef P_2B = getPowerSet(B, 2);
+        quorumDef P1AP2B = P_1A.crossUnion(P_2B);
+
+        //replication information for methods and objects
+        quorumDef P_3A = getPowerSet(A, 3);
+        quorumDef P_5B = getPowerSet(B, 5);
+        quorumDef P_2A = getPowerSet(A, 2);
+        quorumDef P_3B = getPowerSet(B, 3);
+
+        //construct the types
+        CIAType tsa = new CIAType(new nodeSet(c1), P1AP2B, P1AP2B);
+        CIAType tsb = new CIAType(new nodeSet(c2), P1AP2B, P1AP2B);
+        CIAType tu = new CIAType(new nodeSet(cret), P1AP2B, P1AP2B);
+        CIAType t = new CIAType(new nodeSet(c3), P1AP2B, P1AP2B);
+
+        //define \bot integrity and availability
+        HashSet<Integer> b = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
+        HashSet<nodeSet> bot = new HashSet<>();
+        bot.add(new nodeSet(b));
+
+        //host and quorum information
+        HashSet<Integer> Hm8 = new HashSet<>(Arrays.asList(12));
+        HashSet<Integer> Hm7 = new HashSet<>(Arrays.asList(1, 2, 3));
+        HashSet<Integer> Hm6 = new HashSet<>(Arrays.asList(1, 2, 3));
+        HashSet<Integer> Hm5 = new HashSet<>(Arrays.asList(12));
+        HashSet<Integer> Hm4 = new HashSet<>(Arrays.asList(5, 6, 7, 8, 9));
+        HashSet<Integer> Hm3 = new HashSet<>(Arrays.asList(5, 6, 7, 8, 9));
+        HashSet<Integer> Hm2 = new HashSet<>(Arrays.asList(12));
+        HashSet<Integer> Hm1 = new HashSet<>(Arrays.asList(12));
+        HashSet<Integer> Hm0 = new HashSet<>(Arrays.asList(12));
+
+        //input the methods host information and signature manually
+        ArrayList<Pair<nodeSet, quorumDef>> methodsInfo = new ArrayList<>();
+        Pair<nodeSet, quorumDef> m0Info = new Pair<>(new nodeSet(Hm0), SingletonC);
+        methodsInfo.add(m0Info);
+        Pair<nodeSet, quorumDef> m1Info = new Pair<>(new nodeSet(Hm1), SingletonC);
+        methodsInfo.add(m1Info);
+        Pair<nodeSet, quorumDef> m2Info = new Pair<>(new nodeSet(Hm2), P_3B);
+        methodsInfo.add(m2Info);
+        Pair<nodeSet, quorumDef> m3Info = new Pair<>(new nodeSet(Hm3), P_3B);
+        methodsInfo.add(m3Info);
+        Pair<nodeSet, quorumDef> m4Info = new Pair<>(new nodeSet(Hm4), SingletonC);
+        methodsInfo.add(m4Info);
+        Pair<nodeSet, quorumDef> m5Info = new Pair<>(new nodeSet(Hm5), P_2A);
+        methodsInfo.add(m5Info);
+        Pair<nodeSet, quorumDef> m6Info = new Pair<>(new nodeSet(Hm6), P_2A);
+        methodsInfo.add(m6Info);
+        Pair<nodeSet, quorumDef> m7Info = new Pair<>(new nodeSet(Hm7), SingletonC);
+        methodsInfo.add(m7Info);
+        Pair<nodeSet, quorumDef> m8Info = new Pair<>(new nodeSet(Hm8), SingletonC);
+        methodsInfo.add(m8Info);
+
+        //input the return type for all the methods
+        //input the arguments for all the methods
+        ArrayList<ArrayList<String>> mANames = new ArrayList<>(resultMethodDefs.size());
+        for(int i = 0; i < resultMethodDefs.size(); i++){
+            mANames.add(new ArrayList<>());
+        }
+        //notice the the type for a method maybe stronger than the return type of the whole class because of sequence.
+        ArrayList<Pair<ArrayList<CIAType>, ArrayList<CIAType>>> methodSig = new ArrayList<>();
+        CIAType m0retType = new CIAType(new nodeSet(c3), P1AP2B, P1AP2B);
+        CIAType m1retType = m0retType;
+        CIAType m2retType = m0retType;
+        CIAType m3retType = m2retType;
+        CIAType m4retType = m2retType;
+        CIAType m5retType = m2retType;
+        CIAType m6retType = m0retType;
+        CIAType m7retType = m6retType;
+        CIAType m8retType = m6retType;
+
+        CIAType m8Context = tu;
+        CIAType m7Context = tu;
+        CIAType m6Context = tu;
+        CIAType m5Context = tu;
+        CIAType m4Context = tu;
+        CIAType m3Context = tu;
+        CIAType m2Context = tu;
+        CIAType m1Context = tu;
+        CIAType m0Context = tu;
+
+        //the order of the arguments matters, they are defined in mANames
+        ArrayList<CIAType> m0 = new ArrayList<>();
+        m0.add(m0Context);
+        m0.add(m0retType);
+        methodSig.add(new Pair<>(m0, new ArrayList<>()));
+        mANames.get(0).add("o");
+        methodSig.get(0).element2.add(tu);
+
+        ArrayList<CIAType> m1 = new ArrayList<>();
+        m1.add(m1Context);
+        m1.add(m1retType);
+        methodSig.add(new Pair<>(m1, new ArrayList<>()));
+        mANames.get(1).add("offerA");
+        methodSig.get(1).element2.add(tu);
+
+        ArrayList<CIAType> m2 = new ArrayList<>();
+        m2.add(m2Context);
+        m2.add(m2retType);
+        methodSig.add(new Pair<>(m2, new ArrayList<>()));
+        mANames.get(2).add("offerA");
+        mANames.get(2).add("offerB");
+        mANames.get(2).add("seatInfoB");
+        methodSig.get(2).element2.add(tu);
+        methodSig.get(2).element2.add(tu);
+        methodSig.get(2).element2.add(tsb);
+
+        //this is the first split of two methods
+        ArrayList<CIAType> m3 = new ArrayList<>();
+        m3.add(m3Context);
+        m3.add(m3retType);
+        methodSig.add(new Pair<>(m3, new ArrayList<>()));
+        mANames.get(3).add("offerA");
+        mANames.get(3).add("seatInfoB");
+        mANames.get(3).add("u");
+        methodSig.get(3).element2.add(tu);
+        methodSig.get(3).element2.add(tsb);
+        methodSig.get(3).element2.add(tu);
+
+        ArrayList<CIAType> m4 = new ArrayList<>();
+        m4.add(m4Context);
+        m4.add(m4retType);
+        methodSig.add(new Pair<>(m4, new ArrayList<>()));
+        mANames.get(4).add("offerA");
+        mANames.get(4).add("u");
+        methodSig.get(4).element2.add(tu);
+        methodSig.get(4).element2.add(tu);
+
+        ArrayList<CIAType> m5 = new ArrayList<>();
+        m5.add(m5Context);
+        m5.add(m5retType);
+        methodSig.add(new Pair<>(m5, new ArrayList<>()));
+        mANames.get(5).add("offerA");
+        mANames.get(5).add("u");
+        mANames.get(5).add("seatInfoA");
+        mANames.get(5).add("o");
+        methodSig.get(5).element2.add(tu);
+        methodSig.get(5).element2.add(tu);
+        methodSig.get(5).element2.add(tsa);
+        methodSig.get(5).element2.add(tu);
+
+        ArrayList<CIAType> m6 = new ArrayList<>();
+        m6.add(m6Context);
+        m6.add(m6retType);
+        methodSig.add(new Pair<>(m6, new ArrayList<>()));
+        mANames.get(6).add("u");
+        mANames.get(6).add("seatInfoA");
+        mANames.get(6).add("o");
+        methodSig.get(6).element2.add(tu);
+        methodSig.get(6).element2.add(tsa);
+        methodSig.get(6).element2.add(tu);
+
+        ArrayList<CIAType> m7 = new ArrayList<>();
+        m7.add(m7Context);
+        m7.add(m7retType);
+        methodSig.add(new Pair<>(m7, new ArrayList<>()));
+        mANames.get(7).add("u");
+        mANames.get(7).add("o");
+        methodSig.get(7).element2.add(tu);
+        methodSig.get(7).element2.add(tu);
+
+        ArrayList<CIAType> m8 = new ArrayList<>();
+        m8.add(m8Context);
+        m8.add(m8retType);
+        methodSig.add(new Pair<>(m8, new ArrayList<>()));
+        mANames.get(8).add("o");
+        methodSig.get(8).element2.add(tu);
+
+        //input the object host information and signature manually
+        HashMap<String, HashMap<String, ArrayList<CIAType>>> objSigs = new HashMap<>();
+        //for object agent A
+        ArrayList<CIAType> amakeOffer1Arg = new ArrayList<>();
+        amakeOffer1Arg.add(tu);
+        amakeOffer1Arg.add(tu);
+        //ret is in the last index
+        amakeOffer1Arg.add(tsa);
+        HashMap<String, ArrayList<CIAType>> amethods = new HashMap<>();
+        amethods.put("makeOffer1", amakeOffer1Arg);
+        ArrayList<CIAType> amakeOffer2Arg = new ArrayList<>();
+        amakeOffer2Arg.add(tu);
+        amakeOffer2Arg.add(tu);
+        amakeOffer2Arg.add(tu);
+        amethods.put("makeOffer2", amakeOffer2Arg);
+        objSigs.put("A", amethods);
+
+        //for object agent B
+        ArrayList<CIAType> bmakeOffer1Arg = new ArrayList<>();
+        bmakeOffer1Arg.add(tu);
+        bmakeOffer1Arg.add(tu);
+        //ret is in the last index
+        bmakeOffer1Arg.add(tsb);
+        HashMap<String, ArrayList<CIAType>> bmethods = new HashMap<>();
+        bmethods.put("makeOffer1", bmakeOffer1Arg);
+        ArrayList<CIAType> bmakeOffer2Arg = new ArrayList<>();
+        bmakeOffer2Arg.add(tu);
+        bmakeOffer2Arg.add(tu);
+        bmakeOffer2Arg.add(tu);
+        bmethods.put("makeOffer2", bmakeOffer2Arg);
+        objSigs.put("B", bmethods);
+
+        //for object user agent
+        ArrayList<CIAType> readArg = new ArrayList<>();
+        readArg.add(tu);
+        //ret is in the last index
+        readArg.add(tu);
+        HashMap<String, ArrayList<CIAType>> cmethods = new HashMap<>();
+        cmethods.put("read", readArg);
+        ArrayList<CIAType> winnerArg = new ArrayList<>();
+        winnerArg.add(tu);
+        winnerArg.add(t);
+        cmethods.put("declareWinner", winnerArg);
+        ArrayList<CIAType> updateArg = new ArrayList<>();
+        updateArg.add(t);
+        updateArg.add(tu);
+        updateArg.add(t);
+        cmethods.put("update", updateArg);
+        //ArrayList<CIAType> updatePaymentArg = new ArrayList<>();
+        //updatePaymentArg.add(tc);
+        //updatePaymentArg.add(td);
+        //updatePaymentArg.add(tc);
+        //cmethods.put("updatePayment", updatePaymentArg);
+        objSigs.put("user", cmethods);
+
+        //the objects hosts and hear from information
+        HashMap<String, Pair<quorumDef, quorumDef>> objInfo = new HashMap<>();
+        Pair<quorumDef, quorumDef> AInfo = new Pair<>(P_3A,P_2A);
+        objInfo.put("A", AInfo);
+        Pair<quorumDef, quorumDef> BInfo = new Pair<>(P_5B, P_3B);
+        objInfo.put("B", BInfo);
+        Pair<quorumDef, quorumDef> userInfo = new Pair<>(SingletonC, SingletonC);
+        objInfo.put("user", userInfo);
+
+        //input the predefined variable information
+        HashMap<String, CIAType> p = new HashMap<>();
+        p.put("o", tu);
+
+        //input predefine umbrella for the objects
+        //we have to input tight umbrella type for the objects. If there is no requirement, we can infer one
+        HashMap<String, CIAType> u = new HashMap<>();
+        u.put("A", tu);
+        u.put("B", tu);
+        u.put("user", tu);
+
+        SecureTypeChecking test5 = new SecureTypeChecking();
+        Boolean r = test5.classTypeCheck(resultMethodDefs, methodsInfo, methodSig, mANames, objSigs, objInfo, p, u, tu);
         System.out.println("The type checking result for ticket system program:" + r.toString());
     }
 

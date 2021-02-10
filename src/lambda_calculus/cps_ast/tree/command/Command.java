@@ -21,4 +21,6 @@ public abstract class Command implements Node {
     public abstract boolean equals(Object o);
 
     public abstract Command substitute(Var originalVar, Expression replacer);
+
+    public abstract Command substitute(Var originalVar, ThisMethod replacer);
 }

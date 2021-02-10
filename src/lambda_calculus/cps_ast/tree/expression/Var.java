@@ -2,6 +2,7 @@ package lambda_calculus.cps_ast.tree.expression;
 
 import lambda_calculus.cps_ast.tree.command.Command;
 import lambda_calculus.cps_ast.tree.command.ExpSt;
+import lambda_calculus.cps_ast.tree.command.ThisMethod;
 import lambda_calculus.cps_ast.tree.expression.id.Id;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.visitor.CPSVisitor;
@@ -43,6 +44,14 @@ public class Var implements Expression{
             return replacer;
         }
         else return this;
+    }
+
+    @Override
+    public Command substitute(Var originalVar, ThisMethod replacer){
+        if(this.equals(originalVar)){
+            return replacer;
+        }
+        else return new ExpSt(this);
     }
 }
 

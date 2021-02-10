@@ -45,4 +45,11 @@ public class If extends Command {
                 command1.substitute(originalVar, replacer),
                 command2.substitute(originalVar, replacer));
     }
+
+    @Override
+    public Command substitute(Var originalVar, ThisMethod replacer){
+        return new If(condition,
+                command1.substitute(originalVar, replacer),
+                command2.substitute(originalVar, replacer));
+    }
 }

@@ -55,4 +55,15 @@ public class Abstraction extends Command {
         }
         return new Abstraction(resultVar, body.substitute(originalVar, replacer));
     }
+
+    @Override
+    public Command substitute(Var originalVar, ThisMethod replacer){
+        //Var[] resultVar = new Var[lambdas.length];
+        //for(int i = 0; i < lambdas.length; i++){
+            //resultVar[i] = (Var)lambdas[i].substitute(originalVar, replacer);
+        //}
+
+        //methods can not be placed as lambdas
+        return new Abstraction(lambdas, body.substitute(originalVar, replacer));
+    }
 }

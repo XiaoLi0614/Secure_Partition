@@ -1,5 +1,8 @@
 package lambda_calculus.cps_ast.tree.expression.id;
 
+import lambda_calculus.cps_ast.tree.command.Command;
+import lambda_calculus.cps_ast.tree.command.ExpSt;
+import lambda_calculus.cps_ast.tree.command.ThisMethod;
 import lambda_calculus.cps_ast.tree.expression.Expression;
 import lambda_calculus.cps_ast.tree.expression.Var;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
@@ -31,5 +34,10 @@ public class Id extends GId {
     @Override
     public Expression substitute(Var originalVar, Expression replacer){
         return this;
+    }
+
+    @Override
+    public Command substitute(Var originalVar, ThisMethod replacer){
+        return new ExpSt(this);
     }
 }
