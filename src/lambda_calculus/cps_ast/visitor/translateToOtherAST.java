@@ -81,8 +81,17 @@ public class translateToOtherAST implements CPSVisitor {
             }
             else if(application.values.length == 1){
                 //there is no application in the target language, we eliminate the k in this step
-                lambda_calculus.partition_package.tree.command.Command resultCommand = (lambda_calculus.partition_package.tree.command.Command)visitDispatch(application.values[0]);
-                return resultCommand;
+                //we translate k into ret and eliminate the k with recursion
+                if(application.values[0] instanceof ThisMethod){
+                    return (lambda_calculus.partition_package.tree.command.Command)visitDispatch(application.values[0]);
+                }
+                else if(application.values[0] instanceof ExpSt){
+                    Expression[] arg = new Expression[1];
+                    arg[0] = ((ExpSt)application.values[0]).expression;
+                    lambda_calculus.partition_package.tree.command.Command resultCommand = (lambda_calculus.partition_package.tree.command.Command)visitDispatch(new ThisMethod("ret", arg));
+                    return resultCommand;
+                }
+                else return null;
             }
             else return new Error("Application(except administrative continuation) after reduction appears.");
         }

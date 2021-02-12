@@ -83,16 +83,27 @@ public class SingleCall extends Command {
         if (o == null || getClass() != o.getClass()) return false;
 
         SingleCall that = (SingleCall) o;
-
-        if (!administrativeX.equals(that.administrativeX)) return false;
-        else if (!objectName.equals(that.objectName)) return false;
-        else if (!methodName.equals(that.methodName)) return false;
-        else if (!nestedCommand.equals(that.nestedCommand)) return false;
-        else if ((args == null || args.length == 0)) {
-            if (!(that.args == null || that.args.length == 0)) return false;
-            else return true;
+        if(that.objectName.toString() == "this"){
+            if(methodName.toString() == "ret" && that.methodName.toString() == "ret"){return true;}
+            else if (!objectName.equals(that.objectName)) return false;
+            else if (!methodName.equals(that.methodName)) return false;
+            else if ((args == null || args.length == 0)) {
+                if (!(that.args == null || that.args.length == 0)) return false;
+                else return true;
+            }
+            else return args.equals(that.args);
         }
-        else return args.equals(that.args);
+        else {
+            if (!administrativeX.equals(that.administrativeX)) return false;
+            else if (!objectName.equals(that.objectName)) return false;
+            else if (!methodName.equals(that.methodName)) return false;
+            else if (!nestedCommand.equals(that.nestedCommand)) return false;
+            else if ((args == null || args.length == 0)) {
+                if (!(that.args == null || that.args.length == 0)) return false;
+                else return true;
+            }
+            else return args.equals(that.args);
+        }
     }
 
     @Override

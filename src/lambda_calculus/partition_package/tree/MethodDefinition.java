@@ -44,6 +44,12 @@ public class MethodDefinition extends Object{
         //this.administrativeX = aX;
     }
 
+    public MethodDefinition(String thisM, Command nCommand){
+        this.thisMethodName = new Id(thisM);
+        this.freeVars = new HashSet<>();
+        this.callBackCommand = nCommand;
+    }
+
     public void addBody(Command b){
         this.body = b;
     }
@@ -62,16 +68,18 @@ public class MethodDefinition extends Object{
         }
         resultString.append(") := ");
 
-        resultString.append("let " + objectCall.administrativeX + " = " + objectCall.objectName + "." + objectCall.methodName + "(");
-        if(objectCall.args == null || objectCall.args.length == 0){}
-        else{
-            for(Expression e: objectCall.args){
-                resultString.append(e + ", ");
+        if(objectCall != null && body != null){
+            resultString.append("let " + objectCall.administrativeX + " = " + objectCall.objectName + "." + objectCall.methodName + "(");
+            if(objectCall.args == null || objectCall.args.length == 0){}
+            else{
+                for(Expression e: objectCall.args){
+                    resultString.append(e + ", ");
+                }
+                //resultString.deleteCharAt(resultString.lastIndexOf(", "));
+                resultString.delete(resultString.lastIndexOf(", "), resultString.lastIndexOf(", ") + 2);
             }
-            //resultString.deleteCharAt(resultString.lastIndexOf(", "));
-            resultString.delete(resultString.lastIndexOf(", "), resultString.lastIndexOf(", ") + 2);
+            resultString.append(") in " + body);
         }
-        resultString.append(") in " + body);
         return  resultString.toString();
     }
 

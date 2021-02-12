@@ -31,9 +31,9 @@ public class translation_test {
     public static void main(String[] args)
     {
         //Expression lambda1 = createOFTUseCase();
-        //Expression lambda1 = createTicketsUseCase();
+        Expression lambda1 = createTicketsUseCase();
         //Expression lambda1 = createObliviousTransferUseCase();
-        Expression lambda1 = createAuctionUseCase();
+        //Expression lambda1 = createAuctionUseCase();
         //Expression lambda1 = createTestUseCase();
         System.out.println("Complete create use-case");
         CPSPrinter test = new CPSPrinter();
@@ -54,9 +54,9 @@ public class translation_test {
         }
         //OneTimeTransferTypeCheckingP(resultMethodDefs);
         //TicketTypeChecking(resultMethodDefs);
-        //TicketTypeCheckingP(resultMethodDefs);
+        TicketTypeCheckingP(resultMethodDefs);
         //ObliviousTransferTypeCheckingP(resultMethodDefs);
-        AuctionTypeCheckingP(resultMethodDefs);
+        //AuctionTypeCheckingP(resultMethodDefs);
 
         //test for powersets
 /*        HashSet<Integer> in = new HashSet<>(Arrays.asList(1, 2, 3, 4));
@@ -143,6 +143,8 @@ public class translation_test {
             userUpdate2Args[0] = new ObjectMethod("makeOffer1", "B", BMakeOfferArgs, "seatInfoB");
             userUpdate2Args[1] = new ObjectMethod("makeOffer2", "B", BMakeOfferArgs, "offerB");
 
+            //todo: how to make the recursion automatically know it's method name
+            // create a map for the entrance of this-method: auction -> m8 and then have another map for where the replacement is needed
             Expression auctionUseCase = new Sequence(new ObjectMethod("update", "user", userUpdate1Args)
                     , new Conditional(new Plus(new Var("o"),new Var("offerA")),
                     new ObjectMethod("declareWinner", "user", oAsArg),
@@ -272,8 +274,10 @@ public class translation_test {
         CIAType t2 = new CIAType(new nodeSet(c2), AP1B, AP1B);
         CIAType t4 = new CIAType(new nodeSet(c1), P2AP1B, P1AP1B);
         CIAType t5 = new CIAType(new nodeSet(c2), P2AP1B, P1AP1B);
+        CIAType t = new CIAType(new nodeSet(cret), P2AP1B, P1AP1B);
 
         //host and quorum information
+        HashSet<Integer> Hret = new HashSet<>(Arrays.asList(12));
         HashSet<Integer> Hm1 = new HashSet<>(Arrays.asList(2, 3, 4, 5));
         HashSet<Integer> Hm2 = new HashSet<>(Arrays.asList(9, 10, 11));
         HashSet<Integer> Hm3 = new HashSet<>(Arrays.asList(2, 3, 4, 5, 9, 10, 11));
@@ -281,6 +285,8 @@ public class translation_test {
 
         //input the methods host information and signature manually
         ArrayList<Pair<nodeSet, quorumDef>> methodsInfo = new ArrayList<>();
+        Pair<nodeSet, quorumDef> retInfo = new Pair<>(new nodeSet(Hret), SingletonC.union(P_3A).union(P_2B));
+        methodsInfo.add(retInfo);
         Pair<nodeSet, quorumDef> m1Info = new Pair<>(new nodeSet(Hm1), P3AP2BU);
         methodsInfo.add(m1Info);
         Pair<nodeSet, quorumDef> m2Info = new Pair<>(new nodeSet(Hm2), P3AP2BU);
@@ -290,11 +296,12 @@ public class translation_test {
         Pair<nodeSet, quorumDef> m4Info = new Pair<>(new nodeSet(Hm4), SingletonC);
         methodsInfo.add(m4Info);
 
-        ArrayList<ArrayList<String>> mANames = new ArrayList<>(4);
-        for(int i = 0; i < 4; i++){
+        ArrayList<ArrayList<String>> mANames = new ArrayList<>(resultMethodDefs.size());
+        for(int i = 0; i < resultMethodDefs.size(); i++){
             mANames.add(new ArrayList<>());
         }
         ArrayList<Pair<ArrayList<CIAType>, ArrayList<CIAType>>> methodSig = new ArrayList<>();
+        CIAType retType = t;
         CIAType m1retType = new CIAType(new nodeSet(cret), P2AP1B, P1AP1B);
         CIAType m2retType = m1retType.clone();
         CIAType m3retType = m1retType.clone();
@@ -305,30 +312,38 @@ public class translation_test {
         CIAType m3Context = m4Context.ciaJoin(t3);
         CIAType m2Context = m3Context.clone();
         CIAType m1Context = m3Context.clone();
+        CIAType retContext = t;
+
+        ArrayList<CIAType> mret = new ArrayList<>();
+        mret.add(retContext);
+        mret.add(retType);
+        methodSig.add(new Pair<>(mret, new ArrayList<>()));
+        mANames.get(0).add("bot");
+        methodSig.get(0).element2.add(t);
         ArrayList<CIAType> m1 = new ArrayList<>();
         m1.add(m1Context);
         m1.add(m1retType);
         methodSig.add(new Pair<>(m1, new ArrayList<>()));
-        mANames.get(0).add("bot");
-        methodSig.get(0).element2.add(t3);
+        mANames.get(1).add("bot");
+        methodSig.get(1).element2.add(t3);
         ArrayList<CIAType> m2 = new ArrayList<>();
         m2.add(m2Context);
         m2.add(m2retType);
         methodSig.add(new Pair<>(m2, new ArrayList<>()));
-        mANames.get(1).add("bot");
-        methodSig.get(1).element2.add(t3);
+        mANames.get(2).add("bot");
+        methodSig.get(2).element2.add(t3);
         ArrayList<CIAType> m3 = new ArrayList<>();
         m3.add(m3Context);
         m3.add(m3retType);
         methodSig.add(new Pair<>(m3, new ArrayList<>()));
-        mANames.get(2).add("x");
-        methodSig.get(2).element2.add(t3);
+        mANames.get(3).add("x");
+        methodSig.get(3).element2.add(t3);
         ArrayList<CIAType> m4 = new ArrayList<>();
         m4.add(m4Context);
         m4.add(m4retType);
         methodSig.add(new Pair<>(m4, new ArrayList<>()));
-        mANames.get(3).add("x");
-        methodSig.get(3).element2.add(t3);
+        mANames.get(4).add("x");
+        methodSig.get(4).element2.add(t3);
 
         //input the object host information and signature manually
         HashMap<String, HashMap<String, ArrayList<CIAType>>> objSigs = new HashMap<>();
@@ -642,6 +657,7 @@ public class translation_test {
         CIAType t8 = new CIAType(new nodeSet(cx), P2AP1BP1C, P2AP1BP1C);
 
         //host and quorum information
+        HashSet<Integer> Hret = new HashSet<>(Arrays.asList(12, 13, 14, 15));
         HashSet<Integer> Hm1 = new HashSet<>(Arrays.asList(12, 13, 14));
         HashSet<Integer> Hm2 = Hm1;
         HashSet<Integer> Hm3 = Hm1;
@@ -649,6 +665,8 @@ public class translation_test {
 
         //input the methods host information and signature manually
         ArrayList<Pair<nodeSet, quorumDef>> methodsInfo = new ArrayList<>();
+        Pair<nodeSet, quorumDef> retInfo = new Pair<>(new nodeSet(Hret), P_2C);
+        methodsInfo.add(retInfo);
         Pair<nodeSet, quorumDef> m1Info = new Pair<>(new nodeSet(Hm1), P_2C);
         methodsInfo.add(m1Info);
         Pair<nodeSet, quorumDef> m2Info = new Pair<>(new nodeSet(Hm2), P_2C);
@@ -667,42 +685,51 @@ public class translation_test {
         CIAType m2retType = m1retType.clone();
         CIAType m3retType = m1retType.clone();
         CIAType m4retType = m1retType.clone();
+        CIAType retType = t8;
 
         //context type for m4, which is the bottom
         CIAType m4Context = t0;
         CIAType m3Context = t6;
         CIAType m2Context = t6;
         CIAType m1Context = t6;
+        CIAType retContext = t8;
+
+        ArrayList<CIAType> mret = new ArrayList<>();
+        mret.add(retContext);
+        mret.add(retType);
+        methodSig.add(new Pair<>(mret, new ArrayList<>()));
+        mANames.get(0).add("bot");
+        methodSig.get(0).element2.add(t8);
 
         ArrayList<CIAType> m1 = new ArrayList<>();
         m1.add(m1Context);
         m1.add(m1retType);
         methodSig.add(new Pair<>(m1, new ArrayList<>()));
-        mANames.get(0).add("x");
-        methodSig.get(0).element2.add(t8);
-        mANames.get(0).add("temp1");
-        methodSig.get(0).element2.add(t4);
+        mANames.get(1).add("x");
+        methodSig.get(1).element2.add(t8);
+        mANames.get(1).add("temp1");
+        methodSig.get(1).element2.add(t4);
 
         ArrayList<CIAType> m2 = new ArrayList<>();
         m2.add(m2Context);
         m2.add(m2retType);
         methodSig.add(new Pair<>(m2, new ArrayList<>()));
-        mANames.get(1).add("x");
-        methodSig.get(1).element2.add(t8);
+        mANames.get(2).add("x");
+        methodSig.get(2).element2.add(t8);
 
         ArrayList<CIAType> m3 = new ArrayList<>();
         m3.add(m3Context);
         m3.add(m3retType);
         methodSig.add(new Pair<>(m3, new ArrayList<>()));
-        mANames.get(2).add("x");
-        methodSig.get(2).element2.add(t8);
+        mANames.get(3).add("x");
+        methodSig.get(3).element2.add(t8);
 
         ArrayList<CIAType> m4 = new ArrayList<>();
         m4.add(m4Context);
         m4.add(m4retType);
         methodSig.add(new Pair<>(m4, new ArrayList<>()));
-        mANames.get(3).add("x");
-        methodSig.get(3).element2.add(t7);
+        mANames.get(4).add("x");
+        methodSig.get(4).element2.add(t7);
 
         //input the object host information and signature manually
         HashMap<String, HashMap<String, ArrayList<CIAType>>> objSigs = new HashMap<>();
@@ -1206,9 +1233,12 @@ public class translation_test {
         HashSet<Integer> Hm2 = new HashSet<>(Arrays.asList(18));
         HashSet<Integer> Hm1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5));
         HashSet<Integer> Hm0 = new HashSet<>(Arrays.asList(8, 9, 10, 11, 12, 13, 14));
+        HashSet<Integer> Hret = new HashSet<>(Arrays.asList(18));
 
         //input the methods host information and signature manually
         ArrayList<Pair<nodeSet, quorumDef>> methodsInfo = new ArrayList<>();
+        Pair<nodeSet, quorumDef> retInfo = new Pair<>(new nodeSet(Hret), P_4B.union(SingletonC));
+        methodsInfo.add(retInfo);
         Pair<nodeSet, quorumDef> m0Info = new Pair<>(new nodeSet(Hm0), P_3A);
         methodsInfo.add(m0Info);
         Pair<nodeSet, quorumDef> m1Info = new Pair<>(new nodeSet(Hm1), SingletonC);
@@ -1232,12 +1262,13 @@ public class translation_test {
 
         //input the return type for all the methods
         //input the arguments for all the methods
-        ArrayList<ArrayList<String>> mANames = new ArrayList<>(10);
-        for(int i = 0; i < 10; i++){
+        ArrayList<ArrayList<String>> mANames = new ArrayList<>(resultMethodDefs.size());
+        for(int i = 0; i < resultMethodDefs.size(); i++){
             mANames.add(new ArrayList<>());
         }
         //notice the the type for a method maybe stronger than the return type of the whole class because of sequence.
         ArrayList<Pair<ArrayList<CIAType>, ArrayList<CIAType>>> methodSig = new ArrayList<>();
+        CIAType retType = new CIAType(new nodeSet(cret), P2AP3B, P2AP3B);
         CIAType m0retType = new CIAType(new nodeSet(cret), P2AP3B, P2AP3B);
         CIAType m1retType = m0retType;
         CIAType m2retType = new CIAType(new nodeSet(c2), P2AP3B, P2AP3B);
@@ -1249,6 +1280,7 @@ public class translation_test {
         CIAType m8retType = m6retType;
         CIAType m9retType = m6retType;
 
+        CIAType retContext = new CIAType(new nodeSet(cret), P2AP3B, P2AP3B);
         CIAType m9Context = t0;
         CIAType m8Context = t0;
         CIAType m7Context = tnum1;
@@ -1261,102 +1293,109 @@ public class translation_test {
         CIAType m0Context = td;
 
         //the order of the arguments matters, they are defined in mANames
+        ArrayList<CIAType> mret = new ArrayList<>();
+        mret.add(retContext);
+        mret.add(retType);
+        methodSig.add(new Pair<>(mret, new ArrayList<>()));
+        mANames.get(0).add("bot");
+        methodSig.get(0).element2.add(td);
+
         ArrayList<CIAType> m0 = new ArrayList<>();
         m0.add(m0Context);
         m0.add(m0retType);
         methodSig.add(new Pair<>(m0, new ArrayList<>()));
-        mANames.get(0).add("price");
-        methodSig.get(0).element2.add(td);
+        mANames.get(1).add("price");
+        methodSig.get(1).element2.add(td);
 
         ArrayList<CIAType> m1 = new ArrayList<>();
         m1.add(m1Context);
         m1.add(m1retType);
         methodSig.add(new Pair<>(m1, new ArrayList<>()));
-        mANames.get(1).add("price");
-        mANames.get(1).add("num");
-        methodSig.get(1).element2.add(td);
-        methodSig.get(1).element2.add(td);
+        mANames.get(2).add("price");
+        mANames.get(2).add("num");
+        methodSig.get(2).element2.add(td);
+        methodSig.get(2).element2.add(td);
 
         ArrayList<CIAType> m2 = new ArrayList<>();
         m2.add(m2Context);
         m2.add(m2retType);
         methodSig.add(new Pair<>(m2, new ArrayList<>()));
-        mANames.get(2).add("balance");
-        mANames.get(2).add("price");
-        mANames.get(2).add("num");
-        mANames.get(2).add("cashback");
-        methodSig.get(2).element2.add(td);
-        methodSig.get(2).element2.add(td);
-        methodSig.get(2).element2.add(td);
-        methodSig.get(2).element2.add(tc);
-
-        //this is the first split of two methods
-        ArrayList<CIAType> m3 = new ArrayList<>();
-        m3.add(m3Context);
-        m3.add(m3retType);
-        methodSig.add(new Pair<>(m3, new ArrayList<>()));
+        mANames.get(3).add("balance");
         mANames.get(3).add("price");
         mANames.get(3).add("num");
-        mANames.get(3).add("ID");
         mANames.get(3).add("cashback");
         methodSig.get(3).element2.add(td);
         methodSig.get(3).element2.add(td);
         methodSig.get(3).element2.add(td);
         methodSig.get(3).element2.add(tc);
 
+        //this is the first split of two methods
+        ArrayList<CIAType> m3 = new ArrayList<>();
+        m3.add(m3Context);
+        m3.add(m3retType);
+        methodSig.add(new Pair<>(m3, new ArrayList<>()));
+        mANames.get(4).add("price");
+        mANames.get(4).add("num");
+        mANames.get(4).add("ID");
+        mANames.get(4).add("cashback");
+        methodSig.get(4).element2.add(td);
+        methodSig.get(4).element2.add(td);
+        methodSig.get(4).element2.add(td);
+        methodSig.get(4).element2.add(tc);
+
         ArrayList<CIAType> m4 = new ArrayList<>();
         m4.add(m4Context);
         m4.add(m4retType);
         methodSig.add(new Pair<>(m4, new ArrayList<>()));
-        mANames.get(4).add("price");
-        mANames.get(4).add("num");
-        mANames.get(4).add("ID");
-        methodSig.get(4).element2.add(tp);
-        methodSig.get(4).element2.add(tp);
-        methodSig.get(4).element2.add(tp);
+        mANames.get(5).add("price");
+        mANames.get(5).add("num");
+        mANames.get(5).add("ID");
+        methodSig.get(5).element2.add(tp);
+        methodSig.get(5).element2.add(tp);
+        methodSig.get(5).element2.add(tp);
 
         ArrayList<CIAType> m5 = new ArrayList<>();
         m5.add(m5Context);
         m5.add(m5retType);
         methodSig.add(new Pair<>(m5, new ArrayList<>()));
-        mANames.get(5).add("price");
-        mANames.get(5).add("num");
-        methodSig.get(5).element2.add(tp);
-        methodSig.get(5).element2.add(tp);
+        mANames.get(6).add("price");
+        mANames.get(6).add("num");
+        methodSig.get(6).element2.add(tp);
+        methodSig.get(6).element2.add(tp);
 
         ArrayList<CIAType> m6 = new ArrayList<>();
         m6.add(m6Context);
         m6.add(m6retType);
         methodSig.add(new Pair<>(m6, new ArrayList<>()));
-        mANames.get(6).add("schedule");
-        mANames.get(6).add("price");
-        mANames.get(6).add("num");
-        methodSig.get(6).element2.add(ts);
-        methodSig.get(6).element2.add(tp);
-        methodSig.get(6).element2.add(tp);
+        mANames.get(7).add("schedule");
+        mANames.get(7).add("price");
+        mANames.get(7).add("num");
+        methodSig.get(7).element2.add(ts);
+        methodSig.get(7).element2.add(tp);
+        methodSig.get(7).element2.add(tp);
 
         ArrayList<CIAType> m7 = new ArrayList<>();
         m7.add(m7Context);
         m7.add(m7retType);
         methodSig.add(new Pair<>(m7, new ArrayList<>()));
-        mANames.get(7).add("schedule");
-        mANames.get(7).add("num");
-        methodSig.get(7).element2.add(ts);
-        methodSig.get(7).element2.add(tp);
+        mANames.get(8).add("schedule");
+        mANames.get(8).add("num");
+        methodSig.get(8).element2.add(ts);
+        methodSig.get(8).element2.add(tp);
 
         ArrayList<CIAType> m8 = new ArrayList<>();
         m8.add(m8Context);
         m8.add(m8retType);
         methodSig.add(new Pair<>(m8, new ArrayList<>()));
-        mANames.get(8).add("num");
-        methodSig.get(8).element2.add(t0);
+        mANames.get(9).add("num");
+        methodSig.get(9).element2.add(t0);
 
         ArrayList<CIAType> m9 = new ArrayList<>();
         m9.add(m9Context);
         m9.add(m9retType);
         methodSig.add(new Pair<>(m9, new ArrayList<>()));
-        mANames.get(9).add("bot");
-        methodSig.get(9).element2.add(t0);
+        mANames.get(10).add("bot");
+        methodSig.get(10).element2.add(t0);
 
 
         //input the object host information and signature manually
@@ -1497,9 +1536,12 @@ public class translation_test {
         HashSet<Integer> Hm2 = new HashSet<>(Arrays.asList(12));
         HashSet<Integer> Hm1 = new HashSet<>(Arrays.asList(12));
         HashSet<Integer> Hm0 = new HashSet<>(Arrays.asList(12));
+        HashSet<Integer> Hmret = new HashSet<>(Arrays.asList(12));
 
         //input the methods host information and signature manually
         ArrayList<Pair<nodeSet, quorumDef>> methodsInfo = new ArrayList<>();
+        Pair<nodeSet, quorumDef> mretInfo = new Pair<>(new nodeSet(Hmret), SingletonC);
+        methodsInfo.add(mretInfo);
         Pair<nodeSet, quorumDef> m0Info = new Pair<>(new nodeSet(Hm0), SingletonC);
         methodsInfo.add(m0Info);
         Pair<nodeSet, quorumDef> m1Info = new Pair<>(new nodeSet(Hm1), SingletonC);
@@ -1527,6 +1569,7 @@ public class translation_test {
         }
         //notice the the type for a method maybe stronger than the return type of the whole class because of sequence.
         ArrayList<Pair<ArrayList<CIAType>, ArrayList<CIAType>>> methodSig = new ArrayList<>();
+        CIAType retType = t;
         CIAType m0retType = new CIAType(new nodeSet(c3), P1AP2B, P1AP2B);
         CIAType m1retType = m0retType;
         CIAType m2retType = m0retType;
@@ -1546,93 +1589,101 @@ public class translation_test {
         CIAType m2Context = tu;
         CIAType m1Context = tu;
         CIAType m0Context = tu;
+        CIAType retContext = t;
 
         //the order of the arguments matters, they are defined in mANames
+        ArrayList<CIAType> mret = new ArrayList<>();
+        mret.add(retContext);
+        mret.add(retType);
+        methodSig.add(new Pair<>(mret, new ArrayList<>()));
+        mANames.get(0).add("ret");
+        methodSig.get(0).element2.add(t);
+
         ArrayList<CIAType> m0 = new ArrayList<>();
         m0.add(m0Context);
         m0.add(m0retType);
         methodSig.add(new Pair<>(m0, new ArrayList<>()));
-        mANames.get(0).add("o");
-        methodSig.get(0).element2.add(tu);
+        mANames.get(1).add("o");
+        methodSig.get(1).element2.add(tu);
 
         ArrayList<CIAType> m1 = new ArrayList<>();
         m1.add(m1Context);
         m1.add(m1retType);
         methodSig.add(new Pair<>(m1, new ArrayList<>()));
-        mANames.get(1).add("offerA");
-        methodSig.get(1).element2.add(tu);
+        mANames.get(2).add("offerA");
+        methodSig.get(2).element2.add(tu);
 
         ArrayList<CIAType> m2 = new ArrayList<>();
         m2.add(m2Context);
         m2.add(m2retType);
         methodSig.add(new Pair<>(m2, new ArrayList<>()));
-        mANames.get(2).add("offerA");
-        mANames.get(2).add("offerB");
-        mANames.get(2).add("seatInfoB");
-        methodSig.get(2).element2.add(tu);
-        methodSig.get(2).element2.add(tu);
-        methodSig.get(2).element2.add(tsb);
+        mANames.get(3).add("offerA");
+        mANames.get(3).add("offerB");
+        mANames.get(3).add("seatInfoB");
+        methodSig.get(3).element2.add(tu);
+        methodSig.get(3).element2.add(tu);
+        methodSig.get(3).element2.add(tsb);
 
         //this is the first split of two methods
         ArrayList<CIAType> m3 = new ArrayList<>();
         m3.add(m3Context);
         m3.add(m3retType);
         methodSig.add(new Pair<>(m3, new ArrayList<>()));
-        mANames.get(3).add("offerA");
-        mANames.get(3).add("seatInfoB");
-        mANames.get(3).add("u");
-        methodSig.get(3).element2.add(tu);
-        methodSig.get(3).element2.add(tsb);
-        methodSig.get(3).element2.add(tu);
+        mANames.get(4).add("offerA");
+        mANames.get(4).add("seatInfoB");
+        mANames.get(4).add("u");
+        methodSig.get(4).element2.add(tu);
+        methodSig.get(4).element2.add(tsb);
+        methodSig.get(4).element2.add(tu);
 
         ArrayList<CIAType> m4 = new ArrayList<>();
         m4.add(m4Context);
         m4.add(m4retType);
         methodSig.add(new Pair<>(m4, new ArrayList<>()));
-        mANames.get(4).add("offerA");
-        mANames.get(4).add("u");
-        methodSig.get(4).element2.add(tu);
-        methodSig.get(4).element2.add(tu);
+        mANames.get(5).add("offerA");
+        mANames.get(5).add("u");
+        methodSig.get(5).element2.add(tu);
+        methodSig.get(5).element2.add(tu);
 
         ArrayList<CIAType> m5 = new ArrayList<>();
         m5.add(m5Context);
         m5.add(m5retType);
         methodSig.add(new Pair<>(m5, new ArrayList<>()));
-        mANames.get(5).add("offerA");
-        mANames.get(5).add("u");
-        mANames.get(5).add("seatInfoA");
-        mANames.get(5).add("o");
-        methodSig.get(5).element2.add(tu);
-        methodSig.get(5).element2.add(tu);
-        methodSig.get(5).element2.add(tsa);
-        methodSig.get(5).element2.add(tu);
+        mANames.get(6).add("offerA");
+        mANames.get(6).add("u");
+        mANames.get(6).add("seatInfoA");
+        mANames.get(6).add("o");
+        methodSig.get(6).element2.add(tu);
+        methodSig.get(6).element2.add(tu);
+        methodSig.get(6).element2.add(tsa);
+        methodSig.get(6).element2.add(tu);
 
         ArrayList<CIAType> m6 = new ArrayList<>();
         m6.add(m6Context);
         m6.add(m6retType);
         methodSig.add(new Pair<>(m6, new ArrayList<>()));
-        mANames.get(6).add("u");
-        mANames.get(6).add("seatInfoA");
-        mANames.get(6).add("o");
-        methodSig.get(6).element2.add(tu);
-        methodSig.get(6).element2.add(tsa);
-        methodSig.get(6).element2.add(tu);
+        mANames.get(7).add("u");
+        mANames.get(7).add("seatInfoA");
+        mANames.get(7).add("o");
+        methodSig.get(7).element2.add(tu);
+        methodSig.get(7).element2.add(tsa);
+        methodSig.get(7).element2.add(tu);
 
         ArrayList<CIAType> m7 = new ArrayList<>();
         m7.add(m7Context);
         m7.add(m7retType);
         methodSig.add(new Pair<>(m7, new ArrayList<>()));
-        mANames.get(7).add("u");
-        mANames.get(7).add("o");
-        methodSig.get(7).element2.add(tu);
-        methodSig.get(7).element2.add(tu);
+        mANames.get(8).add("u");
+        mANames.get(8).add("o");
+        methodSig.get(8).element2.add(tu);
+        methodSig.get(8).element2.add(tu);
 
         ArrayList<CIAType> m8 = new ArrayList<>();
         m8.add(m8Context);
         m8.add(m8retType);
         methodSig.add(new Pair<>(m8, new ArrayList<>()));
-        mANames.get(8).add("o");
-        methodSig.get(8).element2.add(tu);
+        mANames.get(9).add("o");
+        methodSig.get(9).element2.add(tu);
 
         //input the object host information and signature manually
         HashMap<String, HashMap<String, ArrayList<CIAType>>> objSigs = new HashMap<>();

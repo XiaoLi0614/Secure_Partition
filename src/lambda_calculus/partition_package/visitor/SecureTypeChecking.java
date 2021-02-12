@@ -467,29 +467,32 @@ public class SecureTypeChecking implements PartitionVisitor{
     //mArgNames are the corresponding names for arguments in the methods
     public Boolean methodCheck(MethodDefinition m, int n, SecureTypeChecking s, ArrayList<String> mArgNames){
         Boolean resultB = true;
-        //set up the input arguments to type the body of method and the object call
-        for(Expression arg : m.freeVars){
-            int indexFroArg = mArgNames.indexOf(arg.toString());
-            s.environment.get(m.body).getGamma().put(arg.toString(),
-                    s.methodType.get(m.thisMethodName.toString()).element2.get(indexFroArg));
-            s.environment.get(m.objectCall).getGamma().put(arg.toString(),
-                    s.methodType.get(m.thisMethodName.toString()).element2.get(indexFroArg));
+        if(n != 0){
+            //set up the input arguments to type the body of method and the object call
+            for(Expression arg : m.freeVars){
+                int indexFroArg = mArgNames.indexOf(arg.toString());
+                s.environment.get(m.body).getGamma().put(arg.toString(),
+                        s.methodType.get(m.thisMethodName.toString()).element2.get(indexFroArg));
+                s.environment.get(m.objectCall).getGamma().put(arg.toString(),
+                        s.methodType.get(m.thisMethodName.toString()).element2.get(indexFroArg));
+            }
+            //set the current hosts
+            s.environment.get(m.body).setCurrentHost(s.MMap.get(m.thisMethodName.toString()).element1);
+            s.environment.get(m.body).setCurrentContext(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
+            s.environment.get(m.objectCall).setCurrentHost(s.MMap.get(m.thisMethodName.toString()).element1);
+            s.environment.get(m.objectCall).setCurrentContext(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
+
+            //set the administrative x type in the method body
+            resultB &= (Boolean) s.visitDispatch(m.objectCall);
+            s.environment.get(m.body).getGamma().put(m.objectCall.administrativeX.toString(),
+                    s.environment.get(m.objectCall).getGamma().get(m.objectCall.toString()));
+
+            resultB &= (Boolean) s.visitDispatch(m.body);
+            resultB &= s.environment.get(m.body).getGamma().get(m.body.toString()).
+                    ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(1));
+            statistics.addCons();
         }
-        //set the current hosts
-        s.environment.get(m.body).setCurrentHost(s.MMap.get(m.thisMethodName.toString()).element1);
-        s.environment.get(m.body).setCurrentContext(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
-        s.environment.get(m.objectCall).setCurrentHost(s.MMap.get(m.thisMethodName.toString()).element1);
-        s.environment.get(m.objectCall).setCurrentContext(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
 
-        //set the administrative x type in the method body
-        resultB &= (Boolean) s.visitDispatch(m.objectCall);
-        s.environment.get(m.body).getGamma().put(m.objectCall.administrativeX.toString(),
-                s.environment.get(m.objectCall).getGamma().get(m.objectCall.toString()));
-
-        resultB &= (Boolean) s.visitDispatch(m.body);
-        resultB &= s.environment.get(m.body).getGamma().get(m.body.toString()).
-                ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(1));
-        statistics.addCons();
         for(CIAType argT : s.methodType.get(m.thisMethodName.toString()).element2){
             //\tau_1 <= \tau_x
             //resultB &= argT.ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(0));

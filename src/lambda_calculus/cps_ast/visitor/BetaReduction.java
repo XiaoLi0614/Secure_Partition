@@ -121,6 +121,11 @@ public class BetaReduction implements CPSVisitor{
             //else return new Application((Command) visitDispatch(application.function), application.values);
             //continuation situation
             else if (application.function.toString() == "k"){return new Application((Command) visitDispatch(application.function), application.values);}
+            //we can add ret here
+            //else if (application.function.toString() == "k"){
+                //return new ThisMethod("ret", application.values);
+            //}
+
             ////It can be the sequence situation here.
             else { return visitDispatch(application.function);}
         }

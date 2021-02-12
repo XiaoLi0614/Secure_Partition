@@ -13,7 +13,9 @@ import lambda_calculus.partition_package.tree.expression.literal.IntLiteral;
 import lambda_calculus.partition_package.tree.expression.literal.Literal;
 import lambda_calculus.partition_package.tree.expression.op.BinaryOp;
 import lambda_calculus.partition_package.tree.expression.op.Plus;
+import lesani.collection.Pair;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +24,9 @@ public class PartitionMethod implements PartitionVisitor{
     //Command resultAST;
     HashMap<Node, PartitionProcess> partitionIntermediate; // each node has a three element intermediate structure
     int administrativeM;
+    //the name of the whole method maps to the <entrance method name,
+    //the arraylist is a list of method definitions that has this-whole method need to be replaced>.
+    //HashMap<String, Pair<String, ArrayList<MethodDefinition>>> recursionReplacement;
 
     public String newMName(){
         return "m" + String.valueOf(administrativeM++);
@@ -30,6 +35,7 @@ public class PartitionMethod implements PartitionVisitor{
     public PartitionMethod(){
         partitionIntermediate = new HashMap<>();
         administrativeM = 0;
+        //recursionReplacement = new HashMap<>();
     }
 
     public Object visitDispatch(Expression expression) {
@@ -185,45 +191,53 @@ public class PartitionMethod implements PartitionVisitor{
             if(singleCall.objectName.toString() == "this"){
                 PartitionProcess resultP = new PartitionProcess(new ArrayList<>(), new HashSet<>(), singleCall);
                 partitionIntermediate.put(singleCall, resultP);
+                if(singleCall.methodName.toString() == "ret"){
+                    MethodDefinition retDef = new MethodDefinition("ret", singleCall);
+                    ArrayList<MethodDefinition> resultDefs = new ArrayList<>();
+                    resultDefs.add(retDef);
+                    partitionIntermediate.put(singleCall, new PartitionProcess(resultDefs, retDef.freeVars, singleCall));
+                }
                 return singleCall;
             }
-            Command resultCommand = new SingleCall((Id)singleCall.objectName,
-                    (Id)singleCall.methodName,
-                    singleCall.args,
-                    singleCall.administrativeX,
-                    (Command)visitDispatch(singleCall.nestedCommand));
-            //get the method definitions from nested command
-            ArrayList<MethodDefinition> resultDefinitions = new ArrayList<>(partitionIntermediate.get(singleCall.nestedCommand).getMethodDefinitions());
-            HashSet<Var> freeVarSet = new HashSet<>(partitionIntermediate.get(singleCall.nestedCommand).getFreeVariables());
-            if(singleCall.args == null || singleCall.args.length == 0){
-            }
             else {
-                for(Expression argE: singleCall.args){
-                    visitDispatch(argE);
-                    freeVarSet.addAll(partitionIntermediate.get(argE).getFreeVariables());
+                Command resultCommand = new SingleCall((Id)singleCall.objectName,
+                        (Id)singleCall.methodName,
+                        singleCall.args,
+                        singleCall.administrativeX,
+                        (Command)visitDispatch(singleCall.nestedCommand));
+                //get the method definitions from nested command
+                ArrayList<MethodDefinition> resultDefinitions = new ArrayList<>(partitionIntermediate.get(singleCall.nestedCommand).getMethodDefinitions());
+                HashSet<Var> freeVarSet = new HashSet<>(partitionIntermediate.get(singleCall.nestedCommand).getFreeVariables());
+                if(singleCall.args == null || singleCall.args.length == 0){
                 }
-            }
-            Var toreRemoved = singleCall.administrativeX;
-            for(Var v : freeVarSet){
-                if(v.equals(toreRemoved)){
-                    toreRemoved = v;
+                else {
+                    for(Expression argE: singleCall.args){
+                        visitDispatch(argE);
+                        freeVarSet.addAll(partitionIntermediate.get(argE).getFreeVariables());
+                    }
                 }
+                Var toreRemoved = singleCall.administrativeX;
+                for(Var v : freeVarSet){
+                    if(v.equals(toreRemoved)){
+                        toreRemoved = v;
+                    }
+                }
+                freeVarSet.remove(toreRemoved);
+                Var[] callBackFreeArgs = new Var[freeVarSet.size()];
+
+                //we need to determine whether the method for the same object call already exist?
+                //No. Because the object all is not functional.
+                SingleCall callBackName = new SingleCall(newMName(), freeVarSet.toArray(callBackFreeArgs));
+                MethodDefinition newDefinition = new MethodDefinition((Id) callBackName.methodName,
+                        freeVarSet,
+                        singleCall,
+                        callBackName);
+                newDefinition.addBody(partitionIntermediate.get(singleCall.nestedCommand).getCallBackName());
+                resultDefinitions.add(newDefinition);
+                partitionIntermediate.put(singleCall, new PartitionProcess(resultDefinitions, freeVarSet, callBackName));
+
+                return resultCommand;
             }
-            freeVarSet.remove(toreRemoved);
-            Var[] callBackFreeArgs = new Var[freeVarSet.size()];
-
-            //we need to determine whether the method for the same object call already exist?
-            //No. Because the object all is not functional.
-            SingleCall callBackName = new SingleCall(newMName(), freeVarSet.toArray(callBackFreeArgs));
-            MethodDefinition newDefinition = new MethodDefinition((Id) callBackName.methodName,
-                    freeVarSet,
-                    singleCall,
-                    callBackName);
-            newDefinition.addBody(partitionIntermediate.get(singleCall.nestedCommand).getCallBackName());
-            resultDefinitions.add(newDefinition);
-            partitionIntermediate.put(singleCall, new PartitionProcess(resultDefinitions, freeVarSet, callBackName));
-
-            return resultCommand;
         }
     }
 
@@ -232,13 +246,18 @@ public class PartitionMethod implements PartitionVisitor{
 
     public ArrayList<MethodDefinition> methodSeparation(Command c){
         PartitionMethod b = new PartitionMethod();
+        //b.recursionReplacement.put(wMethodName, new Pair<>("", new ArrayList<>()));
         b.visitDispatch(c);
         ArrayList<MethodDefinition> currentDefinitions = b.partitionIntermediate.get(c).getMethodDefinitions();
-        /*ArrayList<MethodDefinition> resultSeparation = new ArrayList<>();
-        for(MethodDefinition d: currentDefinitions){
-            if(d)
-        }*/
+        // remove redundant ret
+        for(int i = 0; i < currentDefinitions.size(); i++){
+            if(currentDefinitions.get(i).thisMethodName.toString() == "ret" && i != 0){
+                currentDefinitions.remove(i);
+            }
+        }
 
+        //b.recursionReplacement.get(wMethodName).element1 = currentDefinitions.get(currentDefinitions.size()-1).thisMethodName.toString();
+        //for()
         return currentDefinitions;
     }
 }
