@@ -31,9 +31,9 @@ public class translation_test {
     public static void main(String[] args)
     {
         //Expression lambda1 = createOFTUseCase();
-        Expression lambda1 = createTicketsUseCase();
+        //Expression lambda1 = createTicketsUseCase();
         //Expression lambda1 = createObliviousTransferUseCase();
-        //Expression lambda1 = createAuctionUseCase();
+        Expression lambda1 = createAuctionUseCase();
         //Expression lambda1 = createTestUseCase();
         System.out.println("Complete create use-case");
         CPSPrinter test = new CPSPrinter();
@@ -54,9 +54,9 @@ public class translation_test {
         }
         //OneTimeTransferTypeCheckingP(resultMethodDefs);
         //TicketTypeChecking(resultMethodDefs);
-        TicketTypeCheckingP(resultMethodDefs);
+        //TicketTypeCheckingP(resultMethodDefs);
         //ObliviousTransferTypeCheckingP(resultMethodDefs);
-        //AuctionTypeCheckingP(resultMethodDefs);
+        AuctionTypeCheckingP(resultMethodDefs);
 
         //test for powersets
 /*        HashSet<Integer> in = new HashSet<>(Arrays.asList(1, 2, 3, 4));

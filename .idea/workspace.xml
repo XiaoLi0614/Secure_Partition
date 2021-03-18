@@ -10,25 +10,7 @@
     <list default="true" id="c8eb5f03-e017-4c19-b817-0c18d5b49b0d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cs179e/cs179e/LesaniLib" beforeDir="false" afterPath="$PROJECT_DIR$/cs179e/cs179e/LesaniLib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/cps_ast/visitor/BetaReduction$CommandB.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/cps_ast/visitor/BetaReduction$CommandB.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/cps_ast/visitor/BetaReduction.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/cps_ast/visitor/BetaReduction.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/cps_ast/visitor/translateToOtherAST$CommandB.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/cps_ast/visitor/translateToOtherAST$CommandB.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/cps_ast/visitor/translateToOtherAST.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/cps_ast/visitor/translateToOtherAST.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/tree/MethodDefinition.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/tree/MethodDefinition.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/tree/command/SingleCall.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/tree/command/SingleCall.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/PartitionMethod$CommandP.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/PartitionMethod$CommandP.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/PartitionMethod$ExpressionP$BinaryOpB.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/PartitionMethod$ExpressionP$BinaryOpB.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/PartitionMethod$ExpressionP$GIdB.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/PartitionMethod$ExpressionP$GIdB.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/PartitionMethod$ExpressionP$LiteralB.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/PartitionMethod$ExpressionP$LiteralB.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/PartitionMethod$ExpressionP.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/PartitionMethod$ExpressionP.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/PartitionMethod.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/PartitionMethod.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/translation_test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/translation_test.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/visitor/BetaReduction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/visitor/BetaReduction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/visitor/translateToOtherAST.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/cps_ast/visitor/translateToOtherAST.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/MethodDefinition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/MethodDefinition.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/command/SingleCall.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/command/SingleCall.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/PartitionMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/PartitionMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lambda_calculus/translation_test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/translation_test.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -39,79 +21,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/translation_test.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="561">
-              <caret line="1239" column="94" selection-start-line="1239" selection-start-column="94" selection-end-line="1239" selection-end-column="94" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/PartitionProcess.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/PartitionMethod.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="699">
-              <caret line="251" column="31" selection-start-line="251" selection-start-column="31" selection-end-line="251" selection-end-column="31" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/command/SingleCall.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="860">
-              <caret line="110" column="8" selection-start-line="110" selection-start-column="8" selection-end-line="110" selection-end-column="8" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1813#1814#0" expanded="true" />
-                <element signature="e#1858#1859#0" expanded="true" />
-                <element signature="e#4306#4307#0" expanded="true" />
-                <element signature="e#4374#4375#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/MethodDefinition.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="48" column="40" selection-start-line="48" selection-start-column="40" selection-end-line="48" selection-end-column="40" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="335">
-              <caret line="560" selection-start-line="560" selection-end-line="560" />
-              <folding>
-                <element signature="e#8199#8200#0" expanded="true" />
-                <element signature="e#8246#8247#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -217,11 +127,11 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="807" />
-    <option name="y" value="-4" />
-    <option name="width" value="1244" />
-    <option name="height" value="1552" />
+  <component name="ProjectFrameBounds" extendedState="4">
+    <option name="x" value="75" />
+    <option name="y" value="24" />
+    <option name="width" value="1248" />
+    <option name="height" value="1576" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -229,65 +139,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
-              <item name="Project" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lambda_calculus" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lambda_calculus" type="462c0819:PsiDirectoryNode" />
-              <item name="partition_package" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lambda_calculus" type="462c0819:PsiDirectoryNode" />
-              <item name="partition_package" type="462c0819:PsiDirectoryNode" />
-              <item name="tree" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lambda_calculus" type="462c0819:PsiDirectoryNode" />
-              <item name="partition_package" type="462c0819:PsiDirectoryNode" />
-              <item name="tree" type="462c0819:PsiDirectoryNode" />
-              <item name="command" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="secure_partition" type="b2602c69:ProjectViewProjectNode" />
-              <item name="secure_partition" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lambda_calculus" type="462c0819:PsiDirectoryNode" />
-              <item name="partition_package" type="462c0819:PsiDirectoryNode" />
-              <item name="visitor" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="ProjectPane" />
       <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
@@ -303,7 +155,7 @@
     <property name="Repository.Attach.Annotations" value="true" />
     <property name="Repository.Attach.JavaDocs" value="true" />
     <property name="Repository.Attach.Sources" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1613118459799" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1613118504540" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/cs179e" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -365,10 +217,9 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="2495" height="1604" extended-state="6" />
-    <editor active="true" />
+    <frame x="75" y="24" width="1248" height="1576" extended-state="4" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12127399" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2529118" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -378,7 +229,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.33539945" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49001664" visible="true" weight="0.27203858" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49001664" weight="0.27176967" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7079867" weight="0.3429752" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -871,9 +722,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar!/java/net/URLClassLoader.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="686">
+          <caret line="197" selection-start-line="197" selection-end-line="197" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/translation_test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="39" column="57" selection-start-line="39" selection-start-column="57" selection-end-line="39" selection-end-column="57" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/PartitionProcess.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/PartitionMethod.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3859">
+          <caret line="251" column="31" selection-start-line="251" selection-start-column="31" selection-end-line="251" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/command/SingleCall.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="860">
+        <state relative-caret-position="1717">
           <caret line="110" column="8" selection-start-line="110" selection-start-column="8" selection-end-line="110" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -887,52 +772,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/MethodDefinition.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
+        <state relative-caret-position="680">
           <caret line="48" column="40" selection-start-line="48" selection-start-column="40" selection-end-line="48" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/PartitionProcess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/SecureTypeChecking.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
+        <state relative-caret-position="9129">
           <caret line="560" selection-start-line="560" selection-end-line="560" />
           <folding>
             <element signature="e#8199#8200#0" expanded="true" />
             <element signature="e#8246#8247#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar!/java/net/URLClassLoader.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="686">
-          <caret line="197" selection-start-line="197" selection-end-line="197" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/PartitionMethod.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="699">
-          <caret line="251" column="31" selection-start-line="251" selection-start-column="31" selection-end-line="251" selection-end-column="31" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/translation_test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="1239" column="94" selection-start-line="1239" selection-start-column="94" selection-end-line="1239" selection-end-column="94" />
-          <folding>
-            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
