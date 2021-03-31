@@ -24,12 +24,15 @@ import java.util.HashSet;
 public class TypeInference implements PartitionVisitor{
     //the number of different trust domains
     int n;
+
     //the principal list
     ArrayList<Integer> principals;
+
     //final result type
     ArrayList<Boolean> resultC;
     ArrayList<ArrayList<Integer>> resultI;
     ArrayList<ArrayList<Integer>> resultA;
+
     //the initial context \tau_0
     ArrayList<Boolean> startC;
     ArrayList<ArrayList<Integer>> startI;
@@ -42,24 +45,23 @@ public class TypeInference implements PartitionVisitor{
     //the host information for res
     ArrayList<Integer> resH;
 
-    //variables in the current context needed to be refreshed at every node.
-    HashMap<Node, envForTypeInfer> environment;
-
-    //The constraint string
-    //StringBuilder s;
-
-    //The hashmap from the node to the basic variable names
-    HashMap<Node, ArrayList<String>> statementC;
-    HashMap<Node, ArrayList<String>> statementI;
-    HashMap<Node, ArrayList<String>> statementA;
-
     ArrayList<Boolean> botC;
     ArrayList<ArrayList<Integer>> botI;
     ArrayList<ArrayList<Integer>> botA;
 
+    //the information below need to be initialized in classInference method
+
     //hashmap for methods and objects information
     HashMap<String, MethodInfo> mInfo;
     HashMap<String, ObjectInfo> oInfo;
+
+    //The hashmap from the node to the basic variable names
+    HashMap<String, ArrayList<String>> statementC;
+    HashMap<String, ArrayList<String>> statementI;
+    HashMap<String, ArrayList<String>> statementA;
+
+    //variables in the current context needed to be refreshed at every node.
+    HashMap<Node, envForTypeInfer> environment;
 
     public TypeInference(){
         n = 0;
@@ -74,7 +76,6 @@ public class TypeInference implements PartitionVisitor{
         predefinedOM = new HashMap<>();
         resH = new ArrayList<>();
         environment = new HashMap<>();
-        //s = new StringBuilder();
         statementC = new HashMap<>();
         statementI = new HashMap<>();
         statementA = new HashMap<>();
@@ -85,25 +86,52 @@ public class TypeInference implements PartitionVisitor{
         oInfo = new HashMap<>();
     }
 
-    public TypeInference(int num, ArrayList<Integer> p){}
+    public TypeInference(int num, ArrayList<Integer> p,
+                         ArrayList<Boolean> rc, ArrayList<ArrayList<Integer>> ri, ArrayList<ArrayList<Integer>> ra,
+                         ArrayList<Boolean> sc, ArrayList<ArrayList<Integer>> si, ArrayList<ArrayList<Integer>> sa,
+                         ArrayList<Boolean> bc, ArrayList<ArrayList<Integer>> bi, ArrayList<ArrayList<Integer>> ba,
+                         ArrayList<Integer> rH, HashMap<String, ArrayList<Boolean>> pV, HashMap<String, HashMap<String, ArrayList<Boolean>>> pOM)
+    {
+        n = num;
+        principals = p;
+        resultC = rc;
+        resultI = ri;
+        resultA = ra;
+        startC = sc;
+        startI = si;
+        startA = sa;
+        botC = bc;
+        botI = bi;
+        botA = ba;
+        resH = rH;
+        predefinedV = pV;
+        predefinedOM = pOM;
+
+        mInfo = new HashMap<>();
+        oInfo = new HashMap<>();
+        statementC = new HashMap<>();
+        statementI = new HashMap<>();
+        statementA = new HashMap<>();
+        environment = new HashMap<>();
+    }
 
     public void updateStatementAll(Node n, ArrayList<String> c, ArrayList<String> i, ArrayList<String> a){
         if(statementC.get(n) == null || statementC.get(n).isEmpty()){
-            statementC.put(n, new ArrayList<>());
+            statementC.put(n.toString(), new ArrayList<>());
             statementC.get(n).addAll(c);
         }
         else {
             statementC.get(n).addAll(c);
         }
         if(statementI.get(n) == null || statementI.get(n).isEmpty()){
-            statementI.put(n, new ArrayList<>());
+            statementI.put(n.toString(), new ArrayList<>());
             statementI.get(n).addAll(i);
         }
         else {
             statementI.get(n).addAll(i);
         }
         if(statementA.get(n) == null || statementA.get(n).isEmpty()){
-            statementA.put(n, new ArrayList<>());
+            statementA.put(n.toString(), new ArrayList<>());
             statementA.get(n).addAll(a);
         }
         else {
@@ -114,7 +142,7 @@ public class TypeInference implements PartitionVisitor{
 
     public void updateStatementAvai(Node n, ArrayList<String> a){
         if(statementA.get(n) == null || statementA.get(n).isEmpty()){
-            statementA.put(n, new ArrayList<>());
+            statementA.put(n.toString(), new ArrayList<>());
             statementA.get(n).addAll(a);
         }
         else {
@@ -290,9 +318,9 @@ public class TypeInference implements PartitionVisitor{
 
             //todo: may need to generalize the to the command instead of only the singlecall
             if(sequence.command1 instanceof SingleCall){
-                statementC.put(((SingleCall) sequence.command1).administrativeX, statementC.get(sequence.command1));
-                statementI.put(((SingleCall) sequence.command1).administrativeX, statementI.get(sequence.command1));
-                statementA.put(((SingleCall) sequence.command1).administrativeX, statementA.get(sequence.command1));
+                statementC.put(((SingleCall) sequence.command1).administrativeX.toString(), statementC.get(sequence.command1));
+                statementI.put(((SingleCall) sequence.command1).administrativeX.toString(), statementI.get(sequence.command1));
+                statementA.put(((SingleCall) sequence.command1).administrativeX.toString(), statementA.get(sequence.command1));
             }
 
             environment.get(sequence.command2).currentContextA.addAll(statementA.get(sequence.command1));
@@ -353,9 +381,9 @@ public class TypeInference implements PartitionVisitor{
                     retI.add("resultI");
                     ArrayList<String> retA = new ArrayList<>();
                     retA.add("resultA");
-                    statementC.put(singleCall, retC);
-                    statementI.put(singleCall, retI);
-                    statementA.put(singleCall, retA);
+                    statementC.put(singleCall.toString(), retC);
+                    statementI.put(singleCall.toString(), retI);
+                    statementA.put(singleCall.toString(), retA);
 
                     return result;
                 }
@@ -400,9 +428,9 @@ public class TypeInference implements PartitionVisitor{
                     retI.add("resultI");
                     ArrayList<String> retA = new ArrayList<>();
                     retA.add("resultA");
-                    statementC.put(singleCall, retC);
-                    statementI.put(singleCall, retI);
-                    statementA.put(singleCall, retA);
+                    statementC.put(singleCall.toString(), retC);
+                    statementI.put(singleCall.toString(), retI);
+                    statementA.put(singleCall.toString(), retA);
 
                     return result;
                 }
@@ -445,9 +473,9 @@ public class TypeInference implements PartitionVisitor{
                     oretI.add(oInfo.get(Oname).omArgusI.get(OMName).element2);
                     ArrayList<String> oretA = new ArrayList<>();
                     oretA.add(oInfo.get(Oname).omArgusA.get(OMName).element2);
-                    statementC.put(singleCall, oretC);
-                    statementI.put(singleCall, oretI);
-                    statementA.put(singleCall, oretA);
+                    statementC.put(singleCall.toString(), oretC);
+                    statementI.put(singleCall.toString(), oretI);
+                    statementA.put(singleCall.toString(), oretA);
 
                     return result;
                 }
@@ -492,9 +520,9 @@ public class TypeInference implements PartitionVisitor{
                     oretI.add(oInfo.get(Oname).omArgusI.get(OMName).element2);
                     ArrayList<String> oretA = new ArrayList<>();
                     oretA.add(oInfo.get(Oname).omArgusA.get(OMName).element2);
-                    statementC.put(singleCall, oretC);
-                    statementI.put(singleCall, oretI);
-                    statementA.put(singleCall, oretA);
+                    statementC.put(singleCall.toString(), oretC);
+                    statementI.put(singleCall.toString(), oretI);
+                    statementA.put(singleCall.toString(), oretA);
 
                     return result;
                 }
@@ -505,126 +533,160 @@ public class TypeInference implements PartitionVisitor{
     @Override
     public Object visit(Command command){ return command.accept(commandT); }
 
-    //the last element in the array is the return type.
-    public Boolean fieldCheck(String objName, SecureTypeChecking s){
-        Boolean resultB = true;
-        HashMap<String, ArrayList<CIAType>> objSig = s.objectMethodType.get(objName);
-        nodeSet objHosts = s.OMap.get(objName).element1.unionQuorum();
-        for(String mName: objSig.keySet()){
-            ArrayList<CIAType> argTypes = objSig.get(mName);
-            CIAType retVType = argTypes.get(argTypes.size()-1);
-            resultB &= retVType.cLeq(objHosts);
-            resultB &= s.OMap.get(objName).element1.fieldIntegrity(retVType.getIntegrity().getQuorum());
-            resultB &= s.OMap.get(objName).element1.availabilityCons(retVType.getAvailability().getQuorum());
-            for(int i = 0; i < argTypes.size() - 1; i++){
-                //resultB &= s.objUmb.get(objName).ciaLeq(argTypes.get(i)) & argTypes.get(i).ciaLeq(retVType);
-                resultB &= argTypes.get(i).ciaLeq(retVType);
-                //todo: this is not needed
-                //resultB &= argTypes.get(i).cLeq(objHosts);
-                resultB &= s.OMap.get(objName).element2.methodIntegrity(argTypes.get(i).getIntegrity().getQuorum());
+    public StringBuilder fieldCheck(String objName, TypeInference infer){
+        StringBuilder result = new StringBuilder();
+        ObjectInfo objSig = infer.oInfo.get(objName);
+        String objHosts = infer.oInfo.get(objName).Qs;
+
+        for(String mName: objSig.omArgusC.keySet()){
+            //todo: declassification and umbrella check
+
+            //c_m' <= union q
+            result.append("s.add(confQ(" + objSig.omArgusC.get(mName).element2 + ", " + objHosts + "))\n");
+
+            //i_m' <= Sintegrity(Qs)
+            result.append("s.add(sIntegrity(" + objSig.omArgusI.get(mName).element2 + ", " + objHosts + "))\n");
+
+            //a_m' <= Availability(Qs)
+            result.append("s.add(availabilityC(" + objSig.omArgusA.get(mName).element2 + ", " + objHosts + "))\n");
+
+            for(int i = 0; i < objSig.omArgusI.get(mName).element1.size() - 1; i++){
+                //i_m <= CIntegrity(Qc)
+                result.append("s.add(cIntegrity(" + objSig.omArgusI.get(mName).element1.get(i) + ", " + infer.oInfo.get(objName).Qc);
+
+                //c_m <= c_m', i_m <= i_m', a_m <= a_m'
+                result.append("s.add(lableLe(" + objSig.omArgusC.get(mName).element1.get(i) + ", " + objSig.omArgusC.get(mName).element2 +
+                        ", " + objSig.omArgusI.get(mName).element1.get(i) + ", " + objSig.omArgusI.get(mName).element2 + ", " +
+                        objSig.omArgusA.get(mName).element1.get(i) + ", " + objSig.omArgusA.get(mName).element2 + "))\n");
             }
         }
-        //check the integrity constraints for Cintegrity(Q2)
-        //todo: the umbrella is to general
-        //resultB &= s.OMap.get(objName).element2.methodIntegrity(s.objUmb.get(objName).getIntegrity().getQuorum());
-        //resultB &= s.OMap.get(objName).element1.fieldIntegrity(s.objUmb.get(objName).getIntegrity().getQuorum());
-        //resultB &= s.OMap.get(objName).element1.availabilityCons(s.objUmb.get(objName).getAvailability().getQuorum());
-        System.out.println("the field check for " + objName + " is " + resultB.toString());
-        return resultB;
+        return result;
     }
 
-    //mArgNames are the corresponding names for arguments in the methods
-    public Boolean methodCheck(MethodDefinition m, int n, SecureTypeChecking s, ArrayList<String> mArgNames){
-        Boolean resultB = true;
+    //n is the index of method definition in the array
+    public StringBuilder methodCheck(MethodDefinition m, int n, TypeInference infer, ArrayList<String> mArgNames, MethodInfo mInfo){
+        StringBuilder result = new StringBuilder();
         if(n != 0){
-            //set up the input arguments to type the body of method and the object call
-            for(Expression arg : m.freeVars){
-                int indexFroArg = mArgNames.indexOf(arg.toString());
-                s.environment.get(m.body).getGamma().put(arg.toString(),
-                        s.methodType.get(m.thisMethodName.toString()).element2.get(indexFroArg));
-                s.environment.get(m.objectCall).getGamma().put(arg.toString(),
-                        s.methodType.get(m.thisMethodName.toString()).element2.get(indexFroArg));
-            }
-            //set the current hosts
-            s.environment.get(m.body).setCurrentHost(s.MMap.get(m.thisMethodName.toString()).element1);
-            s.environment.get(m.body).setCurrentContext(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
-            s.environment.get(m.objectCall).setCurrentHost(s.MMap.get(m.thisMethodName.toString()).element1);
-            s.environment.get(m.objectCall).setCurrentContext(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
-
-            //set the administrative x type in the method body
-            resultB &= (Boolean) s.visitDispatch(m.objectCall);
-            s.environment.get(m.body).getGamma().put(m.objectCall.administrativeX.toString(),
-                    s.environment.get(m.objectCall).getGamma().get(m.objectCall.toString()));
-
-            resultB &= (Boolean) s.visitDispatch(m.body);
-            resultB &= s.environment.get(m.body).getGamma().get(m.body.toString()).
-                    ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(1));
-        }
-
-        for(CIAType argT : s.methodType.get(m.thisMethodName.toString()).element2){
-            //\tau_1 <= \tau_x
-            //resultB &= argT.ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(0));
-            //\tau_1 <= \tau_2
-            resultB &= argT.ciaLeq(s.methodType.get(m.thisMethodName.toString()).element1.get(1));
-            resultB &= s.MMap.get(m.thisMethodName.toString()).element2.
-                    methodIntegrity(argT.getIntegrity().getQuorum());
-        }
-        //double check whether the return value \tau_2 has to be able to hosted on the method hosts
-//        resultB &= s.methodType.get(m.thisMethodName.toString()).element1.get(0).
-//                ciaJoin(s.methodType.get(m.thisMethodName.toString()).element1.get(1)).
-//                cLeq(s.environment.get(m.body).getCurrentHost());
-        resultB &= s.methodType.get(m.thisMethodName.toString()).element1.get(0).
-                cLeq(s.environment.get(m.body).getCurrentHost());
-        System.out.println("The method " + m.thisMethodName.toString() + " has been checked " + resultB);
-        return resultB;
-    }
-
-    //we only need to do type checking, all the methods signatures are supplied.
-    public Boolean classTypeCheck(ArrayList<MethodDefinition> methods,
-                                  ArrayList<Pair<nodeSet, quorumDef>> methodsSig,
-                                  ArrayList<Pair<ArrayList<CIAType>, ArrayList<CIAType>>> methodTypes,
-                                  ArrayList<ArrayList<String>> methodArgNames,
-                                  HashMap<String, HashMap<String, ArrayList<CIAType>>> objSigs,
-                                  HashMap<String, Pair<quorumDef, quorumDef>> objHosts,
-                                  HashMap<String, CIAType> predefinedVar,
-                                  HashMap<String, CIAType> predefinedUmb,
-                                  CIAType botT){
-        Boolean r = true;
-        SecureTypeChecking b = new SecureTypeChecking();
-        b.statistics.startCheck();
-        //set the M(H, Q) and O(Q1, Q2) and object signature
-        for(int i = 0; i < methods.size(); i++){
-            b.MMap.put(methods.get(i).thisMethodName.toString(), methodsSig.get(i));
-            b.methodType.put(methods.get(i).thisMethodName.toString(), methodTypes.get(i));
-        }
-        b.OMap = objHosts;
-        b.objectMethodType = objSigs;
-        b.objUmb = predefinedUmb;
-        b.botType = botT;
-
-        //first do field check then we do method check
-        for(String oname : objSigs.keySet()){
-            r &= fieldCheck(oname, b);
-        }
-        HashMap<String, CIAType> preGamma = new HashMap<>();
-        for(int i = methods.size() - 1; i >= 0; i--){
-            if(i == methods.size() - 1){
-                b.environment.put(methods.get(i).body, new envForTypeCheck());
-                b.environment.get(methods.get(i).body).setGamma(predefinedVar);
-                b.environment.put(methods.get(i).objectCall, new envForTypeCheck());
-                b.environment.get(methods.get(i).objectCall).setGamma(predefinedVar);
+            // if the free variable in m is empty, we set bot = context
+            if(m.freeVars.isEmpty()){
+                result.append(mInfo.arguC.get(0) + " = " + mInfo.mcontextC);
+                result.append(mInfo.arguI.get(0) + " = " + mInfo.mcontextI);
+                result.append(mInfo.arguA.get(0) + " = " + mInfo.mcontextA);
             }
             else {
-                b.environment.put(methods.get(i).body, new envForTypeCheck());
-                b.environment.get(methods.get(i).body).setGamma(preGamma);
-                b.environment.put(methods.get(i).objectCall, new envForTypeCheck());
-                b.environment.get(methods.get(i).objectCall).setGamma(preGamma);
+                //set up the input arguments to type the body of method and the object call
+                for(Expression arg : m.freeVars){
+                    int indexForArg = mArgNames.indexOf(arg.toString());
+
+                    ArrayList<String> argC = new ArrayList<>();
+                    argC.add(mInfo.arguC.get(indexForArg));
+                    infer.statementC.put(arg.toString(), argC);
+                    ArrayList<String> argI = new ArrayList<>();
+                    argI.add(mInfo.arguI.get(indexForArg));
+                    infer.statementI.put(arg.toString(), argI);
+                    ArrayList<String> argA = new ArrayList<>();
+                    argA.add(mInfo.arguA.get(indexForArg));
+                    infer.statementA.put(arg.toString(), argA);
+                }
             }
-            r &= methodCheck(methods.get(i), i, b, methodArgNames.get(i));
-            preGamma = b.environment.get(methods.get(i).body).getGamma();
+
+            //set the current hosts
+            infer.environment.get(m.body).currentHosts = mInfo.host;
+            infer.environment.get(m.objectCall).currentHosts = mInfo.host;
+
+            //set the initial context
+            ArrayList<String> mconxtC = new ArrayList<>();
+            mconxtC.add(mInfo.mcontextC);
+            infer.environment.get(m.body).currentContextC = mconxtC;
+            ArrayList<String> mconxtI = new ArrayList<>();
+            mconxtI.add(mInfo.mcontextI);
+            infer.environment.get(m.body).currentContextI = mconxtI;
+            ArrayList<String> mconxtA = new ArrayList<>();
+            mconxtC.add(mInfo.mcontextA);
+            infer.environment.get(m.body).currentContextA = mconxtA;
+
+            //set the administrative x type in the method body
+            result.append(((StringBuilder) infer.visitDispatch(m.objectCall)).toString());
+            infer.statementC.put(m.objectCall.administrativeX.toString(), statementC.get(m.objectCall));
+
+            result.append(((StringBuilder) infer.visitDispatch(m.body)).toString());
+            //todo: the part about return type is not implemented right now
         }
-        b.statistics.endCheck();
-        b.statistics.printStatistics();
+
+        //i_1 <= cIntegrity(Qc)
+        for(String argI : mInfo.arguI){
+            //\tau_1 <= \tau_2
+            if(n != 0){
+                result.append("s.add(cIntegrity(" + argI + ", " + mInfo.qc + "))\n");
+            }
+            else {
+                result.append("s.add(cIntegrityE(" + argI + ", " + mInfo.qc + "))\n");
+            }
+        }
+
+        //c_x <= H
+        result.append("s.add(cLeH(" + mInfo.mcontextC + ", " + mInfo.host + "))\n");
+
+        return result;
+    }
+
+    public StringBuilder classTypeCheck(
+            ArrayList<MethodDefinition> methods,
+            ArrayList<ArrayList<String>> methodArgNames,
+            HashMap<String, HashMap<String, Integer>> objectMethods,
+            int num, ArrayList<Integer> p,
+            ArrayList<Boolean> rc, ArrayList<ArrayList<Integer>> ri, ArrayList<ArrayList<Integer>> ra,
+            ArrayList<Boolean> sc, ArrayList<ArrayList<Integer>> si, ArrayList<ArrayList<Integer>> sa,
+            ArrayList<Boolean> bc, ArrayList<ArrayList<Integer>> bi, ArrayList<ArrayList<Integer>> ba,
+            ArrayList<Integer> rH, HashMap<String, ArrayList<Boolean>> pV, HashMap<String, HashMap<String, ArrayList<Boolean>>> pOM){
+
+        StringBuilder r = new StringBuilder();
+        TypeInference infer = new TypeInference(num, p, rc, ri, ra, sc, si, sa, bc, bi, ba, rH, pV, pOM);
+
+        //set the predefined value and predefined object method requirement
+        infer.predefinedV = pV;
+        infer.predefinedOM = pOM;
+
+        //set the predefined variable value
+        for(String vname: pV.keySet()){
+            infer.statementC.put(vname, );
+            r.append("=");
+            //set variables for integrity and availability
+        }
+
+        //print start context
+
+        //print bot type
+
+        //print result type
+
+        //print retH
+
+        //print
+
+        //set the mInfo
+        for(int i = 0; i < methods.size(); i++){
+            infer.mInfo.put(methods.get(i).thisMethodName.toString(),
+                    new MethodInfo(methods.get(i).thisMethodName.toString(), methods.get(i).freeVars.size(), methodArgNames.get(i)));
+            r.append(infer.mInfo.get(methods.get(i).thisMethodName.toString()).initMethod());
+            r.append(infer.mInfo.get(methods.get(i).thisMethodName.toString()).mRangeCons());
+        }
+
+        //set the oInfo
+        for(String on: objectMethods.keySet()){
+            infer.oInfo.put(on, new ObjectInfo(on, objectMethods.get(on)));
+            r.append(infer.oInfo.get(on).initObject(infer.predefinedOM.get(on)));
+            r.append(infer.oInfo.get(on).oRangeCons());
+        }
+
+        //first do field check then we do method check
+        for(String oname : objectMethods.keySet()){
+            r.append(fieldCheck(oname, infer).toString());
+        }
+
+        for(int i = 0; i < methods.size(); i++){
+            r.append(methodCheck(methods.get(i), i, infer, methodArgNames.get(i), infer.mInfo.get(methods.get(i).thisMethodName)));
+        }
         return r;
     }
 }

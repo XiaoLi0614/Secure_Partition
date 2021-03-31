@@ -13,9 +13,6 @@ public class ObjectInfo {
     HashMap<String, Pair<ArrayList<String>, String>> omArgusC; //object method argument and return confidentiality
     HashMap<String, Pair<ArrayList<String>, String>> omArgusI; //object method argument and return integrity
     HashMap<String, Pair<ArrayList<String>, String>> omArgusA; //object method argument and return availability
-    //ArrayList<String> omRetC; //object method return confidentiality
-    //ArrayList<String> omRetI; //object method return integrity
-    //ArrayList<String> omRetA; //object method return availability
     int rangeO;
 
     //the hashmap is the map from object method name to the number of argument
@@ -27,9 +24,6 @@ public class ObjectInfo {
         omArgusC = new HashMap<>();
         omArgusI = new HashMap<>();
         omArgusA = new HashMap<>();
-        //omRetC = new ArrayList<>();
-        //omRetI = new ArrayList<>();
-        //omRetA =new ArrayList<>();
 
         rangeO = 0;
 
@@ -38,10 +32,18 @@ public class ObjectInfo {
             omArgusC.put(m, new Pair<>(new ArrayList<>(), oname + m + "outputC" ));
             omArgusI.put(m, new Pair<>(new ArrayList<>(), oname + m + "outputI" ));
             omArgusA.put(m, new Pair<>(new ArrayList<>(), oname + m + "outputA" ));
-            for(int c = 0; c < arguNum.get(m).intValue(); c++){
-                omArgusC.get(m).element1.add(oname + m + "input" + c + "C");
-                omArgusI.get(m).element1.add(oname + m + "input" + c + "I");
-                omArgusA.get(m).element1.add(oname + m + "input" + c + "A");
+            //automatically generate bot for null input
+            if(arguNum.get(m).intValue() == 0){
+                omArgusC.get(m).element1.add(oname + m + "botC");
+                omArgusI.get(m).element1.add(oname + m + "botI");
+                omArgusA.get(m).element1.add(oname + m + "botA");
+            }
+            else {
+                for(int c = 0; c < arguNum.get(m).intValue(); c++){
+                    omArgusC.get(m).element1.add(oname + m + "input" + c + "C");
+                    omArgusI.get(m).element1.add(oname + m + "input" + c + "I");
+                    omArgusA.get(m).element1.add(oname + m + "input" + c + "A");
+                }
             }
         }
         return;

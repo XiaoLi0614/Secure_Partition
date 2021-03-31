@@ -22,20 +22,28 @@ public class MethodInfo {
 
     int rangeC; //the count for the range constraints
 
-    public MethodInfo(String mName, int argNum){
-        mName = mName;
-        host = mName + "H";
-        qc = mName + "Q";
-        mcontextC = mName + "conxtC";
-        mcontextI = mName + "conxtI";
-        mcontextA = mName + "conxtA";
+    public MethodInfo(String mName, int argNum, ArrayList<String> methodArgNames){
+        mname = mName;
+        host = mname + "H";
+        qc = mname + "Q";
+        mcontextC = mname + "conxtC";
+        mcontextI = mname + "conxtI";
+        mcontextA = mname + "conxtA";
         arguC = new ArrayList<>();
         arguI = new ArrayList<>();
         arguA = new ArrayList<>();
-        for(int i = 0; i < argNum; i++){
-            arguC.add(mName + "inputC" + i);
-            arguI.add(mName + "inputI" + i);
-            arguA.add(mName + "inputA" + i);
+        //automatically generate bot argument for method
+        if (argNum == 0){
+            arguC.add(mname + "botC");
+            arguI.add(mname + "botI");
+            arguA.add(mname + "botA");
+        }
+        else {
+            for(int i = 0; i < argNum; i++){
+                arguC.add(mname + methodArgNames.get(i) + "C");
+                arguI.add(mname + methodArgNames.get(i) + "I");
+                arguA.add(mname + methodArgNames.get(i) + "A");
+            }
         }
         rangeC = 0;
         return;
@@ -89,7 +97,6 @@ public class MethodInfo {
                         arguA.get(j) + "[i], principals), sLe(");
             }
         }
-
         return result.toString();
     }
 }
