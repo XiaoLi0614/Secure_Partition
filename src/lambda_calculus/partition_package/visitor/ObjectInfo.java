@@ -94,6 +94,8 @@ public class ObjectInfo {
 
     public String oRangeCons(){
         StringBuilder result = new StringBuilder();
+
+        //for the >= 0 constraints
         result.append(oname + "range" + rangeO + " = [ And(0 <= " + Qs + "[i][j], 0 <= " + Qc +
                 "[i][j], 0 <= ");
         int count = 1;
@@ -113,6 +115,34 @@ public class ObjectInfo {
             }
             count++;
         }
+
+        result.append("s.add(" + oname + "range" + rangeO + ")\n");
+
+        //for the <= principals constrains
+        rangeO++;
+        int count1 = 0;
+        result.append(oname + "range" + rangeO + " = [And(sLe(" + Qs + "[i], principals), sLe(" + Qc + "[i], principals), sLe(");
+        //for every object method
+        for(String s: omArgusI.keySet()){
+            result.append(omArgusI.get(s).element2 + "[i], principals), sLe(" + omArgusA.get(s).element2 + "[i], principals), sLe(");
+            //for every argument of the method
+            for(int j = 0; j < omArgusI.get(s).element1.size(); j++){
+                //the ending one
+                if((count1 == omArgusI.keySet().size()) && (j == omArgusI.get(s).element1.size() - 1)){
+                    result.append(omArgusI.get(s).element1.get(j) + "[i], principals), sLe(" +
+                            omArgusA.get(s).element1.get(j) + "[i], principals)) for i in range(n)]\n");
+                }
+                else {
+                    result.append(omArgusI.get(s).element1.get(j) + "[i], principals), sLe(" +
+                            omArgusA.get(s).element1.get(j) + "[i], principals), sLe(");
+                }
+            }
+            count1++;
+        }
+
+        result.append("s.add(" + oname + "range" + rangeO + ")\n");
+        rangeO++;
+
         return result.toString();
     }
 

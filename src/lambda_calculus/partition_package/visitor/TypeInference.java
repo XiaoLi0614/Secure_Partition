@@ -643,26 +643,48 @@ public class TypeInference implements PartitionVisitor{
         StringBuilder r = new StringBuilder();
         TypeInference infer = new TypeInference(num, p, rc, ri, ra, sc, si, sa, bc, bi, ba, rH, pV, pOM);
 
-        //set the predefined value and predefined object method requirement
-        infer.predefinedV = pV;
-        infer.predefinedOM = pOM;
-
-        //set the predefined variable value
+        //set the predefined variable value in statementC
         for(String vname: pV.keySet()){
-            infer.statementC.put(vname, );
-            r.append("=");
+            ArrayList<String> vc = new ArrayList<>();
+            vc.add(vname + "C");
+            infer.statementC.put(vname, vc);
+            r.append(vname + "C" + infer.cTrans(pV.get(vname)));
+
             //set variables for integrity and availability
+            ArrayList<String> vi = new ArrayList<>();
+            vi.add(vname + "I");
+            infer.statementI.put(vname, vi);
+            //initialize the variables
+            r.append(infer.bVarGen(vname, "I"));
+            //add range constraints
+            r.append(infer.QSRangeConst(vname + "I"));
+
+            ArrayList<String> va = new ArrayList<>();
+            va.add(vname + "A");
+            infer.statementA.put(vname, va);
+            //initialize the variables
+            r.append(infer.bVarGen(vname, "A"));
+            //add range constraints
+            r.append(infer.QSRangeConst(vname + "A"));
         }
 
         //print start context
+        r.append("startC" + infer.cTrans(sc));
+        r.append("startI" + infer.bTrans(si));
+        r.append("startA" + infer.bTrans(sa));
 
         //print bot type
+        r.append("botC" + infer.cTrans(bc));
+        r.append("botI" + infer.bTrans(bi));
+        r.append("botA" + infer.bTrans(ba));
 
         //print result type
+        r.append("resultC" + infer.cTrans(rc));
+        r.append("resultI" + infer.bTrans(ri));
+        r.append("resultA" + infer.bTrans(ra));
 
         //print retH
-
-        //print
+        r.append("resH = " + infer.hTrans(rH));
 
         //set the mInfo
         for(int i = 0; i < methods.size(); i++){
@@ -688,5 +710,91 @@ public class TypeInference implements PartitionVisitor{
             r.append(methodCheck(methods.get(i), i, infer, methodArgNames.get(i), infer.mInfo.get(methods.get(i).thisMethodName)));
         }
         return r;
+    }
+
+    //transfer confidentiality information from ArrayList<Boolean> to [False, True, True]
+    public String cTrans(ArrayList<Boolean> c){
+        StringBuilder result = new StringBuilder();
+        result.append(" = [ ");
+        for(int i = 0; i < c.size(); i++){
+            if(i == c.size()-1){
+                if(c.get(i) == true){ result.append("True ]\n"); }
+                else {result.append("False ]\n");}
+            }
+            else {
+                if(c.get(i) == true){ result.append("True, "); }
+                else {result.append("False, ");}
+            }
+        }
+        return result.toString();
+    }
+
+    //transfer integrity and availability information from ArrayList<ArrayList<Integer>> to [[1, 2, 3], [0, 0, 2], [0, 0, 0]]
+    public String bTrans(ArrayList<ArrayList<Integer>> b){
+        StringBuilder result = new StringBuilder();
+        result.append(" = [");
+        for(int i = 0; i < b.size(); i++){
+            result.append("[ ");
+            for(int j = 0; j < b.get(i).size(); j++){
+                if(j == b.get(i).size() -1){
+                    result.append(b.get(i).get(j).toString());
+                }
+                else {
+                    result.append(b.get(i).get(j).toString() + ", ");
+                }
+            }
+            if(i == b.size() -1){
+                result.append("] ");
+            }
+            else {
+                result.append("], ");
+            }
+        }
+        result.append("]\n");
+
+        return result.toString();
+    }
+
+    //transfer host information from ArrayList<Integer> to [0, 0, 1]
+    public String hTrans(ArrayList<Integer> h){
+        StringBuilder result = new StringBuilder();
+        result.append("[ ");
+        for(int i = 0; i < h.size(); i++){
+            if(i == h.size() - 1){
+                result.append(h.get(i).toString() + "]\n");
+            }
+            else {
+                result.append(h.get(i).toString() + ", ");
+            }
+        }
+        return result.toString();
+    }
+
+    //generate confidentiality variable array according to the given name
+    public String cVarGen(String cname){
+        StringBuilder result = new StringBuilder();
+        result.append(cname + "C" + " = [ Bool(\'" + cname + "C" + "_%s\' % i) for i in range(n) ]\n");
+        return result.toString();
+    }
+
+    //generate integrity and availability variable arrays according to the given name
+    public String bVarGen(String bname, String IorA){
+        StringBuilder result = new StringBuilder();
+        result.append(bname + IorA + " = [ [ Int(\"" + bname + IorA + "_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]\n");
+        return result.toString();
+    }
+
+    //the constraints for quorum systems like [[], [], []]
+    public String QSRangeConst(String qsName){
+        StringBuilder result = new StringBuilder();
+        // for the >= 0 constraint
+        result.append(qsName + "range0" + " = [ And(0 <= " + qsName + "[i][j]) for i in range(n) for j in range(n) ]\n");
+        result.append("s.add(" + qsName + "range0)\n" );
+
+        //for the <= principals constraints
+        result.append(qsName + "range1" + " = [And(sLe(" + qsName + "[i], principals)) for i in range(n)]\n");
+        result.append("s.add(" + qsName + "range1)\n" );
+
+        return result.toString();
     }
 }

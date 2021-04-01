@@ -81,6 +81,8 @@ public class MethodInfo {
                 result.append(arguI.get(i) + "[i][j], 0 <= " + arguA.get(i) + "[i][j], 0 <= ");
             }
         }
+        result.append("s.add(" + mname + "range" + rangeC + ")\n");
+
 
         //for the <= principals constraints
         rangeC ++;
@@ -97,6 +99,10 @@ public class MethodInfo {
                         arguA.get(j) + "[i], principals), sLe(");
             }
         }
+
+        result.append("s.add(" + mname + "range" + rangeC + ")\n");
+        rangeC++;
+
         return result.toString();
     }
 }
