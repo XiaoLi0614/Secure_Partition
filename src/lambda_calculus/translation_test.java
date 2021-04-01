@@ -2,6 +2,7 @@ package lambda_calculus;
 
 //import javax.swing.plaf.nimbus.State;
 import fj.Hash;
+import graph.lang.ast.False;
 import lambda_calculus.cps_ast.tree.Context;
 import lambda_calculus.cps_ast.tree.command.Command;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
@@ -30,10 +31,10 @@ public class translation_test {
     static String outputPath = "/home/xiao/IdeaProjects/secure_partition/out/lambda_calculus/";
     public static void main(String[] args)
     {
-        //Expression lambda1 = createOFTUseCase();
+        Expression lambda1 = createOFTUseCase();
         //Expression lambda1 = createTicketsUseCase();
         //Expression lambda1 = createObliviousTransferUseCase();
-        Expression lambda1 = createAuctionUseCase();
+        //Expression lambda1 = createAuctionUseCase();
         //Expression lambda1 = createTestUseCase();
         System.out.println("Complete create use-case");
         CPSPrinter test = new CPSPrinter();
@@ -56,7 +57,7 @@ public class translation_test {
         //TicketTypeChecking(resultMethodDefs);
         //TicketTypeCheckingP(resultMethodDefs);
         //ObliviousTransferTypeCheckingP(resultMethodDefs);
-        AuctionTypeCheckingP(resultMethodDefs);
+        //AuctionTypeCheckingP(resultMethodDefs);
 
         //test for powersets
 /*        HashSet<Integer> in = new HashSet<>(Arrays.asList(1, 2, 3, 4));
@@ -82,6 +83,86 @@ public class translation_test {
             catch (IOException e) {
                 System.out.println("IO exception when print result to file");
             }
+        }
+
+        public static String OneTimeTransferInfer(ArrayList<MethodDefinition> resultDefs)
+        {
+            StringBuilder r = new StringBuilder();
+
+            //initialize the method argument name array
+            ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
+            ArrayList<String> m2ArgNames = new ArrayList<>();
+            m2ArgNames.add("x");
+            ArrayList<String> m3ArgNames = new ArrayList<>();
+            m3ArgNames.add("x");
+            mArgNames.add(new ArrayList<>());
+            mArgNames.add(new ArrayList<>());
+            mArgNames.add(m2ArgNames);
+            mArgNames.add(m3ArgNames);
+
+            //initialize the object method argument number array
+            HashMap<String, HashMap<String, Integer>> oArgNums;
+            oArgNums = new HashMap<>();
+            oArgNums.put("i1", new HashMap<>());
+            oArgNums.get("i1").put("read", new Integer(0));
+            oArgNums.put("i2", new HashMap<>());
+            oArgNums.get("i2").put("read", new Integer(0));
+            oArgNums.put("a", new HashMap<>());
+            oArgNums.get("a").put("read", new Integer(0));
+            oArgNums.get("a").put("write", new Integer(1));
+
+            //initialize the principals
+            ArrayList<Integer> principals = new ArrayList<>();
+            principals.add(new Integer(7));
+            principals.add(new Integer(4));
+            principals.add(new Integer(1));
+
+            //initialize the return type
+            ArrayList<Boolean> rc = new ArrayList<>();
+            //[False, False, True]
+            rc.add(false);
+            rc.add(false);
+            rc.add(true);
+            //resultI = [[1, 2, 0], [0, 0, 0], [0, 0, 0]]
+            ArrayList<ArrayList<Integer>> ri = new ArrayList<>();
+            ArrayList<Integer> ri0 = new ArrayList<>();
+            ri0.add(new Integer(1));
+            ri0.add(new Integer(2));
+            ri0.add(new Integer(0));
+            ArrayList<Integer> ri1 = new ArrayList<>();
+            ri0.add(new Integer(0));
+            ri0.add(new Integer(0));
+            ri0.add(new Integer(0));
+            ri.add(ri0);
+            ri.add(ri1);
+            ri.add(ri1);
+            ArrayList<ArrayList<Integer>> ra = ri;
+
+            //initialize the start context type
+            ArrayList<Boolean> sc = new ArrayList<>();
+            //[True, True, True]
+            sc.add(true);
+            sc.add(true);
+            sc.add(true);
+            //[[4, 7, 0], [0, 0, 0], [0, 0, 0]]
+            ArrayList<ArrayList<Integer>> si = new ArrayList<>();
+            ArrayList<Integer> si0 = new ArrayList<>();
+            si0.add(new Integer(4));
+            si0.add(new Integer(7));
+            si0.add(new Integer(0));
+            ArrayList<Integer> si1 = new ArrayList<>();
+            si0.add(new Integer(0));
+            si0.add(new Integer(0));
+            si0.add(new Integer(0));
+            si.add(si0);
+            si.add(si1);
+            si.add(si1);
+            ArrayList<ArrayList<Integer>> sa = si;
+
+            //initialize the bot type
+
+
+            return r.toString();
         }
 
         public static Expression createOFTUseCase()
