@@ -1,6 +1,7 @@
 package lambda_calculus;
 
 //import javax.swing.plaf.nimbus.State;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import fj.Hash;
 import graph.lang.ast.False;
 import lambda_calculus.cps_ast.tree.Context;
@@ -53,6 +54,8 @@ public class translation_test {
         for(MethodDefinition d : resultMethodDefs){
             System.out.println(d.toString());
         }
+        System.out.println("\nStart generate constraints: \n");
+        System.out.print(OneTimeTransferInfer(resultMethodDefs));
         //OneTimeTransferTypeCheckingP(resultMethodDefs);
         //TicketTypeChecking(resultMethodDefs);
         //TicketTypeCheckingP(resultMethodDefs);
@@ -97,6 +100,7 @@ public class translation_test {
             m3ArgNames.add("x");
             mArgNames.add(new ArrayList<>());
             mArgNames.add(new ArrayList<>());
+            mArgNames.add(new ArrayList<>());
             mArgNames.add(m2ArgNames);
             mArgNames.add(m3ArgNames);
 
@@ -113,8 +117,8 @@ public class translation_test {
 
             //initialize the principals
             ArrayList<Integer> principals = new ArrayList<>();
-            principals.add(new Integer(7));
             principals.add(new Integer(4));
+            principals.add(new Integer(7));
             principals.add(new Integer(1));
 
             //initialize the return type
@@ -130,9 +134,9 @@ public class translation_test {
             ri0.add(new Integer(2));
             ri0.add(new Integer(0));
             ArrayList<Integer> ri1 = new ArrayList<>();
-            ri0.add(new Integer(0));
-            ri0.add(new Integer(0));
-            ri0.add(new Integer(0));
+            ri1.add(new Integer(0));
+            ri1.add(new Integer(0));
+            ri1.add(new Integer(0));
             ri.add(ri0);
             ri.add(ri1);
             ri.add(ri1);
@@ -151,16 +155,53 @@ public class translation_test {
             si0.add(new Integer(7));
             si0.add(new Integer(0));
             ArrayList<Integer> si1 = new ArrayList<>();
-            si0.add(new Integer(0));
-            si0.add(new Integer(0));
-            si0.add(new Integer(0));
+            si1.add(new Integer(0));
+            si1.add(new Integer(0));
+            si1.add(new Integer(0));
             si.add(si0);
             si.add(si1);
             si.add(si1);
             ArrayList<ArrayList<Integer>> sa = si;
 
             //initialize the bot type
+            ArrayList<Boolean> bc = sc;
+            ArrayList<ArrayList<Integer>> bi = si;
+            ArrayList<ArrayList<Integer>> ba = sa;
 
+            //initialize the rH [0, 0, 1]
+            ArrayList<Integer> resH = new ArrayList<>();
+            resH.add(new Integer(0));
+            resH.add(new Integer(0));
+            resH.add(new Integer(1));
+
+            //initialize the pre-defined variables
+            //x is the same as bot(start context)
+            HashMap<String, ArrayList<Boolean>> preV = new HashMap<>();
+            preV.put("x", sc);
+
+            //initialize the pre-define object methods type
+            //i1.read() [True, False, True], i2.read() [False, True, True]
+            HashMap<String, HashMap<String, ArrayList<Boolean>>> preOM = new HashMap<>();
+            preOM.put("i1", new HashMap<>());
+            ArrayList<Boolean> i1C = new ArrayList<>();
+            i1C.add(true);
+            i1C.add(false);
+            i1C.add(true);
+            preOM.get("i1").put("i1readoutputC", i1C);
+
+            preOM.put("i2", new HashMap<>());
+            preOM.put("i2", new HashMap<>());
+            ArrayList<Boolean> i2C = new ArrayList<>();
+            i2C.add(false);
+            i2C.add(true);
+            i2C.add(true);
+            preOM.get("i2").put("i2readoutputC", i2C);
+
+            preOM.put("a", new HashMap<>());
+
+            TypeInference test = new TypeInference();
+            r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
+                    rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM).toString());
 
             return r.toString();
         }

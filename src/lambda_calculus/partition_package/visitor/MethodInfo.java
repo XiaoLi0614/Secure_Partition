@@ -49,6 +49,27 @@ public class MethodInfo {
         return;
     }
 
+    //the initialization for the res method
+    public MethodInfo(){
+        mname = "res";
+        host = mname + "H";
+        qc = mname + "Q";
+        mcontextC = "resultC";
+        mcontextI = "resultI";
+        mcontextA = "resultA";
+        arguC = new ArrayList<>();
+        arguI = new ArrayList<>();
+        arguA = new ArrayList<>();
+        //automatically generate bot argument for method
+        arguC.add("resultC");
+        arguI.add("resultI");
+        arguA.add("resultA");
+
+        rangeC = 0;
+
+        return;
+    }
+
     public String initMethod(){
         StringBuilder result = new StringBuilder();
 
@@ -102,6 +123,13 @@ public class MethodInfo {
 
         result.append("s.add(" + mname + "range" + rangeC + ")\n");
         rangeC++;
+
+        //constraints about the host of the methods
+        result.append(mname + "range" + rangeC + " = [And(0 <= " + host + "[i]) for i in range(n)]\n");
+        result.append("s.add(" + mname + "range" + rangeC + ")\n");
+        rangeC++;
+        result.append("s.add(sLe(" + host + ", principals))\n");
+        result.append("s.add(Not(nonCheck(" + host + ")))\n");
 
         return result.toString();
     }

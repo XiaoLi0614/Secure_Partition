@@ -73,7 +73,7 @@ public class ObjectInfo {
                 result.append(omArgusI.get(s).element1.get(c) + " = [ [ Int(\"" + omArgusI.get(s).element1.get(c) +
                         "_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]\n");
                 result.append(omArgusA.get(s).element1.get(c) + " = [ [ Int(\"" + omArgusA.get(s).element1.get(c) +
-                        "_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]");
+                        "_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]\n");
             }
             //output variable initialization
             //if there is a predefined confidentiality for output, use it instead of declare new variables
@@ -87,7 +87,7 @@ public class ObjectInfo {
             result.append(omArgusI.get(s).element2 + " = [ [ Int(\"" + omArgusI.get(s).element2 +
                     "_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]\n");
             result.append(omArgusA.get(s).element2 + " = [ [ Int(\"" + omArgusA.get(s).element2 +
-                    "_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]");
+                    "_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]\n");
         }
         return result.toString();
     }
@@ -120,7 +120,7 @@ public class ObjectInfo {
 
         //for the <= principals constrains
         rangeO++;
-        int count1 = 0;
+        int count1 = 1;
         result.append(oname + "range" + rangeO + " = [And(sLe(" + Qs + "[i], principals), sLe(" + Qc + "[i], principals), sLe(");
         //for every object method
         for(String s: omArgusI.keySet()){
@@ -140,6 +140,11 @@ public class ObjectInfo {
             count1++;
         }
 
+        result.append("s.add(" + oname + "range" + rangeO + ")\n");
+        rangeO++;
+
+        //for object can not be hosted on client constraints
+        result.append(oname + "range" + rangeO + " = [And(0 == " + Qs + "[i][n-1]) for i in range(n)]\n");
         result.append("s.add(" + oname + "range" + rangeO + ")\n");
         rangeO++;
 

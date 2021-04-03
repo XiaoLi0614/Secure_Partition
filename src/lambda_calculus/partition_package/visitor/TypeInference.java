@@ -116,37 +116,37 @@ public class TypeInference implements PartitionVisitor{
     }
 
     public void updateStatementAll(Node n, ArrayList<String> c, ArrayList<String> i, ArrayList<String> a){
-        if(statementC.get(n) == null || statementC.get(n).isEmpty()){
+        if(statementC.get(n.toString()) == null || statementC.get(n.toString()).isEmpty()){
             statementC.put(n.toString(), new ArrayList<>());
-            statementC.get(n).addAll(c);
+            statementC.get(n.toString()).addAll(c);
         }
         else {
-            statementC.get(n).addAll(c);
+            statementC.get(n.toString()).addAll(c);
         }
-        if(statementI.get(n) == null || statementI.get(n).isEmpty()){
+        if(statementI.get(n.toString()) == null || statementI.get(n.toString()).isEmpty()){
             statementI.put(n.toString(), new ArrayList<>());
-            statementI.get(n).addAll(i);
+            statementI.get(n.toString()).addAll(i);
         }
         else {
-            statementI.get(n).addAll(i);
+            statementI.get(n.toString()).addAll(i);
         }
-        if(statementA.get(n) == null || statementA.get(n).isEmpty()){
+        if(statementA.get(n.toString()) == null || statementA.get(n.toString()).isEmpty()){
             statementA.put(n.toString(), new ArrayList<>());
-            statementA.get(n).addAll(a);
+            statementA.get(n.toString()).addAll(a);
         }
         else {
-            statementA.get(n).addAll(a);
+            statementA.get(n.toString()).addAll(a);
         }
         return;
     }
 
     public void updateStatementAvai(Node n, ArrayList<String> a){
-        if(statementA.get(n) == null || statementA.get(n).isEmpty()){
+        if(statementA.get(n.toString()) == null || statementA.get(n.toString()).isEmpty()){
             statementA.put(n.toString(), new ArrayList<>());
-            statementA.get(n).addAll(a);
+            statementA.get(n.toString()).addAll(a);
         }
         else {
-            statementA.get(n).addAll(a);
+            statementA.get(n.toString()).addAll(a);
         }
         return;
     }
@@ -199,8 +199,8 @@ public class TypeInference implements PartitionVisitor{
 
                 StringBuilder result = ((StringBuilder) visitDispatch(plus.operand1)).
                         append(((StringBuilder) visitDispatch(plus.operand2)).toString());
-                updateStatementAll(plus, statementC.get(plus.operand1), statementI.get(plus.operand1), statementA.get(plus.operand1));
-                updateStatementAll(plus, statementC.get(plus.operand2), statementI.get(plus.operand2), statementA.get(plus.operand2));
+                updateStatementAll(plus, statementC.get(plus.operand1.toString()), statementI.get(plus.operand1.toString()), statementA.get(plus.operand1.toString()));
+                updateStatementAll(plus, statementC.get(plus.operand2.toString()), statementI.get(plus.operand2.toString()), statementA.get(plus.operand2.toString()));
                 return result;
             }
         }
@@ -242,23 +242,23 @@ public class TypeInference implements PartitionVisitor{
 
             //the context needs to include condition's type
             environment.put(conditional.ifExp, environment.get(conditional).clone());
-            environment.get(conditional.ifExp).currentContextC.addAll(statementC.get(conditional.condition));
-            environment.get(conditional.ifExp).currentContextI.addAll(statementI.get(conditional.condition));
-            environment.get(conditional.ifExp).currentContextA.addAll(statementA.get(conditional.condition));
+            environment.get(conditional.ifExp).currentContextC.addAll(statementC.get(conditional.condition.toString()));
+            environment.get(conditional.ifExp).currentContextI.addAll(statementI.get(conditional.condition.toString()));
+            environment.get(conditional.ifExp).currentContextA.addAll(statementA.get(conditional.condition.toString()));
 
             environment.put(conditional.elseExp, environment.get(conditional).clone());
-            environment.get(conditional.elseExp).currentContextC.addAll(statementC.get(conditional.condition));
-            environment.get(conditional.elseExp).currentContextI.addAll(statementI.get(conditional.condition));
-            environment.get(conditional.elseExp).currentContextA.addAll(statementA.get(conditional.condition));
+            environment.get(conditional.elseExp).currentContextC.addAll(statementC.get(conditional.condition.toString()));
+            environment.get(conditional.elseExp).currentContextI.addAll(statementI.get(conditional.condition.toString()));
+            environment.get(conditional.elseExp).currentContextA.addAll(statementA.get(conditional.condition.toString()));
 
             //add the constraints of two branches
             result.append((StringBuilder)visitDispatch(conditional.ifExp)).toString();
             result.append((StringBuilder)visitDispatch(conditional.elseExp)).toString();
 
             //set if statement's type
-            updateStatementAll(conditional, statementC.get(conditional.condition), statementI.get(conditional.condition), statementA.get(conditional.condition));
-            updateStatementAll(conditional, statementC.get(conditional.ifExp), statementI.get(conditional.ifExp), statementA.get(conditional.ifExp));
-            updateStatementAll(conditional, statementC.get(conditional.elseExp), statementI.get(conditional.elseExp), statementA.get(conditional.elseExp));
+            updateStatementAll(conditional, statementC.get(conditional.condition.toString()), statementI.get(conditional.condition.toString()), statementA.get(conditional.condition.toString()));
+            updateStatementAll(conditional, statementC.get(conditional.ifExp.toString()), statementI.get(conditional.ifExp.toString()), statementA.get(conditional.ifExp.toString()));
+            updateStatementAll(conditional, statementC.get(conditional.elseExp.toString()), statementI.get(conditional.elseExp.toString()), statementA.get(conditional.elseExp.toString()));
 
             return result;
         }
@@ -275,7 +275,7 @@ public class TypeInference implements PartitionVisitor{
             StringBuilder result = (StringBuilder) visitDispatch(expSt.expression);
 
             //set expression statement type
-            updateStatementAll(expSt, statementC.get(expSt.expression), statementI.get(expSt.expression), statementA.get(expSt.expression));
+            updateStatementAll(expSt, statementC.get(expSt.expression.toString()), statementI.get(expSt.expression.toString()), statementA.get(expSt.expression.toString()));
 
             return result;
         }
@@ -288,23 +288,23 @@ public class TypeInference implements PartitionVisitor{
 
             //the context needs to include condition's type
             environment.put(iF.command1, environment.get(iF).clone());
-            environment.get(iF.command1).currentContextC.addAll(statementC.get(iF.condition));
-            environment.get(iF.command1).currentContextI.addAll(statementI.get(iF.condition));
-            environment.get(iF.command1).currentContextA.addAll(statementA.get(iF.condition));
+            environment.get(iF.command1).currentContextC.addAll(statementC.get(iF.condition.toString()));
+            environment.get(iF.command1).currentContextI.addAll(statementI.get(iF.condition.toString()));
+            environment.get(iF.command1).currentContextA.addAll(statementA.get(iF.condition.toString()));
 
             environment.put(iF.command2, environment.get(iF).clone());
-            environment.get(iF.command2).currentContextC.addAll(statementC.get(iF.condition));
-            environment.get(iF.command2).currentContextI.addAll(statementI.get(iF.condition));
-            environment.get(iF.command2).currentContextA.addAll(statementA.get(iF.condition));
+            environment.get(iF.command2).currentContextC.addAll(statementC.get(iF.condition.toString()));
+            environment.get(iF.command2).currentContextI.addAll(statementI.get(iF.condition.toString()));
+            environment.get(iF.command2).currentContextA.addAll(statementA.get(iF.condition.toString()));
 
             //add the constraints of two branches
             result.append((StringBuilder)visitDispatch(iF.command1)).toString();
             result.append((StringBuilder)visitDispatch(iF.command2)).toString();
 
             //set if statement's type
-            updateStatementAll(iF, statementC.get(iF.condition), statementI.get(iF.condition), statementA.get(iF.condition));
-            updateStatementAll(iF, statementC.get(iF.command1), statementI.get(iF.command1), statementA.get(iF.command1));
-            updateStatementAll(iF, statementC.get(iF.command2), statementI.get(iF.command2), statementA.get(iF.command2));
+            updateStatementAll(iF, statementC.get(iF.condition.toString()), statementI.get(iF.condition.toString()), statementA.get(iF.condition.toString()));
+            updateStatementAll(iF, statementC.get(iF.command1.toString()), statementI.get(iF.command1.toString()), statementA.get(iF.command1.toString()));
+            updateStatementAll(iF, statementC.get(iF.command2.toString()), statementI.get(iF.command2.toString()), statementA.get(iF.command2.toString()));
 
             return result;
         }
@@ -318,17 +318,17 @@ public class TypeInference implements PartitionVisitor{
 
             //todo: may need to generalize the to the command instead of only the singlecall
             if(sequence.command1 instanceof SingleCall){
-                statementC.put(((SingleCall) sequence.command1).administrativeX.toString(), statementC.get(sequence.command1));
-                statementI.put(((SingleCall) sequence.command1).administrativeX.toString(), statementI.get(sequence.command1));
-                statementA.put(((SingleCall) sequence.command1).administrativeX.toString(), statementA.get(sequence.command1));
+                statementC.put(((SingleCall) sequence.command1).administrativeX.toString(), statementC.get(sequence.command1.toString()));
+                statementI.put(((SingleCall) sequence.command1).administrativeX.toString(), statementI.get(sequence.command1.toString()));
+                statementA.put(((SingleCall) sequence.command1).administrativeX.toString(), statementA.get(sequence.command1.toString()));
             }
 
-            environment.get(sequence.command2).currentContextA.addAll(statementA.get(sequence.command1));
+            environment.get(sequence.command2).currentContextA.addAll(statementA.get(sequence.command1.toString()));
             result.append(((StringBuilder) visitDispatch(sequence.command2)).toString());
 
             //set the sequence statement type
-            updateStatementAll(sequence, statementC.get(sequence.command1), statementI.get(sequence.command1), statementA.get(sequence.command1));
-            updateStatementAll(sequence, statementC.get(sequence.command2), statementI.get(sequence.command2), statementA.get(sequence.command2));
+            updateStatementAll(sequence, statementC.get(sequence.command1.toString()), statementI.get(sequence.command1.toString()), statementA.get(sequence.command1.toString()));
+            updateStatementAll(sequence, statementC.get(sequence.command2.toString()), statementI.get(sequence.command2.toString()), statementA.get(sequence.command2.toString()));
             return result;
         }
 
@@ -394,14 +394,14 @@ public class TypeInference implements PartitionVisitor{
                         result.append(((StringBuilder) visitDispatch(argE)).toString());
 
                         //\tau <= \tau_1
-                        for(String cVariables: statementC.get(argE)){
-                            result.append("s.add(cLe(" + cVariables + ", " + mInfo.get(singleCall.methodName.toString()).arguC.get(a) + "))\n ");
+                        for(String cVariables: statementC.get(argE.toString())){
+                            result.append("s.add(cLe(" + cVariables + ", " + mInfo.get(singleCall.methodName.toString()).arguC.get(a) + "))\n");
                         }
-                        for(String iVariables: statementI.get(argE)){
-                            result.append("s.add(bLe(" + mInfo.get(singleCall.methodName.toString()).arguI.get(a)  + ", " + iVariables + "))\n ");
+                        for(String iVariables: statementI.get(argE.toString())){
+                            result.append("s.add(bLe(" + mInfo.get(singleCall.methodName.toString()).arguI.get(a)  + ", " + iVariables + "))\n");
                         }
-                        for(String aVariables: statementA.get(argE)){
-                            result.append("s.add(bLe(" + mInfo.get(singleCall.methodName.toString()).arguA.get(a)  + ", " + aVariables + "))\n ");
+                        for(String aVariables: statementA.get(argE.toString())){
+                            result.append("s.add(bLe(" + mInfo.get(singleCall.methodName.toString()).arguA.get(a)  + ", " + aVariables + "))\n");
                         }
 
                         //\tau_x <= \tau_1
@@ -486,14 +486,14 @@ public class TypeInference implements PartitionVisitor{
                         result.append(((StringBuilder) visitDispatch(argE)).toString());
 
                         //\tau <= \tau_1
-                        for(String cVariables: statementC.get(argE)){
-                            result.append("s.add(cLe(" + cVariables + ", " + oInfo.get(Oname).omArgusC.get(OMName).element1.get(a) + "))\n ");
+                        for(String cVariables: statementC.get(argE.toString())){
+                            result.append("s.add(cLe(" + cVariables + ", " + oInfo.get(Oname).omArgusC.get(OMName).element1.get(a) + "))\n");
                         }
-                        for(String iVariables: statementI.get(argE)){
-                            result.append("s.add(bLe(" + oInfo.get(Oname).omArgusI.get(OMName).element1.get(a) + ", " + iVariables + "))\n ");
+                        for(String iVariables: statementI.get(argE.toString())){
+                            result.append("s.add(bLe(" + oInfo.get(Oname).omArgusI.get(OMName).element1.get(a) + ", " + iVariables + "))\n");
                         }
-                        for(String aVariables: statementA.get(argE)){
-                            result.append("s.add(bLe(" + oInfo.get(Oname).omArgusA.get(OMName).element1.get(a) + ", " + aVariables + "))\n ");
+                        for(String aVariables: statementA.get(argE.toString())){
+                            result.append("s.add(bLe(" + oInfo.get(Oname).omArgusA.get(OMName).element1.get(a) + ", " + aVariables + "))\n");
                         }
 
                         //\tau_x <= \tau_1
@@ -566,12 +566,13 @@ public class TypeInference implements PartitionVisitor{
     //n is the index of method definition in the array
     public StringBuilder methodCheck(MethodDefinition m, int n, TypeInference infer, ArrayList<String> mArgNames, MethodInfo mInfo){
         StringBuilder result = new StringBuilder();
+        //need to differentiate res and other method call setup
         if(n != 0){
             // if the free variable in m is empty, we set bot = context
             if(m.freeVars.isEmpty()){
-                result.append(mInfo.arguC.get(0) + " = " + mInfo.mcontextC);
-                result.append(mInfo.arguI.get(0) + " = " + mInfo.mcontextI);
-                result.append(mInfo.arguA.get(0) + " = " + mInfo.mcontextA);
+                result.append(mInfo.arguC.get(0) + " = " + mInfo.mcontextC + "\n");
+                result.append(mInfo.arguI.get(0) + " = " + mInfo.mcontextI + "\n");
+                result.append(mInfo.arguA.get(0) + " = " + mInfo.mcontextA + "\n");
             }
             else {
                 //set up the input arguments to type the body of method and the object call
@@ -591,6 +592,8 @@ public class TypeInference implements PartitionVisitor{
             }
 
             //set the current hosts
+            infer.environment.put(m.body, new envForTypeInfer());
+            infer.environment.put(m.objectCall, new envForTypeInfer());
             infer.environment.get(m.body).currentHosts = mInfo.host;
             infer.environment.get(m.objectCall).currentHosts = mInfo.host;
 
@@ -602,7 +605,7 @@ public class TypeInference implements PartitionVisitor{
             mconxtI.add(mInfo.mcontextI);
             infer.environment.get(m.body).currentContextI = mconxtI;
             ArrayList<String> mconxtA = new ArrayList<>();
-            mconxtC.add(mInfo.mcontextA);
+            mconxtA.add(mInfo.mcontextA);
             infer.environment.get(m.body).currentContextA = mconxtA;
 
             //set the administrative x type in the method body
@@ -611,23 +614,30 @@ public class TypeInference implements PartitionVisitor{
 
             result.append(((StringBuilder) infer.visitDispatch(m.body)).toString());
             //todo: the part about return type is not implemented right now
-        }
 
-        //i_1 <= cIntegrity(Qc)
-        for(String argI : mInfo.arguI){
-            //\tau_1 <= \tau_2
-            if(n != 0){
-                result.append("s.add(cIntegrity(" + argI + ", " + mInfo.qc + "))\n");
+            //i_1 <= cIntegrity(Qc)
+            for(String argI : mInfo.arguI){
+                //\tau_1 <= \tau_2
+                if(n != infer.mInfo.keySet().size() - 1){
+                    result.append("s.add(cIntegrity(" + argI + ", " + mInfo.qc + "))\n");
+                }
+                else {
+                    result.append("s.add(cIntegrityE(" + argI + ", " + mInfo.qc + "))\n");
+                }
             }
-            else {
-                result.append("s.add(cIntegrityE(" + argI + ", " + mInfo.qc + "))\n");
-            }
+
+            //c_x <= H
+            result.append("s.add(cLeH(" + mInfo.mcontextC + ", " + mInfo.host + "))\n");
+
+            return result;
         }
+        //this is the set up for the res method
+        else {
+            result.append("s.add(cLeH(resultC, resH))\n");
+            result.append("s.add(cIntegrity(resultI, resQ))\n");
 
-        //c_x <= H
-        result.append("s.add(cLeH(" + mInfo.mcontextC + ", " + mInfo.host + "))\n");
-
-        return result;
+            return result;
+        }
     }
 
     public StringBuilder classTypeCheck(
@@ -642,6 +652,9 @@ public class TypeInference implements PartitionVisitor{
 
         StringBuilder r = new StringBuilder();
         TypeInference infer = new TypeInference(num, p, rc, ri, ra, sc, si, sa, bc, bi, ba, rH, pV, pOM);
+
+        r.append("n = " + num + "\n");
+        r.append("principals = " + infer.hTrans(p));
 
         //set the predefined variable value in statementC
         for(String vname: pV.keySet()){
@@ -686,13 +699,20 @@ public class TypeInference implements PartitionVisitor{
         //print retH
         r.append("resH = " + infer.hTrans(rH));
 
-        //set the mInfo
-        for(int i = 0; i < methods.size(); i++){
+        //initial resQ
+        r.append("resQ = [ [ Int(\"resQ_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]\n");
+        r.append("s.add([ And(0 <= resQ[i][j]) for i in range(n) for j in range(n) ])\n");
+        r.append("s.add([ And(sLe(resQ[i], principals)) for i in range(n) ])\n");
+
+        //set the mInfo, the index start with 1 to ignore res method
+        for(int i = 1; i < methods.size(); i++){
             infer.mInfo.put(methods.get(i).thisMethodName.toString(),
                     new MethodInfo(methods.get(i).thisMethodName.toString(), methods.get(i).freeVars.size(), methodArgNames.get(i)));
             r.append(infer.mInfo.get(methods.get(i).thisMethodName.toString()).initMethod());
             r.append(infer.mInfo.get(methods.get(i).thisMethodName.toString()).mRangeCons());
         }
+        //set up mInfo for res method
+        infer.mInfo.put(methods.get(0).thisMethodName.toString(), new MethodInfo());
 
         //set the oInfo
         for(String on: objectMethods.keySet()){
@@ -706,9 +726,14 @@ public class TypeInference implements PartitionVisitor{
             r.append(fieldCheck(oname, infer).toString());
         }
 
+        //then the method checks
         for(int i = 0; i < methods.size(); i++){
-            r.append(methodCheck(methods.get(i), i, infer, methodArgNames.get(i), infer.mInfo.get(methods.get(i).thisMethodName)));
+            r.append(methodCheck(methods.get(i), i, infer, methodArgNames.get(i), infer.mInfo.get(methods.get(i).thisMethodName.toString())));
         }
+
+        //we need to have a this call check for the entrance method (the last method in the method definition array)
+        r.append(infer.entranceThisCallT(methods.get(methods.size() - 1), methodArgNames.get(methodArgNames.size() - 1)).toString());
+
         return r;
     }
 
@@ -796,5 +821,79 @@ public class TypeInference implements PartitionVisitor{
         result.append("s.add(" + qsName + "range1)\n" );
 
         return result.toString();
+    }
+
+    public StringBuilder entranceThisCallT(MethodDefinition mDef, ArrayList<String> mn){
+        StringBuilder result = new StringBuilder();
+
+        //start \tau_x <= \tau_x'
+        result.append("s.add(cLe(startC, " + mInfo.get(mDef.thisMethodName.toString()).mcontextC + "))\n");
+        result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).mcontextI + ", startI))\n");
+        result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).mcontextA + ", startA))\n");
+
+        //when there is no argument for the method
+        //we need to add dummy argument for the implicit constraints
+        //now we have changed the dummy variable to the argument named "bot" in the mAName
+        //now all the implicit constraints are forced by the bot argument
+        //for example, \tau_1 can have the same type as \tau_x' and the availability constraint is on the A(\tau_x')
+        if(mDef.freeVars == null || mDef.freeVars.size() == 0){
+            //a1 <= AvailabilityP(a1, Q|H)
+            result.append("s.add(availabilityP(" + mInfo.get(mDef.thisMethodName.toString()).arguA.get(0) +
+                    ", " + mInfo.get(mDef.thisMethodName.toString()).qc + ", resH))\n");
+
+            ////\tau_x <= \tau_1
+            result.append("s.add(cLe(startC, " + mInfo.get(mDef.thisMethodName.toString()).arguC.get(0) + "))\n");
+            result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).arguI.get(0) + ", startI))\n");
+            result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).arguA.get(0) + ", startA))\n");
+
+            //set the return value for the method
+            //ArrayList<String> retC = new ArrayList<>();
+            //retC.add("resultC");
+            //ArrayList<String> retI = new ArrayList<>();
+            //retI.add("resultI");
+            //ArrayList<String> retA = new ArrayList<>();
+            //retA.add("resultA");
+            //statementC.put(singleCall.toString(), retC);
+            //statementI.put(singleCall.toString(), retI);
+            //statementA.put(singleCall.toString(), retA);
+
+            return result;
+        }
+        else {
+            for(Var arg: mDef.freeVars){
+                //for the entrance method, all the arguments are from user. There is no constraints
+                result.append(((StringBuilder) visitDispatch(arg)).toString());
+            }
+            for (int a = 0; a < mDef.freeVars.size(); a++){
+                //\tau_x <= \tau_1
+                result.append("s.add(cLe(startC, " + mInfo.get(mDef.thisMethodName.toString()).arguC.get(a) + "))\n");
+                result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).arguI.get(a) + ", startI))\n");
+                result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).arguA.get(a) + ", startA))\n");
+
+                //\tau <= \tau_1
+                String cVariable = statementC.get(mn.get(a)).get(0);
+                result.append("s.add(cLe(" + cVariable + ", " + mInfo.get(mDef.thisMethodName.toString()).arguC.get(a) + "))\n");
+                String iVariable = statementI.get(mn.get(a)).get(0);
+                result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).arguI.get(a)  + ", " + iVariable + "))\n");
+                String aVariable = statementA.get(mn.get(a)).get(0);
+                result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).arguA.get(a)  + ", " + aVariable + "))\n");
+
+                //a1 <= Availability(Q|H)
+                result.append("s.add(availabilityP(" + mInfo.get(mDef.thisMethodName.toString()).arguA.get(a) +
+                        ", " + mInfo.get(mDef.thisMethodName.toString()).qc + ", resH))\n");
+            }
+
+            //set the return value for the method
+            //ArrayList<String> retC = new ArrayList<>();
+            //retC.add("resultC");
+            //ArrayList<String> retI = new ArrayList<>();
+            //retI.add("resultI");
+            //ArrayList<String> retA = new ArrayList<>();
+            //retA.add("resultA");
+            //statementC.put(singleCall.toString(), retC);
+            //statementI.put(singleCall.toString(), retI);
+            //statementA.put(singleCall.toString(), retA);
+
+        return result; }
     }
 }
