@@ -94,11 +94,13 @@ public class translation_test {
 
             //initialize the method argument name array
             ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
+            ArrayList<String> m1ArgNames = new ArrayList<>();
+            m1ArgNames.add("return");
             ArrayList<String> m2ArgNames = new ArrayList<>();
             m2ArgNames.add("x");
             ArrayList<String> m3ArgNames = new ArrayList<>();
             m3ArgNames.add("x");
-            mArgNames.add(new ArrayList<>());
+            mArgNames.add(m1ArgNames);
             mArgNames.add(new ArrayList<>());
             mArgNames.add(new ArrayList<>());
             mArgNames.add(m2ArgNames);

@@ -610,7 +610,9 @@ public class TypeInference implements PartitionVisitor{
 
             //set the administrative x type in the method body
             result.append(((StringBuilder) infer.visitDispatch(m.objectCall)).toString());
-            infer.statementC.put(m.objectCall.administrativeX.toString(), statementC.get(m.objectCall));
+            infer.statementC.put(m.objectCall.administrativeX.toString(), infer.statementC.get(m.objectCall.toString()));
+            infer.statementI.put(m.objectCall.administrativeX.toString(), infer.statementI.get(m.objectCall.toString()));
+            infer.statementA.put(m.objectCall.administrativeX.toString(), infer.statementA.get(m.objectCall.toString()));
 
             result.append(((StringBuilder) infer.visitDispatch(m.body)).toString());
             //todo: the part about return type is not implemented right now

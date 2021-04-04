@@ -256,6 +256,10 @@ public class PartitionMethod implements PartitionVisitor{
             }
         }
 
+        //add one free variable for ret
+        currentDefinitions.get(0).freeVars.add(new Var("return"));
+        currentDefinitions.get(0).addBody(new ExpSt(new Var("return")));
+
         //b.recursionReplacement.get(wMethodName).element1 = currentDefinitions.get(currentDefinitions.size()-1).thisMethodName.toString();
         //for()
         return currentDefinitions;
