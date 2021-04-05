@@ -144,8 +144,11 @@ public class ObjectInfo {
         rangeO++;
 
         //for object can not be hosted on client constraints
-        result.append(oname + "range" + rangeO + " = [And(0 == " + Qs + "[i][n-1]) for i in range(n)]\n");
-        result.append("s.add(" + oname + "range" + rangeO + ")\n");
+        //todo: this constraints needs to be generalized
+        if(!oname.equals("user")){
+            result.append(oname + "range" + rangeO + " = [And(0 == " + Qs + "[i][n-1]) for i in range(n)]\n");
+            result.append("s.add(" + oname + "range" + rangeO + ")\n");
+        }
         rangeO++;
 
         return result.toString();

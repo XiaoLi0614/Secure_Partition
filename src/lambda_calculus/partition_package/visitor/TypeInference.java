@@ -550,9 +550,9 @@ public class TypeInference implements PartitionVisitor{
             //a_m' <= Availability(Qs)
             result.append("s.add(availabilityC(" + objSig.omArgusA.get(mName).element2 + ", " + objHosts + "))\n");
 
-            for(int i = 0; i < objSig.omArgusI.get(mName).element1.size() - 1; i++){
+            for(int i = 0; i < objSig.omArgusI.get(mName).element1.size(); i++){
                 //i_m <= CIntegrity(Qc)
-                result.append("s.add(cIntegrity(" + objSig.omArgusI.get(mName).element1.get(i) + ", " + infer.oInfo.get(objName).Qc);
+                result.append("s.add(cIntegrity(" + objSig.omArgusI.get(mName).element1.get(i) + ", " + infer.oInfo.get(objName).Qc + "))\n");
 
                 //c_m <= c_m', i_m <= i_m', a_m <= a_m'
                 result.append("s.add(lableLe(" + objSig.omArgusC.get(mName).element1.get(i) + ", " + objSig.omArgusC.get(mName).element2 +
