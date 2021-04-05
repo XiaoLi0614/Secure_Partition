@@ -736,7 +736,69 @@ public class TypeInference implements PartitionVisitor{
         //we need to have a this call check for the entrance method (the last method in the method definition array)
         r.append(infer.entranceThisCallT(methods.get(methods.size() - 1), methodArgNames.get(methodArgNames.size() - 1)).toString());
 
+        r.append(infer.optimizationResult());
         return r;
+    }
+
+    //print the minimize requirements and print out the result
+    public String optimizationResult(){
+        StringBuilder result = new StringBuilder();
+
+        result.append("\ns.minimize(sum(");
+        //minimize host for all methods except for res
+        for(String mn: mInfo.keySet()){
+            if(!mn.equals("ret")){
+                result.append(mInfo.get(mn).host + ") + sum(");
+            }
+        }
+
+        //minimize the storage quorum
+        for(String on: oInfo.keySet()){
+            for(int i = 0; i < n; i++){
+                result.append(oInfo.get(on).Qs + "[" + i + "]) + sum(");
+            }
+        }
+
+        //minimize the communication quorum for methods
+        int c = 1;
+        for(String mn1: mInfo.keySet()){
+            for(int j = 0; j < n; j++){
+                if(j == n - 1 && c == mInfo.keySet().size()){
+                    result.append(mInfo.get(mn1).qc + "[" + j + "]))\n");
+                }
+                else{
+                    result.append(mInfo.get(mn1).qc + "[" + j + "]) + sum(");
+                }
+            }
+            c++;
+        }
+        result.append("print(s.check())\nm = s.model()\nprint(\"resH:\")\nprint(resH)\n");
+
+        //print host information
+        for(String mn2: mInfo.keySet()){
+            if(!mn2.equals("ret")){
+                result.append("print(\"" + mInfo.get(mn2).host + ":\")\n");
+                result.append("print([m[hInfo].as_long() for hInfo in " + mInfo.get(mn2).host + "])\n");
+            }
+        }
+
+        //print quorum information
+        for(String mn3: mInfo.keySet()){
+            result.append(printQuorum(mInfo.get(mn3).qc));
+        }
+        for(String on1: oInfo.keySet()){
+            result.append(printQuorum(oInfo.get(on1).Qs));
+        }
+
+        return result.toString();
+    }
+
+    public String printQuorum(String qName){
+        StringBuilder result  = new StringBuilder();
+        result.append("print(\"" + qName + ":\")\n");
+        result.append("print([e for qs in " + qName + " for e in qs])\n");
+        result.append("print([m[e].as_long() for qs in " + qName + " for e in qs])\n");
+        return result.toString();
     }
 
     //transfer confidentiality information from ArrayList<Boolean> to [False, True, True]

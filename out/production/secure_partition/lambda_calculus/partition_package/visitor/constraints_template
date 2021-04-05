@@ -1,0 +1,140 @@
+from z3 import *
+
+s = Optimize()
+
+def solve(constr):
+    s.add(constr)
+    if s.check() == sat:
+        return True
+    else: 
+        return False
+
+def cLe(c1, c2):
+    constraints = []
+    for i1 in range(n):
+        #constraints.append(And(Implies(c2[i1], c1[i1])))
+        constraints.append(Implies(c2[i1], c1[i1]))
+    result = And(constraints)
+    return result
+
+def cLeH (c1, h):
+    constraints = []
+    for i1 in range(n):
+        #constraints.append(And(Implies(h[i1] > 0, c1[i1])))
+        constraints.append(Implies(h[i1] > 0, c1[i1]))
+    result = And(constraints)
+    return result
+
+def nonCheck(qs):
+    constraints = []
+    for i1 in range(n):
+        #constraints.append(And(qs[i1] == 0))
+        constraints.append(qs[i1] == 0)
+    result = And(constraints)
+    return result
+
+def sLe(qs1, qs2):
+    constraints = []
+    for i1 in range(n):
+        #constraints.append(And(qs2[i1] >= qs1[i1]))
+        constraints.append(qs2[i1] >= qs1[i1])
+    result = And(constraints)
+    return result
+
+def sL(qs1, qs2):
+    constraints = []
+    for i1 in range(n):
+        constraints.append(qs1[i1] < qs2[i1])
+    result = Implies(Not(nonCheck(qs2)), Or(constraints))
+    return result
+
+def bLe(q1, q2):
+    constraints = []
+    for i1 in range(n):
+        subconstr = []
+        for i2 in range(n):
+            subconstr.append(sLe(q1[i1], q2[i2]))   
+        constraints.append(Or(subconstr))
+    result = And(constraints)
+    return result
+
+def confQ(c, q):
+    constraints = []
+    for i1 in range(n):
+        for i2 in range(n):
+            constraints.append(Implies(q[i1][i2] > 0, c[i2]))
+    result = And(constraints)
+    return result
+
+#There are two solutions about representation of the Q matrix:
+#1. the nonCheck can be eliminated because of integrity constraint. Then we will have to deal with redundency
+#2. add nonCheck and then [[4, 7, 1],[0, 0, 0],[0, 0, 0]] can exists
+def availabilityC(b, q):
+    constraints = []
+    for i1 in range(n):
+        subconstr = []
+        for i2 in range(n):
+            aliveQs = [ principals[i] - b[i1][i] for i in range(n) ]
+            subconstr.append(And(sLe(q[i2], aliveQs), Not(nonCheck(q[i2]))))
+        constraints.append(Or(subconstr))
+    result = And(constraints)
+    return result
+
+def availabilityP(b, q, h):
+    constraints = []
+    for i1 in range(n):
+        subconstr = []
+        for i2 in range(n):
+            alive = []
+            for a in range(n):
+                alive.append(Implies(h[a] > 0, q[i2][a] <= h[a] - b[i1][a]))
+                alive.append(Implies(h[a] == 0, q[i2][a] <= 0))
+                #alive.append(Implies(q[i2][a] >= 0, q[i2][a] <= h[a] - b[i1][a]))
+            subconstr.append(And(sLe(q[i2], h), Not(nonCheck(q[i2])), And(alive)))
+        constraints.append(Or(subconstr))
+    result = And(constraints)
+    return result
+
+def cIntegrity(b, q):
+    constraints = []
+    for i1 in range(n):
+        subconstr = []
+        for i2 in range(n):
+            alive = []
+            for a in range(n):
+                #alive.append(Implies(a < n-1, b[i1][a] < q[i2][a]))
+                alive.append(And(a < n-1, b[i1][a] < q[i2][a]))
+            #subconstr.append(Implies(Not(nonCheck(q[i2])), And(alive)))
+            subconstr.append(Implies(Not(nonCheck(q[i2])), Or(alive)))
+        constraints.append(And(subconstr))
+    result = And(constraints)
+    return result
+
+def cIntegrityE(b, q):
+    constraints = []
+    for i1 in range(n):
+        subconstr = []
+        for i2 in range(n):
+            alive = []
+            for a in range(n):
+                alive.append(b[i1][a] < q[i2][a])
+            subconstr.append(Implies(Not(nonCheck(q[i2])), Or(alive)))
+        constraints.append(And(subconstr))
+    result = And(constraints)
+    return result
+
+def sIntegrity(b, q):
+    constraints = []
+    for i3 in range(n):
+        for i1 in range(n):
+            for i2 in range(n):
+                for j in range(n):
+                    constraints.append(Implies(And(Not(q[i1][j] == 0), Not(q[i2][j] == 0)), 
+                                               ((q[i1][j] + q[i2][j] - principals[j]) > b[i3][j])))
+    result = And(constraints)
+    return result
+
+def lableLe(c1, c2, i1, i2, a1, a2):
+    return And(cLe(c1, c2), bLe(i2, i1), bLe(a2, a1))
+
+

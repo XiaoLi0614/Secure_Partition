@@ -18,9 +18,12 @@ import lambda_calculus.source_ast.visitor.CPSPrinter;
 import lesani.collection.Pair;
 import com.google.common.collect.*;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.nio.channels.FileChannel;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,8 +32,8 @@ import static com.google.common.collect.Sets.newHashSet;
 
 
 public class translation_test {
-    static String outputPath = "/home/xiao/IdeaProjects/secure_partition/out/lambda_calculus/";
-    public static void main(String[] args)
+    static String outputPath = "/home/xiao/IdeaProjects/secure_partition/src/lambda_calculus/partition_package/visitor/";
+    public static void main(String[] args) throws IOException
     {
         Expression lambda1 = createOFTUseCase();
         //Expression lambda1 = createTicketsUseCase();
@@ -55,7 +58,9 @@ public class translation_test {
             System.out.println(d.toString());
         }
         System.out.println("\nStart generate constraints: \n");
-        System.out.print(OneTimeTransferInfer(resultMethodDefs));
+        printToFile(OneTimeTransferInfer(resultMethodDefs), "OneTimeTransfer");
+        //System.out.print(OneTimeTransferInfer(resultMethodDefs));
+
         //OneTimeTransferTypeCheckingP(resultMethodDefs);
         //TicketTypeChecking(resultMethodDefs);
         //TicketTypeCheckingP(resultMethodDefs);
@@ -76,15 +81,35 @@ public class translation_test {
 //            return result;
 //        }
 
-        public static void printToFile(String transformation, String fileName)
+        public static void printToFile(String transformation, String fileName) throws IOException
         {
             try {
-                FileOutputStream fileOutputStream = new FileOutputStream(outputPath + fileName);
-                fileOutputStream.write(transformation.getBytes());
-                fileOutputStream.close();
+                File f = new File(outputPath + fileName);
+                if (!f.exists()) {
+                    f.createNewFile();
+                }
+
+                File template = new File(outputPath + "constraints_template");
+                if (!template.exists()) {
+                    template.createNewFile();
+                }
+
+                //add the constraints template to output file
+                FileChannel tempChannel = new FileInputStream(template).getChannel();
+                FileChannel fChannel = new FileOutputStream(f).getChannel();
+                fChannel.transferFrom(tempChannel, 0, tempChannel.size());
+                tempChannel.close();
+                fChannel.close();
+
+                //write the collected constraints for the specific use-case
+                FileOutputStream consOutputStream = new FileOutputStream(f, true);
+                consOutputStream.write(transformation.getBytes());
+                consOutputStream.flush();
+                consOutputStream.close();
             }
             catch (IOException e) {
                 System.out.println("IO exception when print result to file");
+                e.printStackTrace();
             }
         }
 
