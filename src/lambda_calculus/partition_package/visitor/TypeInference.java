@@ -239,6 +239,7 @@ public class TypeInference implements PartitionVisitor{
             //the first step is to set the environment for the dispatched commands
             environment.put(conditional.condition, environment.get(conditional).clone());
             StringBuilder result = (StringBuilder) visitDispatch(conditional.condition);
+            result.append("#IfT: " + conditional.toString() + "\n");
 
             //the context needs to include condition's type
             environment.put(conditional.ifExp, environment.get(conditional).clone());
@@ -285,6 +286,7 @@ public class TypeInference implements PartitionVisitor{
             //the first step is to set the environment for the dispatched commands
             environment.put(iF.condition, environment.get(iF).clone());
             StringBuilder result = (StringBuilder) visitDispatch(iF.condition);
+            result.append("#IfT: " + iF.toString() + "\n");
 
             //the context needs to include condition's type
             environment.put(iF.command1, environment.get(iF).clone());
@@ -314,6 +316,7 @@ public class TypeInference implements PartitionVisitor{
             //we first type the expression e1, then bind the type \tau_1 with the administrative x
             environment.put(sequence.command1, environment.get(sequence).clone());
             StringBuilder result = (StringBuilder) visitDispatch(sequence.command1);
+            result.append("#SeqT: " + sequence.toString() + "\n");
             environment.put(sequence.command2, environment.get(sequence).clone());
 
             //todo: may need to generalize the to the command instead of only the singlecall
@@ -342,6 +345,8 @@ public class TypeInference implements PartitionVisitor{
             //when this is a method call (ThisCallT)
             StringBuilder result = new StringBuilder();
             if(singleCall.objectName.toString() =="this"){
+                result.append("#ThisCallT: " + singleCall.toString() + "\n");
+
                 //\tau_x <= \tau_x'
                 for(String conxtxC: environment.get(singleCall).currentContextC){
                     result.append("s.add(cLe(" + conxtxC + ", " + mInfo.get(singleCall.methodName.toString()).mcontextC + "))\n");
@@ -437,6 +442,8 @@ public class TypeInference implements PartitionVisitor{
             }
             //this is an object call
             else {
+                result.append("#ObjCallT: " + singleCall.toString() + "\n");
+
                 String Oname = singleCall.objectName.toString();
                 String OMName = singleCall.methodName.toString();
 
@@ -535,6 +542,8 @@ public class TypeInference implements PartitionVisitor{
 
     public StringBuilder fieldCheck(String objName, TypeInference infer){
         StringBuilder result = new StringBuilder();
+        result.append("#FieldT: " + objName + "\n");
+
         ObjectInfo objSig = infer.oInfo.get(objName);
         String objHosts = infer.oInfo.get(objName).Qs;
 
@@ -552,7 +561,7 @@ public class TypeInference implements PartitionVisitor{
 
             for(int i = 0; i < objSig.omArgusI.get(mName).element1.size(); i++){
                 //i_m <= CIntegrity(Qc)
-                result.append("s.add(cIntegrity(" + objSig.omArgusI.get(mName).element1.get(i) + ", " + infer.oInfo.get(objName).Qc + "))\n");
+                result.append("s.add(cIntegrityE(" + objSig.omArgusI.get(mName).element1.get(i) + ", " + infer.oInfo.get(objName).Qc + "))\n");
 
                 //c_m <= c_m', i_m <= i_m', a_m <= a_m'
                 result.append("s.add(lableLe(" + objSig.omArgusC.get(mName).element1.get(i) + ", " + objSig.omArgusC.get(mName).element2 +
@@ -566,6 +575,8 @@ public class TypeInference implements PartitionVisitor{
     //n is the index of method definition in the array
     public StringBuilder methodCheck(MethodDefinition m, int n, TypeInference infer, ArrayList<String> mArgNames, MethodInfo mInfo){
         StringBuilder result = new StringBuilder();
+        result.append("#MethodT: " + m.thisMethodName.toString() + "\n");
+
         //need to differentiate res and other method call setup
         if(n != 0){
             // if the free variable in m is empty, we set bot = context
@@ -620,12 +631,12 @@ public class TypeInference implements PartitionVisitor{
             //i_1 <= cIntegrity(Qc)
             for(String argI : mInfo.arguI){
                 //\tau_1 <= \tau_2
-                if(n != infer.mInfo.keySet().size() - 1){
-                    result.append("s.add(cIntegrity(" + argI + ", " + mInfo.qc + "))\n");
-                }
-                else {
-                    result.append("s.add(cIntegrityE(" + argI + ", " + mInfo.qc + "))\n");
-                }
+                result.append("s.add(cIntegrityE(" + argI + ", " + mInfo.qc + "))\n");
+            }
+
+            for(String argC: mInfo.arguC){
+                //todo: add constraint about the argument of this method call
+                result.append("s.add(cLeH(" + argC + ", " + mInfo.host + "))\n");
             }
 
             //c_x <= H
@@ -636,7 +647,7 @@ public class TypeInference implements PartitionVisitor{
         //this is the set up for the res method
         else {
             result.append("s.add(cLeH(resultC, resH))\n");
-            result.append("s.add(cIntegrity(resultI, resQ))\n");
+            result.append("s.add(cIntegrityE(resultI, resQ))\n");
 
             return result;
         }
@@ -748,7 +759,7 @@ public class TypeInference implements PartitionVisitor{
         //minimize host for all methods except for res
         for(String mn: mInfo.keySet()){
             if(!mn.equals("ret")){
-                result.append(mInfo.get(mn).host + ") + sum(");
+                result.append(mInfo.get(mn).host + "[i] * weight[i] for i in range(n)) + sum(");
             }
         }
 
