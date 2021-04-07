@@ -661,7 +661,8 @@ public class TypeInference implements PartitionVisitor{
             ArrayList<Boolean> rc, ArrayList<ArrayList<Integer>> ri, ArrayList<ArrayList<Integer>> ra,
             ArrayList<Boolean> sc, ArrayList<ArrayList<Integer>> si, ArrayList<ArrayList<Integer>> sa,
             ArrayList<Boolean> bc, ArrayList<ArrayList<Integer>> bi, ArrayList<ArrayList<Integer>> ba,
-            ArrayList<Integer> rH, HashMap<String, ArrayList<Boolean>> pV, HashMap<String, HashMap<String, ArrayList<Boolean>>> pOM){
+            ArrayList<Integer> rH, HashMap<String, ArrayList<Boolean>> pV, HashMap<String, HashMap<String, ArrayList<Boolean>>> pOM,
+            ArrayList<Integer> w){
 
         StringBuilder r = new StringBuilder();
         TypeInference infer = new TypeInference(num, p, rc, ri, ra, sc, si, sa, bc, bi, ba, rH, pV, pOM);
@@ -747,13 +748,14 @@ public class TypeInference implements PartitionVisitor{
         //we need to have a this call check for the entrance method (the last method in the method definition array)
         r.append(infer.entranceThisCallT(methods.get(methods.size() - 1), methodArgNames.get(methodArgNames.size() - 1)).toString());
 
-        r.append(infer.optimizationResult());
+        r.append(infer.optimizationResult(w));
         return r;
     }
 
     //print the minimize requirements and print out the result
-    public String optimizationResult(){
+    public String optimizationResult(ArrayList<Integer> weight){
         StringBuilder result = new StringBuilder();
+        result.append("weight = " + hTrans(weight));
 
         result.append("\ns.minimize(sum(");
         //minimize host for all methods except for res
@@ -766,7 +768,7 @@ public class TypeInference implements PartitionVisitor{
         //minimize the storage quorum
         for(String on: oInfo.keySet()){
             for(int i = 0; i < n; i++){
-                result.append(oInfo.get(on).Qs + "[" + i + "]) + sum(");
+                result.append(oInfo.get(on).Qs + "[" + i + "][i] * weight[i] for i in range(n)) + sum(");
             }
         }
 

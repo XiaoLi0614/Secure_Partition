@@ -36,8 +36,8 @@ public class translation_test {
     public static void main(String[] args) throws IOException
     {
         //Expression lambda1 = createOFTUseCase();
-        Expression lambda1 = createTicketsUseCase();
-        //Expression lambda1 = createObliviousTransferUseCase();
+        //Expression lambda1 = createTicketsUseCase();
+        Expression lambda1 = createObliviousTransferUseCase();
         //Expression lambda1 = createAuctionUseCase();
         //Expression lambda1 = createTestUseCase();
         System.out.println("Complete create use-case");
@@ -60,8 +60,8 @@ public class translation_test {
 
         System.out.println("\nStart generate constraints: \n");
         //printToFile(OneTimeTransferInfer(resultMethodDefs), "OneTimeTransfer");
-        //System.out.print(OneTimeTransferInfer(resultMethodDefs));
         //printToFile(AuctionInfer(resultMethodDefs), "Auction");
+        //printToFile(TicketInfer(resultMethodDefs), "Ticket");
 
         //OneTimeTransferTypeCheckingP(resultMethodDefs);
         //TicketTypeChecking(resultMethodDefs);
@@ -228,9 +228,14 @@ public class translation_test {
 
         preOM.put("a", new HashMap<>());
 
+        ArrayList<Integer> w = new ArrayList<>();
+        w.add(new Integer(1));
+        w.add(new Integer(1));
+        w.add(new Integer(12));
+
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
-                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM).toString());
+                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, w).toString());
 
         return r.toString();
     }
@@ -391,9 +396,14 @@ public class translation_test {
         preOM.put("user", new HashMap<>());
         preOM.get("user").put("userreadoutputC", A2C);
 
+        ArrayList<Integer> w = new ArrayList<>();
+        w.add(new Integer(1));
+        w.add(new Integer(1));
+        w.add(new Integer(12));
+
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
-                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM).toString());
+                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, w).toString());
 
         return r.toString();
     }
@@ -408,34 +418,36 @@ public class translation_test {
         ArrayList<String> resArgNames = new ArrayList<>();
         resArgNames.add("return");
         ArrayList<String> m0ArgNames = new ArrayList<>();
-        m0ArgNames.add("o");
+        m0ArgNames.add("price");
         ArrayList<String> m1ArgNames = new ArrayList<>();
-        m1ArgNames.add("offerA");
+        m1ArgNames.add("price");
+        m1ArgNames.add("num");
         ArrayList<String> m2ArgNames = new ArrayList<>();
-        m2ArgNames.add("offerB");
-        m2ArgNames.add("offerA");
-        m2ArgNames.add("seatInfoB");
+        m2ArgNames.add("balance");
+        m2ArgNames.add("price");
+        m2ArgNames.add("num");
+        m2ArgNames.add("cashback");
         ArrayList<String> m3ArgNames = new ArrayList<>();
-        m3ArgNames.add("offerA");
-        m3ArgNames.add("seatInfoB");
-        m3ArgNames.add("u");
+        m3ArgNames.add("price");
+        m3ArgNames.add("num");
+        m3ArgNames.add("ID");
+        m3ArgNames.add("cashback");
         ArrayList<String> m4ArgNames = new ArrayList<>();
-        m4ArgNames.add("offerA");
-        m4ArgNames.add("u");
+        m4ArgNames.add("price");
+        m4ArgNames.add("num");
+        m4ArgNames.add("ID");
         ArrayList<String> m5ArgNames = new ArrayList<>();
-        m5ArgNames.add("offerA");
-        m5ArgNames.add("u");
-        m5ArgNames.add("seatInfoA");
-        m5ArgNames.add("o");
+        m5ArgNames.add("price");
+        m5ArgNames.add("num");
         ArrayList<String> m6ArgNames = new ArrayList<>();
-        m6ArgNames.add("u");
-        m6ArgNames.add("seatInfoA");
-        m6ArgNames.add("o");
+        m6ArgNames.add("schedule");
+        m6ArgNames.add("price");
+        m6ArgNames.add("num");
         ArrayList<String> m7ArgNames = new ArrayList<>();
-        m7ArgNames.add("u");
-        m7ArgNames.add("o");
+        m7ArgNames.add("schedule");
+        m7ArgNames.add("num");
         ArrayList<String> m8ArgNames = new ArrayList<>();
-        m8ArgNames.add("o");
+        m8ArgNames.add("num");
 
         mArgNames.add(resArgNames);
         mArgNames.add(m0ArgNames);
@@ -447,20 +459,155 @@ public class translation_test {
         mArgNames.add(m6ArgNames);
         mArgNames.add(m7ArgNames);
         mArgNames.add(m8ArgNames);
+        mArgNames.add(new ArrayList<>());
 
         //initialize the object method argument number array
         HashMap<String, HashMap<String, Integer>> oArgNums;
         oArgNums = new HashMap<>();
-        oArgNums.put("A", new HashMap<>());
-        oArgNums.get("A").put("makeOffer1", new Integer(2));
-        oArgNums.get("A").put("makeOffer2", new Integer(2));
-        oArgNums.put("B", new HashMap<>());
-        oArgNums.get("B").put("makeOffer1", new Integer(2));
-        oArgNums.get("B").put("makeOffer2", new Integer(2));
-        oArgNums.put("user", new HashMap<>());
-        oArgNums.get("user").put("read", new Integer(0));
-        oArgNums.get("user").put("update", new Integer(2));
-        oArgNums.get("user").put("declareWinner", new Integer(1));
+        oArgNums.put("airline", new HashMap<>());
+        oArgNums.get("airline").put("getPrice1", new Integer(1));
+        oArgNums.get("airline").put("getPrice2", new Integer(1));
+        oArgNums.get("airline").put("decSeat", new Integer(1));
+        oArgNums.put("bank", new HashMap<>());
+        oArgNums.get("bank").put("getBalance1", new Integer(1));
+        oArgNums.get("bank").put("getBalance2", new Integer(1));
+        oArgNums.get("bank").put("decBalance", new Integer(1));
+        oArgNums.put("customer", new HashMap<>());
+        oArgNums.get("customer").put("ticketNum", new Integer(0));
+        oArgNums.get("customer").put("updateInfo", new Integer(2));
+        oArgNums.get("customer").put("updatePayment", new Integer(2));
+        oArgNums.get("customer").put("getID", new Integer(0));
+
+        //initialize the principals
+        ArrayList<Integer> principals = new ArrayList<>();
+        principals.add(new Integer(7));
+        principals.add(new Integer(10));
+        principals.add(new Integer(1));
+
+        //initialize the return type
+        ArrayList<Boolean> rc = new ArrayList<>();
+        //[False, False, True]
+        rc.add(true);
+        rc.add(true);
+        rc.add(true);
+        //resultI = [[1, 2, 0], [0, 0, 0], [0, 0, 0]]
+        ArrayList<ArrayList<Integer>> ri = new ArrayList<>();
+        ArrayList<Integer> ri0 = new ArrayList<>();
+        ri0.add(new Integer(2));
+        ri0.add(new Integer(3));
+        ri0.add(new Integer(0));
+        ArrayList<Integer> ri1 = new ArrayList<>();
+        ri1.add(new Integer(0));
+        ri1.add(new Integer(0));
+        ri1.add(new Integer(0));
+        ri.add(ri0);
+        ri.add(ri1);
+        ri.add(ri1);
+        ArrayList<ArrayList<Integer>> ra = ri;
+
+        //initialize the start context type
+        ArrayList<Boolean> sc = new ArrayList<>();
+        //[True, True, True]
+        sc.add(true);
+        sc.add(true);
+        sc.add(true);
+        //[[7, 10, 0], [0, 0, 0], [0, 0, 0]]
+        ArrayList<ArrayList<Integer>> si = new ArrayList<>();
+        ArrayList<Integer> si0 = new ArrayList<>();
+        si0.add(new Integer(7));
+        si0.add(new Integer(10));
+        si0.add(new Integer(0));
+        ArrayList<Integer> si1 = new ArrayList<>();
+        si1.add(new Integer(0));
+        si1.add(new Integer(0));
+        si1.add(new Integer(0));
+        si.add(si0);
+        si.add(si1);
+        si.add(si1);
+        ArrayList<ArrayList<Integer>> sa = si;
+
+        //initialize the bot type
+        ArrayList<Boolean> bc = sc;
+        ArrayList<ArrayList<Integer>> bi = si;
+        ArrayList<ArrayList<Integer>> ba = sa;
+
+        //initialize the rH [0, 0, 1]
+        ArrayList<Integer> resH = new ArrayList<>();
+        resH.add(new Integer(0));
+        resH.add(new Integer(0));
+        resH.add(new Integer(1));
+
+        //initialize the pre-defined variables
+        HashMap<String, ArrayList<Boolean>> preV = new HashMap<>();
+
+        //initialize the pre-define object methods type
+        //
+        //airline.getPrice1(num) [True, False, True], bank.getBalance1(ID) [False, True, True]
+        //airline.getPrice2(num) [True, True, True], bank.makeOffer2(ID) [True, True, True]
+        HashMap<String, HashMap<String, ArrayList<Boolean>>> preOM = new HashMap<>();
+        preOM.put("airline", new HashMap<>());
+        ArrayList<Boolean> A1C = new ArrayList<>();
+        A1C.add(true);
+        A1C.add(false);
+        A1C.add(true);
+        preOM.get("airline").put("airlinegetPrice1outputC", A1C);
+        ArrayList<Boolean> A2C = new ArrayList<>();
+        A2C.add(true);
+        A2C.add(true);
+        A2C.add(true);
+        preOM.get("airline").put("airlinegetPrice2outputC", A2C);
+
+        preOM.put("bank", new HashMap<>());
+        ArrayList<Boolean> B1C = new ArrayList<>();
+        B1C.add(false);
+        B1C.add(true);
+        B1C.add(true);
+        preOM.get("bank").put("bankgetBalance1outputC", B1C);
+        preOM.get("bank").put("bankgetBalance2outputC", A2C);
+
+        preOM.put("customer", new HashMap<>());
+        //preOM.get("user").put("userreadoutputC", A2C);
+
+        ArrayList<Integer> w = new ArrayList<>();
+        w.add(new Integer(1));
+        w.add(new Integer(1));
+        w.add(new Integer(18));
+
+        TypeInference test = new TypeInference();
+        r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
+                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, w).toString());
+
+        return r.toString();
+    }
+
+    public static String ObliviousTransferInfer(ArrayList<MethodDefinition> resultDefs)
+    {
+        StringBuilder r = new StringBuilder();
+
+        //initialize the method argument name array
+        ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
+        ArrayList<String> m1ArgNames = new ArrayList<>();
+        m1ArgNames.add("return");
+        ArrayList<String> m2ArgNames = new ArrayList<>();
+        m2ArgNames.add("x");
+        ArrayList<String> m3ArgNames = new ArrayList<>();
+        m3ArgNames.add("x");
+        mArgNames.add(m1ArgNames);
+        mArgNames.add(new ArrayList<>());
+        mArgNames.add(new ArrayList<>());
+        mArgNames.add(m2ArgNames);
+        mArgNames.add(m3ArgNames);
+
+        //initialize the object method argument number array
+        HashMap<String, HashMap<String, Integer>> oArgNums;
+        oArgNums = new HashMap<>();
+        oArgNums.put("i1", new HashMap<>());
+        oArgNums.get("i1").put("read", new Integer(0));
+        oArgNums.put("i2", new HashMap<>());
+        oArgNums.get("i2").put("read", new Integer(0));
+        oArgNums.put("a", new HashMap<>());
+        oArgNums.get("a").put("read", new Integer(0));
+        oArgNums.get("a").put("write", new Integer(1));
 
         //initialize the principals
         ArrayList<Integer> principals = new ArrayList<>();
@@ -522,41 +669,38 @@ public class translation_test {
         resH.add(new Integer(1));
 
         //initialize the pre-defined variables
-        //o is the same as bot(start context)
+        //x is the same as bot(start context)
         HashMap<String, ArrayList<Boolean>> preV = new HashMap<>();
-        preV.put("o", sc);
+        preV.put("x", sc);
 
         //initialize the pre-define object methods type
-        //user.read() [True, True, True]
-        //A.makeOffer1(u, o) [True, False, True], B.makeOffer1(u, offerA) [False, True, True]
-        //A.makeOffer2(u, o) [True, True, True], B.makeOffer2(u, offerA) [True, True, True]
+        //i1.read() [True, False, True], i2.read() [False, True, True]
         HashMap<String, HashMap<String, ArrayList<Boolean>>> preOM = new HashMap<>();
-        preOM.put("A", new HashMap<>());
-        ArrayList<Boolean> A1C = new ArrayList<>();
-        A1C.add(true);
-        A1C.add(false);
-        A1C.add(true);
-        preOM.get("A").put("AmakeOffer1outputC", A1C);
-        ArrayList<Boolean> A2C = new ArrayList<>();
-        A2C.add(true);
-        A2C.add(true);
-        A2C.add(true);
-        preOM.get("A").put("AmakeOffer2outputC", A2C);
+        preOM.put("i1", new HashMap<>());
+        ArrayList<Boolean> i1C = new ArrayList<>();
+        i1C.add(true);
+        i1C.add(false);
+        i1C.add(true);
+        preOM.get("i1").put("i1readoutputC", i1C);
 
-        preOM.put("B", new HashMap<>());
-        ArrayList<Boolean> B1C = new ArrayList<>();
-        B1C.add(false);
-        B1C.add(true);
-        B1C.add(true);
-        preOM.get("B").put("BmakeOffer1outputC", B1C);
-        preOM.get("B").put("BmakeOffer2outputC", A2C);
+        preOM.put("i2", new HashMap<>());
+        preOM.put("i2", new HashMap<>());
+        ArrayList<Boolean> i2C = new ArrayList<>();
+        i2C.add(false);
+        i2C.add(true);
+        i2C.add(true);
+        preOM.get("i2").put("i2readoutputC", i2C);
 
-        preOM.put("user", new HashMap<>());
-        preOM.get("user").put("userreadoutputC", A2C);
+        preOM.put("a", new HashMap<>());
+
+        ArrayList<Integer> w = new ArrayList<>();
+        w.add(new Integer(1));
+        w.add(new Integer(1));
+        w.add(new Integer(12));
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
-                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM).toString());
+                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, w).toString());
 
         return r.toString();
     }
@@ -659,12 +803,18 @@ public class translation_test {
             updatePaymentArgs[0] = new ObjectMethod("getBalance1", "bank", getBalanceArg, "cashback");
             updatePaymentArgs[1] = new ObjectMethod("getBalance2", "bank", getBalanceArg1, "balance");
 
-            Expression ticketUseCase = new Sequence(new ObjectMethod("updateInfo", "customer", updateInfoArgs),
+            /*Expression ticketUseCase = new Sequence(new ObjectMethod("updateInfo", "customer", updateInfoArgs),
                     new Sequence(new ObjectMethod("updatePayment", "customer", updatePaymentArgs),
                             new Conditional(new Plus(new Var("price"), new Var("balance")),
                                     new Sequence(new ObjectMethod("decSeat", "airline", decSeatArg),
                                             new Sequence(new ObjectMethod("decBalance", "bank", decBalanceArg),
                                                     new IntLiteral(1))),
+                                    new IntLiteral(0))));*/
+            Expression ticketUseCase = new Sequence(new ObjectMethod("updateInfo", "customer", updateInfoArgs),
+                    new Sequence(new ObjectMethod("updatePayment", "customer", updatePaymentArgs),
+                            new Conditional(new Plus(new Var("price"), new Var("balance")),
+                                    new Sequence(new ObjectMethod("decSeat", "airline", decSeatArg),
+                                            new ObjectMethod("decBalance", "bank", decBalanceArg)),
                                     new IntLiteral(0))));
             return ticketUseCase;
         }
