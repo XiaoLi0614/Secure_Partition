@@ -44,9 +44,18 @@ public class MethodDefinition extends Object{
         //this.administrativeX = aX;
     }
 
+    //the initialization for return
     public MethodDefinition(String thisM, Command nCommand){
         this.thisMethodName = new Id(thisM);
         this.freeVars = new HashSet<>();
+        //the ret can have argument
+        if(nCommand instanceof SingleCall && ((SingleCall) nCommand).methodName.toString() == "ret"){
+            for(Expression e: ((SingleCall) nCommand).args){
+                if(e instanceof Var){
+                    this.freeVars.add((Var)e);
+                }
+            }
+        }
         this.callBackCommand = nCommand;
     }
 

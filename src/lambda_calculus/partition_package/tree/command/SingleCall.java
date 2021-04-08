@@ -84,7 +84,8 @@ public class SingleCall extends Command {
 
         SingleCall that = (SingleCall) o;
         if(that.objectName.toString() == "this"){
-            if(methodName.toString() == "ret" && that.methodName.toString() == "ret"){return true;}
+            if(methodName.toString() == "ret" && that.methodName.toString() == "ret" && args.equals(that
+            .args)){return true;}
             else if (!objectName.equals(that.objectName)) return false;
             else if (!methodName.equals(that.methodName)) return false;
             else if ((args == null || args.length == 0)) {

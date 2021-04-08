@@ -62,6 +62,7 @@ public class translation_test {
         //printToFile(OneTimeTransferInfer(resultMethodDefs), "OneTimeTransfer");
         //printToFile(AuctionInfer(resultMethodDefs), "Auction");
         //printToFile(TicketInfer(resultMethodDefs), "Ticket");
+        printToFile(ObliviousTransferInfer(resultMethodDefs), "ObliviousTransfer");
 
         //OneTimeTransferTypeCheckingP(resultMethodDefs);
         //TicketTypeChecking(resultMethodDefs);
@@ -586,15 +587,20 @@ public class translation_test {
 
         //initialize the method argument name array
         ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
+        ArrayList<String> rArgNames = new ArrayList<>();
+        rArgNames.add("return");
+        ArrayList<String> m0ArgNames = new ArrayList<>();
+        m0ArgNames.add("x");
+        m0ArgNames.add("temp1");
         ArrayList<String> m1ArgNames = new ArrayList<>();
-        m1ArgNames.add("return");
+        m1ArgNames.add("x");
         ArrayList<String> m2ArgNames = new ArrayList<>();
         m2ArgNames.add("x");
         ArrayList<String> m3ArgNames = new ArrayList<>();
         m3ArgNames.add("x");
+        mArgNames.add(rArgNames);
+        mArgNames.add(m0ArgNames);
         mArgNames.add(m1ArgNames);
-        mArgNames.add(new ArrayList<>());
-        mArgNames.add(new ArrayList<>());
         mArgNames.add(m2ArgNames);
         mArgNames.add(m3ArgNames);
 
@@ -611,9 +617,9 @@ public class translation_test {
 
         //initialize the principals
         ArrayList<Integer> principals = new ArrayList<>();
-        principals.add(new Integer(4));
         principals.add(new Integer(7));
-        principals.add(new Integer(1));
+        principals.add(new Integer(4));
+        principals.add(new Integer(4));
 
         //initialize the return type
         ArrayList<Boolean> rc = new ArrayList<>();
@@ -621,12 +627,12 @@ public class translation_test {
         rc.add(false);
         rc.add(false);
         rc.add(true);
-        //resultI = [[1, 2, 0], [0, 0, 0], [0, 0, 0]]
+        //resultI = [[2, 1, 1], [0, 0, 0], [0, 0, 0]]
         ArrayList<ArrayList<Integer>> ri = new ArrayList<>();
         ArrayList<Integer> ri0 = new ArrayList<>();
-        ri0.add(new Integer(1));
         ri0.add(new Integer(2));
-        ri0.add(new Integer(0));
+        ri0.add(new Integer(1));
+        ri0.add(new Integer(1));
         ArrayList<Integer> ri1 = new ArrayList<>();
         ri1.add(new Integer(0));
         ri1.add(new Integer(0));
@@ -642,12 +648,12 @@ public class translation_test {
         sc.add(true);
         sc.add(true);
         sc.add(true);
-        //[[4, 7, 0], [0, 0, 0], [0, 0, 0]]
+        //[[7, 4, 4], [0, 0, 0], [0, 0, 0]]
         ArrayList<ArrayList<Integer>> si = new ArrayList<>();
         ArrayList<Integer> si0 = new ArrayList<>();
-        si0.add(new Integer(4));
         si0.add(new Integer(7));
-        si0.add(new Integer(0));
+        si0.add(new Integer(4));
+        si0.add(new Integer(4));
         ArrayList<Integer> si1 = new ArrayList<>();
         si1.add(new Integer(0));
         si1.add(new Integer(0));
@@ -666,12 +672,16 @@ public class translation_test {
         ArrayList<Integer> resH = new ArrayList<>();
         resH.add(new Integer(0));
         resH.add(new Integer(0));
-        resH.add(new Integer(1));
+        resH.add(new Integer(4));
 
         //initialize the pre-defined variables
         //x is the same as bot(start context)
         HashMap<String, ArrayList<Boolean>> preV = new HashMap<>();
-        preV.put("x", sc);
+        ArrayList<Boolean> xc = new ArrayList<>();
+        xc.add(false);
+        xc.add(false);
+        xc.add(true);
+        preV.put("x", xc);
 
         //initialize the pre-define object methods type
         //i1.read() [True, False, True], i2.read() [False, True, True]
