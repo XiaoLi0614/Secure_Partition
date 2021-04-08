@@ -211,6 +211,7 @@ public class TypeInference implements PartitionVisitor{
         @Override
         public Object visit(Var var){
             //if the variable is predefined by user, use the type of the pre defined variable
+            //todo: this may need to be generalized
             if(predefinedV.containsKey(var.toString() + "C")){
                 ArrayList<String> bc = new ArrayList<String>();
                 bc.add(var.toString() + "C");
@@ -673,9 +674,9 @@ public class TypeInference implements PartitionVisitor{
         //set the predefined variable value in statementC
         for(String vname: pV.keySet()){
             ArrayList<String> vc = new ArrayList<>();
-            vc.add(vname + "C");
+            vc.add(vname);
             infer.statementC.put(vname, vc);
-            r.append(vname + "C" + infer.cTrans(pV.get(vname)));
+            r.append(vname + infer.cTrans(pV.get(vname)));
 
             //set variables for integrity and availability
             ArrayList<String> vi = new ArrayList<>();
@@ -938,7 +939,7 @@ public class TypeInference implements PartitionVisitor{
         }
         else {
             for(Var arg: mDef.freeVars){
-                //for the entrance method, all the arguments are from user. There is no constraints
+                //for the entrance method, all the arguments are from user. The constraints is on predefined variables
                 result.append(((StringBuilder) visitDispatch(arg)).toString());
             }
             for (int a = 0; a < mDef.freeVars.size(); a++){
@@ -948,11 +949,11 @@ public class TypeInference implements PartitionVisitor{
                 result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).arguA.get(a) + ", startA))\n");
 
                 //\tau <= \tau_1
-                String cVariable = statementC.get(mn.get(a)).get(0);
+                String cVariable = statementC.get(mn.get(a)).get(statementC.get(mn.get(a)).size() - 1);
                 result.append("s.add(cLe(" + cVariable + ", " + mInfo.get(mDef.thisMethodName.toString()).arguC.get(a) + "))\n");
-                String iVariable = statementI.get(mn.get(a)).get(0);
+                String iVariable = statementI.get(mn.get(a)).get(statementC.get(mn.get(a)).size() - 1);
                 result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).arguI.get(a)  + ", " + iVariable + "))\n");
-                String aVariable = statementA.get(mn.get(a)).get(0);
+                String aVariable = statementA.get(mn.get(a)).get(statementC.get(mn.get(a)).size() - 1);
                 result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).arguA.get(a)  + ", " + aVariable + "))\n");
 
                 //a1 <= Availability(Q|H)

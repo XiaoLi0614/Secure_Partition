@@ -36,8 +36,8 @@ public class translation_test {
     public static void main(String[] args) throws IOException
     {
         //Expression lambda1 = createOFTUseCase();
-        //Expression lambda1 = createTicketsUseCase();
-        Expression lambda1 = createObliviousTransferUseCase();
+        Expression lambda1 = createTicketsUseCase();
+        //Expression lambda1 = createObliviousTransferUseCase();
         //Expression lambda1 = createAuctionUseCase();
         //Expression lambda1 = createTestUseCase();
         System.out.println("Complete create use-case");
@@ -62,7 +62,7 @@ public class translation_test {
         //printToFile(OneTimeTransferInfer(resultMethodDefs), "OneTimeTransfer");
         //printToFile(AuctionInfer(resultMethodDefs), "Auction");
         //printToFile(TicketInfer(resultMethodDefs), "Ticket");
-        printToFile(ObliviousTransferInfer(resultMethodDefs), "ObliviousTransfer");
+        //printToFile(ObliviousTransferInfer(resultMethodDefs), "ObliviousTransfer");
 
         //OneTimeTransferTypeCheckingP(resultMethodDefs);
         //TicketTypeChecking(resultMethodDefs);
@@ -207,7 +207,7 @@ public class translation_test {
         //initialize the pre-defined variables
         //x is the same as bot(start context)
         HashMap<String, ArrayList<Boolean>> preV = new HashMap<>();
-        preV.put("x", sc);
+        preV.put("xC", sc);
 
         //initialize the pre-define object methods type
         //i1.read() [True, False, True], i2.read() [False, True, True]
@@ -367,7 +367,7 @@ public class translation_test {
         //initialize the pre-defined variables
         //o is the same as bot(start context)
         HashMap<String, ArrayList<Boolean>> preV = new HashMap<>();
-        preV.put("o", sc);
+        preV.put("oC", sc);
 
         //initialize the pre-define object methods type
         //user.read() [True, True, True]
@@ -681,7 +681,7 @@ public class translation_test {
         xc.add(false);
         xc.add(false);
         xc.add(true);
-        preV.put("x", xc);
+        preV.put("xC", xc);
 
         //initialize the pre-define object methods type
         //i1.read() [True, False, True], i2.read() [False, True, True]
