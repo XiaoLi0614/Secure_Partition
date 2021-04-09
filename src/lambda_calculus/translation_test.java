@@ -36,10 +36,12 @@ public class translation_test {
     public static void main(String[] args) throws IOException
     {
         //Expression lambda1 = createOFTUseCase();
-        Expression lambda1 = createTicketsUseCase();
+        //Expression lambda1 = createTicketsUseCase();
         //Expression lambda1 = createObliviousTransferUseCase();
         //Expression lambda1 = createAuctionUseCase();
         //Expression lambda1 = createTestUseCase();
+        //Expression lambda1 = createFriendsMapUseCase();
+        Expression lambda1 = createMPCUseCase();
         System.out.println("Complete create use-case");
         CPSPrinter test = new CPSPrinter();
         Command resultAST = test.print(lambda1).element1;
@@ -63,6 +65,7 @@ public class translation_test {
         //printToFile(AuctionInfer(resultMethodDefs), "Auction");
         //printToFile(TicketInfer(resultMethodDefs), "Ticket");
         //printToFile(ObliviousTransferInfer(resultMethodDefs), "ObliviousTransfer");
+        //printToFile(FriendsMapInfer(resultMethodDefs), "FriendMap");
 
         //OneTimeTransferTypeCheckingP(resultMethodDefs);
         //TicketTypeChecking(resultMethodDefs);
@@ -715,119 +718,407 @@ public class translation_test {
         return r.toString();
     }
 
-        public static Expression createOFTUseCase()
-        {
-            Expression[] emptyArg = {};
-            Expression[] trueArg = new Expression[1];
-            trueArg[0] = new IntLiteral(1);
-            Expression oftUseCase = new Conditional(
-                    new ObjectMethod("read", "a", emptyArg),
-                    new Sequence(new ObjectMethod("write", "a", trueArg),
-                            new Conditional(new Var("x"),
-                                    new ObjectMethod("read", "i1", emptyArg),
-                                    new ObjectMethod("read", "i2", emptyArg))),
-                    new IntLiteral(0));
-            return oftUseCase;
-        }
+    //for the ticket use-case, we have to allow some of the methods hosted on client
+    public static String FriendsMapInfer(ArrayList<MethodDefinition> resultDefs)
+    {
+        StringBuilder r = new StringBuilder();
 
-        public static Expression createObliviousTransferUseCase()
-        {
-            Expression[] emptyArg = {};
-            Expression[] trueArg = new Expression[1];
-            trueArg[0] = new IntLiteral(1);
-            Expression otUseCase = new Conditional(
-                    new ObjectMethod("read", "a", emptyArg),
-                    new Sequence(new ObjectMethod("write", "a", trueArg),
-                            new Sequence(new ObjectMethod("read", "i1", emptyArg, "temp1"),
-                                    new Sequence(new ObjectMethod("read", "i2", emptyArg, "temp2"),
-                                            new Conditional(new Var("x"), new Var("temp1"), new Var("temp2"))))),
-                    new IntLiteral(0));
-            return otUseCase;
-        }
+        //initialize the method argument name array
+        ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
+        ArrayList<String> resArgNames = new ArrayList<>();
+        resArgNames.add("return");
+        ArrayList<String> m0ArgNames = new ArrayList<>();
+        m0ArgNames.add("bc");
+        m0ArgNames.add("m");
+        ArrayList<String> m1ArgNames = new ArrayList<>();
+        m1ArgNames.add("m");
+        ArrayList<String> m2ArgNames = new ArrayList<>();
+        m2ArgNames.add("newB");
+        ArrayList<String> m3ArgNames = new ArrayList<>();
+        m3ArgNames.add("b");
+        m3ArgNames.add("bLoc");
+        ArrayList<String> m4ArgNames = new ArrayList<>();
+        m4ArgNames.add("b");
+        ArrayList<String> m5ArgNames = new ArrayList<>();
+        m5ArgNames.add("b");
+        m5ArgNames.add("bID");
+        m5ArgNames.add("aID");
+        ArrayList<String> m6ArgNames = new ArrayList<>();
+        m6ArgNames.add("b");
+        m6ArgNames.add("aID");
+        ArrayList<String> m7ArgNames = new ArrayList<>();
+        m7ArgNames.add("b");
 
-        //because we do not have several return, we need to split the makeOffer methods into two different methods
-        public static Expression createAuctionUseCase()
-        {
-            Expression[] emptyArg = {};
-            Expression[] oAsArg = new Expression[1];
-            oAsArg[0] = new Var("o");
-            Expression[] offerAAsArg = new Expression[1];
-            offerAAsArg[0] = new Var("offerA");
-            Expression[] offerBAsArg = new Expression[1];
-            offerBAsArg[0] = new Var("offerB");
+        mArgNames.add(resArgNames);
+        mArgNames.add(m0ArgNames);
+        mArgNames.add(m1ArgNames);
+        mArgNames.add(m2ArgNames);
+        mArgNames.add(m3ArgNames);
+        mArgNames.add(m4ArgNames);
+        mArgNames.add(m5ArgNames);
+        mArgNames.add(m6ArgNames);
+        mArgNames.add(m7ArgNames);
+        mArgNames.add(new ArrayList<>());
 
-            Expression[] AMakeOfferArgs = new Expression[2];
-            AMakeOfferArgs[0] = new ObjectMethod("read", "user", emptyArg, "u");
-            AMakeOfferArgs[1] = new Var("o");
-            Expression[] AMakeOfferArgs2 = new Expression[2];
-            AMakeOfferArgs2[0] = new Var("u");
-            AMakeOfferArgs2[1] = new Var("o");
-            Expression[] BMakeOfferArgs = new Expression[2];
-            BMakeOfferArgs[0] = new Var("u");
-            BMakeOfferArgs[1] = new Var("offerA");
+        //initialize the object method argument number array
+        HashMap<String, HashMap<String, Integer>> oArgNums;
+        oArgNums = new HashMap<>();
+        oArgNums.put("Alice", new HashMap<>());
+        oArgNums.get("Alice").put("ID", new Integer(0));
+        oArgNums.get("Alice").put("newBox", new Integer(0));
+        oArgNums.get("Alice").put("expand", new Integer(2));
+        oArgNums.get("Alice").put("addComment", new Integer(2));
+        oArgNums.put("Bob", new HashMap<>());
+        oArgNums.get("Bob").put("ID", new Integer(0));
+        oArgNums.get("Bob").put("comment", new Integer(0));
+        oArgNums.get("Bob").put("location", new Integer(0));
+        oArgNums.put("Snapp", new HashMap<>());
+        oArgNums.get("Snapp").put("isFriend", new Integer(2));
+        oArgNums.put("mapServ", new HashMap<>());
+        oArgNums.get("mapServ").put("getMap", new Integer(1));
 
-            Expression[] userUpdate1Args = new Expression[2];
-            userUpdate1Args[0] = new ObjectMethod("makeOffer1", "A", AMakeOfferArgs, "seatInfoA");
-            userUpdate1Args[1] = new ObjectMethod("makeOffer2", "A", AMakeOfferArgs2, "offerA");
 
-            Expression[] userUpdate2Args = new Expression[2];
-            userUpdate2Args[0] = new ObjectMethod("makeOffer1", "B", BMakeOfferArgs, "seatInfoB");
-            userUpdate2Args[1] = new ObjectMethod("makeOffer2", "B", BMakeOfferArgs, "offerB");
+        //initialize the principals
+        ArrayList<Integer> principals = new ArrayList<>();
+        principals.add(new Integer(4));
+        principals.add(new Integer(4));
+        principals.add(new Integer(7));
+        principals.add(new Integer(4));
 
-            //todo: how to make the recursion automatically know it's method name
-            // create a map for the entrance of this-method: auction -> m8 and then have another map for where the replacement is needed
-            Expression auctionUseCase = new Sequence(new ObjectMethod("update", "user", userUpdate1Args)
-                    , new Conditional(new Plus(new Var("o"),new Var("offerA")),
-                    new ObjectMethod("declareWinner", "user", oAsArg),
-                    new Sequence(new ObjectMethod("update", "user", userUpdate2Args),
-                            new Conditional(new Plus(new Var("offerA"), new Var("offerB")),
-                                    new ThisMethod("m8", offerBAsArg),
-                                    new ObjectMethod("declareWinner", "user", offerAAsArg)))));
-            return auctionUseCase;
-        }
+        //initialize the return type
+        ArrayList<Boolean> rc = new ArrayList<>();
+        //[True, False, False, False]
+        rc.add(true);
+        rc.add(false);
+        rc.add(false);
+        rc.add(false);
+        //resultI = [[1, 1, 2, 1], [0, 0, 0 ,0], [0, 0, 0, 0], [0, 0, 0 ,0]]
+        ArrayList<ArrayList<Integer>> ri = new ArrayList<>();
+        ArrayList<Integer> ri0 = new ArrayList<>();
+        ri0.add(new Integer(1));
+        ri0.add(new Integer(1));
+        ri0.add(new Integer(2));
+        ri0.add(new Integer(1));
+        ArrayList<Integer> ri1 = new ArrayList<>();
+        ri1.add(new Integer(0));
+        ri1.add(new Integer(0));
+        ri1.add(new Integer(0));
+        ri1.add(new Integer(0));
+        ri.add(ri0);
+        ri.add(ri1);
+        ri.add(ri1);
+        ri.add(ri1);
+        ArrayList<ArrayList<Integer>> ra = ri;
 
-        public static Expression createTicketsUseCase(){
-            Expression[] emptyArg = {};
+        //initialize the start context type
+        ArrayList<Boolean> sc = new ArrayList<>();
+        //[True, True, True, True]
+        sc.add(true);
+        sc.add(true);
+        sc.add(true);
+        sc.add(true);
+        //[[4, 4, 7, 4], [0, 0, 0, 0], [0, 0, 0, 0]]
+        ArrayList<ArrayList<Integer>> si = new ArrayList<>();
+        ArrayList<Integer> si0 = new ArrayList<>();
+        si0.add(new Integer(4));
+        si0.add(new Integer(4));
+        si0.add(new Integer(7));
+        si0.add(new Integer(4));
+        ArrayList<Integer> si1 = new ArrayList<>();
+        si1.add(new Integer(0));
+        si1.add(new Integer(0));
+        si1.add(new Integer(0));
+        si1.add(new Integer(0));
+        si.add(si0);
+        si.add(si1);
+        si.add(si1);
+        si.add(si1);
+        ArrayList<ArrayList<Integer>> sa = si;
 
-            Expression[] getPriceArg = new Expression[1];
-            getPriceArg[0] = new ObjectMethod("ticketNum", "customer", emptyArg, "num");
-            Expression[] getPriceArg1 = new Expression[1];
-            getPriceArg1[0] = new Var("num");
+        //initialize the bot type
+        ArrayList<Boolean> bc = sc;
+        ArrayList<ArrayList<Integer>> bi = si;
+        ArrayList<ArrayList<Integer>> ba = sa;
 
-            Expression[] getBalanceArg = new Expression[1];
-            getBalanceArg[0] = new ObjectMethod("getID", "customer", emptyArg, "ID");
-            Expression[] getBalanceArg1 = new Expression[1];
-            getBalanceArg1[0] = new Var("ID");
+        //initialize the rH [4, 0, 0, 0]
+        ArrayList<Integer> resH = new ArrayList<>();
+        resH.add(new Integer(4));
+        resH.add(new Integer(0));
+        resH.add(new Integer(0));
+        resH.add(new Integer(0));
 
-            Expression[] decSeatArg = new Expression[1];
-            decSeatArg[0] = new Var("num");
-            Expression[] decBalanceArg = new Expression[1];
-            //todo: may need to change this to the object method call to get ID
-            decBalanceArg[0] = new Var("price");
+        //initialize the pre-defined variables
+        HashMap<String, ArrayList<Boolean>> preV = new HashMap<>();
 
-            Expression[] updateInfoArgs = new Expression[2];
-            updateInfoArgs[0] = new ObjectMethod("getPrice1", "airline", getPriceArg, "schedule");
-            updateInfoArgs[1] = new ObjectMethod("getPrice2", "airline", getPriceArg1, "price");
+        //initialize the pre-define object methods type
+        //Alice.ID() [True, True, True, True], Bob.ID() [True, True, True, True]
+        //Alice.newBox() [True, True, True, True], Alice.expand(b, loc) [True, True, True, False], Alice.addComment(m, c) [True, False, False, False]
+        //Bob.location() [True, True, True, False], Bob.comment() [True, True, False, False]
+        //Snapp.isFriend [True, True, True, True]
+        //mapServ.getMap [True, True, True, False]
+        HashMap<String, HashMap<String, ArrayList<Boolean>>> preOM = new HashMap<>();
+        preOM.put("Alice", new HashMap<>());
+        ArrayList<Boolean> A1C = new ArrayList<>();
+        A1C.add(true);
+        A1C.add(true);
+        A1C.add(true);
+        A1C.add(true);
+        preOM.get("Alice").put("AliceIDoutputC", A1C);
+        preOM.get("Alice").put("AlicenewBoxoutputC", A1C);
+        ArrayList<Boolean> A2C = new ArrayList<>();
+        A2C.add(true);
+        A2C.add(true);
+        A2C.add(true);
+        A2C.add(false);
+        preOM.get("Alice").put("AliceexpandoutputC", A2C);
+        ArrayList<Boolean> A3C = new ArrayList<>();
+        A3C.add(true);
+        A3C.add(false);
+        A3C.add(false);
+        A3C.add(false);
+        preOM.get("Alice").put("AliceaddCommentoutputC", A3C);
 
-            Expression[] updatePaymentArgs = new Expression[2];
-            updatePaymentArgs[0] = new ObjectMethod("getBalance1", "bank", getBalanceArg, "cashback");
-            updatePaymentArgs[1] = new ObjectMethod("getBalance2", "bank", getBalanceArg1, "balance");
+        preOM.put("Bob", new HashMap<>());
+        preOM.get("Bob").put("BobIDoutputC", A1C);
+        preOM.get("Bob").put("BoblocationoutputC", A2C);
+        ArrayList<Boolean> B1C = new ArrayList<>();
+        B1C.add(true);
+        B1C.add(true);
+        B1C.add(false);
+        B1C.add(false);
+        preOM.get("Bob").put("BobcommentoutputC", B1C);
 
-            /*Expression ticketUseCase = new Sequence(new ObjectMethod("updateInfo", "customer", updateInfoArgs),
-                    new Sequence(new ObjectMethod("updatePayment", "customer", updatePaymentArgs),
-                            new Conditional(new Plus(new Var("price"), new Var("balance")),
-                                    new Sequence(new ObjectMethod("decSeat", "airline", decSeatArg),
-                                            new Sequence(new ObjectMethod("decBalance", "bank", decBalanceArg),
-                                                    new IntLiteral(1))),
-                                    new IntLiteral(0))));*/
-            Expression ticketUseCase = new Sequence(new ObjectMethod("updateInfo", "customer", updateInfoArgs),
-                    new Sequence(new ObjectMethod("updatePayment", "customer", updatePaymentArgs),
-                            new Conditional(new Plus(new Var("price"), new Var("balance")),
-                                    new Sequence(new ObjectMethod("decSeat", "airline", decSeatArg),
-                                            new ObjectMethod("decBalance", "bank", decBalanceArg)),
-                                    new IntLiteral(0))));
-            return ticketUseCase;
-        }
+        preOM.put("Snapp", new HashMap<>());
+        preOM.get("Snapp").put("SnappisFriendoutputC", A1C);
+        preOM.put("mapServ", new HashMap<>());
+        preOM.get("mapServ").put("mapServgetMapoutputC", A2C);
+
+        ArrayList<Integer> w = new ArrayList<>();
+        w.add(new Integer(2));
+        w.add(new Integer(2));
+        w.add(new Integer(1));
+        w.add(new Integer(1));
+
+        TypeInference test = new TypeInference();
+        r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 4, principals,
+                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, w).toString());
+
+        return r.toString();
+    }
+
+    public static Expression createOFTUseCase()
+    {
+        Expression[] emptyArg = {};
+        Expression[] trueArg = new Expression[1];
+        trueArg[0] = new IntLiteral(1);
+        Expression oftUseCase = new Conditional(
+                new ObjectMethod("read", "a", emptyArg),
+                new Sequence(new ObjectMethod("write", "a", trueArg),
+                        new Conditional(new Var("x"),
+                                new ObjectMethod("read", "i1", emptyArg),
+                                new ObjectMethod("read", "i2", emptyArg))),
+                new IntLiteral(0));
+        return oftUseCase;
+    }
+
+    public static Expression createObliviousTransferUseCase()
+    {
+        Expression[] emptyArg = {};
+        Expression[] trueArg = new Expression[1];
+        trueArg[0] = new IntLiteral(1);
+        Expression otUseCase = new Conditional(
+                new ObjectMethod("read", "a", emptyArg),
+                new Sequence(new ObjectMethod("write", "a", trueArg),
+                        new Sequence(new ObjectMethod("read", "i1", emptyArg, "temp1"),
+                                new Sequence(new ObjectMethod("read", "i2", emptyArg, "temp2"),
+                                        new Conditional(new Var("x"), new Var("temp1"), new Var("temp2"))))),
+                new IntLiteral(0));
+        return otUseCase;
+    }
+
+    //because we do not have several return, we need to split the makeOffer methods into two different methods
+    public static Expression createAuctionUseCase()
+    {
+        Expression[] emptyArg = {};
+        Expression[] oAsArg = new Expression[1];
+        oAsArg[0] = new Var("o");
+        Expression[] offerAAsArg = new Expression[1];
+        offerAAsArg[0] = new Var("offerA");
+        Expression[] offerBAsArg = new Expression[1];
+        offerBAsArg[0] = new Var("offerB");
+
+        Expression[] AMakeOfferArgs = new Expression[2];
+        AMakeOfferArgs[0] = new ObjectMethod("read", "user", emptyArg, "u");
+        AMakeOfferArgs[1] = new Var("o");
+        Expression[] AMakeOfferArgs2 = new Expression[2];
+        AMakeOfferArgs2[0] = new Var("u");
+        AMakeOfferArgs2[1] = new Var("o");
+        Expression[] BMakeOfferArgs = new Expression[2];
+        BMakeOfferArgs[0] = new Var("u");
+        BMakeOfferArgs[1] = new Var("offerA");
+
+        Expression[] userUpdate1Args = new Expression[2];
+        userUpdate1Args[0] = new ObjectMethod("makeOffer1", "A", AMakeOfferArgs, "seatInfoA");
+        userUpdate1Args[1] = new ObjectMethod("makeOffer2", "A", AMakeOfferArgs2, "offerA");
+
+        Expression[] userUpdate2Args = new Expression[2];
+        userUpdate2Args[0] = new ObjectMethod("makeOffer1", "B", BMakeOfferArgs, "seatInfoB");
+        userUpdate2Args[1] = new ObjectMethod("makeOffer2", "B", BMakeOfferArgs, "offerB");
+
+        //todo: how to make the recursion automatically know it's method name
+        // create a map for the entrance of this-method: auction -> m8 and then have another map for where the replacement is needed
+        Expression auctionUseCase = new Sequence(new ObjectMethod("update", "user", userUpdate1Args)
+                , new Conditional(new Plus(new Var("o"),new Var("offerA")),
+                new ObjectMethod("declareWinner", "user", oAsArg),
+                new Sequence(new ObjectMethod("update", "user", userUpdate2Args),
+                        new Conditional(new Plus(new Var("offerA"), new Var("offerB")),
+                                new ThisMethod("m8", offerBAsArg),
+                                new ObjectMethod("declareWinner", "user", offerAAsArg)))));
+        return auctionUseCase;
+    }
+
+    public static Expression createTicketsUseCase(){
+        Expression[] emptyArg = {};
+
+        Expression[] getPriceArg = new Expression[1];
+        getPriceArg[0] = new ObjectMethod("ticketNum", "customer", emptyArg, "num");
+        Expression[] getPriceArg1 = new Expression[1];
+        getPriceArg1[0] = new Var("num");
+
+        Expression[] getBalanceArg = new Expression[1];
+        getBalanceArg[0] = new ObjectMethod("getID", "customer", emptyArg, "ID");
+        Expression[] getBalanceArg1 = new Expression[1];
+        getBalanceArg1[0] = new Var("ID");
+
+        Expression[] decSeatArg = new Expression[1];
+        decSeatArg[0] = new Var("num");
+        Expression[] decBalanceArg = new Expression[1];
+        //todo: may need to change this to the object method call to get ID
+        decBalanceArg[0] = new Var("price");
+
+        Expression[] updateInfoArgs = new Expression[2];
+        updateInfoArgs[0] = new ObjectMethod("getPrice1", "airline", getPriceArg, "schedule");
+        updateInfoArgs[1] = new ObjectMethod("getPrice2", "airline", getPriceArg1, "price");
+
+        Expression[] updatePaymentArgs = new Expression[2];
+        updatePaymentArgs[0] = new ObjectMethod("getBalance1", "bank", getBalanceArg, "cashback");
+        updatePaymentArgs[1] = new ObjectMethod("getBalance2", "bank", getBalanceArg1, "balance");
+
+        /*Expression ticketUseCase = new Sequence(new ObjectMethod("updateInfo", "customer", updateInfoArgs),
+                new Sequence(new ObjectMethod("updatePayment", "customer", updatePaymentArgs),
+                        new Conditional(new Plus(new Var("price"), new Var("balance")),
+                                new Sequence(new ObjectMethod("decSeat", "airline", decSeatArg),
+                                        new Sequence(new ObjectMethod("decBalance", "bank", decBalanceArg),
+                                                new IntLiteral(1))),
+                                new IntLiteral(0))));*/
+        Expression ticketUseCase = new Sequence(new ObjectMethod("updateInfo", "customer", updateInfoArgs),
+                new Sequence(new ObjectMethod("updatePayment", "customer", updatePaymentArgs),
+                        new Conditional(new Plus(new Var("price"), new Var("balance")),
+                                new Sequence(new ObjectMethod("decSeat", "airline", decSeatArg),
+                                        new ObjectMethod("decBalance", "bank", decBalanceArg)),
+                                new IntLiteral(0))));
+        return ticketUseCase;
+    }
+
+    public static Expression createFriendsMapUseCase(){
+        Expression[] emptyArg = {};
+
+        Expression[] isFriendArg = new Expression[2];
+        isFriendArg[0] = new ObjectMethod("ID", "Alice", emptyArg, "aID");
+        isFriendArg[1] = new ObjectMethod("ID", "Bob", emptyArg, "bID");
+
+        Expression[] expandArg = new Expression[2];
+        expandArg[0] = new Var("b");
+        expandArg[1] = new ObjectMethod("location", "Bob", emptyArg, "bLoc");
+
+        Expression[] getMapArg = new Expression[1];
+        getMapArg[0] = new ObjectMethod("expand", "Alice", expandArg, "newB");
+
+        Expression[] addCommentArg = new Expression[2];
+        addCommentArg[0] = new ObjectMethod("getMap", "mapServ", getMapArg, "m");
+        addCommentArg[1] = new ObjectMethod("comment", "Bob", emptyArg, "bc");
+
+        Expression friendmapUseCase = new Sequence(new ObjectMethod("newBox", "Alice", emptyArg, "b"),
+                new Conditional(new ObjectMethod("isFriend", "Snapp", isFriendArg),
+                        new ObjectMethod("addComment", "Alice", addCommentArg),
+                        new Var("b")));
+        return friendmapUseCase;
+    }
+
+    public static Expression createMPCUseCase(){
+        Expression[] emptyArg = {};
+
+        Expression[] u1random1Arg = new Expression[1];
+        u1random1Arg[0] = new ObjectMethod("getSalary", "u1", emptyArg, "s1");
+        Expression[] u1random2Arg = new Expression[1];
+        u1random2Arg[0] = new Var("s1");
+        Expression[] u1random3Arg = new Expression[1];
+        u1random3Arg[0] = new Var("s1");
+
+        Expression[] u2random1Arg = new Expression[1];
+        u2random1Arg[0] = new ObjectMethod("getSalary", "u2", emptyArg, "s2");
+        Expression[] u2random2Arg = new Expression[1];
+        u2random2Arg[0] = new Var("s2");
+        Expression[] u2random3Arg = new Expression[1];
+        u2random3Arg[0] = new Var("s2");
+
+        Expression[] u3random1Arg = new Expression[1];
+        u3random1Arg[0] = new ObjectMethod("getSalary", "u3", emptyArg, "s3");
+        Expression[] u3random2Arg = new Expression[1];
+        u3random2Arg[0] = new Var("s3");
+        Expression[] u3random3Arg = new Expression[1];
+        u3random3Arg[0] = new Var("s3");
+
+        Expression[] u1writep11Arg = new Expression[1];
+        u1writep11Arg[0] = new ObjectMethod("random1", "u1", u1random1Arg, "v11");
+        Expression[] u1writep12Arg = new Expression[1];
+        u1writep12Arg[0] = new ObjectMethod("random2", "u1", u1random2Arg, "v12");
+        Expression[] u1writep13Arg = new Expression[1];
+        u1writep13Arg[0] = new ObjectMethod("random3", "u1", u1random3Arg, "v13");
+
+        Expression[] u2writep21Arg = new Expression[1];
+        u2writep21Arg[0] = new ObjectMethod("random1", "u2", u2random1Arg, "v21");
+        Expression[] u2writep22Arg = new Expression[1];
+        u2writep22Arg[0] = new ObjectMethod("random2", "u2", u2random2Arg, "v22");
+        Expression[] u2writep23Arg = new Expression[1];
+        u2writep23Arg[0] = new ObjectMethod("random3", "u2", u2random3Arg, "v23");
+
+        Expression[] u3writep31Arg = new Expression[1];
+        u3writep31Arg[0] = new ObjectMethod("random1", "u3", u3random1Arg, "v31");
+        Expression[] u3writep32Arg = new Expression[1];
+        u3writep32Arg[0] = new ObjectMethod("random2", "u3", u1random2Arg, "v32");
+        Expression[] u3writep33Arg = new Expression[1];
+        u3writep33Arg[0] = new ObjectMethod("random3", "u3", u3random3Arg, "v33");
+
+        Expression[] computeSum1Arg = new Expression[3];
+        computeSum1Arg[0] = new ObjectMethod("readp11", "u1", emptyArg, "rp11");
+        computeSum1Arg[1] = new ObjectMethod("readp21", "u1", emptyArg, "rp21");
+        computeSum1Arg[2] = new ObjectMethod("readp31", "u1", emptyArg, "rp31");
+
+        Expression[] computeSum2Arg = new Expression[3];
+        computeSum2Arg[0] = new ObjectMethod("readp12", "u2", emptyArg, "rp12");
+        computeSum2Arg[1] = new ObjectMethod("readp22", "u2", emptyArg, "rp22");
+        computeSum2Arg[2] = new ObjectMethod("readp32", "u2", emptyArg, "rp32");
+
+        Expression[] computeSum3Arg = new Expression[3];
+        computeSum3Arg[0] = new ObjectMethod("readp13", "u3", emptyArg, "rp13");
+        computeSum3Arg[1] = new ObjectMethod("readp23", "u3", emptyArg, "rp23");
+        computeSum3Arg[2] = new ObjectMethod("readp33", "u3", emptyArg, "rp33");
+
+        Expression MPCUseCase = new Sequence(new Sequence(new ObjectMethod("writep11", "u1", u1writep11Arg),
+                new Sequence(new ObjectMethod("writep12", "u1", u1writep12Arg),
+                        new Sequence(new ObjectMethod("writep13", "u1", u1writep13Arg),
+                                new Sequence(new ObjectMethod("writep21", "u2", u2writep21Arg),
+                                        new Sequence(new ObjectMethod("writep22", "u2", u2writep22Arg),
+                                                new Sequence(new ObjectMethod("writep23", "u2", u2writep23Arg),
+                                                        new Sequence(new ObjectMethod("writep31", "u3", u3writep31Arg),
+                                                                new Sequence(new ObjectMethod("writep32", "u3", u3writep32Arg),
+                                                                        new ObjectMethod("writep33", "u3", u3writep33Arg))))))))),
+                new Plus(new Plus(new ObjectMethod("computeSum1", "u1", computeSum1Arg, "sum1"),
+                        new ObjectMethod("computeSum2",  "u2", computeSum2Arg, "sum2")),
+                        new ObjectMethod("computeSum3", "u3", computeSum3Arg, "sum3")));
+        return MPCUseCase;
+    }
 
     public static Expression createTestUseCase(){
         Expression[] emptyArg = {};

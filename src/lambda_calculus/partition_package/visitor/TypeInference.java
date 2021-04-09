@@ -548,8 +548,9 @@ public class TypeInference implements PartitionVisitor{
         ObjectInfo objSig = infer.oInfo.get(objName);
         String objHosts = infer.oInfo.get(objName).Qs;
 
+        //for each method
         for(String mName: objSig.omArgusC.keySet()){
-            //todo: declassification and umbrella check
+            //todo: umbrella check
 
             //c_m' <= union q
             result.append("s.add(confQ(" + objSig.omArgusC.get(mName).element2 + ", " + objHosts + "))\n");
@@ -560,14 +561,28 @@ public class TypeInference implements PartitionVisitor{
             //a_m' <= Availability(Qs)
             result.append("s.add(availabilityC(" + objSig.omArgusA.get(mName).element2 + ", " + objHosts + "))\n");
 
+            //for each argument of the method
             for(int i = 0; i < objSig.omArgusI.get(mName).element1.size(); i++){
                 //i_m <= CIntegrity(Qc)
                 result.append("s.add(cIntegrityE(" + objSig.omArgusI.get(mName).element1.get(i) + ", " + infer.oInfo.get(objName).Qc + "))\n");
 
-                //c_m <= c_m', i_m <= i_m', a_m <= a_m'
-                result.append("s.add(lableLe(" + objSig.omArgusC.get(mName).element1.get(i) + ", " + objSig.omArgusC.get(mName).element2 +
-                        ", " + objSig.omArgusI.get(mName).element1.get(i) + ", " + objSig.omArgusI.get(mName).element2 + ", " +
-                        objSig.omArgusA.get(mName).element1.get(i) + ", " + objSig.omArgusA.get(mName).element2 + "))\n");
+                //declassification happens here.
+                //If we have predefined confidentiality type for both input and output, then we do not check confidentiality for this argument
+                if(infer.predefinedOM.get(objName).keySet().contains(objSig.omArgusC.get(mName).element1.get(i)) &&
+                        infer.predefinedOM.get(objName).keySet().contains(objSig.omArgusC.get(mName).element2)){
+                    //we only check the integrity and availability
+                    result.append("s.add(bLe(" + objSig.omArgusI.get(mName).element2 + ", " +
+                            objSig.omArgusI.get(mName).element1.get(i) + "))\n");
+                    result.append("s.add(bLe(" + objSig.omArgusA.get(mName).element2 + ", " +
+                            objSig.omArgusA.get(mName).element1.get(i) + "))\n");
+                }
+                //otherwise do the normal input <= output check
+                else {
+                    //c_m <= c_m', i_m <= i_m', a_m <= a_m'
+                    result.append("s.add(lableLe(" + objSig.omArgusC.get(mName).element1.get(i) + ", " + objSig.omArgusC.get(mName).element2 +
+                            ", " + objSig.omArgusI.get(mName).element1.get(i) + ", " + objSig.omArgusI.get(mName).element2 + ", " +
+                            objSig.omArgusA.get(mName).element1.get(i) + ", " + objSig.omArgusA.get(mName).element2 + "))\n");
+                }
             }
         }
         return result;
@@ -742,7 +757,7 @@ public class TypeInference implements PartitionVisitor{
         }
 
         //then the method checks
-        for(int i = 0; i < methods.size(); i++){
+        for(int i = methods.size() - 1; i >= 0; i--){
             r.append(methodCheck(methods.get(i), i, infer, methodArgNames.get(i), infer.mInfo.get(methods.get(i).thisMethodName.toString())));
         }
 
