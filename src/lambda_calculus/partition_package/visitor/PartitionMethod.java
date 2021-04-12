@@ -195,7 +195,12 @@ public class PartitionMethod implements PartitionVisitor{
                     MethodDefinition retDef = new MethodDefinition("ret", singleCall);
                     ArrayList<MethodDefinition> resultDefs = new ArrayList<>();
                     resultDefs.add(retDef);
-                    partitionIntermediate.put(singleCall, new PartitionProcess(resultDefs, retDef.freeVars, singleCall));
+                    HashSet<Var> freeVarForRet = new HashSet<>();
+                    //freeVarForRet.addAll(retDef.freeVars);
+                    //this is the ret method , we have one argument for ret method.
+                    visitDispatch(singleCall.args[0]);
+                    freeVarForRet.addAll(partitionIntermediate.get(singleCall.args[0]).getFreeVariables());
+                    partitionIntermediate.put(singleCall, new PartitionProcess(resultDefs, freeVarForRet, singleCall));
                 }
                 return singleCall;
             }

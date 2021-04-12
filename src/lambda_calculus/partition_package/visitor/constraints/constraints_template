@@ -1,5 +1,7 @@
 from z3 import *
+import time
 
+startT = time.time()
 s = Optimize()
 
 def solve(constr):

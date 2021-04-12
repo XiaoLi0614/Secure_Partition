@@ -58,7 +58,7 @@ public class CPSPrinter implements SourceVisitor{
             //[x]k = k x
             @Override
             public Object visit(Id id){
-                System.out.println("CPS ID");
+                //System.out.println("CPS ID");
                 lambda_calculus.cps_ast.tree.expression.id.Id resultId = new lambda_calculus.cps_ast.tree.expression.id.Id(id.lexeme);
                 //Command[] resultVar = new Command[1];
                 //resultVar[0] = new ExpSt(resultId);
@@ -76,7 +76,7 @@ public class CPSPrinter implements SourceVisitor{
             //[n]k = k n
             @Override
             public Object visit(IntLiteral intLiteral){
-                System.out.println("CPS int");
+                //System.out.println("CPS int");
                 lambda_calculus.cps_ast.tree.expression.literal.IntLiteral resultInt = new lambda_calculus.cps_ast.tree.expression.literal.IntLiteral(intLiteral.lexeme);
                 Command[] resultVar = new Command[1];
                 resultVar[0] = new ExpSt(resultInt);
@@ -94,7 +94,7 @@ public class CPSPrinter implements SourceVisitor{
             //this is a non-terminal node
             @Override
             public Object visit(Plus plus){
-                System.out.println("CPS plus");
+                //System.out.println("CPS plus");
                 lambda_calculus.cps_ast.tree.expression.Var[] lambda1Var = new lambda_calculus.cps_ast.tree.expression.Var[1];
                 lambda1Var[0] = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
                 lambda_calculus.cps_ast.tree.expression.Var[] lambda2Var = new lambda_calculus.cps_ast.tree.expression.Var[1];
@@ -177,7 +177,7 @@ public class CPSPrinter implements SourceVisitor{
             //[e1; e2]k = [e1] \lambda x1 ([e2](lambda x2. k x2))
             @Override
             public Object visit(Sequence sequence){
-                System.out.println("CPS sequence");
+                //System.out.println("CPS sequence");
                 //lambda x
                 lambda_calculus.cps_ast.tree.expression.Var lambdaVar = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
 
@@ -239,7 +239,7 @@ public class CPSPrinter implements SourceVisitor{
         //[o.m(e)] k = [e] (lambda x1. call x2 = o.m(x1) in k x2)
         @Override
         public Object visit(ObjectMethod objectMethod) {
-            System.out.println("CPS object method " + objectMethod.objectName.lexeme + "." + objectMethod.methodName.lexeme);
+            //System.out.println("CPS object method " + objectMethod.objectName.lexeme + "." + objectMethod.methodName.lexeme);
             //TODO: we need to change to multiple output
             //add bind according to the names
             lambda_calculus.cps_ast.tree.expression.Var lambda2;
@@ -328,7 +328,7 @@ public class CPSPrinter implements SourceVisitor{
         ////[m(e1, e2)]k = [e1](lambda x1. ([e2] lambda x2. k m(x1, x2)))
         @Override
         public Object visit(ThisMethod thisMethod) {
-            System.out.println("CPS this method");
+            //System.out.println("CPS this method");
             //[m()] k = k m()
             //this is a termination
             if(thisMethod.args.length == 0 || thisMethod.args == null){
@@ -386,7 +386,7 @@ public class CPSPrinter implements SourceVisitor{
         //[if e0 then e1 else e2] k = [e0] (lambda x. if x neq 0 then [e1]( lambda x1. k x1) else [e2] (lambda x2. k x2))
         @Override
         public Object visit(Conditional conditional) {
-            System.out.println("CPS condition");
+            //System.out.println("CPS condition");
             //produce lambda
             lambda_calculus.cps_ast.tree.expression.Var lambda0 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
             lambda_calculus.cps_ast.tree.expression.Var lambda1 = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
@@ -437,7 +437,7 @@ public class CPSPrinter implements SourceVisitor{
         //[x] k = k x
         @Override
         public Object visit(Var var) {
-            System.out.println("CPS var");
+            //System.out.println("CPS var");
             Command[] varAsValue = new Command[1];
             visitDispatch(var.name);
             //varAsValue[0] = new ExpSt(new lambda_calculus.cps_ast.tree.expression.Var(var.name.lexeme));

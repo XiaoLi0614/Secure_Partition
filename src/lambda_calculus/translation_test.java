@@ -32,40 +32,72 @@ import static com.google.common.collect.Sets.newHashSet;
 
 
 public class translation_test {
-    static String outputPath = "/home/xiao/IdeaProjects/secure_partition/src/lambda_calculus/partition_package/visitor/";
+    static String outputPath = "/home/xiao/IdeaProjects/secure_partition/src/lambda_calculus/partition_package/visitor/constraints/";
     public static void main(String[] args) throws IOException
     {
+        long partitionT;
+        long consGenT;
+        Date date1 = new Date();
+        partitionT = date1.getTime();
         //Expression lambda1 = createOFTUseCase();
         //Expression lambda1 = createTicketsUseCase();
         //Expression lambda1 = createObliviousTransferUseCase();
         //Expression lambda1 = createAuctionUseCase();
         //Expression lambda1 = createTestUseCase();
         //Expression lambda1 = createFriendsMapUseCase();
-        Expression lambda1 = createMPCUseCase();
+        //Expression lambda1 = createMPCUseCase();
+        Expression lambda1 = createMPCSimpUseCase();
         System.out.println("Complete create use-case");
+        //Date cDate = new Date();
+        //long cd = cDate.getTime();
+        //System.out.println("Create use-case time: " + (cd - partitionT));
+
         CPSPrinter test = new CPSPrinter();
         Command resultAST = test.print(lambda1).element1;
         //Context resultContext = test.print(lambda1).element2;
         System.out.println("Complete ast translation: " + resultAST.toString());
+        //Date aDate = new Date();
+        //long ad = aDate.getTime();
+        //System.out.println("Ast translation time: " + (ad - cd));
+
         BetaReduction test2 = new BetaReduction();
         Command resultAST2 = test2.wholeReduction(resultAST);
         System.out.println("Complete reduction: " + resultAST2.toString());
+        //Date rDate = new Date();
+        //long rd = rDate.getTime();
+        //System.out.println("Beta reduction time: " + (rd - ad));
+
+
         translateToOtherAST test3 = new translateToOtherAST();
         lambda_calculus.partition_package.tree.command.Command translatedAST = test3.getAST(resultAST2);
         System.out.println("Complete translation 2: " + translatedAST.toString());
+        //Date tDate = new Date();
+        //long td = tDate.getTime();
+        //System.out.println("Ast translation2 time: " + (td - rd));
+
         PartitionMethod test4 = new PartitionMethod();
         ArrayList<MethodDefinition> resultMethodDefs = test4.methodSeparation(translatedAST);
         System.out.println("Complete separation: " );
+        //Date sDate = new Date();
+        //long sd = sDate.getTime();
+        //System.out.println("Separation time: " + (sd - td));
+
         for(MethodDefinition d : resultMethodDefs){
             System.out.println(d.toString());
         }
+        Date date2 = new Date();
+        partitionT = date2.getTime() - partitionT;
+        System.out.println("The use-case partition time is: " + partitionT + " ms");
 
         System.out.println("\nStart generate constraints: \n");
+        Date date3 = new Date();
+        consGenT = date3.getTime();
         //printToFile(OneTimeTransferInfer(resultMethodDefs), "OneTimeTransfer");
         //printToFile(AuctionInfer(resultMethodDefs), "Auction");
         //printToFile(TicketInfer(resultMethodDefs), "Ticket");
         //printToFile(ObliviousTransferInfer(resultMethodDefs), "ObliviousTransfer");
         //printToFile(FriendsMapInfer(resultMethodDefs), "FriendMap");
+        printToFile(MPCSimpInfer(resultMethodDefs), "MPCSimp");
 
         //OneTimeTransferTypeCheckingP(resultMethodDefs);
         //TicketTypeChecking(resultMethodDefs);
@@ -77,7 +109,9 @@ public class translation_test {
 /*        HashSet<Integer> in = new HashSet<>(Arrays.asList(1, 2, 3, 4));
         nodeSet in1 = new nodeSet(in);
         getPowerSet(in1, 2);*/
-
+        Date date4 = new Date();
+        consGenT = date4.getTime() - consGenT;
+        System.out.println("Constraint generation time: " + consGenT + " ms");
     }
 
 //        public static String cpsTransformation(lambda_usecase useCase)
@@ -90,7 +124,7 @@ public class translation_test {
     public static void printToFile(String transformation, String fileName) throws IOException
     {
         try {
-            File f = new File(outputPath + fileName);
+            File f = new File(outputPath + fileName + ".py");
             if (!f.exists()) {
                 f.createNewFile();
             }
@@ -906,6 +940,270 @@ public class translation_test {
         return r.toString();
     }
 
+    public static String MPCSimpInfer(ArrayList<MethodDefinition> resultDefs)
+    {
+        StringBuilder r = new StringBuilder();
+
+        //initialize the method argument name array
+        ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
+        ArrayList<String> resArgNames = new ArrayList<>();
+        resArgNames.add("return");
+        ArrayList<String> m0ArgNames = new ArrayList<>();
+        m0ArgNames.add("sum1");
+        m0ArgNames.add("sum2");
+        m0ArgNames.add("rp13");
+        m0ArgNames.add("rp23");
+        m0ArgNames.add("rp33");
+        ArrayList<String> m1ArgNames = new ArrayList<>();
+        m1ArgNames.add("sum1");
+        m1ArgNames.add("sum2");
+        m1ArgNames.add("rp13");
+        m1ArgNames.add("rp23");
+        ArrayList<String> m2ArgNames = new ArrayList<>();
+        m2ArgNames.add("sum1");
+        m2ArgNames.add("sum2");
+        m2ArgNames.add("rp13");
+        ArrayList<String> m3ArgNames = new ArrayList<>();
+        m3ArgNames.add("sum1");
+        m3ArgNames.add("sum2");
+        ArrayList<String> m4ArgNames = new ArrayList<>();
+        m4ArgNames.add("sum1");
+        m4ArgNames.add("rp32");
+        m4ArgNames.add("rp12");
+        m4ArgNames.add("rp22");
+        ArrayList<String> m5ArgNames = new ArrayList<>();
+        m5ArgNames.add("sum1");
+        m5ArgNames.add("rp12");
+        m5ArgNames.add("rp22");
+        ArrayList<String> m6ArgNames = new ArrayList<>();
+        m6ArgNames.add("sum1");
+        m6ArgNames.add("rp12");
+        ArrayList<String> m7ArgNames = new ArrayList<>();
+        m7ArgNames.add("sum1");
+        ArrayList<String> m8ArgNames = new ArrayList<>();
+        m8ArgNames.add("rp21");
+        m8ArgNames.add("rp31");
+        m8ArgNames.add("rp11");
+        ArrayList<String> m9ArgNames = new ArrayList<>();
+        m9ArgNames.add("rp21");
+        m9ArgNames.add("rp11");
+        ArrayList<String> m10ArgNames = new ArrayList<>();
+        m10ArgNames.add("rp11");
+        ArrayList<String> m11ArgNames = new ArrayList<>();
+        ArrayList<String> m12ArgNames = new ArrayList<>();
+        m12ArgNames.add("v13");
+        ArrayList<String> m13ArgNames = new ArrayList<>();
+        m13ArgNames.add("s1");
+        ArrayList<String> m14ArgNames = new ArrayList<>();
+        m14ArgNames.add("v12");
+        m14ArgNames.add("s1");
+        ArrayList<String> m15ArgNames = new ArrayList<>();
+        m15ArgNames.add("s1");
+        ArrayList<String> m16ArgNames = new ArrayList<>();
+        m16ArgNames.add("v11");
+        m16ArgNames.add("s1");
+        ArrayList<String> m17ArgNames = new ArrayList<>();
+        m17ArgNames.add("s1");
+        ArrayList<String> m18ArgNames = new ArrayList<>();
+
+        mArgNames.add(resArgNames);
+        mArgNames.add(m0ArgNames);
+        mArgNames.add(m1ArgNames);
+        mArgNames.add(m2ArgNames);
+        mArgNames.add(m3ArgNames);
+        mArgNames.add(m4ArgNames);
+        mArgNames.add(m5ArgNames);
+        mArgNames.add(m6ArgNames);
+        mArgNames.add(m7ArgNames);
+        mArgNames.add(m8ArgNames);
+        mArgNames.add(m9ArgNames);
+        mArgNames.add(m10ArgNames);
+        mArgNames.add(m11ArgNames);
+        mArgNames.add(m12ArgNames);
+        mArgNames.add(m13ArgNames);
+        mArgNames.add(m14ArgNames);
+        mArgNames.add(m15ArgNames);
+        mArgNames.add(m16ArgNames);
+        mArgNames.add(m17ArgNames);
+        mArgNames.add(m18ArgNames);
+
+        //initialize the object method argument number array
+        HashMap<String, HashMap<String, Integer>> oArgNums;
+        oArgNums = new HashMap<>();
+        oArgNums.put("u1", new HashMap<>());
+        oArgNums.get("u1").put("getSalary", new Integer(0));
+        oArgNums.get("u1").put("random1", new Integer(1));
+        oArgNums.get("u1").put("random2", new Integer(1));
+        oArgNums.get("u1").put("random3", new Integer(1));
+        oArgNums.get("u1").put("writep11", new Integer(1));
+        oArgNums.get("u1").put("writep12", new Integer(1));
+        oArgNums.get("u1").put("writep13", new Integer(1));
+        oArgNums.get("u1").put("readp11", new Integer(0));
+        oArgNums.get("u1").put("readp21", new Integer(0));
+        oArgNums.get("u1").put("readp31", new Integer(0));
+        oArgNums.get("u1").put("computeSum1", new Integer(3));
+
+        oArgNums.put("u2", new HashMap<>());
+        oArgNums.get("u2").put("readp12", new Integer(0));
+        oArgNums.get("u2").put("readp22", new Integer(0));
+        oArgNums.get("u2").put("readp32", new Integer(0));
+        oArgNums.get("u2").put("computeSum2", new Integer(3));
+
+        oArgNums.put("u3", new HashMap<>());
+        oArgNums.get("u3").put("readp13", new Integer(0));
+        oArgNums.get("u3").put("readp23", new Integer(0));
+        oArgNums.get("u3").put("readp33", new Integer(0));
+        oArgNums.get("u3").put("computeSum3", new Integer(3));
+
+        //initialize the principals
+        ArrayList<Integer> principals = new ArrayList<>();
+        principals.add(new Integer(7));
+        principals.add(new Integer(4));
+        principals.add(new Integer(4));
+
+        //initialize the return type
+        ArrayList<Boolean> rc = new ArrayList<>();
+        //[True, True, True]
+        rc.add(true);
+        rc.add(true);
+        rc.add(true);
+        //resultI = [[2, 1, 1], [0, 0, 0], [0, 0, 0]]
+        ArrayList<ArrayList<Integer>> ri = new ArrayList<>();
+        ArrayList<Integer> ri0 = new ArrayList<>();
+        ri0.add(new Integer(2));
+        ri0.add(new Integer(1));
+        ri0.add(new Integer(1));
+        ArrayList<Integer> ri1 = new ArrayList<>();
+        ri1.add(new Integer(0));
+        ri1.add(new Integer(0));
+        ri1.add(new Integer(0));
+        ri.add(ri0);
+        ri.add(ri1);
+        ri.add(ri1);
+        ArrayList<ArrayList<Integer>> ra = ri;
+
+        //initialize the start context type
+        ArrayList<Boolean> sc = new ArrayList<>();
+        //[True, True, True]
+        sc.add(true);
+        sc.add(true);
+        sc.add(true);
+        //[[7, 4, 4], [0, 0, 0], [0, 0, 0]]
+        ArrayList<ArrayList<Integer>> si = new ArrayList<>();
+        ArrayList<Integer> si0 = new ArrayList<>();
+        si0.add(new Integer(7));
+        si0.add(new Integer(4));
+        si0.add(new Integer(4));
+        ArrayList<Integer> si1 = new ArrayList<>();
+        si1.add(new Integer(0));
+        si1.add(new Integer(0));
+        si1.add(new Integer(0));
+        si.add(si0);
+        si.add(si1);
+        si.add(si1);
+        ArrayList<ArrayList<Integer>> sa = si;
+
+        //initialize the bot type
+        ArrayList<Boolean> bc = sc;
+        ArrayList<ArrayList<Integer>> bi = si;
+        ArrayList<ArrayList<Integer>> ba = sa;
+
+        //initialize the rH [0, 0, 1]
+        ArrayList<Integer> resH = new ArrayList<>();
+        resH.add(new Integer(7));
+        resH.add(new Integer(0));
+        resH.add(new Integer(0));
+
+        //initialize the pre-defined variables
+        HashMap<String, ArrayList<Boolean>> preV = new HashMap<>();
+
+        //initialize the pre-define object methods type
+        //u1.getSalary() [True, False, False]
+        //u1.random1(s1) [True, False, False] -> [True, False, False]
+        //u1.random2(s1) [True, False, False] -> [True, True, False]
+        //u1.random3(s1) [True, False, False] -> [True, False, True]
+        //u1.computeSum1(rp11, rp21, rp31) [True, False, False], [True, True, False], [True, False, True] -> [True, True, True]
+        //u2.computeSum2(rp12, rp22, rp32) [True, True, False], [False, True, False], [False, True, True] -> [True, True, True]
+        //u3.computeSum3(rp13, rp23, rp33) [True, False, True], [False, True, True], [False, False, True] -> [True, True, True]
+        //u1.readp11() [True, False, False] u1.readp21() [True, True, False] u1.readp31() [True, False, True]
+        //u2.readp12() [True, True, False] u2.readp22() [False, True, False] u2.readp32() [False, True, True]
+        //u3.readp13() [True, False, True] u3.readp23() [False, True, True] u3.readp33() [False, False, True]
+        HashMap<String, HashMap<String, ArrayList<Boolean>>> preOM = new HashMap<>();
+        preOM.put("u1", new HashMap<>());
+        ArrayList<Boolean> TFF = new ArrayList<>();
+        TFF.add(true);
+        TFF.add(false);
+        TFF.add(false);
+        preOM.get("u1").put("u1getSalaryoutputC", TFF);
+        preOM.get("u1").put("random1input0C", TFF);
+        preOM.get("u1").put("random1outputC", TFF);
+        ArrayList<Boolean> TTF = new ArrayList<>();
+        TTF.add(true);
+        TTF.add(true);
+        TTF.add(false);
+        preOM.get("u1").put("u1random2input0C", TFF);
+        preOM.get("u1").put("u1random2outputC", TTF);
+        ArrayList<Boolean> TFT = new ArrayList<>();
+        TFT.add(true);
+        TFT.add(false);
+        TFT.add(true);
+        preOM.get("u1").put("u1random3input0C", TFF);
+        preOM.get("u1").put("u1random3outputC", TFT);
+        preOM.get("u1").put("u1readp11outputC", TFF);
+        preOM.get("u1").put("u1readp21outputC", TTF);
+        preOM.get("u1").put("u1readp31outputC", TFT);
+
+        ArrayList<Boolean> TTT = new ArrayList<>();
+        TTT.add(true);
+        TTT.add(true);
+        TTT.add(true);
+        preOM.get("u1").put("u1computeSum1input0C", TFF);
+        preOM.get("u1").put("u1computeSum1input1C", TTF);
+        preOM.get("u1").put("u1computeSum1input2C", TFT);
+        preOM.get("u1").put("u1computeSum1outputC", TTT);
+
+        preOM.put("u2", new HashMap<>());
+        ArrayList<Boolean> FTF = new ArrayList<>();
+        FTF.add(false);
+        FTF.add(true);
+        FTF.add(false);
+        ArrayList<Boolean> FTT = new ArrayList<>();
+        FTT.add(false);
+        FTT.add(true);
+        FTT.add(true);
+        preOM.get("u2").put("u2computeSum2input0C", TTF);
+        preOM.get("u2").put("u2computeSum2input1C", FTF);
+        preOM.get("u2").put("u2computeSum2input2C", FTT);
+        preOM.get("u2").put("u2computeSum2outputC", TTT);
+        preOM.get("u2").put("u2readp12outputC", TTF);
+        preOM.get("u2").put("u2readp22outputC", FTF);
+        preOM.get("u2").put("u2readp32outputC", FTT);
+
+        preOM.put("u3", new HashMap<>());
+        ArrayList<Boolean> FFT = new ArrayList<>();
+        FFT.add(false);
+        FFT.add(false);
+        FFT.add(true);
+        preOM.get("u3").put("u3computeSum3input0C", TFT);
+        preOM.get("u3").put("u3computeSum3input1C", FTT);
+        preOM.get("u3").put("u3computeSum3input2C", FFT);
+        preOM.get("u3").put("u3computeSum3outputC", TTT);
+        preOM.get("u3").put("u3readp13outputC", TFT);
+        preOM.get("u3").put("u3readp23outputC", FTT);
+        preOM.get("u3").put("u3readp33outputC", FFT);
+
+        ArrayList<Integer> w = new ArrayList<>();
+        w.add(new Integer(1));
+        w.add(new Integer(1));
+        w.add(new Integer(1));
+
+        TypeInference test = new TypeInference();
+        r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
+                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, w).toString());
+
+        return r.toString();
+    }
+
     public static Expression createOFTUseCase()
     {
         Expression[] emptyArg = {};
@@ -1114,6 +1412,75 @@ public class translation_test {
                                                         new Sequence(new ObjectMethod("writep31", "u3", u3writep31Arg),
                                                                 new Sequence(new ObjectMethod("writep32", "u3", u3writep32Arg),
                                                                         new ObjectMethod("writep33", "u3", u3writep33Arg))))))))),
+                new Plus(new Plus(new ObjectMethod("computeSum1", "u1", computeSum1Arg, "sum1"),
+                        new ObjectMethod("computeSum2",  "u2", computeSum2Arg, "sum2")),
+                        new ObjectMethod("computeSum3", "u3", computeSum3Arg, "sum3")));
+        return MPCUseCase;
+    }
+
+    public static Expression createMPCSimpUseCase(){
+        Expression[] emptyArg = {};
+
+        Expression[] u1random1Arg = new Expression[1];
+        u1random1Arg[0] = new ObjectMethod("getSalary", "u1", emptyArg, "s1");
+        Expression[] u1random2Arg = new Expression[1];
+        u1random2Arg[0] = new Var("s1");
+        Expression[] u1random3Arg = new Expression[1];
+        u1random3Arg[0] = new Var("s1");
+
+//        Expression[] u2random1Arg = new Expression[1];
+//        u2random1Arg[0] = new ObjectMethod("getSalary", "u2", emptyArg, "s2");
+//        Expression[] u2random2Arg = new Expression[1];
+//        u2random2Arg[0] = new Var("s2");
+//        Expression[] u2random3Arg = new Expression[1];
+//        u2random3Arg[0] = new Var("s2");
+//
+//        Expression[] u3random1Arg = new Expression[1];
+//        u3random1Arg[0] = new ObjectMethod("getSalary", "u3", emptyArg, "s3");
+//        Expression[] u3random2Arg = new Expression[1];
+//        u3random2Arg[0] = new Var("s3");
+//        Expression[] u3random3Arg = new Expression[1];
+//        u3random3Arg[0] = new Var("s3");
+
+        Expression[] u1writep11Arg = new Expression[1];
+        u1writep11Arg[0] = new ObjectMethod("random1", "u1", u1random1Arg, "v11");
+        Expression[] u1writep12Arg = new Expression[1];
+        u1writep12Arg[0] = new ObjectMethod("random2", "u1", u1random2Arg, "v12");
+        Expression[] u1writep13Arg = new Expression[1];
+        u1writep13Arg[0] = new ObjectMethod("random3", "u1", u1random3Arg, "v13");
+
+//        Expression[] u2writep21Arg = new Expression[1];
+//        u2writep21Arg[0] = new ObjectMethod("random1", "u2", u2random1Arg, "v21");
+//        Expression[] u2writep22Arg = new Expression[1];
+//        u2writep22Arg[0] = new ObjectMethod("random2", "u2", u2random2Arg, "v22");
+//        Expression[] u2writep23Arg = new Expression[1];
+//        u2writep23Arg[0] = new ObjectMethod("random3", "u2", u2random3Arg, "v23");
+//
+//        Expression[] u3writep31Arg = new Expression[1];
+//        u3writep31Arg[0] = new ObjectMethod("random1", "u3", u3random1Arg, "v31");
+//        Expression[] u3writep32Arg = new Expression[1];
+//        u3writep32Arg[0] = new ObjectMethod("random2", "u3", u1random2Arg, "v32");
+//        Expression[] u3writep33Arg = new Expression[1];
+//        u3writep33Arg[0] = new ObjectMethod("random3", "u3", u3random3Arg, "v33");
+
+        Expression[] computeSum1Arg = new Expression[3];
+        computeSum1Arg[0] = new ObjectMethod("readp11", "u1", emptyArg, "rp11");
+        computeSum1Arg[1] = new ObjectMethod("readp21", "u1", emptyArg, "rp21");
+        computeSum1Arg[2] = new ObjectMethod("readp31", "u1", emptyArg, "rp31");
+
+        Expression[] computeSum2Arg = new Expression[3];
+        computeSum2Arg[0] = new ObjectMethod("readp12", "u2", emptyArg, "rp12");
+        computeSum2Arg[1] = new ObjectMethod("readp22", "u2", emptyArg, "rp22");
+        computeSum2Arg[2] = new ObjectMethod("readp32", "u2", emptyArg, "rp32");
+
+        Expression[] computeSum3Arg = new Expression[3];
+        computeSum3Arg[0] = new ObjectMethod("readp13", "u3", emptyArg, "rp13");
+        computeSum3Arg[1] = new ObjectMethod("readp23", "u3", emptyArg, "rp23");
+        computeSum3Arg[2] = new ObjectMethod("readp33", "u3", emptyArg, "rp33");
+
+        Expression MPCUseCase = new Sequence(new Sequence(new ObjectMethod("writep11", "u1", u1writep11Arg),
+                new Sequence(new ObjectMethod("writep12", "u1", u1writep12Arg),
+                        new ObjectMethod("writep13", "u1", u1writep13Arg))),
                 new Plus(new Plus(new ObjectMethod("computeSum1", "u1", computeSum1Arg, "sum1"),
                         new ObjectMethod("computeSum2",  "u2", computeSum2Arg, "sum2")),
                         new ObjectMethod("computeSum3", "u3", computeSum3Arg, "sum3")));

@@ -63,6 +63,9 @@ public class TypeInference implements PartitionVisitor{
     //variables in the current context needed to be refreshed at every node.
     HashMap<Node, envForTypeInfer> environment;
 
+    //the constraint number
+    int constraintNum;
+
     public TypeInference(){
         n = 0;
         principals = new ArrayList<>();
@@ -84,6 +87,7 @@ public class TypeInference implements PartitionVisitor{
         botA = new ArrayList<>();
         mInfo = new HashMap<>();
         oInfo = new HashMap<>();
+        constraintNum = 0;
     }
 
     public TypeInference(int num, ArrayList<Integer> p,
@@ -113,6 +117,7 @@ public class TypeInference implements PartitionVisitor{
         statementI = new HashMap<>();
         statementA = new HashMap<>();
         environment = new HashMap<>();
+        constraintNum = 0;
     }
 
     public void updateStatementAll(Node n, ArrayList<String> c, ArrayList<String> i, ArrayList<String> a){
@@ -351,12 +356,15 @@ public class TypeInference implements PartitionVisitor{
                 //\tau_x <= \tau_x'
                 for(String conxtxC: environment.get(singleCall).currentContextC){
                     result.append("s.add(cLe(" + conxtxC + ", " + mInfo.get(singleCall.methodName.toString()).mcontextC + "))\n");
+                    constraintNum++;
                 }
                 for(String conxtI: environment.get(singleCall).currentContextI){
                     result.append("s.add(bLe(" + mInfo.get(singleCall.methodName.toString()).mcontextI + ", " + conxtI + "))\n");
+                    constraintNum++;
                 }
                 for(String conxtA: environment.get(singleCall).currentContextA){
                     result.append("s.add(bLe(" + mInfo.get(singleCall.methodName.toString()).mcontextA + ", " + conxtA + "))\n");
+                    constraintNum++;
                 }
 
                 //when there is no argument for the method
@@ -368,16 +376,20 @@ public class TypeInference implements PartitionVisitor{
                     //a1 <= AvailabilityP(a1, Q|H)
                     result.append("s.add(availabilityP(" + mInfo.get(singleCall.methodName.toString()).arguA.get(0) +
                             ", " + mInfo.get(singleCall.methodName.toString()).qc + ", " + environment.get(singleCall).currentHosts + "))\n");
+                    constraintNum++;
 
                     ////\tau_x <= \tau_1
                     for(String conxtxC: environment.get(singleCall).currentContextC){
                         result.append("s.add(cLe(" + conxtxC + ", " + mInfo.get(singleCall.methodName.toString()).arguC.get(0) + "))\n");
+                        constraintNum++;
                     }
                     for(String conxtI: environment.get(singleCall).currentContextI){
                         result.append("s.add(bLe(" + mInfo.get(singleCall.methodName.toString()).arguI.get(0) + ", " + conxtI + "))\n");
+                        constraintNum++;
                     }
                     for(String conxtA: environment.get(singleCall).currentContextA){
                         result.append("s.add(bLe(" + mInfo.get(singleCall.methodName.toString()).arguA.get(0) + ", " + conxtA + "))\n");
+                        constraintNum++;
                     }
 
                     //set the return value for the method
@@ -402,28 +414,35 @@ public class TypeInference implements PartitionVisitor{
                         //\tau <= \tau_1
                         for(String cVariables: statementC.get(argE.toString())){
                             result.append("s.add(cLe(" + cVariables + ", " + mInfo.get(singleCall.methodName.toString()).arguC.get(a) + "))\n");
+                            constraintNum++;
                         }
                         for(String iVariables: statementI.get(argE.toString())){
                             result.append("s.add(bLe(" + mInfo.get(singleCall.methodName.toString()).arguI.get(a)  + ", " + iVariables + "))\n");
+                            constraintNum++;
                         }
                         for(String aVariables: statementA.get(argE.toString())){
                             result.append("s.add(bLe(" + mInfo.get(singleCall.methodName.toString()).arguA.get(a)  + ", " + aVariables + "))\n");
+                            constraintNum++;
                         }
 
                         //\tau_x <= \tau_1
                         for(String conxtxC: environment.get(singleCall).currentContextC){
                             result.append("s.add(cLe(" + conxtxC + ", " + mInfo.get(singleCall.methodName.toString()).arguC.get(a) + "))\n");
+                            constraintNum++;
                         }
                         for(String conxtI: environment.get(singleCall).currentContextI){
                             result.append("s.add(bLe(" + mInfo.get(singleCall.methodName.toString()).arguI.get(a) + ", " + conxtI + "))\n");
+                            constraintNum++;
                         }
                         for(String conxtA: environment.get(singleCall).currentContextA){
                             result.append("s.add(bLe(" + mInfo.get(singleCall.methodName.toString()).arguA.get(a) + ", " + conxtA + "))\n");
+                            constraintNum++;
                         }
 
                         //a1 <= Availability(Q|H)
                         result.append("s.add(availabilityP(" + mInfo.get(singleCall.methodName.toString()).arguA.get(a) +
                                 ", " + mInfo.get(singleCall.methodName.toString()).qc + ", " + environment.get(singleCall).currentHosts + "))\n");
+                        constraintNum++;
 
                     }
 
@@ -450,6 +469,7 @@ public class TypeInference implements PartitionVisitor{
 
                 //c2 <= H
                 result.append("s.add(cLeH(" + oInfo.get(Oname).omArgusC.get(OMName).element2 + ", " + environment.get(singleCall).currentHosts + "))\n");
+                constraintNum++;
 
                 //we have the typed context for the method
                 //when there is no argument for the method
@@ -462,16 +482,20 @@ public class TypeInference implements PartitionVisitor{
                     //a1 <= AvailabilityP(a1, Q|H)
                     result.append("s.add(availabilityP(" + oInfo.get(Oname).omArgusA.get(OMName).element1.get(0) +
                             ", " + oInfo.get(Oname).Qc + ", " + environment.get(singleCall).currentHosts + "))\n");
+                    constraintNum++;
 
                     ////\tau_x <= \tau_1
                     for(String conxtxC: environment.get(singleCall).currentContextC){
                         result.append("s.add(cLe(" + conxtxC + ", " + oInfo.get(Oname).omArgusC.get(OMName).element1.get(0) + "))\n");
+                        constraintNum++;
                     }
                     for(String conxtI: environment.get(singleCall).currentContextI){
                         result.append("s.add(bLe(" + oInfo.get(Oname).omArgusI.get(OMName).element1.get(0) + ", " + conxtI + "))\n");
+                        constraintNum++;
                     }
                     for(String conxtA: environment.get(singleCall).currentContextA){
                         result.append("s.add(bLe(" + oInfo.get(Oname).omArgusA.get(OMName).element1.get(0) + ", " + conxtA + "))\n");
+                        constraintNum++;
                     }
 
                     //set the return value for the method
@@ -496,28 +520,35 @@ public class TypeInference implements PartitionVisitor{
                         //\tau <= \tau_1
                         for(String cVariables: statementC.get(argE.toString())){
                             result.append("s.add(cLe(" + cVariables + ", " + oInfo.get(Oname).omArgusC.get(OMName).element1.get(a) + "))\n");
+                            constraintNum++;
                         }
                         for(String iVariables: statementI.get(argE.toString())){
                             result.append("s.add(bLe(" + oInfo.get(Oname).omArgusI.get(OMName).element1.get(a) + ", " + iVariables + "))\n");
+                            constraintNum++;
                         }
                         for(String aVariables: statementA.get(argE.toString())){
                             result.append("s.add(bLe(" + oInfo.get(Oname).omArgusA.get(OMName).element1.get(a) + ", " + aVariables + "))\n");
+                            constraintNum++;
                         }
 
                         //\tau_x <= \tau_1
                         for(String conxtxC: environment.get(singleCall).currentContextC){
                             result.append("s.add(cLe(" + conxtxC + ", " + oInfo.get(Oname).omArgusC.get(OMName).element1.get(a) + "))\n");
+                            constraintNum++;
                         }
                         for(String conxtI: environment.get(singleCall).currentContextI){
                             result.append("s.add(bLe(" + oInfo.get(Oname).omArgusI.get(OMName).element1.get(a) + ", " + conxtI + "))\n");
+                            constraintNum++;
                         }
                         for(String conxtA: environment.get(singleCall).currentContextA){
                             result.append("s.add(bLe(" + oInfo.get(Oname).omArgusA.get(OMName).element1.get(a) + ", " + conxtA + "))\n");
+                            constraintNum++;
                         }
 
                         //a1 <= Availability(Q|H)
                         result.append("s.add(availabilityP(" + oInfo.get(Oname).omArgusA.get(OMName).element1.get(a) +
                                 ", " + oInfo.get(Oname).Qc + ", " + environment.get(singleCall).currentHosts + "))\n");
+                        constraintNum++;
 
                     }
 
@@ -554,17 +585,21 @@ public class TypeInference implements PartitionVisitor{
 
             //c_m' <= union q
             result.append("s.add(confQ(" + objSig.omArgusC.get(mName).element2 + ", " + objHosts + "))\n");
+            constraintNum++;
 
             //i_m' <= Sintegrity(Qs)
             result.append("s.add(sIntegrity(" + objSig.omArgusI.get(mName).element2 + ", " + objHosts + "))\n");
+            constraintNum++;
 
             //a_m' <= Availability(Qs)
             result.append("s.add(availabilityC(" + objSig.omArgusA.get(mName).element2 + ", " + objHosts + "))\n");
+            constraintNum++;
 
             //for each argument of the method
             for(int i = 0; i < objSig.omArgusI.get(mName).element1.size(); i++){
                 //i_m <= CIntegrity(Qc)
                 result.append("s.add(cIntegrityE(" + objSig.omArgusI.get(mName).element1.get(i) + ", " + infer.oInfo.get(objName).Qc + "))\n");
+                constraintNum++;
 
                 //declassification happens here.
                 //If we have predefined confidentiality type for both input and output, then we do not check confidentiality for this argument
@@ -573,8 +608,10 @@ public class TypeInference implements PartitionVisitor{
                     //we only check the integrity and availability
                     result.append("s.add(bLe(" + objSig.omArgusI.get(mName).element2 + ", " +
                             objSig.omArgusI.get(mName).element1.get(i) + "))\n");
+                    constraintNum++;
                     result.append("s.add(bLe(" + objSig.omArgusA.get(mName).element2 + ", " +
                             objSig.omArgusA.get(mName).element1.get(i) + "))\n");
+                    constraintNum++;
                 }
                 //otherwise do the normal input <= output check
                 else {
@@ -582,6 +619,7 @@ public class TypeInference implements PartitionVisitor{
                     result.append("s.add(lableLe(" + objSig.omArgusC.get(mName).element1.get(i) + ", " + objSig.omArgusC.get(mName).element2 +
                             ", " + objSig.omArgusI.get(mName).element1.get(i) + ", " + objSig.omArgusI.get(mName).element2 + ", " +
                             objSig.omArgusA.get(mName).element1.get(i) + ", " + objSig.omArgusA.get(mName).element2 + "))\n");
+                    constraintNum = constraintNum + 3;
                 }
             }
         }
@@ -598,8 +636,11 @@ public class TypeInference implements PartitionVisitor{
             // if the free variable in m is empty, we set bot = context
             if(m.freeVars.isEmpty()){
                 result.append(mInfo.arguC.get(0) + " = " + mInfo.mcontextC + "\n");
+                constraintNum++;
                 result.append(mInfo.arguI.get(0) + " = " + mInfo.mcontextI + "\n");
+                constraintNum++;
                 result.append(mInfo.arguA.get(0) + " = " + mInfo.mcontextA + "\n");
+                constraintNum++;
             }
             else {
                 //set up the input arguments to type the body of method and the object call
@@ -648,22 +689,27 @@ public class TypeInference implements PartitionVisitor{
             for(String argI : mInfo.arguI){
                 //\tau_1 <= \tau_2
                 result.append("s.add(cIntegrityE(" + argI + ", " + mInfo.qc + "))\n");
+                constraintNum++;
             }
 
             for(String argC: mInfo.arguC){
                 //todo: add constraint about the argument of this method call
                 result.append("s.add(cLeH(" + argC + ", " + mInfo.host + "))\n");
+                constraintNum++;
             }
 
             //c_x <= H
             result.append("s.add(cLeH(" + mInfo.mcontextC + ", " + mInfo.host + "))\n");
+            constraintNum++;
 
             return result;
         }
         //this is the set up for the res method
         else {
             result.append("s.add(cLeH(resultC, resH))\n");
+            constraintNum++;
             result.append("s.add(cIntegrityE(resultI, resQ))\n");
+            constraintNum++;
 
             return result;
         }
@@ -765,6 +811,11 @@ public class TypeInference implements PartitionVisitor{
         r.append(infer.entranceThisCallT(methods.get(methods.size() - 1), methodArgNames.get(methodArgNames.size() - 1)).toString());
 
         r.append(infer.optimizationResult(w));
+        r.append("endT = time.time() - startT\n");
+        r.append("print(endT)\n");
+
+        System.out.println("constraint number: " + infer.constraintNum);
+
         return r;
     }
 
@@ -774,6 +825,7 @@ public class TypeInference implements PartitionVisitor{
         result.append("weight = " + hTrans(weight));
 
         result.append("\ns.minimize(sum(");
+        constraintNum++;
         //minimize host for all methods except for res
         for(String mn: mInfo.keySet()){
             if(!mn.equals("ret")){
@@ -923,6 +975,7 @@ public class TypeInference implements PartitionVisitor{
         result.append("s.add(cLe(startC, " + mInfo.get(mDef.thisMethodName.toString()).mcontextC + "))\n");
         result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).mcontextI + ", startI))\n");
         result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).mcontextA + ", startA))\n");
+        constraintNum = constraintNum + 3;
 
         //when there is no argument for the method
         //we need to add dummy argument for the implicit constraints
@@ -933,11 +986,13 @@ public class TypeInference implements PartitionVisitor{
             //a1 <= AvailabilityP(a1, Q|H)
             result.append("s.add(availabilityP(" + mInfo.get(mDef.thisMethodName.toString()).arguA.get(0) +
                     ", " + mInfo.get(mDef.thisMethodName.toString()).qc + ", resH))\n");
+            constraintNum++;
 
             ////\tau_x <= \tau_1
             result.append("s.add(cLe(startC, " + mInfo.get(mDef.thisMethodName.toString()).arguC.get(0) + "))\n");
             result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).arguI.get(0) + ", startI))\n");
             result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).arguA.get(0) + ", startA))\n");
+            constraintNum = constraintNum + 3;
 
             //set the return value for the method
             //ArrayList<String> retC = new ArrayList<>();
@@ -962,6 +1017,7 @@ public class TypeInference implements PartitionVisitor{
                 result.append("s.add(cLe(startC, " + mInfo.get(mDef.thisMethodName.toString()).arguC.get(a) + "))\n");
                 result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).arguI.get(a) + ", startI))\n");
                 result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).arguA.get(a) + ", startA))\n");
+                constraintNum = constraintNum + 3;
 
                 //\tau <= \tau_1
                 String cVariable = statementC.get(mn.get(a)).get(statementC.get(mn.get(a)).size() - 1);
@@ -970,10 +1026,12 @@ public class TypeInference implements PartitionVisitor{
                 result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).arguI.get(a)  + ", " + iVariable + "))\n");
                 String aVariable = statementA.get(mn.get(a)).get(statementC.get(mn.get(a)).size() - 1);
                 result.append("s.add(bLe(" + mInfo.get(mDef.thisMethodName.toString()).arguA.get(a)  + ", " + aVariable + "))\n");
+                constraintNum = constraintNum + 3;
 
                 //a1 <= Availability(Q|H)
                 result.append("s.add(availabilityP(" + mInfo.get(mDef.thisMethodName.toString()).arguA.get(a) +
                         ", " + mInfo.get(mDef.thisMethodName.toString()).qc + ", resH))\n");
+                constraintNum++;
             }
 
             //set the return value for the method
