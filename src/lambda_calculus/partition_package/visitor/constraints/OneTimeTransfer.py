@@ -463,9 +463,6 @@ s.add(cIntegrityE(m2xI, m2Q))
 s.add(cLeH(m2xC, m2H))
 s.add(cLeH(m2conxtC, m2H))
 #MethodT: m1
-m1botC = m1conxtC
-m1botI = m1conxtI
-m1botA = m1conxtA
 #ObjCallT: let x9 = i2.read() in this.ret(x9)
 s.add(cLeH(i2readoutputC, m1H))
 s.add(availabilityP(i2readbotA, i2qc, m1H))
@@ -487,9 +484,6 @@ s.add(cIntegrityE(m1botI, m1Q))
 s.add(cLeH(m1botC, m1H))
 s.add(cLeH(m1conxtC, m1H))
 #MethodT: m0
-m0botC = m0conxtC
-m0botI = m0conxtI
-m0botA = m0conxtA
 #ObjCallT: let x8 = i1.read() in this.ret(x8)
 s.add(cLeH(i1readoutputC, m0H))
 s.add(availabilityP(i1readbotA, i1qc, m0H))

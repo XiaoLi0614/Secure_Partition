@@ -633,14 +633,15 @@ public class TypeInference implements PartitionVisitor{
 
         //need to differentiate res and other method call setup
         if(n != 0){
-            // if the free variable in m is empty, we set bot = context
+            // if the free variable in m is empty, there is no need to put bot in the environment
+            //because it is only a dummy variable, we never use it in typing children nodes.
             if(m.freeVars.isEmpty()){
-                result.append(mInfo.arguC.get(0) + " = " + mInfo.mcontextC + "\n");
-                constraintNum++;
-                result.append(mInfo.arguI.get(0) + " = " + mInfo.mcontextI + "\n");
-                constraintNum++;
-                result.append(mInfo.arguA.get(0) + " = " + mInfo.mcontextA + "\n");
-                constraintNum++;
+//                result.append(mInfo.arguC.get(0) + " = " + mInfo.mcontextC + "\n");
+//                constraintNum++;
+//                result.append(mInfo.arguI.get(0) + " = " + mInfo.mcontextI + "\n");
+//                constraintNum++;
+//                result.append(mInfo.arguA.get(0) + " = " + mInfo.mcontextA + "\n");
+//                constraintNum++;
             }
             else {
                 //set up the input arguments to type the body of method and the object call
