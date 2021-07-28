@@ -601,7 +601,7 @@ public class TypeInference implements PartitionVisitor{
                 result.append("s.add(cIntegrityE(" + objSig.omArgusI.get(mName).element1.get(i) + ", " + infer.oInfo.get(objName).Qc + "))\n");
                 constraintNum++;
 
-                //declassification happens here.
+                //todo: declassification happens here.
                 //If we have predefined confidentiality type for both input and output, then we do not check confidentiality for this argument
                 if(infer.predefinedOM.get(objName).keySet().contains(objSig.omArgusC.get(mName).element1.get(i)) &&
                         infer.predefinedOM.get(objName).keySet().contains(objSig.omArgusC.get(mName).element2)){

@@ -35,6 +35,14 @@ def nonCheck(qs):
     result = And(constraints)
     return result
 
+def nonCheckQ(q):
+    constraints = []
+    for i1 in range(n):
+        for i2 in range(n):
+            constraints.append(q[i1][i2] == 0)
+    result = And(constraints)
+    return result
+
 def sLe(qs1, qs2):
     constraints = []
     for i1 in range(n):
@@ -139,9 +147,8 @@ def sIntegrity(b, q):
 def lableLe(c1, c2, i1, i2, a1, a2):
     return And(cLe(c1, c2), bLe(i2, i1), bLe(a2, a1))
 
-
 n = 3
-principals = [ 4, 7, 1]
+principals = [ 7, 4, 1]
 xC = [ True, True, True ]
 xCI = [ [ Int("xCI_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 xCIrange0 = [ And(0 <= xCI[i][j]) for i in range(n) for j in range(n) ]
@@ -154,14 +161,14 @@ s.add(xCArange0)
 xCArange1 = [And(sLe(xCA[i], principals)) for i in range(n)]
 s.add(xCArange1)
 startC = [ True, True, True ]
-startI = [[ 4, 7, 0], [ 0, 0, 0], [ 0, 0, 0] ]
-startA = [[ 4, 7, 0], [ 0, 0, 0], [ 0, 0, 0] ]
+startI = [[ 7, 4, 0], [ 0, 0, 0], [ 0, 0, 0] ]
+startA = [[ 7, 4, 0], [ 0, 0, 0], [ 0, 0, 0] ]
 botC = [ True, True, True ]
-botI = [[ 4, 7, 0], [ 0, 0, 0], [ 0, 0, 0] ]
-botA = [[ 4, 7, 0], [ 0, 0, 0], [ 0, 0, 0] ]
+botI = [[ 7, 4, 0], [ 0, 0, 0], [ 0, 0, 0] ]
+botA = [[ 7, 4, 0], [ 0, 0, 0], [ 0, 0, 0] ]
 resultC = [ False, False, True ]
-resultI = [[ 1, 2, 0], [ 0, 0, 0], [ 0, 0, 0] ]
-resultA = [[ 1, 2, 0], [ 0, 0, 0], [ 0, 0, 0] ]
+resultI = [[ 2, 1, 0], [ 0, 0, 0], [ 0, 0, 0] ]
+resultA = [[ 1, 1, 0], [ 0, 0, 0], [ 0, 0, 0] ]
 resH = [ 0, 0, 1]
 resQ = [ [ Int("resQ_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 s.add([ And(0 <= resQ[i][j]) for i in range(n) for j in range(n) ])
@@ -171,9 +178,9 @@ m0Q = [ [ Int('m0Q_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
 m0conxtC = [ Bool('m0conxtC_%s' % i) for i in range(n) ]
 m0conxtI = [ [ Int('m0conxtI_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
 m0conxtA = [ [ Int('m0conxtA_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
-m0botC = [ Bool('m0botC_%s' % i) for i in range(n) ]
-m0botI = [ [ Int('m0botI_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
-m0botA = [ [ Int('m0botA_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
+m0botC = m0conxtC
+m0botI = m0conxtI
+m0botA = m0conxtA
 m0range0 = [ And(0 <= m0conxtI[i][j], 0 <= m0conxtA[i][j], 0 <= m0Q[i][j], 0 <= m0botI[i][j], 0 <= m0botA[i][j]) for i in range(n) for j in range(n) ]
 s.add(m0range0)
 m0range1 = [And(sLe(m0conxtI[i], principals), sLe(m0conxtA[i], principals), sLe(m0Q[i], principals), sLe(m0botI[i], principals), sLe(m0botA[i], principals)) for i in range(n)]
@@ -182,14 +189,15 @@ m0range2 = [And(0 <= m0H[i]) for i in range(n)]
 s.add(m0range2)
 s.add(sLe(m0H, principals))
 s.add(Not(nonCheck(m0H)))
+s.add(Not(nonCheckQ(m0Q)))
 m1H = [ Int('m1H_%s' % i) for i in range(n) ] 
 m1Q = [ [ Int('m1Q_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
 m1conxtC = [ Bool('m1conxtC_%s' % i) for i in range(n) ]
 m1conxtI = [ [ Int('m1conxtI_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
 m1conxtA = [ [ Int('m1conxtA_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
-m1botC = [ Bool('m1botC_%s' % i) for i in range(n) ]
-m1botI = [ [ Int('m1botI_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
-m1botA = [ [ Int('m1botA_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
+m1botC = m1conxtC
+m1botI = m1conxtI
+m1botA = m1conxtA
 m1range0 = [ And(0 <= m1conxtI[i][j], 0 <= m1conxtA[i][j], 0 <= m1Q[i][j], 0 <= m1botI[i][j], 0 <= m1botA[i][j]) for i in range(n) for j in range(n) ]
 s.add(m1range0)
 m1range1 = [And(sLe(m1conxtI[i], principals), sLe(m1conxtA[i], principals), sLe(m1Q[i], principals), sLe(m1botI[i], principals), sLe(m1botA[i], principals)) for i in range(n)]
@@ -198,6 +206,7 @@ m1range2 = [And(0 <= m1H[i]) for i in range(n)]
 s.add(m1range2)
 s.add(sLe(m1H, principals))
 s.add(Not(nonCheck(m1H)))
+s.add(Not(nonCheckQ(m1Q)))
 m2H = [ Int('m2H_%s' % i) for i in range(n) ] 
 m2Q = [ [ Int('m2Q_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
 m2conxtC = [ Bool('m2conxtC_%s' % i) for i in range(n) ]
@@ -214,6 +223,7 @@ m2range2 = [And(0 <= m2H[i]) for i in range(n)]
 s.add(m2range2)
 s.add(sLe(m2H, principals))
 s.add(Not(nonCheck(m2H)))
+s.add(Not(nonCheckQ(m2Q)))
 m3H = [ Int('m3H_%s' % i) for i in range(n) ] 
 m3Q = [ [ Int('m3Q_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
 m3conxtC = [ Bool('m3conxtC_%s' % i) for i in range(n) ]
@@ -230,6 +240,7 @@ m3range2 = [And(0 <= m3H[i]) for i in range(n)]
 s.add(m3range2)
 s.add(sLe(m3H, principals))
 s.add(Not(nonCheck(m3H)))
+s.add(Not(nonCheckQ(m3Q)))
 aqs = [ [ Int("aqs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 aqc = [ [ Int("aqc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 areadbotC = [ Bool('areadbotC_%s' % i) for i in range(n) ]

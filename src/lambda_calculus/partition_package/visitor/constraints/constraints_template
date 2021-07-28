@@ -35,6 +35,14 @@ def nonCheck(qs):
     result = And(constraints)
     return result
 
+def nonCheckQ(q):
+    constraints = []
+    for i1 in range(n):
+        for i2 in range(n):
+            constraints.append(q[i1][i2] == 0)
+    result = And(constraints)
+    return result
+
 def sLe(qs1, qs2):
     constraints = []
     for i1 in range(n):
@@ -138,5 +146,4 @@ def sIntegrity(b, q):
 
 def lableLe(c1, c2, i1, i2, a1, a2):
     return And(cLe(c1, c2), bLe(i2, i1), bLe(a2, a1))
-
 

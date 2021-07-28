@@ -141,7 +141,7 @@ def lableLe(c1, c2, i1, i2, a1, a2):
 
 
 n = 3
-principals = [ 4, 7, 1]
+principals = [ 7, 4, 1]
 xC = [ True, True, True ]
 xCI = [ [ Int("xCI_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 xCIrange0 = [ And(0 <= xCI[i][j]) for i in range(n) for j in range(n) ]
@@ -154,14 +154,14 @@ s.add(xCArange0)
 xCArange1 = [And(sLe(xCA[i], principals)) for i in range(n)]
 s.add(xCArange1)
 startC = [ True, True, True ]
-startI = [[ 4, 7, 0], [ 0, 0, 0], [ 0, 0, 0] ]
-startA = [[ 4, 7, 0], [ 0, 0, 0], [ 0, 0, 0] ]
+startI = [[ 7, 4, 0], [ 0, 0, 0], [ 0, 0, 0] ]
+startA = [[ 7, 4, 0], [ 0, 0, 0], [ 0, 0, 0] ]
 botC = [ True, True, True ]
-botI = [[ 4, 7, 0], [ 0, 0, 0], [ 0, 0, 0] ]
-botA = [[ 4, 7, 0], [ 0, 0, 0], [ 0, 0, 0] ]
+botI = [[ 7, 4, 0], [ 0, 0, 0], [ 0, 0, 0] ]
+botA = [[ 7, 4, 0], [ 0, 0, 0], [ 0, 0, 0] ]
 resultC = [ False, False, True ]
-resultI = [[ 1, 2, 0], [ 0, 0, 0], [ 0, 0, 0] ]
-resultA = [[ 1, 2, 0], [ 0, 0, 0], [ 0, 0, 0] ]
+resultI = [[ 2, 1, 0], [ 0, 0, 0], [ 0, 0, 0] ]
+resultA = [[ 1, 1, 0], [ 0, 0, 0], [ 0, 0, 0] ]
 resH = [ 0, 0, 1]
 resQ = [ [ Int("resQ_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 s.add([ And(0 <= resQ[i][j]) for i in range(n) for j in range(n) ])

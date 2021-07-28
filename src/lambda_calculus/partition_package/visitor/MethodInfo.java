@@ -79,10 +79,22 @@ public class MethodInfo {
         result.append(mcontextC + " = [ Bool(\'" + mcontextC + "_%s\' % i) for i in range(n) ]\n");
         result.append(mcontextI + " = [ [ Int(\'" + mcontextI + "_%s_%s\' % (i, j)) for j in range(n) ] for i in range(n) ]\n");
         result.append(mcontextA + " = [ [ Int(\'" + mcontextA + "_%s_%s\' % (i, j)) for j in range(n) ] for i in range(n) ]\n");
-        for(int i = 0; i < arguC.size(); i++){
-            result.append(arguC.get(i) + " = [ Bool(\'" + arguC.get(i) + "_%s\' % i) for i in range(n) ]\n");
-            result.append(arguI.get(i) + " = [ [ Int(\'" + arguI.get(i) + "_%s_%s\' % (i, j)) for j in range(n) ] for i in range(n) ]\n");
-            result.append(arguA.get(i) + " = [ [ Int(\'" + arguA.get(i) + "_%s_%s\' % (i, j)) for j in range(n) ] for i in range(n) ]\n");
+
+        //when there is only dummy variable, assign the context variable to it: m0botC = m0conxtC
+        //there is no need to initialize the bot variable
+        int l = arguC.get(0).length();
+        if(arguC.size() == 1 && arguC.get(0).substring(l-4, l).equals("botC")){
+            result.append(arguC.get(0) + " = " + mcontextC + "\n");
+            result.append(arguI.get(0) + " = " + mcontextI + "\n");
+            result.append(arguA.get(0) + " = " + mcontextA + "\n");
+        }
+        //otherwise initialize the variable
+        else{
+            for(int i = 0; i < arguC.size(); i++){
+                result.append(arguC.get(i) + " = [ Bool(\'" + arguC.get(i) + "_%s\' % i) for i in range(n) ]\n");
+                result.append(arguI.get(i) + " = [ [ Int(\'" + arguI.get(i) + "_%s_%s\' % (i, j)) for j in range(n) ] for i in range(n) ]\n");
+                result.append(arguA.get(i) + " = [ [ Int(\'" + arguA.get(i) + "_%s_%s\' % (i, j)) for j in range(n) ] for i in range(n) ]\n");
+            }
         }
         return result.toString();
     }
@@ -130,6 +142,7 @@ public class MethodInfo {
         rangeC++;
         result.append("s.add(sLe(" + host + ", principals))\n");
         result.append("s.add(Not(nonCheck(" + host + ")))\n");
+        result.append("s.add(Not(nonCheckQ(" + qc + ")))\n");
 
         return result.toString();
     }

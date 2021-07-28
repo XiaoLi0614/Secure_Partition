@@ -39,14 +39,14 @@ public class translation_test {
         long consGenT;
         Date date1 = new Date();
         partitionT = date1.getTime();
-        //Expression lambda1 = createOFTUseCase();
+        Expression lambda1 = createOFTUseCase();
         //Expression lambda1 = createTicketsUseCase();
         //Expression lambda1 = createObliviousTransferUseCase();
         //Expression lambda1 = createAuctionUseCase();
         //Expression lambda1 = createTestUseCase();
         //Expression lambda1 = createFriendsMapUseCase();
         //Expression lambda1 = createMPCUseCase();
-        Expression lambda1 = createMPCSimpUseCase();
+        //Expression lambda1 = createMPCSimpUseCase();
         System.out.println("Complete create use-case");
         //Date cDate = new Date();
         //long cd = cDate.getTime();
@@ -92,13 +92,14 @@ public class translation_test {
         System.out.println("\nStart generate constraints: \n");
         Date date3 = new Date();
         consGenT = date3.getTime();
-        //printToFile(OneTimeTransferInfer(resultMethodDefs), "OneTimeTransfer");
+        printToFile(OneTimeTransferInfer(resultMethodDefs), "OneTimeTransfer");
         //printToFile(AuctionInfer(resultMethodDefs), "Auction");
         //printToFile(TicketInfer(resultMethodDefs), "Ticket");
         //printToFile(ObliviousTransferInfer(resultMethodDefs), "ObliviousTransfer");
         //printToFile(FriendsMapInfer(resultMethodDefs), "FriendMap");
-        printToFile(MPCSimpInfer(resultMethodDefs), "MPCSimp");
+        //printToFile(MPCSimpInfer(resultMethodDefs), "MPCSimp");
 
+        //type checking when placement information is available
         //OneTimeTransferTypeCheckingP(resultMethodDefs);
         //TicketTypeChecking(resultMethodDefs);
         //TicketTypeCheckingP(resultMethodDefs);
@@ -184,8 +185,8 @@ public class translation_test {
 
         //initialize the principals
         ArrayList<Integer> principals = new ArrayList<>();
-        principals.add(new Integer(4));
         principals.add(new Integer(7));
+        principals.add(new Integer(4));
         principals.add(new Integer(1));
 
         //initialize the return type
@@ -194,11 +195,11 @@ public class translation_test {
         rc.add(false);
         rc.add(false);
         rc.add(true);
-        //resultI = [[1, 2, 0], [0, 0, 0], [0, 0, 0]]
+        //resultI = [[2, 1, 0], [0, 0, 0], [0, 0, 0]]
         ArrayList<ArrayList<Integer>> ri = new ArrayList<>();
         ArrayList<Integer> ri0 = new ArrayList<>();
-        ri0.add(new Integer(1));
         ri0.add(new Integer(2));
+        ri0.add(new Integer(1));
         ri0.add(new Integer(0));
         ArrayList<Integer> ri1 = new ArrayList<>();
         ri1.add(new Integer(0));
@@ -207,7 +208,18 @@ public class translation_test {
         ri.add(ri0);
         ri.add(ri1);
         ri.add(ri1);
-        ArrayList<ArrayList<Integer>> ra = ri;
+        ArrayList<ArrayList<Integer>> ra = new ArrayList<>();
+        ArrayList<Integer> ra0 = new ArrayList<>();
+        ra0.add(new Integer(1));
+        ra0.add(new Integer(1));
+        ra0.add(new Integer(0));
+        ArrayList<Integer> ra1 = new ArrayList<>();
+        ra1.add(new Integer(0));
+        ra1.add(new Integer(0));
+        ra1.add(new Integer(0));
+        ra.add(ra0);
+        ra.add(ra1);
+        ra.add(ra1);
 
         //initialize the start context type
         ArrayList<Boolean> sc = new ArrayList<>();
@@ -215,11 +227,11 @@ public class translation_test {
         sc.add(true);
         sc.add(true);
         sc.add(true);
-        //[[4, 7, 0], [0, 0, 0], [0, 0, 0]]
+        //[[7, 4, 0], [0, 0, 0], [0, 0, 0]]
         ArrayList<ArrayList<Integer>> si = new ArrayList<>();
         ArrayList<Integer> si0 = new ArrayList<>();
-        si0.add(new Integer(4));
         si0.add(new Integer(7));
+        si0.add(new Integer(4));
         si0.add(new Integer(0));
         ArrayList<Integer> si1 = new ArrayList<>();
         si1.add(new Integer(0));
