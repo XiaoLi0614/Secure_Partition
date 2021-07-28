@@ -1,0 +1,64 @@
+sat
+resH:
+[4, 0, 0, 0]
+m0H:
+[3, 0, 0, 0]
+m1H:
+[0, 3, 0, 0]
+m2H:
+[0, 0, 5, 0]
+m3H:
+[0, 3, 0, 0]
+m4H:
+[0, 0, 5, 0]
+m5H:
+[0, 0, 0, 3]
+m6H:
+[0, 0, 0, 3]
+m7H:
+[0, 0, 0, 3]
+m8H:
+[0, 0, 0, 3]
+resQ:
+[resQ_0_0, resQ_0_1, resQ_0_2, resQ_0_3, resQ_1_0, resQ_1_1, resQ_1_2, resQ_1_3, resQ_2_0, resQ_2_1, resQ_2_2, resQ_2_3, resQ_3_0, resQ_3_1, resQ_3_2, resQ_3_3]
+[0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2]
+m0Q:
+[m0Q_0_0, m0Q_0_1, m0Q_0_2, m0Q_0_3, m0Q_1_0, m0Q_1_1, m0Q_1_2, m0Q_1_3, m0Q_2_0, m0Q_2_1, m0Q_2_2, m0Q_2_3, m0Q_3_0, m0Q_3_1, m0Q_3_2, m0Q_3_3]
+[0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+m1Q:
+[m1Q_0_0, m1Q_0_1, m1Q_0_2, m1Q_0_3, m1Q_1_0, m1Q_1_1, m1Q_1_2, m1Q_1_3, m1Q_2_0, m1Q_2_1, m1Q_2_2, m1Q_2_3, m1Q_3_0, m1Q_3_1, m1Q_3_2, m1Q_3_3]
+[0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+m2Q:
+[m2Q_0_0, m2Q_0_1, m2Q_0_2, m2Q_0_3, m2Q_1_0, m2Q_1_1, m2Q_1_2, m2Q_1_3, m2Q_2_0, m2Q_2_1, m2Q_2_2, m2Q_2_3, m2Q_3_0, m2Q_3_1, m2Q_3_2, m2Q_3_3]
+[0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+m3Q:
+[m3Q_0_0, m3Q_0_1, m3Q_0_2, m3Q_0_3, m3Q_1_0, m3Q_1_1, m3Q_1_2, m3Q_1_3, m3Q_2_0, m3Q_2_1, m3Q_2_2, m3Q_2_3, m3Q_3_0, m3Q_3_1, m3Q_3_2, m3Q_3_3]
+[0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+m4Q:
+[m4Q_0_0, m4Q_0_1, m4Q_0_2, m4Q_0_3, m4Q_1_0, m4Q_1_1, m4Q_1_2, m4Q_1_3, m4Q_2_0, m4Q_2_1, m4Q_2_2, m4Q_2_3, m4Q_3_0, m4Q_3_1, m4Q_3_2, m4Q_3_3]
+[0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+m5Q:
+[m5Q_0_0, m5Q_0_1, m5Q_0_2, m5Q_0_3, m5Q_1_0, m5Q_1_1, m5Q_1_2, m5Q_1_3, m5Q_2_0, m5Q_2_1, m5Q_2_2, m5Q_2_3, m5Q_3_0, m5Q_3_1, m5Q_3_2, m5Q_3_3]
+[0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+m6Q:
+[m6Q_0_0, m6Q_0_1, m6Q_0_2, m6Q_0_3, m6Q_1_0, m6Q_1_1, m6Q_1_2, m6Q_1_3, m6Q_2_0, m6Q_2_1, m6Q_2_2, m6Q_2_3, m6Q_3_0, m6Q_3_1, m6Q_3_2, m6Q_3_3]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0]
+m7Q:
+[m7Q_0_0, m7Q_0_1, m7Q_0_2, m7Q_0_3, m7Q_1_0, m7Q_1_1, m7Q_1_2, m7Q_1_3, m7Q_2_0, m7Q_2_1, m7Q_2_2, m7Q_2_3, m7Q_3_0, m7Q_3_1, m7Q_3_2, m7Q_3_3]
+[0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+m8Q:
+[m8Q_0_0, m8Q_0_1, m8Q_0_2, m8Q_0_3, m8Q_1_0, m8Q_1_1, m8Q_1_2, m8Q_1_3, m8Q_2_0, m8Q_2_1, m8Q_2_2, m8Q_2_3, m8Q_3_0, m8Q_3_1, m8Q_3_2, m8Q_3_3]
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0]
+Snappqs:
+[Snappqs_0_0, Snappqs_0_1, Snappqs_0_2, Snappqs_0_3, Snappqs_1_0, Snappqs_1_1, Snappqs_1_2, Snappqs_1_3, Snappqs_2_0, Snappqs_2_1, Snappqs_2_2, Snappqs_2_3, Snappqs_3_0, Snappqs_3_1, Snappqs_3_2, Snappqs_3_3]
+[0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+Bobqs:
+[Bobqs_0_0, Bobqs_0_1, Bobqs_0_2, Bobqs_0_3, Bobqs_1_0, Bobqs_1_1, Bobqs_1_2, Bobqs_1_3, Bobqs_2_0, Bobqs_2_1, Bobqs_2_2, Bobqs_2_3, Bobqs_3_0, Bobqs_3_1, Bobqs_3_2, Bobqs_3_3]
+[0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0]
+Aliceqs:
+[Aliceqs_0_0, Aliceqs_0_1, Aliceqs_0_2, Aliceqs_0_3, Aliceqs_1_0, Aliceqs_1_1, Aliceqs_1_2, Aliceqs_1_3, Aliceqs_2_0, Aliceqs_2_1, Aliceqs_2_2, Aliceqs_2_3, Aliceqs_3_0, Aliceqs_3_1, Aliceqs_3_2, Aliceqs_3_3]
+[0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0]
+mapServqs:
+[mapServqs_0_0, mapServqs_0_1, mapServqs_0_2, mapServqs_0_3, mapServqs_1_0, mapServqs_1_1, mapServqs_1_2, mapServqs_1_3, mapServqs_2_0, mapServqs_2_1, mapServqs_2_2, mapServqs_2_3, mapServqs_3_0, mapServqs_3_1, mapServqs_3_2, mapServqs_3_3]
+[0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+230.24827003479004
