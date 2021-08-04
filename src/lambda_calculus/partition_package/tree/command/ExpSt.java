@@ -20,6 +20,11 @@ public class ExpSt extends Command {
     }
 
     @Override
+    public String toString(String eName){
+        return expression.toString();
+    }
+
+    @Override
     public boolean equals(Object o){
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

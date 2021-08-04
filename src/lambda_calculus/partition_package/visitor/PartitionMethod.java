@@ -24,9 +24,9 @@ public class PartitionMethod implements PartitionVisitor{
     //Command resultAST;
     HashMap<Node, PartitionProcess> partitionIntermediate; // each node has a three element intermediate structure
     int administrativeM;
-    //the name of the whole method maps to the <entrance method name,
-    //the arraylist is a list of method definitions that has this-whole method need to be replaced>.
-    //HashMap<String, Pair<String, ArrayList<MethodDefinition>>> recursionReplacement;
+    //the arraylist is a list of method definition names that call recursive method and need to be replaced.
+    //eg: m2(): let x = a.read() in this.self(x)
+    //ArrayList<String> recursionReplacement;
 
     public String newMName(){
         return "m" + String.valueOf(administrativeM++);
@@ -35,7 +35,7 @@ public class PartitionMethod implements PartitionVisitor{
     public PartitionMethod(){
         partitionIntermediate = new HashMap<>();
         administrativeM = 0;
-        //recursionReplacement = new HashMap<>();
+        //recursionReplacement = new ArrayList<>();
     }
 
     public Object visitDispatch(Expression expression) {
@@ -202,6 +202,9 @@ public class PartitionMethod implements PartitionVisitor{
                     freeVarForRet.addAll(partitionIntermediate.get(singleCall.args[0]).getFreeVariables());
                     partitionIntermediate.put(singleCall, new PartitionProcess(resultDefs, freeVarForRet, singleCall));
                 }
+                //if(singleCall.methodName.toString() == "self"){
+                    //recursionReplacement.add("m" + String.valueOf(administrativeM));
+                //}
                 return singleCall;
             }
             else {
@@ -259,6 +262,11 @@ public class PartitionMethod implements PartitionVisitor{
             if(currentDefinitions.get(i).thisMethodName.toString() == "ret" && i != 0){
                 currentDefinitions.remove(i);
             }
+        }
+
+        //place the entrance method name for recursion
+        for(int i = 0; i < currentDefinitions.size(); i++){
+            currentDefinitions.get(i).recursionReplace = currentDefinitions.size();
         }
 
         //add one free variable for ret

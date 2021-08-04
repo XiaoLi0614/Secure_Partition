@@ -21,6 +21,11 @@ public class Sequence extends Command {
     }
 
     @Override
+    public String toString(String eName){
+        return command1.toString(eName) +"; " + command2.toString(eName);
+    }
+
+    @Override
     public boolean equals(Object o){
         if(this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

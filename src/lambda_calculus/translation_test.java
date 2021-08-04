@@ -39,10 +39,10 @@ public class translation_test {
         long consGenT;
         Date date1 = new Date();
         partitionT = date1.getTime();
-        Expression lambda1 = createOFTUseCase();
+        //Expression lambda1 = createOFTUseCase();
         //Expression lambda1 = createTicketsUseCase();
         //Expression lambda1 = createObliviousTransferUseCase();
-        //Expression lambda1 = createAuctionUseCase();
+        Expression lambda1 = createAuctionUseCase();
         //Expression lambda1 = createTestUseCase();
         //Expression lambda1 = createFriendsMapUseCase();
         //Expression lambda1 = createMPCUseCase();
@@ -92,8 +92,8 @@ public class translation_test {
         System.out.println("\nStart generate constraints: \n");
         Date date3 = new Date();
         consGenT = date3.getTime();
-        printToFile(OneTimeTransferInfer(resultMethodDefs), "OneTimeTransfer");
-        //printToFile(AuctionInfer(resultMethodDefs), "Auction");
+        //printToFile(OneTimeTransferInfer(resultMethodDefs), "OneTimeTransfer");
+        printToFile(AuctionInfer(resultMethodDefs), "Auction");
         //printToFile(TicketInfer(resultMethodDefs), "Ticket");
         //printToFile(ObliviousTransferInfer(resultMethodDefs), "ObliviousTransfer");
         //printToFile(FriendsMapInfer(resultMethodDefs), "FriendMap");
@@ -285,7 +285,7 @@ public class translation_test {
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
-                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, w).toString());
+                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, new HashMap<>(),w).toString());
 
         return r.toString();
     }
@@ -445,6 +445,7 @@ public class translation_test {
 
         preOM.put("user", new HashMap<>());
         preOM.get("user").put("userreadoutputC", A2C);
+        preOM.get("user").put("userdeclareWinneroutputC", rc);
 
         ArrayList<Integer> w = new ArrayList<>();
         w.add(new Integer(1));
@@ -453,7 +454,7 @@ public class translation_test {
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
-                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, w).toString());
+                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, new HashMap<>(), w).toString());
 
         return r.toString();
     }
@@ -540,7 +541,7 @@ public class translation_test {
         rc.add(true);
         rc.add(true);
         rc.add(true);
-        //resultI = [[1, 2, 0], [0, 0, 0], [0, 0, 0]]
+        //resultI = [[2, 3, 0], [0, 0, 0], [0, 0, 0]]
         ArrayList<ArrayList<Integer>> ri = new ArrayList<>();
         ArrayList<Integer> ri0 = new ArrayList<>();
         ri0.add(new Integer(2));
@@ -625,7 +626,7 @@ public class translation_test {
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
-                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, w).toString());
+                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, new HashMap<>(), w).toString());
 
         return r.toString();
     }
@@ -759,7 +760,7 @@ public class translation_test {
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
-                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, w).toString());
+                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, new HashMap<>(), w).toString());
 
         return r.toString();
     }
@@ -947,7 +948,7 @@ public class translation_test {
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 4, principals,
-                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, w).toString());
+                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, new HashMap<>(), w).toString());
 
         return r.toString();
     }
@@ -1103,7 +1104,7 @@ public class translation_test {
         //[[7, 4, 4], [0, 0, 0], [0, 0, 0]]
         ArrayList<ArrayList<Integer>> si = new ArrayList<>();
         ArrayList<Integer> si0 = new ArrayList<>();
-        si0.add(new Integer(7));
+        si0.add(new Integer(2));
         si0.add(new Integer(4));
         si0.add(new Integer(4));
         ArrayList<Integer> si1 = new ArrayList<>();
@@ -1204,6 +1205,17 @@ public class translation_test {
         preOM.get("u3").put("u3readp23outputC", FTT);
         preOM.get("u3").put("u3readp33outputC", FFT);
 
+        HashMap<String, String> preVarR = new HashMap<>();
+        preVarR.put("u1readp11botC", "u1writep11outputC");
+        preVarR.put("u1readp11botI", "u1writep11outputI");
+        preVarR.put("u1readp11botA", "u1writep11outputA");
+        preVarR.put("u2readp12botC", "u1writep12outputC");
+        preVarR.put("u2readp12botI", "u1writep12outputI");
+        preVarR.put("u2readp12botA", "u1writep12outputA");
+        preVarR.put("u3readp13botC", "u1writep13outputC");
+        preVarR.put("u3readp13botI", "u1writep13outputI");
+        preVarR.put("u3readp13botA", "u1writep13outputA");
+
         ArrayList<Integer> w = new ArrayList<>();
         w.add(new Integer(1));
         w.add(new Integer(1));
@@ -1211,7 +1223,7 @@ public class translation_test {
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
-                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, w).toString());
+                rc, ri, ra, sc, si, sa, bc, bi, ba, resH, preV, preOM, preVarR, w).toString());
 
         return r.toString();
     }
@@ -1282,7 +1294,7 @@ public class translation_test {
                 new ObjectMethod("declareWinner", "user", oAsArg),
                 new Sequence(new ObjectMethod("update", "user", userUpdate2Args),
                         new Conditional(new Plus(new Var("offerA"), new Var("offerB")),
-                                new ThisMethod("m8", offerBAsArg),
+                                new ThisMethod("self", offerBAsArg),
                                 new ObjectMethod("declareWinner", "user", offerAAsArg)))));
         return auctionUseCase;
     }
@@ -1321,10 +1333,12 @@ public class translation_test {
                                         new Sequence(new ObjectMethod("decBalance", "bank", decBalanceArg),
                                                 new IntLiteral(1))),
                                 new IntLiteral(0))));*/
+        //todo: add more single argument operators. currently they are represented by plus.
         Expression ticketUseCase = new Sequence(new ObjectMethod("updateInfo", "customer", updateInfoArgs),
                 new Sequence(new ObjectMethod("updatePayment", "customer", updatePaymentArgs),
                         new Conditional(new Plus(new Var("price"), new Var("balance")),
                                 new Sequence(new ObjectMethod("decSeat", "airline", decSeatArg),
+                                        //new Sequence(new ObjectMethod("decBalance", "bank", decBalanceArg), new IntLiteral(1))),
                                         new ObjectMethod("decBalance", "bank", decBalanceArg)),
                                 new IntLiteral(0))));
         return ticketUseCase;
@@ -1479,14 +1493,26 @@ public class translation_test {
         computeSum1Arg[0] = new ObjectMethod("readp11", "u1", emptyArg, "rp11");
         computeSum1Arg[1] = new ObjectMethod("readp21", "u1", emptyArg, "rp21");
         computeSum1Arg[2] = new ObjectMethod("readp31", "u1", emptyArg, "rp31");
+        //Expression[] rp11Arg = new Expression[1];
+        //rp11Arg[0] = new Var("wp11");
+        //Expression[] rp12Arg = new Expression[1];
+        //rp12Arg[0] = new Var("wp12");
+        //Expression[] rp13Arg = new Expression[1];
+        //rp13Arg[0] = new Var("wp13");
+        computeSum1Arg[0] = new ObjectMethod("readp11", "u1", emptyArg, "rp11");
+        //computeSum1Arg[0] = new ObjectMethod("readp11", "u1", rp11Arg, "rp11");
+        computeSum1Arg[1] = new ObjectMethod("readp21", "u1", emptyArg, "rp21");
+        computeSum1Arg[2] = new ObjectMethod("readp31", "u1", emptyArg, "rp31");
 
         Expression[] computeSum2Arg = new Expression[3];
         computeSum2Arg[0] = new ObjectMethod("readp12", "u2", emptyArg, "rp12");
+        //computeSum2Arg[0] = new ObjectMethod("readp12", "u2", rp12Arg, "rp12");
         computeSum2Arg[1] = new ObjectMethod("readp22", "u2", emptyArg, "rp22");
         computeSum2Arg[2] = new ObjectMethod("readp32", "u2", emptyArg, "rp32");
 
         Expression[] computeSum3Arg = new Expression[3];
         computeSum3Arg[0] = new ObjectMethod("readp13", "u3", emptyArg, "rp13");
+        //computeSum3Arg[0] = new ObjectMethod("readp13", "u3", rp13Arg, "rp13");
         computeSum3Arg[1] = new ObjectMethod("readp23", "u3", emptyArg, "rp23");
         computeSum3Arg[2] = new ObjectMethod("readp33", "u3", emptyArg, "rp33");
 
@@ -1496,6 +1522,12 @@ public class translation_test {
                 new Plus(new Plus(new ObjectMethod("computeSum1", "u1", computeSum1Arg, "sum1"),
                         new ObjectMethod("computeSum2",  "u2", computeSum2Arg, "sum2")),
                         new ObjectMethod("computeSum3", "u3", computeSum3Arg, "sum3")));
+//        Expression MPCUseCase = new Sequence(new Sequence(new ObjectMethod("writep11", "u1", u1writep11Arg, "wp11"),
+//                new Sequence(new ObjectMethod("writep12", "u1", u1writep12Arg, "wp12"),
+//                        new ObjectMethod("writep13", "u1", u1writep13Arg, "wp13"))),
+//                new Plus(new Plus(new ObjectMethod("computeSum1", "u1", computeSum1Arg, "sum1"),
+//                        new ObjectMethod("computeSum2",  "u2", computeSum2Arg, "sum2")),
+//                        new ObjectMethod("computeSum3", "u3", computeSum3Arg, "sum3")));
         return MPCUseCase;
     }
 

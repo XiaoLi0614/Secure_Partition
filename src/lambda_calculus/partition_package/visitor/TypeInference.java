@@ -41,6 +41,7 @@ public class TypeInference implements PartitionVisitor{
     //user defined variables, currently the user's requirements are on the confidentiality
     HashMap<String, ArrayList<Boolean>> predefinedV; //pre defined variables's confidentiality
     HashMap<String, HashMap<String, ArrayList<Boolean>>> predefinedOM; //pre defined object method variables' confidentiality
+    HashMap<String, String> predefinedVarRelation; //pre defined variable relations for the register
 
     //the host information for res
     ArrayList<Integer> resH;
@@ -77,6 +78,7 @@ public class TypeInference implements PartitionVisitor{
         startA = new ArrayList<>();
         predefinedV = new HashMap<>();
         predefinedOM = new HashMap<>();
+        predefinedVarRelation = new HashMap<>();
         resH = new ArrayList<>();
         environment = new HashMap<>();
         statementC = new HashMap<>();
@@ -94,7 +96,7 @@ public class TypeInference implements PartitionVisitor{
                          ArrayList<Boolean> rc, ArrayList<ArrayList<Integer>> ri, ArrayList<ArrayList<Integer>> ra,
                          ArrayList<Boolean> sc, ArrayList<ArrayList<Integer>> si, ArrayList<ArrayList<Integer>> sa,
                          ArrayList<Boolean> bc, ArrayList<ArrayList<Integer>> bi, ArrayList<ArrayList<Integer>> ba,
-                         ArrayList<Integer> rH, HashMap<String, ArrayList<Boolean>> pV, HashMap<String, HashMap<String, ArrayList<Boolean>>> pOM)
+                         ArrayList<Integer> rH, HashMap<String, ArrayList<Boolean>> pV, HashMap<String, HashMap<String, ArrayList<Boolean>>> pOM, HashMap<String, String> pVarR)
     {
         n = num;
         principals = p;
@@ -110,6 +112,7 @@ public class TypeInference implements PartitionVisitor{
         resH = rH;
         predefinedV = pV;
         predefinedOM = pOM;
+        predefinedVarRelation = pVarR;
 
         mInfo = new HashMap<>();
         oInfo = new HashMap<>();
@@ -724,11 +727,11 @@ public class TypeInference implements PartitionVisitor{
             ArrayList<Boolean> rc, ArrayList<ArrayList<Integer>> ri, ArrayList<ArrayList<Integer>> ra,
             ArrayList<Boolean> sc, ArrayList<ArrayList<Integer>> si, ArrayList<ArrayList<Integer>> sa,
             ArrayList<Boolean> bc, ArrayList<ArrayList<Integer>> bi, ArrayList<ArrayList<Integer>> ba,
-            ArrayList<Integer> rH, HashMap<String, ArrayList<Boolean>> pV, HashMap<String, HashMap<String, ArrayList<Boolean>>> pOM,
+            ArrayList<Integer> rH, HashMap<String, ArrayList<Boolean>> pV, HashMap<String, HashMap<String, ArrayList<Boolean>>> pOM, HashMap<String, String> pVR,
             ArrayList<Integer> w){
 
         StringBuilder r = new StringBuilder();
-        TypeInference infer = new TypeInference(num, p, rc, ri, ra, sc, si, sa, bc, bi, ba, rH, pV, pOM);
+        TypeInference infer = new TypeInference(num, p, rc, ri, ra, sc, si, sa, bc, bi, ba, rH, pV, pOM, pVR);
 
         r.append("n = " + num + "\n");
         r.append("principals = " + infer.hTrans(p));
@@ -794,7 +797,7 @@ public class TypeInference implements PartitionVisitor{
         //set the oInfo
         for(String on: objectMethods.keySet()){
             infer.oInfo.put(on, new ObjectInfo(on, objectMethods.get(on)));
-            r.append(infer.oInfo.get(on).initObject(infer.predefinedOM.get(on)));
+            r.append(infer.oInfo.get(on).initObject(infer.predefinedOM.get(on), infer.predefinedVarRelation));
             r.append(infer.oInfo.get(on).oRangeCons());
         }
 

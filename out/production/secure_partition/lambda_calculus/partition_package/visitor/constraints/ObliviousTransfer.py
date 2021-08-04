@@ -148,8 +148,8 @@ def lableLe(c1, c2, i1, i2, a1, a2):
     return And(cLe(c1, c2), bLe(i2, i1), bLe(a2, a1))
 
 n = 3
-principals = [ 7, 4, 1]
-xC = [ True, True, True ]
+principals = [ 7, 4, 4]
+xC = [ False, False, True ]
 xCI = [ [ Int("xCI_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 xCIrange0 = [ And(0 <= xCI[i][j]) for i in range(n) for j in range(n) ]
 s.add(xCIrange0)
@@ -161,15 +161,15 @@ s.add(xCArange0)
 xCArange1 = [And(sLe(xCA[i], principals)) for i in range(n)]
 s.add(xCArange1)
 startC = [ True, True, True ]
-startI = [[ 7, 4, 0], [ 0, 0, 0], [ 0, 0, 0] ]
-startA = [[ 7, 4, 0], [ 0, 0, 0], [ 0, 0, 0] ]
+startI = [[ 7, 4, 4], [ 0, 0, 0], [ 0, 0, 0] ]
+startA = [[ 7, 4, 4], [ 0, 0, 0], [ 0, 0, 0] ]
 botC = [ True, True, True ]
-botI = [[ 7, 4, 0], [ 0, 0, 0], [ 0, 0, 0] ]
-botA = [[ 7, 4, 0], [ 0, 0, 0], [ 0, 0, 0] ]
+botI = [[ 7, 4, 4], [ 0, 0, 0], [ 0, 0, 0] ]
+botA = [[ 7, 4, 4], [ 0, 0, 0], [ 0, 0, 0] ]
 resultC = [ False, False, True ]
-resultI = [[ 2, 1, 0], [ 0, 0, 0], [ 0, 0, 0] ]
-resultA = [[ 1, 1, 0], [ 0, 0, 0], [ 0, 0, 0] ]
-resH = [ 0, 0, 1]
+resultI = [[ 2, 1, 1], [ 0, 0, 0], [ 0, 0, 0] ]
+resultA = [[ 2, 1, 1], [ 0, 0, 0], [ 0, 0, 0] ]
+resH = [ 0, 0, 4]
 resQ = [ [ Int("resQ_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 s.add([ And(0 <= resQ[i][j]) for i in range(n) for j in range(n) ])
 s.add([ And(sLe(resQ[i], principals)) for i in range(n) ])
@@ -178,12 +178,15 @@ m0Q = [ [ Int('m0Q_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
 m0conxtC = [ Bool('m0conxtC_%s' % i) for i in range(n) ]
 m0conxtI = [ [ Int('m0conxtI_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
 m0conxtA = [ [ Int('m0conxtA_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
-m0botC = m0conxtC
-m0botI = m0conxtI
-m0botA = m0conxtA
-m0range0 = [ And(0 <= m0conxtI[i][j], 0 <= m0conxtA[i][j], 0 <= m0Q[i][j], 0 <= m0botI[i][j], 0 <= m0botA[i][j]) for i in range(n) for j in range(n) ]
+m0xC = [ Bool('m0xC_%s' % i) for i in range(n) ]
+m0xI = [ [ Int('m0xI_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
+m0xA = [ [ Int('m0xA_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
+m0temp1C = [ Bool('m0temp1C_%s' % i) for i in range(n) ]
+m0temp1I = [ [ Int('m0temp1I_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
+m0temp1A = [ [ Int('m0temp1A_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
+m0range0 = [ And(0 <= m0conxtI[i][j], 0 <= m0conxtA[i][j], 0 <= m0Q[i][j], 0 <= m0xI[i][j], 0 <= m0xA[i][j], 0 <= m0temp1I[i][j], 0 <= m0temp1A[i][j]) for i in range(n) for j in range(n) ]
 s.add(m0range0)
-m0range1 = [And(sLe(m0conxtI[i], principals), sLe(m0conxtA[i], principals), sLe(m0Q[i], principals), sLe(m0botI[i], principals), sLe(m0botA[i], principals)) for i in range(n)]
+m0range1 = [And(sLe(m0conxtI[i], principals), sLe(m0conxtA[i], principals), sLe(m0Q[i], principals), sLe(m0xI[i], principals), sLe(m0xA[i], principals), sLe(m0temp1I[i], principals), sLe(m0temp1A[i], principals)) for i in range(n)]
 s.add(m0range1)
 m0range2 = [And(0 <= m0H[i]) for i in range(n)]
 s.add(m0range2)
@@ -195,12 +198,12 @@ m1Q = [ [ Int('m1Q_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
 m1conxtC = [ Bool('m1conxtC_%s' % i) for i in range(n) ]
 m1conxtI = [ [ Int('m1conxtI_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
 m1conxtA = [ [ Int('m1conxtA_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
-m1botC = m1conxtC
-m1botI = m1conxtI
-m1botA = m1conxtA
-m1range0 = [ And(0 <= m1conxtI[i][j], 0 <= m1conxtA[i][j], 0 <= m1Q[i][j], 0 <= m1botI[i][j], 0 <= m1botA[i][j]) for i in range(n) for j in range(n) ]
+m1xC = [ Bool('m1xC_%s' % i) for i in range(n) ]
+m1xI = [ [ Int('m1xI_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
+m1xA = [ [ Int('m1xA_%s_%s' % (i, j)) for j in range(n) ] for i in range(n) ]
+m1range0 = [ And(0 <= m1conxtI[i][j], 0 <= m1conxtA[i][j], 0 <= m1Q[i][j], 0 <= m1xI[i][j], 0 <= m1xA[i][j]) for i in range(n) for j in range(n) ]
 s.add(m1range0)
-m1range1 = [And(sLe(m1conxtI[i], principals), sLe(m1conxtA[i], principals), sLe(m1Q[i], principals), sLe(m1botI[i], principals), sLe(m1botA[i], principals)) for i in range(n)]
+m1range1 = [And(sLe(m1conxtI[i], principals), sLe(m1conxtA[i], principals), sLe(m1Q[i], principals), sLe(m1xI[i], principals), sLe(m1xA[i], principals)) for i in range(n)]
 s.add(m1range1)
 m1range2 = [And(0 <= m1H[i]) for i in range(n)]
 s.add(m1range2)
@@ -307,10 +310,10 @@ s.add(availabilityC(i2readoutputA, i2qs))
 s.add(cIntegrityE(i2readbotI, i2qc))
 s.add(lableLe(i2readbotC, i2readoutputC, i2readbotI, i2readoutputI, i2readbotA, i2readoutputA))
 #MethodT: m3
-#ObjCallT: let x12 = a.read() in If (x12) then (let x10 = a.write(1) in If (x) then (let x8 = i1.read() in this.ret(x8)) else (let x9 = i2.read() in this.ret(x9))) else (this.ret(0))
+#ObjCallT: let x14 = a.read() in If (x14) then (let x12 = a.write(1) in let temp1 = i1.read() in let temp2 = i2.read() in If (x) then (this.ret(temp1)) else (this.ret(temp2))) else (this.ret(0))
 s.add(cLeH(areadoutputC, m3H))
 s.add(availabilityP(areadbotA, aqc, m3H))
-#IfT: If (x12) then (this.m2(x)) else (this.ret(0))
+#IfT: If (x14) then (this.m2(x)) else (this.ret(0))
 #ThisCallT: this.m2(x)
 s.add(cLe(m3conxtC, m2conxtC))
 s.add(cLe(areadoutputC, m2conxtC))
@@ -388,121 +391,145 @@ s.add(cIntegrityE(m3xI, m3Q))
 s.add(cLeH(m3xC, m3H))
 s.add(cLeH(m3conxtC, m3H))
 #MethodT: m2
-#ObjCallT: let x10 = a.write(1) in If (x) then (let x8 = i1.read() in this.ret(x8)) else (let x9 = i2.read() in this.ret(x9))
+#ObjCallT: let x12 = a.write(1) in let temp1 = i1.read() in let temp2 = i2.read() in If (x) then (this.ret(temp1)) else (this.ret(temp2))
 s.add(cLeH(awriteoutputC, m2H))
 s.add(cLe(botC, awriteinput0C))
 s.add(bLe(awriteinput0I, botI))
 s.add(bLe(awriteinput0A, botA))
 s.add(availabilityP(awriteinput0A, aqc, m2H))
-#IfT: If (x) then (this.m0()) else (this.m1())
-#ThisCallT: this.m0()
-s.add(cLe(m2conxtC, m0conxtC))
-s.add(cLe(m2xC, m0conxtC))
-s.add(cLe(xC, m0conxtC))
-s.add(cLe(m2xC, m0conxtC))
-s.add(cLe(xC, m0conxtC))
-s.add(bLe(m0conxtI, m2conxtI))
-s.add(bLe(m0conxtI, m2xI))
-s.add(bLe(m0conxtI, botI))
-s.add(bLe(m0conxtI, m2xI))
-s.add(bLe(m0conxtI, botI))
-s.add(bLe(m0conxtA, m2conxtA))
-s.add(bLe(m0conxtA, m2xA))
-s.add(bLe(m0conxtA, botA))
-s.add(bLe(m0conxtA, m2xA))
-s.add(bLe(m0conxtA, botA))
-s.add(availabilityP(m0botA, m0Q, m2H))
-s.add(cLe(m2conxtC, m0botC))
-s.add(cLe(m2xC, m0botC))
-s.add(cLe(xC, m0botC))
-s.add(cLe(m2xC, m0botC))
-s.add(cLe(xC, m0botC))
-s.add(bLe(m0botI, m2conxtI))
-s.add(bLe(m0botI, m2xI))
-s.add(bLe(m0botI, botI))
-s.add(bLe(m0botI, m2xI))
-s.add(bLe(m0botI, botI))
-s.add(bLe(m0botA, m2conxtA))
-s.add(bLe(m0botA, m2xA))
-s.add(bLe(m0botA, botA))
-s.add(bLe(m0botA, m2xA))
-s.add(bLe(m0botA, botA))
-#ThisCallT: this.m1()
+#ThisCallT: this.m1(x)
 s.add(cLe(m2conxtC, m1conxtC))
-s.add(cLe(m2xC, m1conxtC))
-s.add(cLe(xC, m1conxtC))
-s.add(cLe(m2xC, m1conxtC))
-s.add(cLe(xC, m1conxtC))
 s.add(bLe(m1conxtI, m2conxtI))
-s.add(bLe(m1conxtI, m2xI))
-s.add(bLe(m1conxtI, botI))
-s.add(bLe(m1conxtI, m2xI))
-s.add(bLe(m1conxtI, botI))
 s.add(bLe(m1conxtA, m2conxtA))
-s.add(bLe(m1conxtA, m2xA))
-s.add(bLe(m1conxtA, botA))
-s.add(bLe(m1conxtA, m2xA))
-s.add(bLe(m1conxtA, botA))
-s.add(availabilityP(m1botA, m1Q, m2H))
-s.add(cLe(m2conxtC, m1botC))
-s.add(cLe(m2xC, m1botC))
-s.add(cLe(xC, m1botC))
-s.add(cLe(m2xC, m1botC))
-s.add(cLe(xC, m1botC))
-s.add(bLe(m1botI, m2conxtI))
-s.add(bLe(m1botI, m2xI))
-s.add(bLe(m1botI, botI))
-s.add(bLe(m1botI, m2xI))
-s.add(bLe(m1botI, botI))
-s.add(bLe(m1botA, m2conxtA))
-s.add(bLe(m1botA, m2xA))
-s.add(bLe(m1botA, botA))
-s.add(bLe(m1botA, m2xA))
-s.add(bLe(m1botA, botA))
+s.add(cLe(m2xC, m1xC))
+s.add(cLe(xC, m1xC))
+s.add(bLe(m1xI, m2xI))
+s.add(bLe(m1xI, botI))
+s.add(bLe(m1xA, m2xA))
+s.add(bLe(m1xA, botA))
+s.add(cLe(m2conxtC, m1xC))
+s.add(bLe(m1xI, m2conxtI))
+s.add(bLe(m1xA, m2conxtA))
+s.add(availabilityP(m1xA, m1Q, m2H))
 s.add(cIntegrityE(m2xI, m2Q))
 s.add(cLeH(m2xC, m2H))
 s.add(cLeH(m2conxtC, m2H))
 #MethodT: m1
-#ObjCallT: let x9 = i2.read() in this.ret(x9)
-s.add(cLeH(i2readoutputC, m1H))
-s.add(availabilityP(i2readbotA, i2qc, m1H))
-#ThisCallT: this.ret(x9)
-s.add(cLe(m1conxtC, resultC))
-s.add(bLe(resultI, m1conxtI))
-s.add(bLe(resultA, m1conxtA))
+#ObjCallT: let temp1 = i1.read() in let temp2 = i2.read() in If (x) then (this.ret(temp1)) else (this.ret(temp2))
+s.add(cLeH(i1readoutputC, m1H))
+s.add(availabilityP(i1readbotA, i1qc, m1H))
+#ThisCallT: this.m0(x, temp1)
+s.add(cLe(m1conxtC, m0conxtC))
+s.add(bLe(m0conxtI, m1conxtI))
+s.add(bLe(m0conxtA, m1conxtA))
+s.add(cLe(m1xC, m0xC))
+s.add(cLe(xC, m0xC))
+s.add(bLe(m0xI, m1xI))
+s.add(bLe(m0xI, botI))
+s.add(bLe(m0xA, m1xA))
+s.add(bLe(m0xA, botA))
+s.add(cLe(m1conxtC, m0xC))
+s.add(bLe(m0xI, m1conxtI))
+s.add(bLe(m0xA, m1conxtA))
+s.add(availabilityP(m0xA, m0Q, m1H))
+s.add(cLe(i1readoutputC, m0temp1C))
+s.add(cLe(botC, m0temp1C))
+s.add(bLe(m0temp1I, i1readoutputI))
+s.add(bLe(m0temp1I, botI))
+s.add(bLe(m0temp1A, i1readoutputA))
+s.add(bLe(m0temp1A, botA))
+s.add(cLe(m1conxtC, m0temp1C))
+s.add(bLe(m0temp1I, m1conxtI))
+s.add(bLe(m0temp1A, m1conxtA))
+s.add(availabilityP(m0temp1A, m0Q, m1H))
+s.add(cIntegrityE(m1xI, m1Q))
+s.add(cLeH(m1xC, m1H))
+s.add(cLeH(m1conxtC, m1H))
+#MethodT: m0
+#ObjCallT: let temp2 = i2.read() in If (x) then (this.ret(temp1)) else (this.ret(temp2))
+s.add(cLeH(i2readoutputC, m0H))
+s.add(availabilityP(i2readbotA, i2qc, m0H))
+#IfT: If (x) then (this.ret(temp1)) else (this.ret(temp2))
+#ThisCallT: this.ret(temp1)
+s.add(cLe(m0conxtC, resultC))
+s.add(cLe(m0xC, resultC))
+s.add(cLe(xC, resultC))
+s.add(cLe(m0xC, resultC))
+s.add(cLe(xC, resultC))
+s.add(bLe(resultI, m0conxtI))
+s.add(bLe(resultI, m0xI))
+s.add(bLe(resultI, botI))
+s.add(bLe(resultI, m0xI))
+s.add(bLe(resultI, botI))
+s.add(bLe(resultA, m0conxtA))
+s.add(bLe(resultA, m0xA))
+s.add(bLe(resultA, botA))
+s.add(bLe(resultA, m0xA))
+s.add(bLe(resultA, botA))
+s.add(cLe(m0temp1C, resultC))
+s.add(cLe(botC, resultC))
+s.add(bLe(resultI, m0temp1I))
+s.add(bLe(resultI, botI))
+s.add(bLe(resultA, m0temp1A))
+s.add(bLe(resultA, botA))
+s.add(cLe(m0conxtC, resultC))
+s.add(cLe(m0xC, resultC))
+s.add(cLe(xC, resultC))
+s.add(cLe(m0xC, resultC))
+s.add(cLe(xC, resultC))
+s.add(bLe(resultI, m0conxtI))
+s.add(bLe(resultI, m0xI))
+s.add(bLe(resultI, botI))
+s.add(bLe(resultI, m0xI))
+s.add(bLe(resultI, botI))
+s.add(bLe(resultA, m0conxtA))
+s.add(bLe(resultA, m0xA))
+s.add(bLe(resultA, botA))
+s.add(bLe(resultA, m0xA))
+s.add(bLe(resultA, botA))
+s.add(availabilityP(resultA, resQ, m0H))
+#ThisCallT: this.ret(temp2)
+s.add(cLe(m0conxtC, resultC))
+s.add(cLe(m0xC, resultC))
+s.add(cLe(xC, resultC))
+s.add(cLe(m0xC, resultC))
+s.add(cLe(xC, resultC))
+s.add(bLe(resultI, m0conxtI))
+s.add(bLe(resultI, m0xI))
+s.add(bLe(resultI, botI))
+s.add(bLe(resultI, m0xI))
+s.add(bLe(resultI, botI))
+s.add(bLe(resultA, m0conxtA))
+s.add(bLe(resultA, m0xA))
+s.add(bLe(resultA, botA))
+s.add(bLe(resultA, m0xA))
+s.add(bLe(resultA, botA))
 s.add(cLe(i2readoutputC, resultC))
 s.add(cLe(botC, resultC))
 s.add(bLe(resultI, i2readoutputI))
 s.add(bLe(resultI, botI))
 s.add(bLe(resultA, i2readoutputA))
 s.add(bLe(resultA, botA))
-s.add(cLe(m1conxtC, resultC))
-s.add(bLe(resultI, m1conxtI))
-s.add(bLe(resultA, m1conxtA))
-s.add(availabilityP(resultA, resQ, m1H))
-s.add(cIntegrityE(m1botI, m1Q))
-s.add(cLeH(m1botC, m1H))
-s.add(cLeH(m1conxtC, m1H))
-#MethodT: m0
-#ObjCallT: let x8 = i1.read() in this.ret(x8)
-s.add(cLeH(i1readoutputC, m0H))
-s.add(availabilityP(i1readbotA, i1qc, m0H))
-#ThisCallT: this.ret(x8)
 s.add(cLe(m0conxtC, resultC))
+s.add(cLe(m0xC, resultC))
+s.add(cLe(xC, resultC))
+s.add(cLe(m0xC, resultC))
+s.add(cLe(xC, resultC))
 s.add(bLe(resultI, m0conxtI))
-s.add(bLe(resultA, m0conxtA))
-s.add(cLe(i1readoutputC, resultC))
-s.add(cLe(botC, resultC))
-s.add(bLe(resultI, i1readoutputI))
+s.add(bLe(resultI, m0xI))
 s.add(bLe(resultI, botI))
-s.add(bLe(resultA, i1readoutputA))
-s.add(bLe(resultA, botA))
-s.add(cLe(m0conxtC, resultC))
-s.add(bLe(resultI, m0conxtI))
+s.add(bLe(resultI, m0xI))
+s.add(bLe(resultI, botI))
 s.add(bLe(resultA, m0conxtA))
+s.add(bLe(resultA, m0xA))
+s.add(bLe(resultA, botA))
+s.add(bLe(resultA, m0xA))
+s.add(bLe(resultA, botA))
 s.add(availabilityP(resultA, resQ, m0H))
-s.add(cIntegrityE(m0botI, m0Q))
-s.add(cLeH(m0botC, m0H))
+s.add(cIntegrityE(m0xI, m0Q))
+s.add(cIntegrityE(m0temp1I, m0Q))
+s.add(cLeH(m0xC, m0H))
+s.add(cLeH(m0temp1C, m0H))
 s.add(cLeH(m0conxtC, m0H))
 #MethodT: ret
 s.add(cLeH(resultC, resH))

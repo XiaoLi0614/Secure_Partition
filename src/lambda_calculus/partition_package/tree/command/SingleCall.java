@@ -78,6 +78,37 @@ public class SingleCall extends Command {
     }
 
     @Override
+    public String toString(String eName){
+        StringBuilder resultString = new StringBuilder();
+        if(this.objectName.toString() == "this"){
+            if(this.methodName.lexeme.equals("self")){
+                this.methodName.lexeme = eName;
+            }
+            resultString.append( objectName +"." + methodName + "(");
+            if(args == null || args.length == 0){}
+            else{
+                for(Expression e: args){
+                    resultString.append(e + ", ");
+                }
+                resultString.delete(resultString.lastIndexOf(", "), resultString.lastIndexOf(", ") + 2);
+            }
+            resultString.append(")");
+        }
+        else {
+            resultString.append("let " + administrativeX + " = " + objectName +"." + methodName + "(");
+            if(args == null || args.length == 0){}
+            else{
+                for(Expression e: args){
+                    resultString.append(e + ", ");
+                }
+                resultString.delete(resultString.lastIndexOf(", "), resultString.lastIndexOf(", ") + 2);
+            }
+            resultString.append(") in " + nestedCommand);
+        }
+        return  resultString.toString();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

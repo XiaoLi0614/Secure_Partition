@@ -21,6 +21,7 @@ public class MethodDefinition extends Object{
     public Command callBackCommand; // e' : the call back command
     public SingleCall objectCall; // the only object call inside this method
     public Command body; //the body expression of this method
+    public int recursionReplace; // m + recursionReplacement is the entrance method name for recursion
 
     public MethodDefinition(String thisM, HashSet<Var> fV, SingleCall objectCall, Command nCommand) {
         this.thisMethodName = new Id(thisM);
@@ -30,6 +31,7 @@ public class MethodDefinition extends Object{
         //this.args = args;
         this.callBackCommand = nCommand;
         this.objectCall = objectCall;
+        this.recursionReplace = 0;
         //this.administrativeX = aX;
     }
 
@@ -41,11 +43,13 @@ public class MethodDefinition extends Object{
         //this.args = args;
         this.callBackCommand = nCommand;
         this.objectCall = objectCall;
+        this.recursionReplace = 0;
         //this.administrativeX = aX;
     }
 
     //the initialization for return
     public MethodDefinition(String thisM, Command nCommand){
+        this.recursionReplace = 0;
         this.thisMethodName = new Id(thisM);
         this.freeVars = new HashSet<>();
         //the ret can have argument
@@ -87,7 +91,7 @@ public class MethodDefinition extends Object{
                 //resultString.deleteCharAt(resultString.lastIndexOf(", "));
                 resultString.delete(resultString.lastIndexOf(", "), resultString.lastIndexOf(", ") + 2);
             }
-            resultString.append(") in " + body);
+            resultString.append(") in " + body.toString("m" + String.valueOf(recursionReplace-2)));
         }
         return  resultString.toString();
     }

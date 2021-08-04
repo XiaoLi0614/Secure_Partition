@@ -24,6 +24,11 @@ public class If extends Command {
     }
 
     @Override
+    public String toString(String eName){
+        return "If (" + condition + ") then (" + command1.toString(eName) +") else (" + command2.toString(eName) + ")";
+    }
+
+    @Override
     public boolean equals(Object o){
         if(this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

@@ -12,6 +12,8 @@ public abstract class Command implements Node {
 
     public abstract String toString();
 
+    public abstract String toString(String entranceMethod);
+
     public abstract boolean equals(Object o);
 
     public abstract int hashCode();

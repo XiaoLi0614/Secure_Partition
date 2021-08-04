@@ -49,8 +49,10 @@ public class ObjectInfo {
         return;
     }
 
+    //todo: for the mpc example, we need to have some predefined input/out equal to some variable name
+    //todo: this is for the use of register
     //the input is the predefined confidentiality requirements: object method name maps to requirement
-    public String initObject(HashMap<String, ArrayList<Boolean>> predefinedOM){
+    public String initObject(HashMap<String, ArrayList<Boolean>> predefinedOM, HashMap<String, String> predefinedVarRelation){
         StringBuilder result = new StringBuilder();
 
         //placement information for objects
@@ -64,16 +66,31 @@ public class ObjectInfo {
                 if(predefinedOM.keySet().contains(omArgusC.get(s).element1.get(c))){
                     result.append(omArgusC.get(s).element1.get(c) + cTrans(predefinedOM.get(omArgusC.get(s).element1.get(c))));
                 }
+                //if the input variable is bound to some output variable relation, then we can skip the initilization
+                else if (predefinedVarRelation.keySet().contains(omArgusC.get(s).element1.get(c))){
+                    result.append(omArgusC.get(s).element1.get(c) + " = " + predefinedVarRelation.get(omArgusC.get(s).element1.get(c)) + "\n");
+                }
                 else{
                     result.append(omArgusC.get(s).element1.get(c) +
                             " = [ Bool(\'" + omArgusC.get(s).element1.get(c) + "_%s\' % i) for i in range(n) ]\n");
                 }
                 //result.append(omArgusC.get(s).element1.get(c) +
                         //" = [ Bool(\'" + omArgusC.get(s).element1.get(c) + "_%s\' % i) for i in range(n) ]\n");
-                result.append(omArgusI.get(s).element1.get(c) + " = [ [ Int(\"" + omArgusI.get(s).element1.get(c) +
-                        "_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]\n");
-                result.append(omArgusA.get(s).element1.get(c) + " = [ [ Int(\"" + omArgusA.get(s).element1.get(c) +
-                        "_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]\n");
+                //if the input variable is bound to some output variable relation, then we can skip the initilization
+                if (predefinedVarRelation.keySet().contains(omArgusI.get(s).element1.get(c))){
+                    result.append(omArgusI.get(s).element1.get(c) + " = " + predefinedVarRelation.get(omArgusI.get(s).element1.get(c)) + "\n");
+                }
+                else {
+                    result.append(omArgusI.get(s).element1.get(c) + " = [ [ Int(\"" + omArgusI.get(s).element1.get(c) +
+                            "_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]\n");
+                }
+                if (predefinedVarRelation.keySet().contains(omArgusA.get(s).element1.get(c))){
+                    result.append(omArgusA.get(s).element1.get(c) + " = " + predefinedVarRelation.get(omArgusA.get(s).element1.get(c)) + "\n");
+                }
+                else{
+                    result.append(omArgusA.get(s).element1.get(c) + " = [ [ Int(\"" + omArgusA.get(s).element1.get(c) +
+                            "_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]\n");
+                }
             }
             //output variable initialization
             //if there is a predefined confidentiality for output, use it instead of declare new variables
