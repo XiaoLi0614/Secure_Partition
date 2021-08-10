@@ -9,6 +9,7 @@ public class ObjectInfo {
     String oname; //name for the object
     String Qs; //storage quorum name
     String Qc; //communication quorum name
+    String host; // the host of object
     //ArrayList<String> methodName; // object method names
     HashMap<String, Pair<ArrayList<String>, String>> omArgusC; //object method argument and return confidentiality
     HashMap<String, Pair<ArrayList<String>, String>> omArgusI; //object method argument and return integrity
@@ -20,6 +21,7 @@ public class ObjectInfo {
         oname = on;
         Qs = on + "qs";
         Qc = on + "qc";
+        host = on + "H";
         //methodName = new ArrayList<>();
         omArgusC = new HashMap<>();
         omArgusI = new HashMap<>();
@@ -52,12 +54,19 @@ public class ObjectInfo {
     //todo: for the mpc example, we need to have some predefined input/out equal to some variable name
     //todo: this is for the use of register
     //the input is the predefined confidentiality requirements: object method name maps to requirement
-    public String initObject(HashMap<String, ArrayList<Boolean>> predefinedOM, HashMap<String, String> predefinedVarRelation){
+    public String initObject(HashMap<String, ArrayList<Boolean>> predefinedOM, HashMap<String, String> predefinedVarRelation, HashMap<String, ArrayList<Integer>> oHost){
         StringBuilder result = new StringBuilder();
 
         //placement information for objects
         result.append(Qs + " = [ [ Int(\"" + Qs + "_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]\n");
         result.append(Qc + " = [ [ Int(\"" + Qc + "_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]\n");
+        //Todo: currently the object hosts are fixed. Can be inferred if z3 has enough computational power
+        if(!oHost.get(host).isEmpty()){
+            result.append(host + " = " + hTrans(oHost.get(host)));
+        }
+        else {
+            result.append(host + " = [ Int(\'" + host + "_%s\' % i) for i in range(n) ] \n");
+        }
 
         //initialize the input arguments and output for each object method
         for(String s: omArgusC.keySet()){
@@ -160,6 +169,16 @@ public class ObjectInfo {
         result.append("s.add(" + oname + "range" + rangeO + ")\n");
         rangeO++;
 
+/*        //range constraints for the object hosts
+        //result.append(oname + "range" + rangeO + " = [And(0 <= " + host + "[i]) for i in range(n)]\n");
+        result.append(oname + "range" + rangeO + " = [And(sLe(" + Qs + "[i], " + host + ")) for i in range(n)]\n");
+        result.append("s.add(" + oname + "range" + rangeO + ")\n");
+        rangeO++;
+
+        result.append(oname + "range" + rangeO + " = sLe(" + host + ", principals)\n");
+        result.append("s.add(" + oname + "range" + rangeO + ")\n");
+        rangeO++;*/
+
         //for object can not be hosted on client constraints
         //if(!oname.equals("user")){
             //result.append(oname + "range" + rangeO + " = [And(0 == " + Qs + "[i][n-1]) for i in range(n)]\n");
@@ -181,6 +200,21 @@ public class ObjectInfo {
             else {
                 if(c.get(i) == true){ result.append("True, "); }
                 else {result.append("False, ");}
+            }
+        }
+        return result.toString();
+    }
+
+    //transfer host information from ArrayList<Integer> to [0, 0, 1]
+    public String hTrans(ArrayList<Integer> h){
+        StringBuilder result = new StringBuilder();
+        result.append("[ ");
+        for(int i = 0; i < h.size(); i++){
+            if(i == h.size() - 1){
+                result.append(h.get(i).toString() + "]\n");
+            }
+            else {
+                result.append(h.get(i).toString() + ", ");
             }
         }
         return result.toString();

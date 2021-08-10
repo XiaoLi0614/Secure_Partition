@@ -133,14 +133,14 @@ def cIntegrityE(b, q):
     result = And(constraints)
     return result
 
-def sIntegrity(b, q):
+def sIntegrity(b, q, h):
     constraints = []
     for i3 in range(n):
         for i1 in range(n):
             for i2 in range(n):
                 for j in range(n):
                     constraints.append(Implies(And(Not(q[i1][j] == 0), Not(q[i2][j] == 0)), 
-                                               ((q[i1][j] + q[i2][j] - principals[j]) > b[i3][j])))
+                                               ((q[i1][j] + q[i2][j] - h[j]) > b[i3][j])))
     result = And(constraints)
     return result
 
@@ -373,6 +373,7 @@ s.add(Not(nonCheck(m9H)))
 s.add(Not(nonCheckQ(m9Q)))
 bankqs = [ [ Int("bankqs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 bankqc = [ [ Int("bankqc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
+bankH = [ 0, 10, 0]
 bankgetBalance2input0C = [ Bool('bankgetBalance2input0C_%s' % i) for i in range(n) ]
 bankgetBalance2input0I = [ [ Int("bankgetBalance2input0I_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 bankgetBalance2input0A = [ [ Int("bankgetBalance2input0A_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -397,6 +398,7 @@ bankrange1 = [And(sLe(bankqs[i], principals), sLe(bankqc[i], principals), sLe(ba
 s.add(bankrange1)
 airlineqs = [ [ Int("airlineqs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 airlineqc = [ [ Int("airlineqc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
+airlineH = [ 7, 0, 0]
 airlinegetPrice2input0C = [ Bool('airlinegetPrice2input0C_%s' % i) for i in range(n) ]
 airlinegetPrice2input0I = [ [ Int("airlinegetPrice2input0I_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 airlinegetPrice2input0A = [ [ Int("airlinegetPrice2input0A_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -421,6 +423,7 @@ airlinerange1 = [And(sLe(airlineqs[i], principals), sLe(airlineqc[i], principals
 s.add(airlinerange1)
 customerqs = [ [ Int("customerqs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 customerqc = [ [ Int("customerqc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
+customerH = [ 0, 0, 1]
 customerupdateInfoinput0C = [ Bool('customerupdateInfoinput0C_%s' % i) for i in range(n) ]
 customerupdateInfoinput0I = [ [ Int("customerupdateInfoinput0I_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 customerupdateInfoinput0A = [ [ Int("customerupdateInfoinput0A_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -457,57 +460,57 @@ customerrange1 = [And(sLe(customerqs[i], principals), sLe(customerqc[i], princip
 s.add(customerrange1)
 #FieldT: bank
 s.add(confQ(bankgetBalance2outputC, bankqs))
-s.add(sIntegrity(bankgetBalance2outputI, bankqs))
-s.add(availabilityC(bankgetBalance2outputA, bankqs))
+s.add(sIntegrity(bankgetBalance2outputI, bankqs, bankH))
+s.add(availabilityP(bankgetBalance2outputA, bankqs, bankH))
 s.add(cIntegrityE(bankgetBalance2input0I, bankqc))
 s.add(lableLe(bankgetBalance2input0C, bankgetBalance2outputC, bankgetBalance2input0I, bankgetBalance2outputI, bankgetBalance2input0A, bankgetBalance2outputA))
 s.add(confQ(bankgetBalance1outputC, bankqs))
-s.add(sIntegrity(bankgetBalance1outputI, bankqs))
-s.add(availabilityC(bankgetBalance1outputA, bankqs))
+s.add(sIntegrity(bankgetBalance1outputI, bankqs, bankH))
+s.add(availabilityP(bankgetBalance1outputA, bankqs, bankH))
 s.add(cIntegrityE(bankgetBalance1input0I, bankqc))
 s.add(lableLe(bankgetBalance1input0C, bankgetBalance1outputC, bankgetBalance1input0I, bankgetBalance1outputI, bankgetBalance1input0A, bankgetBalance1outputA))
 s.add(confQ(bankdecBalanceoutputC, bankqs))
-s.add(sIntegrity(bankdecBalanceoutputI, bankqs))
-s.add(availabilityC(bankdecBalanceoutputA, bankqs))
+s.add(sIntegrity(bankdecBalanceoutputI, bankqs, bankH))
+s.add(availabilityP(bankdecBalanceoutputA, bankqs, bankH))
 s.add(cIntegrityE(bankdecBalanceinput0I, bankqc))
 s.add(lableLe(bankdecBalanceinput0C, bankdecBalanceoutputC, bankdecBalanceinput0I, bankdecBalanceoutputI, bankdecBalanceinput0A, bankdecBalanceoutputA))
 #FieldT: airline
 s.add(confQ(airlinegetPrice2outputC, airlineqs))
-s.add(sIntegrity(airlinegetPrice2outputI, airlineqs))
-s.add(availabilityC(airlinegetPrice2outputA, airlineqs))
+s.add(sIntegrity(airlinegetPrice2outputI, airlineqs, airlineH))
+s.add(availabilityP(airlinegetPrice2outputA, airlineqs, airlineH))
 s.add(cIntegrityE(airlinegetPrice2input0I, airlineqc))
 s.add(lableLe(airlinegetPrice2input0C, airlinegetPrice2outputC, airlinegetPrice2input0I, airlinegetPrice2outputI, airlinegetPrice2input0A, airlinegetPrice2outputA))
 s.add(confQ(airlinegetPrice1outputC, airlineqs))
-s.add(sIntegrity(airlinegetPrice1outputI, airlineqs))
-s.add(availabilityC(airlinegetPrice1outputA, airlineqs))
+s.add(sIntegrity(airlinegetPrice1outputI, airlineqs, airlineH))
+s.add(availabilityP(airlinegetPrice1outputA, airlineqs, airlineH))
 s.add(cIntegrityE(airlinegetPrice1input0I, airlineqc))
 s.add(lableLe(airlinegetPrice1input0C, airlinegetPrice1outputC, airlinegetPrice1input0I, airlinegetPrice1outputI, airlinegetPrice1input0A, airlinegetPrice1outputA))
 s.add(confQ(airlinedecSeatoutputC, airlineqs))
-s.add(sIntegrity(airlinedecSeatoutputI, airlineqs))
-s.add(availabilityC(airlinedecSeatoutputA, airlineqs))
+s.add(sIntegrity(airlinedecSeatoutputI, airlineqs, airlineH))
+s.add(availabilityP(airlinedecSeatoutputA, airlineqs, airlineH))
 s.add(cIntegrityE(airlinedecSeatinput0I, airlineqc))
 s.add(lableLe(airlinedecSeatinput0C, airlinedecSeatoutputC, airlinedecSeatinput0I, airlinedecSeatoutputI, airlinedecSeatinput0A, airlinedecSeatoutputA))
 #FieldT: customer
 s.add(confQ(customerupdateInfooutputC, customerqs))
-s.add(sIntegrity(customerupdateInfooutputI, customerqs))
-s.add(availabilityC(customerupdateInfooutputA, customerqs))
+s.add(sIntegrity(customerupdateInfooutputI, customerqs, customerH))
+s.add(availabilityP(customerupdateInfooutputA, customerqs, customerH))
 s.add(cIntegrityE(customerupdateInfoinput0I, customerqc))
 s.add(lableLe(customerupdateInfoinput0C, customerupdateInfooutputC, customerupdateInfoinput0I, customerupdateInfooutputI, customerupdateInfoinput0A, customerupdateInfooutputA))
 s.add(cIntegrityE(customerupdateInfoinput1I, customerqc))
 s.add(lableLe(customerupdateInfoinput1C, customerupdateInfooutputC, customerupdateInfoinput1I, customerupdateInfooutputI, customerupdateInfoinput1A, customerupdateInfooutputA))
 s.add(confQ(customerticketNumoutputC, customerqs))
-s.add(sIntegrity(customerticketNumoutputI, customerqs))
-s.add(availabilityC(customerticketNumoutputA, customerqs))
+s.add(sIntegrity(customerticketNumoutputI, customerqs, customerH))
+s.add(availabilityP(customerticketNumoutputA, customerqs, customerH))
 s.add(cIntegrityE(customerticketNumbotI, customerqc))
 s.add(lableLe(customerticketNumbotC, customerticketNumoutputC, customerticketNumbotI, customerticketNumoutputI, customerticketNumbotA, customerticketNumoutputA))
 s.add(confQ(customergetIDoutputC, customerqs))
-s.add(sIntegrity(customergetIDoutputI, customerqs))
-s.add(availabilityC(customergetIDoutputA, customerqs))
+s.add(sIntegrity(customergetIDoutputI, customerqs, customerH))
+s.add(availabilityP(customergetIDoutputA, customerqs, customerH))
 s.add(cIntegrityE(customergetIDbotI, customerqc))
 s.add(lableLe(customergetIDbotC, customergetIDoutputC, customergetIDbotI, customergetIDoutputI, customergetIDbotA, customergetIDoutputA))
 s.add(confQ(customerupdatePaymentoutputC, customerqs))
-s.add(sIntegrity(customerupdatePaymentoutputI, customerqs))
-s.add(availabilityC(customerupdatePaymentoutputA, customerqs))
+s.add(sIntegrity(customerupdatePaymentoutputI, customerqs, customerH))
+s.add(availabilityP(customerupdatePaymentoutputA, customerqs, customerH))
 s.add(cIntegrityE(customerupdatePaymentinput0I, customerqc))
 s.add(lableLe(customerupdatePaymentinput0C, customerupdatePaymentoutputC, customerupdatePaymentinput0I, customerupdatePaymentoutputI, customerupdatePaymentinput0A, customerupdatePaymentoutputA))
 s.add(cIntegrityE(customerupdatePaymentinput1I, customerqc))
@@ -1127,9 +1130,11 @@ s.add(availabilityP(m9botA, m9Q, resH))
 s.add(cLe(startC, m9botC))
 s.add(bLe(m9botI, startI))
 s.add(bLe(m9botA, startA))
+print("n = 3")
+print("principals = [ 7, 10, 1]")
 weight = [ 1, 1, 18]
 
-s.minimize(sum(m0H[i] * weight[i] for i in range(n)) + sum(m1H[i] * weight[i] for i in range(n)) + sum(m2H[i] * weight[i] for i in range(n)) + sum(m3H[i] * weight[i] for i in range(n)) + sum(m4H[i] * weight[i] for i in range(n)) + sum(m5H[i] * weight[i] for i in range(n)) + sum(m6H[i] * weight[i] for i in range(n)) + sum(m7H[i] * weight[i] for i in range(n)) + sum(m8H[i] * weight[i] for i in range(n)) + sum(m9H[i] * weight[i] for i in range(n)) + sum(bankqs[0][i] * weight[i] for i in range(n)) + sum(bankqs[1][i] * weight[i] for i in range(n)) + sum(bankqs[2][i] * weight[i] for i in range(n)) + sum(airlineqs[0][i] * weight[i] for i in range(n)) + sum(airlineqs[1][i] * weight[i] for i in range(n)) + sum(airlineqs[2][i] * weight[i] for i in range(n)) + sum(customerqs[0][i] * weight[i] for i in range(n)) + sum(customerqs[1][i] * weight[i] for i in range(n)) + sum(customerqs[2][i] * weight[i] for i in range(n)) + sum(resQ[0]) + sum(resQ[1]) + sum(resQ[2]) + sum(m0Q[0]) + sum(m0Q[1]) + sum(m0Q[2]) + sum(m1Q[0]) + sum(m1Q[1]) + sum(m1Q[2]) + sum(m2Q[0]) + sum(m2Q[1]) + sum(m2Q[2]) + sum(m3Q[0]) + sum(m3Q[1]) + sum(m3Q[2]) + sum(m4Q[0]) + sum(m4Q[1]) + sum(m4Q[2]) + sum(m5Q[0]) + sum(m5Q[1]) + sum(m5Q[2]) + sum(m6Q[0]) + sum(m6Q[1]) + sum(m6Q[2]) + sum(m7Q[0]) + sum(m7Q[1]) + sum(m7Q[2]) + sum(m8Q[0]) + sum(m8Q[1]) + sum(m8Q[2]) + sum(m9Q[0]) + sum(m9Q[1]) + sum(m9Q[2]))
+s.minimize(sum(m0H[i] * weight[i] for i in range(n)) + sum(m1H[i] * weight[i] for i in range(n)) + sum(m2H[i] * weight[i] for i in range(n)) + sum(m3H[i] * weight[i] for i in range(n)) + sum(m4H[i] * weight[i] for i in range(n)) + sum(m5H[i] * weight[i] for i in range(n)) + sum(m6H[i] * weight[i] for i in range(n)) + sum(m7H[i] * weight[i] for i in range(n)) + sum(m8H[i] * weight[i] for i in range(n)) + sum(m9H[i] * weight[i] for i in range(n)) + sum(bankH[i] * weight[i] for i in range(n)) + sum(airlineH[i] * weight[i] for i in range(n)) + sum(customerH[i] * weight[i] for i in range(n)) + sum(bankqs[0][i] * weight[i] for i in range(n)) + sum(bankqs[1][i] * weight[i] for i in range(n)) + sum(bankqs[2][i] * weight[i] for i in range(n)) + sum(airlineqs[0][i] * weight[i] for i in range(n)) + sum(airlineqs[1][i] * weight[i] for i in range(n)) + sum(airlineqs[2][i] * weight[i] for i in range(n)) + sum(customerqs[0][i] * weight[i] for i in range(n)) + sum(customerqs[1][i] * weight[i] for i in range(n)) + sum(customerqs[2][i] * weight[i] for i in range(n)) + sum(bankqc[0][i] * weight[i] for i in range(n)) + sum(bankqc[1][i] * weight[i] for i in range(n)) + sum(bankqc[2][i] * weight[i] for i in range(n)) + sum(airlineqc[0][i] * weight[i] for i in range(n)) + sum(airlineqc[1][i] * weight[i] for i in range(n)) + sum(airlineqc[2][i] * weight[i] for i in range(n)) + sum(customerqc[0][i] * weight[i] for i in range(n)) + sum(customerqc[1][i] * weight[i] for i in range(n)) + sum(customerqc[2][i] * weight[i] for i in range(n)) + sum(resQ[0]) + sum(resQ[1]) + sum(resQ[2]) + sum(m0Q[0]) + sum(m0Q[1]) + sum(m0Q[2]) + sum(m1Q[0]) + sum(m1Q[1]) + sum(m1Q[2]) + sum(m2Q[0]) + sum(m2Q[1]) + sum(m2Q[2]) + sum(m3Q[0]) + sum(m3Q[1]) + sum(m3Q[2]) + sum(m4Q[0]) + sum(m4Q[1]) + sum(m4Q[2]) + sum(m5Q[0]) + sum(m5Q[1]) + sum(m5Q[2]) + sum(m6Q[0]) + sum(m6Q[1]) + sum(m6Q[2]) + sum(m7Q[0]) + sum(m7Q[1]) + sum(m7Q[2]) + sum(m8Q[0]) + sum(m8Q[1]) + sum(m8Q[2]) + sum(m9Q[0]) + sum(m9Q[1]) + sum(m9Q[2]))
 print(s.check())
 m = s.model()
 print("resH:")
@@ -1155,46 +1160,44 @@ print([m[hInfo].as_long() for hInfo in m8H])
 print("m9H:")
 print([m[hInfo].as_long() for hInfo in m9H])
 print("resQ:")
-print([e for qs in resQ for e in qs])
 print([m[e].as_long() for qs in resQ for e in qs])
 print("m0Q:")
-print([e for qs in m0Q for e in qs])
 print([m[e].as_long() for qs in m0Q for e in qs])
 print("m1Q:")
-print([e for qs in m1Q for e in qs])
 print([m[e].as_long() for qs in m1Q for e in qs])
 print("m2Q:")
-print([e for qs in m2Q for e in qs])
 print([m[e].as_long() for qs in m2Q for e in qs])
 print("m3Q:")
-print([e for qs in m3Q for e in qs])
 print([m[e].as_long() for qs in m3Q for e in qs])
 print("m4Q:")
-print([e for qs in m4Q for e in qs])
 print([m[e].as_long() for qs in m4Q for e in qs])
 print("m5Q:")
-print([e for qs in m5Q for e in qs])
 print([m[e].as_long() for qs in m5Q for e in qs])
 print("m6Q:")
-print([e for qs in m6Q for e in qs])
 print([m[e].as_long() for qs in m6Q for e in qs])
 print("m7Q:")
-print([e for qs in m7Q for e in qs])
 print([m[e].as_long() for qs in m7Q for e in qs])
 print("m8Q:")
-print([e for qs in m8Q for e in qs])
 print([m[e].as_long() for qs in m8Q for e in qs])
 print("m9Q:")
-print([e for qs in m9Q for e in qs])
 print([m[e].as_long() for qs in m9Q for e in qs])
 print("bankqs:")
-print([e for qs in bankqs for e in qs])
 print([m[e].as_long() for qs in bankqs for e in qs])
 print("airlineqs:")
-print([e for qs in airlineqs for e in qs])
 print([m[e].as_long() for qs in airlineqs for e in qs])
 print("customerqs:")
-print([e for qs in customerqs for e in qs])
 print([m[e].as_long() for qs in customerqs for e in qs])
+print("bankqc:")
+print([m[e].as_long() for qs in bankqc for e in qs])
+print("airlineqc:")
+print([m[e].as_long() for qs in airlineqc for e in qs])
+print("customerqc:")
+print([m[e].as_long() for qs in customerqc for e in qs])
+#print("bankH:")
+#print([m[hInfo].as_long() for hInfo in bankH])
+#print("airlineH:")
+#print([m[hInfo].as_long() for hInfo in airlineH])
+#print("customerH:")
+#print([m[hInfo].as_long() for hInfo in customerH])
 endT = time.time() - startT
 print(endT)

@@ -133,14 +133,14 @@ def cIntegrityE(b, q):
     result = And(constraints)
     return result
 
-def sIntegrity(b, q):
+def sIntegrity(b, q, h):
     constraints = []
     for i3 in range(n):
         for i1 in range(n):
             for i2 in range(n):
                 for j in range(n):
                     constraints.append(Implies(And(Not(q[i1][j] == 0), Not(q[i2][j] == 0)), 
-                                               ((q[i1][j] + q[i2][j] - principals[j]) > b[i3][j])))
+                                               ((q[i1][j] + q[i2][j] - h[j]) > b[i3][j])))
     result = And(constraints)
     return result
 
@@ -361,6 +361,7 @@ s.add(Not(nonCheck(m8H)))
 s.add(Not(nonCheckQ(m8Q)))
 Aqs = [ [ Int("Aqs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 Aqc = [ [ Int("Aqc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
+AH = [ 4, 0, 0]
 AmakeOffer1input0C = [ Bool('AmakeOffer1input0C_%s' % i) for i in range(n) ]
 AmakeOffer1input0I = [ [ Int("AmakeOffer1input0I_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 AmakeOffer1input0A = [ [ Int("AmakeOffer1input0A_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -385,6 +386,7 @@ Arange1 = [And(sLe(Aqs[i], principals), sLe(Aqc[i], principals), sLe(AmakeOffer1
 s.add(Arange1)
 Bqs = [ [ Int("Bqs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 Bqc = [ [ Int("Bqc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
+BH = [ 0, 7, 0]
 BmakeOffer1input0C = [ Bool('BmakeOffer1input0C_%s' % i) for i in range(n) ]
 BmakeOffer1input0I = [ [ Int("BmakeOffer1input0I_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 BmakeOffer1input0A = [ [ Int("BmakeOffer1input0A_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -409,10 +411,11 @@ Brange1 = [And(sLe(Bqs[i], principals), sLe(Bqc[i], principals), sLe(BmakeOffer1
 s.add(Brange1)
 userqs = [ [ Int("userqs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 userqc = [ [ Int("userqc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
+userH = [ 0, 0, 1]
 userdeclareWinnerinput0C = [ Bool('userdeclareWinnerinput0C_%s' % i) for i in range(n) ]
 userdeclareWinnerinput0I = [ [ Int("userdeclareWinnerinput0I_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 userdeclareWinnerinput0A = [ [ Int("userdeclareWinnerinput0A_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
-userdeclareWinneroutputC = [ Bool('userdeclareWinneroutputC_%s' % i) for i in range(n) ]
+userdeclareWinneroutputC = [ False, False, True ]
 userdeclareWinneroutputI = [ [ Int("userdeclareWinneroutputI_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 userdeclareWinneroutputA = [ [ Int("userdeclareWinneroutputA_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 userreadbotC = [ Bool('userreadbotC_%s' % i) for i in range(n) ]
@@ -436,48 +439,48 @@ userrange1 = [And(sLe(userqs[i], principals), sLe(userqc[i], principals), sLe(us
 s.add(userrange1)
 #FieldT: A
 s.add(confQ(AmakeOffer1outputC, Aqs))
-s.add(sIntegrity(AmakeOffer1outputI, Aqs))
-s.add(availabilityC(AmakeOffer1outputA, Aqs))
+s.add(sIntegrity(AmakeOffer1outputI, Aqs, AH))
+s.add(availabilityP(AmakeOffer1outputA, Aqs, AH))
 s.add(cIntegrityE(AmakeOffer1input0I, Aqc))
 s.add(lableLe(AmakeOffer1input0C, AmakeOffer1outputC, AmakeOffer1input0I, AmakeOffer1outputI, AmakeOffer1input0A, AmakeOffer1outputA))
 s.add(cIntegrityE(AmakeOffer1input1I, Aqc))
 s.add(lableLe(AmakeOffer1input1C, AmakeOffer1outputC, AmakeOffer1input1I, AmakeOffer1outputI, AmakeOffer1input1A, AmakeOffer1outputA))
 s.add(confQ(AmakeOffer2outputC, Aqs))
-s.add(sIntegrity(AmakeOffer2outputI, Aqs))
-s.add(availabilityC(AmakeOffer2outputA, Aqs))
+s.add(sIntegrity(AmakeOffer2outputI, Aqs, AH))
+s.add(availabilityP(AmakeOffer2outputA, Aqs, AH))
 s.add(cIntegrityE(AmakeOffer2input0I, Aqc))
 s.add(lableLe(AmakeOffer2input0C, AmakeOffer2outputC, AmakeOffer2input0I, AmakeOffer2outputI, AmakeOffer2input0A, AmakeOffer2outputA))
 s.add(cIntegrityE(AmakeOffer2input1I, Aqc))
 s.add(lableLe(AmakeOffer2input1C, AmakeOffer2outputC, AmakeOffer2input1I, AmakeOffer2outputI, AmakeOffer2input1A, AmakeOffer2outputA))
 #FieldT: B
 s.add(confQ(BmakeOffer1outputC, Bqs))
-s.add(sIntegrity(BmakeOffer1outputI, Bqs))
-s.add(availabilityC(BmakeOffer1outputA, Bqs))
+s.add(sIntegrity(BmakeOffer1outputI, Bqs, BH))
+s.add(availabilityP(BmakeOffer1outputA, Bqs, BH))
 s.add(cIntegrityE(BmakeOffer1input0I, Bqc))
 s.add(lableLe(BmakeOffer1input0C, BmakeOffer1outputC, BmakeOffer1input0I, BmakeOffer1outputI, BmakeOffer1input0A, BmakeOffer1outputA))
 s.add(cIntegrityE(BmakeOffer1input1I, Bqc))
 s.add(lableLe(BmakeOffer1input1C, BmakeOffer1outputC, BmakeOffer1input1I, BmakeOffer1outputI, BmakeOffer1input1A, BmakeOffer1outputA))
 s.add(confQ(BmakeOffer2outputC, Bqs))
-s.add(sIntegrity(BmakeOffer2outputI, Bqs))
-s.add(availabilityC(BmakeOffer2outputA, Bqs))
+s.add(sIntegrity(BmakeOffer2outputI, Bqs, BH))
+s.add(availabilityP(BmakeOffer2outputA, Bqs, BH))
 s.add(cIntegrityE(BmakeOffer2input0I, Bqc))
 s.add(lableLe(BmakeOffer2input0C, BmakeOffer2outputC, BmakeOffer2input0I, BmakeOffer2outputI, BmakeOffer2input0A, BmakeOffer2outputA))
 s.add(cIntegrityE(BmakeOffer2input1I, Bqc))
 s.add(lableLe(BmakeOffer2input1C, BmakeOffer2outputC, BmakeOffer2input1I, BmakeOffer2outputI, BmakeOffer2input1A, BmakeOffer2outputA))
 #FieldT: user
 s.add(confQ(userdeclareWinneroutputC, userqs))
-s.add(sIntegrity(userdeclareWinneroutputI, userqs))
-s.add(availabilityC(userdeclareWinneroutputA, userqs))
+s.add(sIntegrity(userdeclareWinneroutputI, userqs, userH))
+s.add(availabilityP(userdeclareWinneroutputA, userqs, userH))
 s.add(cIntegrityE(userdeclareWinnerinput0I, userqc))
 s.add(lableLe(userdeclareWinnerinput0C, userdeclareWinneroutputC, userdeclareWinnerinput0I, userdeclareWinneroutputI, userdeclareWinnerinput0A, userdeclareWinneroutputA))
 s.add(confQ(userreadoutputC, userqs))
-s.add(sIntegrity(userreadoutputI, userqs))
-s.add(availabilityC(userreadoutputA, userqs))
+s.add(sIntegrity(userreadoutputI, userqs, userH))
+s.add(availabilityP(userreadoutputA, userqs, userH))
 s.add(cIntegrityE(userreadbotI, userqc))
 s.add(lableLe(userreadbotC, userreadoutputC, userreadbotI, userreadoutputI, userreadbotA, userreadoutputA))
 s.add(confQ(userupdateoutputC, userqs))
-s.add(sIntegrity(userupdateoutputI, userqs))
-s.add(availabilityC(userupdateoutputA, userqs))
+s.add(sIntegrity(userupdateoutputI, userqs, userH))
+s.add(availabilityP(userupdateoutputA, userqs, userH))
 s.add(cIntegrityE(userupdateinput0I, userqc))
 s.add(lableLe(userupdateinput0C, userupdateoutputC, userupdateinput0I, userupdateoutputI, userupdateinput0A, userupdateoutputA))
 s.add(cIntegrityE(userupdateinput1I, userqc))
@@ -1245,9 +1248,11 @@ s.add(cLe(oC, m8oC))
 s.add(bLe(m8oI, botI))
 s.add(bLe(m8oA, botA))
 s.add(availabilityP(m8oA, m8Q, resH))
+print("n = 3")
+print("principals = [ 4, 7, 1]")
 weight = [ 1, 1, 12]
 
-s.minimize(sum(m0H[i] * weight[i] for i in range(n)) + sum(m1H[i] * weight[i] for i in range(n)) + sum(m2H[i] * weight[i] for i in range(n)) + sum(m3H[i] * weight[i] for i in range(n)) + sum(m4H[i] * weight[i] for i in range(n)) + sum(m5H[i] * weight[i] for i in range(n)) + sum(m6H[i] * weight[i] for i in range(n)) + sum(m7H[i] * weight[i] for i in range(n)) + sum(m8H[i] * weight[i] for i in range(n)) + sum(Aqs[0][i] * weight[i] for i in range(n)) + sum(Aqs[1][i] * weight[i] for i in range(n)) + sum(Aqs[2][i] * weight[i] for i in range(n)) + sum(Bqs[0][i] * weight[i] for i in range(n)) + sum(Bqs[1][i] * weight[i] for i in range(n)) + sum(Bqs[2][i] * weight[i] for i in range(n)) + sum(userqs[0][i] * weight[i] for i in range(n)) + sum(userqs[1][i] * weight[i] for i in range(n)) + sum(userqs[2][i] * weight[i] for i in range(n)) + sum(resQ[0]) + sum(resQ[1]) + sum(resQ[2]) + sum(m0Q[0]) + sum(m0Q[1]) + sum(m0Q[2]) + sum(m1Q[0]) + sum(m1Q[1]) + sum(m1Q[2]) + sum(m2Q[0]) + sum(m2Q[1]) + sum(m2Q[2]) + sum(m3Q[0]) + sum(m3Q[1]) + sum(m3Q[2]) + sum(m4Q[0]) + sum(m4Q[1]) + sum(m4Q[2]) + sum(m5Q[0]) + sum(m5Q[1]) + sum(m5Q[2]) + sum(m6Q[0]) + sum(m6Q[1]) + sum(m6Q[2]) + sum(m7Q[0]) + sum(m7Q[1]) + sum(m7Q[2]) + sum(m8Q[0]) + sum(m8Q[1]) + sum(m8Q[2]))
+s.minimize(sum(m0H[i] * weight[i] for i in range(n)) + sum(m1H[i] * weight[i] for i in range(n)) + sum(m2H[i] * weight[i] for i in range(n)) + sum(m3H[i] * weight[i] for i in range(n)) + sum(m4H[i] * weight[i] for i in range(n)) + sum(m5H[i] * weight[i] for i in range(n)) + sum(m6H[i] * weight[i] for i in range(n)) + sum(m7H[i] * weight[i] for i in range(n)) + sum(m8H[i] * weight[i] for i in range(n)) + sum(AH[i] * weight[i] for i in range(n)) + sum(BH[i] * weight[i] for i in range(n)) + sum(userH[i] * weight[i] for i in range(n)) + sum(Aqs[0][i] * weight[i] for i in range(n)) + sum(Aqs[1][i] * weight[i] for i in range(n)) + sum(Aqs[2][i] * weight[i] for i in range(n)) + sum(Bqs[0][i] * weight[i] for i in range(n)) + sum(Bqs[1][i] * weight[i] for i in range(n)) + sum(Bqs[2][i] * weight[i] for i in range(n)) + sum(userqs[0][i] * weight[i] for i in range(n)) + sum(userqs[1][i] * weight[i] for i in range(n)) + sum(userqs[2][i] * weight[i] for i in range(n)) + sum(Aqc[0][i] * weight[i] for i in range(n)) + sum(Aqc[1][i] * weight[i] for i in range(n)) + sum(Aqc[2][i] * weight[i] for i in range(n)) + sum(Bqc[0][i] * weight[i] for i in range(n)) + sum(Bqc[1][i] * weight[i] for i in range(n)) + sum(Bqc[2][i] * weight[i] for i in range(n)) + sum(userqc[0][i] * weight[i] for i in range(n)) + sum(userqc[1][i] * weight[i] for i in range(n)) + sum(userqc[2][i] * weight[i] for i in range(n)) + sum(resQ[0]) + sum(resQ[1]) + sum(resQ[2]) + sum(m0Q[0]) + sum(m0Q[1]) + sum(m0Q[2]) + sum(m1Q[0]) + sum(m1Q[1]) + sum(m1Q[2]) + sum(m2Q[0]) + sum(m2Q[1]) + sum(m2Q[2]) + sum(m3Q[0]) + sum(m3Q[1]) + sum(m3Q[2]) + sum(m4Q[0]) + sum(m4Q[1]) + sum(m4Q[2]) + sum(m5Q[0]) + sum(m5Q[1]) + sum(m5Q[2]) + sum(m6Q[0]) + sum(m6Q[1]) + sum(m6Q[2]) + sum(m7Q[0]) + sum(m7Q[1]) + sum(m7Q[2]) + sum(m8Q[0]) + sum(m8Q[1]) + sum(m8Q[2]))
 print(s.check())
 m = s.model()
 print("resH:")
@@ -1271,43 +1276,42 @@ print([m[hInfo].as_long() for hInfo in m7H])
 print("m8H:")
 print([m[hInfo].as_long() for hInfo in m8H])
 print("resQ:")
-print([e for qs in resQ for e in qs])
 print([m[e].as_long() for qs in resQ for e in qs])
 print("m0Q:")
-print([e for qs in m0Q for e in qs])
 print([m[e].as_long() for qs in m0Q for e in qs])
 print("m1Q:")
-print([e for qs in m1Q for e in qs])
 print([m[e].as_long() for qs in m1Q for e in qs])
 print("m2Q:")
-print([e for qs in m2Q for e in qs])
 print([m[e].as_long() for qs in m2Q for e in qs])
 print("m3Q:")
-print([e for qs in m3Q for e in qs])
 print([m[e].as_long() for qs in m3Q for e in qs])
 print("m4Q:")
-print([e for qs in m4Q for e in qs])
 print([m[e].as_long() for qs in m4Q for e in qs])
 print("m5Q:")
-print([e for qs in m5Q for e in qs])
 print([m[e].as_long() for qs in m5Q for e in qs])
 print("m6Q:")
-print([e for qs in m6Q for e in qs])
 print([m[e].as_long() for qs in m6Q for e in qs])
 print("m7Q:")
-print([e for qs in m7Q for e in qs])
 print([m[e].as_long() for qs in m7Q for e in qs])
 print("m8Q:")
-print([e for qs in m8Q for e in qs])
 print([m[e].as_long() for qs in m8Q for e in qs])
 print("Aqs:")
-print([e for qs in Aqs for e in qs])
 print([m[e].as_long() for qs in Aqs for e in qs])
 print("Bqs:")
-print([e for qs in Bqs for e in qs])
 print([m[e].as_long() for qs in Bqs for e in qs])
 print("userqs:")
-print([e for qs in userqs for e in qs])
 print([m[e].as_long() for qs in userqs for e in qs])
+print("Aqc:")
+print([m[e].as_long() for qs in Aqc for e in qs])
+print("Bqc:")
+print([m[e].as_long() for qs in Bqc for e in qs])
+print("userqc:")
+print([m[e].as_long() for qs in userqc for e in qs])
+#print("AH:")
+#print([m[hInfo].as_long() for hInfo in AH])
+#print("BH:")
+#print([m[hInfo].as_long() for hInfo in BH])
+#print("userH:")
+#print([m[hInfo].as_long() for hInfo in userH])
 endT = time.time() - startT
 print(endT)

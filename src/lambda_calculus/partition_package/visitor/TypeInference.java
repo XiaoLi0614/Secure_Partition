@@ -43,6 +43,8 @@ public class TypeInference implements PartitionVisitor{
     HashMap<String, HashMap<String, ArrayList<Boolean>>> predefinedOM; //pre defined object method variables' confidentiality
     HashMap<String, String> predefinedVarRelation; //pre defined variable relations for the register
 
+    HashMap<String, ArrayList<Integer>> objHost;
+
     //the host information for res
     ArrayList<Integer> resH;
 
@@ -79,6 +81,7 @@ public class TypeInference implements PartitionVisitor{
         predefinedV = new HashMap<>();
         predefinedOM = new HashMap<>();
         predefinedVarRelation = new HashMap<>();
+        objHost = new HashMap<>();
         resH = new ArrayList<>();
         environment = new HashMap<>();
         statementC = new HashMap<>();
@@ -96,7 +99,7 @@ public class TypeInference implements PartitionVisitor{
                          ArrayList<Boolean> rc, ArrayList<ArrayList<Integer>> ri, ArrayList<ArrayList<Integer>> ra,
                          ArrayList<Boolean> sc, ArrayList<ArrayList<Integer>> si, ArrayList<ArrayList<Integer>> sa,
                          ArrayList<Boolean> bc, ArrayList<ArrayList<Integer>> bi, ArrayList<ArrayList<Integer>> ba,
-                         ArrayList<Integer> rH, HashMap<String, ArrayList<Boolean>> pV, HashMap<String, HashMap<String, ArrayList<Boolean>>> pOM, HashMap<String, String> pVarR)
+                         ArrayList<Integer> rH, HashMap<String, ArrayList<Boolean>> pV, HashMap<String, HashMap<String, ArrayList<Boolean>>> pOM, HashMap<String, String> pVarR, HashMap<String, ArrayList<Integer>> oh)
     {
         n = num;
         principals = p;
@@ -113,6 +116,7 @@ public class TypeInference implements PartitionVisitor{
         predefinedV = pV;
         predefinedOM = pOM;
         predefinedVarRelation = pVarR;
+        objHost = oh;
 
         mInfo = new HashMap<>();
         oInfo = new HashMap<>();
@@ -581,6 +585,7 @@ public class TypeInference implements PartitionVisitor{
 
         ObjectInfo objSig = infer.oInfo.get(objName);
         String objHosts = infer.oInfo.get(objName).Qs;
+        String objectH = infer.oInfo.get(objName).host;
 
         //for each method
         for(String mName: objSig.omArgusC.keySet()){
@@ -591,11 +596,12 @@ public class TypeInference implements PartitionVisitor{
             constraintNum++;
 
             //i_m' <= Sintegrity(Qs)
-            result.append("s.add(sIntegrity(" + objSig.omArgusI.get(mName).element2 + ", " + objHosts + "))\n");
+            result.append("s.add(sIntegrity(" + objSig.omArgusI.get(mName).element2 + ", " + objHosts + ", " + objectH + "))\n");
+            //result.append("s.add(sIntegrity(" + objSig.omArgusI.get(mName).element2 + ", " + objHosts + ", principals))\n");
             constraintNum++;
 
             //a_m' <= Availability(Qs)
-            result.append("s.add(availabilityC(" + objSig.omArgusA.get(mName).element2 + ", " + objHosts + "))\n");
+            result.append("s.add(availabilityP(" + objSig.omArgusA.get(mName).element2 + ", " + objHosts + ", " + objectH +"))\n");
             constraintNum++;
 
             //for each argument of the method
@@ -728,10 +734,11 @@ public class TypeInference implements PartitionVisitor{
             ArrayList<Boolean> sc, ArrayList<ArrayList<Integer>> si, ArrayList<ArrayList<Integer>> sa,
             ArrayList<Boolean> bc, ArrayList<ArrayList<Integer>> bi, ArrayList<ArrayList<Integer>> ba,
             ArrayList<Integer> rH, HashMap<String, ArrayList<Boolean>> pV, HashMap<String, HashMap<String, ArrayList<Boolean>>> pOM, HashMap<String, String> pVR,
+            HashMap<String, ArrayList<Integer>> oH,
             ArrayList<Integer> w){
 
         StringBuilder r = new StringBuilder();
-        TypeInference infer = new TypeInference(num, p, rc, ri, ra, sc, si, sa, bc, bi, ba, rH, pV, pOM, pVR);
+        TypeInference infer = new TypeInference(num, p, rc, ri, ra, sc, si, sa, bc, bi, ba, rH, pV, pOM, pVR, oH);
 
         r.append("n = " + num + "\n");
         r.append("principals = " + infer.hTrans(p));
@@ -797,7 +804,7 @@ public class TypeInference implements PartitionVisitor{
         //set the oInfo
         for(String on: objectMethods.keySet()){
             infer.oInfo.put(on, new ObjectInfo(on, objectMethods.get(on)));
-            r.append(infer.oInfo.get(on).initObject(infer.predefinedOM.get(on), infer.predefinedVarRelation));
+            r.append(infer.oInfo.get(on).initObject(infer.predefinedOM.get(on), infer.predefinedVarRelation, infer.objHost));
             r.append(infer.oInfo.get(on).oRangeCons());
         }
 
@@ -814,7 +821,20 @@ public class TypeInference implements PartitionVisitor{
         //we need to have a this call check for the entrance method (the last method in the method definition array)
         r.append(infer.entranceThisCallT(methods.get(methods.size() - 1), methodArgNames.get(methodArgNames.size() - 1)).toString());
 
+        //print n and principal for future operation
+        r.append("print(\"n = "+ infer.n +"\")\n");
+        String principalLine = hTrans(infer.principals);
+        principalLine = principalLine.replace("\n", "");
+        r.append("print(\"principals = "+ principalLine +"\")\n");
         r.append(infer.optimizationResult(w));
+
+        //print object hosts for now
+        for(String on: infer.objHost.keySet()){
+            String oHLine = hTrans(infer.objHost.get(on));
+            oHLine = oHLine.replace("\n", "");
+            r.append("print(\""+ on + " = "+ oHLine + "\")\n");
+        }
+
         r.append("endT = time.time() - startT\n");
         r.append("print(endT)\n");
 
@@ -837,10 +857,22 @@ public class TypeInference implements PartitionVisitor{
             }
         }
 
-        //minimize the storage quorum
+        //minimize host for all objects
+        for(String on: oInfo.keySet()){
+            result.append(oInfo.get(on).host + "[i] * weight[i] for i in range(n)) + sum(");
+        }
+
+        //minimize the object storage quorum
         for(String on: oInfo.keySet()){
             for(int i = 0; i < n; i++){
                 result.append(oInfo.get(on).Qs + "[" + i + "][i] * weight[i] for i in range(n)) + sum(");
+            }
+        }
+
+        //minimize the object communication quorum
+        for(String on: oInfo.keySet()){
+            for(int i = 0; i < n; i++){
+                result.append(oInfo.get(on).Qc + "[" + i + "][i] * weight[i] for i in range(n)) + sum(");
             }
         }
 
@@ -859,7 +891,7 @@ public class TypeInference implements PartitionVisitor{
         }
         result.append("print(s.check())\nm = s.model()\nprint(\"resH:\")\nprint(resH)\n");
 
-        //print host information
+        //print method host information
         for(String mn2: mInfo.keySet()){
             if(!mn2.equals("ret")){
                 result.append("print(\"" + mInfo.get(mn2).host + ":\")\n");
@@ -874,6 +906,15 @@ public class TypeInference implements PartitionVisitor{
         for(String on1: oInfo.keySet()){
             result.append(printQuorum(oInfo.get(on1).Qs));
         }
+        for(String on2: oInfo.keySet()){
+            result.append(printQuorum(oInfo.get(on2).Qc));
+        }
+
+/*        //print object information
+        for(String on3: oInfo.keySet()){
+            result.append("print(\"" + oInfo.get(on3).host + ":\")\n");
+            result.append("print([m[hInfo].as_long() for hInfo in " + oInfo.get(on3).host + "])\n");
+        }*/
 
         return result.toString();
     }
@@ -881,7 +922,7 @@ public class TypeInference implements PartitionVisitor{
     public String printQuorum(String qName){
         StringBuilder result  = new StringBuilder();
         result.append("print(\"" + qName + ":\")\n");
-        result.append("print([e for qs in " + qName + " for e in qs])\n");
+        //result.append("print([e for qs in " + qName + " for e in qs])\n");
         result.append("print([m[e].as_long() for qs in " + qName + " for e in qs])\n");
         return result.toString();
     }
@@ -932,7 +973,7 @@ public class TypeInference implements PartitionVisitor{
     //transfer host information from ArrayList<Integer> to [0, 0, 1]
     public String hTrans(ArrayList<Integer> h){
         StringBuilder result = new StringBuilder();
-        result.append("[ ");
+        result.append("[");
         for(int i = 0; i < h.size(); i++){
             if(i == h.size() - 1){
                 result.append(h.get(i).toString() + "]\n");

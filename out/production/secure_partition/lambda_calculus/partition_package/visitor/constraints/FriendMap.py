@@ -133,14 +133,14 @@ def cIntegrityE(b, q):
     result = And(constraints)
     return result
 
-def sIntegrity(b, q):
+def sIntegrity(b, q, h):
     constraints = []
     for i3 in range(n):
         for i1 in range(n):
             for i2 in range(n):
                 for j in range(n):
                     constraints.append(Implies(And(Not(q[i1][j] == 0), Not(q[i2][j] == 0)), 
-                                               ((q[i1][j] + q[i2][j] - principals[j]) > b[i3][j])))
+                                               ((q[i1][j] + q[i2][j] - h[j]) > b[i3][j])))
     result = And(constraints)
     return result
 
@@ -332,6 +332,7 @@ s.add(Not(nonCheck(m8H)))
 s.add(Not(nonCheckQ(m8Q)))
 Snappqs = [ [ Int("Snappqs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 Snappqc = [ [ Int("Snappqc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
+SnappH = [ 0, 0, 0, 4]
 SnappisFriendinput0C = [ Bool('SnappisFriendinput0C_%s' % i) for i in range(n) ]
 SnappisFriendinput0I = [ [ Int("SnappisFriendinput0I_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 SnappisFriendinput0A = [ [ Int("SnappisFriendinput0A_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -347,6 +348,7 @@ Snapprange1 = [And(sLe(Snappqs[i], principals), sLe(Snappqc[i], principals), sLe
 s.add(Snapprange1)
 Bobqs = [ [ Int("Bobqs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 Bobqc = [ [ Int("Bobqc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
+BobH = [ 0, 4, 0, 0]
 BobcommentbotC = [ Bool('BobcommentbotC_%s' % i) for i in range(n) ]
 BobcommentbotI = [ [ Int("BobcommentbotI_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 BobcommentbotA = [ [ Int("BobcommentbotA_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -371,6 +373,7 @@ Bobrange1 = [And(sLe(Bobqs[i], principals), sLe(Bobqc[i], principals), sLe(Bobco
 s.add(Bobrange1)
 Aliceqs = [ [ Int("Aliceqs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 Aliceqc = [ [ Int("Aliceqc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
+AliceH = [ 4, 0, 0, 0]
 AlicenewBoxbotC = [ Bool('AlicenewBoxbotC_%s' % i) for i in range(n) ]
 AlicenewBoxbotI = [ [ Int("AlicenewBoxbotI_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 AlicenewBoxbotA = [ [ Int("AlicenewBoxbotA_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -407,6 +410,7 @@ Alicerange1 = [And(sLe(Aliceqs[i], principals), sLe(Aliceqc[i], principals), sLe
 s.add(Alicerange1)
 mapServqs = [ [ Int("mapServqs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 mapServqc = [ [ Int("mapServqc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
+mapServH = [ 0, 0, 7, 0]
 mapServgetMapinput0C = [ Bool('mapServgetMapinput0C_%s' % i) for i in range(n) ]
 mapServgetMapinput0I = [ [ Int("mapServgetMapinput0I_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 mapServgetMapinput0A = [ [ Int("mapServgetMapinput0A_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -419,57 +423,57 @@ mapServrange1 = [And(sLe(mapServqs[i], principals), sLe(mapServqc[i], principals
 s.add(mapServrange1)
 #FieldT: Snapp
 s.add(confQ(SnappisFriendoutputC, Snappqs))
-s.add(sIntegrity(SnappisFriendoutputI, Snappqs))
-s.add(availabilityC(SnappisFriendoutputA, Snappqs))
+s.add(sIntegrity(SnappisFriendoutputI, Snappqs, SnappH))
+s.add(availabilityP(SnappisFriendoutputA, Snappqs, SnappH))
 s.add(cIntegrityE(SnappisFriendinput0I, Snappqc))
 s.add(lableLe(SnappisFriendinput0C, SnappisFriendoutputC, SnappisFriendinput0I, SnappisFriendoutputI, SnappisFriendinput0A, SnappisFriendoutputA))
 s.add(cIntegrityE(SnappisFriendinput1I, Snappqc))
 s.add(lableLe(SnappisFriendinput1C, SnappisFriendoutputC, SnappisFriendinput1I, SnappisFriendoutputI, SnappisFriendinput1A, SnappisFriendoutputA))
 #FieldT: Bob
 s.add(confQ(BobcommentoutputC, Bobqs))
-s.add(sIntegrity(BobcommentoutputI, Bobqs))
-s.add(availabilityC(BobcommentoutputA, Bobqs))
+s.add(sIntegrity(BobcommentoutputI, Bobqs, BobH))
+s.add(availabilityP(BobcommentoutputA, Bobqs, BobH))
 s.add(cIntegrityE(BobcommentbotI, Bobqc))
 s.add(lableLe(BobcommentbotC, BobcommentoutputC, BobcommentbotI, BobcommentoutputI, BobcommentbotA, BobcommentoutputA))
 s.add(confQ(BoblocationoutputC, Bobqs))
-s.add(sIntegrity(BoblocationoutputI, Bobqs))
-s.add(availabilityC(BoblocationoutputA, Bobqs))
+s.add(sIntegrity(BoblocationoutputI, Bobqs, BobH))
+s.add(availabilityP(BoblocationoutputA, Bobqs, BobH))
 s.add(cIntegrityE(BoblocationbotI, Bobqc))
 s.add(lableLe(BoblocationbotC, BoblocationoutputC, BoblocationbotI, BoblocationoutputI, BoblocationbotA, BoblocationoutputA))
 s.add(confQ(BobIDoutputC, Bobqs))
-s.add(sIntegrity(BobIDoutputI, Bobqs))
-s.add(availabilityC(BobIDoutputA, Bobqs))
+s.add(sIntegrity(BobIDoutputI, Bobqs, BobH))
+s.add(availabilityP(BobIDoutputA, Bobqs, BobH))
 s.add(cIntegrityE(BobIDbotI, Bobqc))
 s.add(lableLe(BobIDbotC, BobIDoutputC, BobIDbotI, BobIDoutputI, BobIDbotA, BobIDoutputA))
 #FieldT: Alice
 s.add(confQ(AlicenewBoxoutputC, Aliceqs))
-s.add(sIntegrity(AlicenewBoxoutputI, Aliceqs))
-s.add(availabilityC(AlicenewBoxoutputA, Aliceqs))
+s.add(sIntegrity(AlicenewBoxoutputI, Aliceqs, AliceH))
+s.add(availabilityP(AlicenewBoxoutputA, Aliceqs, AliceH))
 s.add(cIntegrityE(AlicenewBoxbotI, Aliceqc))
 s.add(lableLe(AlicenewBoxbotC, AlicenewBoxoutputC, AlicenewBoxbotI, AlicenewBoxoutputI, AlicenewBoxbotA, AlicenewBoxoutputA))
 s.add(confQ(AliceexpandoutputC, Aliceqs))
-s.add(sIntegrity(AliceexpandoutputI, Aliceqs))
-s.add(availabilityC(AliceexpandoutputA, Aliceqs))
+s.add(sIntegrity(AliceexpandoutputI, Aliceqs, AliceH))
+s.add(availabilityP(AliceexpandoutputA, Aliceqs, AliceH))
 s.add(cIntegrityE(Aliceexpandinput0I, Aliceqc))
 s.add(lableLe(Aliceexpandinput0C, AliceexpandoutputC, Aliceexpandinput0I, AliceexpandoutputI, Aliceexpandinput0A, AliceexpandoutputA))
 s.add(cIntegrityE(Aliceexpandinput1I, Aliceqc))
 s.add(lableLe(Aliceexpandinput1C, AliceexpandoutputC, Aliceexpandinput1I, AliceexpandoutputI, Aliceexpandinput1A, AliceexpandoutputA))
 s.add(confQ(AliceIDoutputC, Aliceqs))
-s.add(sIntegrity(AliceIDoutputI, Aliceqs))
-s.add(availabilityC(AliceIDoutputA, Aliceqs))
+s.add(sIntegrity(AliceIDoutputI, Aliceqs, AliceH))
+s.add(availabilityP(AliceIDoutputA, Aliceqs, AliceH))
 s.add(cIntegrityE(AliceIDbotI, Aliceqc))
 s.add(lableLe(AliceIDbotC, AliceIDoutputC, AliceIDbotI, AliceIDoutputI, AliceIDbotA, AliceIDoutputA))
 s.add(confQ(AliceaddCommentoutputC, Aliceqs))
-s.add(sIntegrity(AliceaddCommentoutputI, Aliceqs))
-s.add(availabilityC(AliceaddCommentoutputA, Aliceqs))
+s.add(sIntegrity(AliceaddCommentoutputI, Aliceqs, AliceH))
+s.add(availabilityP(AliceaddCommentoutputA, Aliceqs, AliceH))
 s.add(cIntegrityE(AliceaddCommentinput0I, Aliceqc))
 s.add(lableLe(AliceaddCommentinput0C, AliceaddCommentoutputC, AliceaddCommentinput0I, AliceaddCommentoutputI, AliceaddCommentinput0A, AliceaddCommentoutputA))
 s.add(cIntegrityE(AliceaddCommentinput1I, Aliceqc))
 s.add(lableLe(AliceaddCommentinput1C, AliceaddCommentoutputC, AliceaddCommentinput1I, AliceaddCommentoutputI, AliceaddCommentinput1A, AliceaddCommentoutputA))
 #FieldT: mapServ
 s.add(confQ(mapServgetMapoutputC, mapServqs))
-s.add(sIntegrity(mapServgetMapoutputI, mapServqs))
-s.add(availabilityC(mapServgetMapoutputA, mapServqs))
+s.add(sIntegrity(mapServgetMapoutputI, mapServqs, mapServH))
+s.add(availabilityP(mapServgetMapoutputA, mapServqs, mapServH))
 s.add(cIntegrityE(mapServgetMapinput0I, mapServqc))
 s.add(lableLe(mapServgetMapinput0C, mapServgetMapoutputC, mapServgetMapinput0I, mapServgetMapoutputI, mapServgetMapinput0A, mapServgetMapoutputA))
 #MethodT: m8
@@ -842,9 +846,11 @@ s.add(availabilityP(m8botA, m8Q, resH))
 s.add(cLe(startC, m8botC))
 s.add(bLe(m8botI, startI))
 s.add(bLe(m8botA, startA))
+print("n = 4")
+print("principals = [ 4, 4, 7, 4]")
 weight = [ 2, 2, 1, 1]
 
-s.minimize(sum(m0H[i] * weight[i] for i in range(n)) + sum(m1H[i] * weight[i] for i in range(n)) + sum(m2H[i] * weight[i] for i in range(n)) + sum(m3H[i] * weight[i] for i in range(n)) + sum(m4H[i] * weight[i] for i in range(n)) + sum(m5H[i] * weight[i] for i in range(n)) + sum(m6H[i] * weight[i] for i in range(n)) + sum(m7H[i] * weight[i] for i in range(n)) + sum(m8H[i] * weight[i] for i in range(n)) + sum(Snappqs[0][i] * weight[i] for i in range(n)) + sum(Snappqs[1][i] * weight[i] for i in range(n)) + sum(Snappqs[2][i] * weight[i] for i in range(n)) + sum(Snappqs[3][i] * weight[i] for i in range(n)) + sum(Bobqs[0][i] * weight[i] for i in range(n)) + sum(Bobqs[1][i] * weight[i] for i in range(n)) + sum(Bobqs[2][i] * weight[i] for i in range(n)) + sum(Bobqs[3][i] * weight[i] for i in range(n)) + sum(Aliceqs[0][i] * weight[i] for i in range(n)) + sum(Aliceqs[1][i] * weight[i] for i in range(n)) + sum(Aliceqs[2][i] * weight[i] for i in range(n)) + sum(Aliceqs[3][i] * weight[i] for i in range(n)) + sum(mapServqs[0][i] * weight[i] for i in range(n)) + sum(mapServqs[1][i] * weight[i] for i in range(n)) + sum(mapServqs[2][i] * weight[i] for i in range(n)) + sum(mapServqs[3][i] * weight[i] for i in range(n)) + sum(resQ[0]) + sum(resQ[1]) + sum(resQ[2]) + sum(resQ[3]) + sum(m0Q[0]) + sum(m0Q[1]) + sum(m0Q[2]) + sum(m0Q[3]) + sum(m1Q[0]) + sum(m1Q[1]) + sum(m1Q[2]) + sum(m1Q[3]) + sum(m2Q[0]) + sum(m2Q[1]) + sum(m2Q[2]) + sum(m2Q[3]) + sum(m3Q[0]) + sum(m3Q[1]) + sum(m3Q[2]) + sum(m3Q[3]) + sum(m4Q[0]) + sum(m4Q[1]) + sum(m4Q[2]) + sum(m4Q[3]) + sum(m5Q[0]) + sum(m5Q[1]) + sum(m5Q[2]) + sum(m5Q[3]) + sum(m6Q[0]) + sum(m6Q[1]) + sum(m6Q[2]) + sum(m6Q[3]) + sum(m7Q[0]) + sum(m7Q[1]) + sum(m7Q[2]) + sum(m7Q[3]) + sum(m8Q[0]) + sum(m8Q[1]) + sum(m8Q[2]) + sum(m8Q[3]))
+s.minimize(sum(m0H[i] * weight[i] for i in range(n)) + sum(m1H[i] * weight[i] for i in range(n)) + sum(m2H[i] * weight[i] for i in range(n)) + sum(m3H[i] * weight[i] for i in range(n)) + sum(m4H[i] * weight[i] for i in range(n)) + sum(m5H[i] * weight[i] for i in range(n)) + sum(m6H[i] * weight[i] for i in range(n)) + sum(m7H[i] * weight[i] for i in range(n)) + sum(m8H[i] * weight[i] for i in range(n)) + sum(SnappH[i] * weight[i] for i in range(n)) + sum(BobH[i] * weight[i] for i in range(n)) + sum(AliceH[i] * weight[i] for i in range(n)) + sum(mapServH[i] * weight[i] for i in range(n)) + sum(Snappqs[0][i] * weight[i] for i in range(n)) + sum(Snappqs[1][i] * weight[i] for i in range(n)) + sum(Snappqs[2][i] * weight[i] for i in range(n)) + sum(Snappqs[3][i] * weight[i] for i in range(n)) + sum(Bobqs[0][i] * weight[i] for i in range(n)) + sum(Bobqs[1][i] * weight[i] for i in range(n)) + sum(Bobqs[2][i] * weight[i] for i in range(n)) + sum(Bobqs[3][i] * weight[i] for i in range(n)) + sum(Aliceqs[0][i] * weight[i] for i in range(n)) + sum(Aliceqs[1][i] * weight[i] for i in range(n)) + sum(Aliceqs[2][i] * weight[i] for i in range(n)) + sum(Aliceqs[3][i] * weight[i] for i in range(n)) + sum(mapServqs[0][i] * weight[i] for i in range(n)) + sum(mapServqs[1][i] * weight[i] for i in range(n)) + sum(mapServqs[2][i] * weight[i] for i in range(n)) + sum(mapServqs[3][i] * weight[i] for i in range(n)) + sum(Snappqc[0][i] * weight[i] for i in range(n)) + sum(Snappqc[1][i] * weight[i] for i in range(n)) + sum(Snappqc[2][i] * weight[i] for i in range(n)) + sum(Snappqc[3][i] * weight[i] for i in range(n)) + sum(Bobqc[0][i] * weight[i] for i in range(n)) + sum(Bobqc[1][i] * weight[i] for i in range(n)) + sum(Bobqc[2][i] * weight[i] for i in range(n)) + sum(Bobqc[3][i] * weight[i] for i in range(n)) + sum(Aliceqc[0][i] * weight[i] for i in range(n)) + sum(Aliceqc[1][i] * weight[i] for i in range(n)) + sum(Aliceqc[2][i] * weight[i] for i in range(n)) + sum(Aliceqc[3][i] * weight[i] for i in range(n)) + sum(mapServqc[0][i] * weight[i] for i in range(n)) + sum(mapServqc[1][i] * weight[i] for i in range(n)) + sum(mapServqc[2][i] * weight[i] for i in range(n)) + sum(mapServqc[3][i] * weight[i] for i in range(n)) + sum(resQ[0]) + sum(resQ[1]) + sum(resQ[2]) + sum(resQ[3]) + sum(m0Q[0]) + sum(m0Q[1]) + sum(m0Q[2]) + sum(m0Q[3]) + sum(m1Q[0]) + sum(m1Q[1]) + sum(m1Q[2]) + sum(m1Q[3]) + sum(m2Q[0]) + sum(m2Q[1]) + sum(m2Q[2]) + sum(m2Q[3]) + sum(m3Q[0]) + sum(m3Q[1]) + sum(m3Q[2]) + sum(m3Q[3]) + sum(m4Q[0]) + sum(m4Q[1]) + sum(m4Q[2]) + sum(m4Q[3]) + sum(m5Q[0]) + sum(m5Q[1]) + sum(m5Q[2]) + sum(m5Q[3]) + sum(m6Q[0]) + sum(m6Q[1]) + sum(m6Q[2]) + sum(m6Q[3]) + sum(m7Q[0]) + sum(m7Q[1]) + sum(m7Q[2]) + sum(m7Q[3]) + sum(m8Q[0]) + sum(m8Q[1]) + sum(m8Q[2]) + sum(m8Q[3]))
 print(s.check())
 m = s.model()
 print("resH:")
@@ -868,46 +874,48 @@ print([m[hInfo].as_long() for hInfo in m7H])
 print("m8H:")
 print([m[hInfo].as_long() for hInfo in m8H])
 print("resQ:")
-print([e for qs in resQ for e in qs])
 print([m[e].as_long() for qs in resQ for e in qs])
 print("m0Q:")
-print([e for qs in m0Q for e in qs])
 print([m[e].as_long() for qs in m0Q for e in qs])
 print("m1Q:")
-print([e for qs in m1Q for e in qs])
 print([m[e].as_long() for qs in m1Q for e in qs])
 print("m2Q:")
-print([e for qs in m2Q for e in qs])
 print([m[e].as_long() for qs in m2Q for e in qs])
 print("m3Q:")
-print([e for qs in m3Q for e in qs])
 print([m[e].as_long() for qs in m3Q for e in qs])
 print("m4Q:")
-print([e for qs in m4Q for e in qs])
 print([m[e].as_long() for qs in m4Q for e in qs])
 print("m5Q:")
-print([e for qs in m5Q for e in qs])
 print([m[e].as_long() for qs in m5Q for e in qs])
 print("m6Q:")
-print([e for qs in m6Q for e in qs])
 print([m[e].as_long() for qs in m6Q for e in qs])
 print("m7Q:")
-print([e for qs in m7Q for e in qs])
 print([m[e].as_long() for qs in m7Q for e in qs])
 print("m8Q:")
-print([e for qs in m8Q for e in qs])
 print([m[e].as_long() for qs in m8Q for e in qs])
 print("Snappqs:")
-print([e for qs in Snappqs for e in qs])
 print([m[e].as_long() for qs in Snappqs for e in qs])
 print("Bobqs:")
-print([e for qs in Bobqs for e in qs])
 print([m[e].as_long() for qs in Bobqs for e in qs])
 print("Aliceqs:")
-print([e for qs in Aliceqs for e in qs])
 print([m[e].as_long() for qs in Aliceqs for e in qs])
 print("mapServqs:")
-print([e for qs in mapServqs for e in qs])
 print([m[e].as_long() for qs in mapServqs for e in qs])
+print("Snappqc:")
+print([m[e].as_long() for qs in Snappqc for e in qs])
+print("Bobqc:")
+print([m[e].as_long() for qs in Bobqc for e in qs])
+print("Aliceqc:")
+print([m[e].as_long() for qs in Aliceqc for e in qs])
+print("mapServqc:")
+print([m[e].as_long() for qs in mapServqc for e in qs])
+#print("SnappH:")
+#print([m[hInfo].as_long() for hInfo in SnappH])
+#print("BobH:")
+#print([m[hInfo].as_long() for hInfo in BobH])
+#print("AliceH:")
+#print([m[hInfo].as_long() for hInfo in AliceH])
+#print("mapServH:")
+#print([m[hInfo].as_long() for hInfo in mapServH])
 endT = time.time() - startT
 print(endT)
