@@ -148,7 +148,7 @@ def lableLe(c1, c2, i1, i2, a1, a2):
     return And(cLe(c1, c2), bLe(i2, i1), bLe(a2, a1))
 
 n = 3
-principals = [ 7, 4, 4]
+principals = [7, 4, 4]
 startC = [ True, True, True ]
 startI = [[ 2, 4, 4], [ 0, 0, 0], [ 0, 0, 0] ]
 startA = [[ 2, 4, 4], [ 0, 0, 0], [ 0, 0, 0] ]
@@ -158,7 +158,7 @@ botA = [[ 2, 4, 4], [ 0, 0, 0], [ 0, 0, 0] ]
 resultC = [ True, True, True ]
 resultI = [[ 2, 1, 1], [ 0, 0, 0], [ 0, 0, 0] ]
 resultA = [[ 2, 1, 1], [ 0, 0, 0], [ 0, 0, 0] ]
-resH = [ 7, 0, 0]
+resH = [7, 0, 0]
 resQ = [ [ Int("resQ_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 s.add([ And(0 <= resQ[i][j]) for i in range(n) for j in range(n) ])
 s.add([ And(sLe(resQ[i], principals)) for i in range(n) ])
@@ -550,7 +550,7 @@ s.add(Not(nonCheck(m18H)))
 s.add(Not(nonCheckQ(m18Q)))
 u1qs = [ [ Int("u1qs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 u1qc = [ [ Int("u1qc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
-u1H = [ 7, 0, 0]
+u1H = [ Int('u1H_%s' % i) for i in range(n) ] 
 u1writep11input0C = [ Bool('u1writep11input0C_%s' % i) for i in range(n) ]
 u1writep11input0I = [ [ Int("u1writep11input0I_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 u1writep11input0A = [ [ Int("u1writep11input0A_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -627,9 +627,13 @@ u1range0 = [ And(0 <= u1qs[i][j], 0 <= u1qc[i][j], 0 <= u1writep11outputI[i][j],
 s.add(u1range0)
 u1range1 = [And(sLe(u1qs[i], principals), sLe(u1qc[i], principals), sLe(u1writep11outputI[i], principals), sLe(u1writep11outputA[i], principals), sLe(u1writep11input0I[i], principals), sLe(u1writep11input0A[i], principals), sLe(u1writep13outputI[i], principals), sLe(u1writep13outputA[i], principals), sLe(u1writep13input0I[i], principals), sLe(u1writep13input0A[i], principals), sLe(u1writep12outputI[i], principals), sLe(u1writep12outputA[i], principals), sLe(u1writep12input0I[i], principals), sLe(u1writep12input0A[i], principals), sLe(u1random2outputI[i], principals), sLe(u1random2outputA[i], principals), sLe(u1random2input0I[i], principals), sLe(u1random2input0A[i], principals), sLe(u1random1outputI[i], principals), sLe(u1random1outputA[i], principals), sLe(u1random1input0I[i], principals), sLe(u1random1input0A[i], principals), sLe(u1random3outputI[i], principals), sLe(u1random3outputA[i], principals), sLe(u1random3input0I[i], principals), sLe(u1random3input0A[i], principals), sLe(u1readp21outputI[i], principals), sLe(u1readp21outputA[i], principals), sLe(u1readp21botI[i], principals), sLe(u1readp21botA[i], principals), sLe(u1getSalaryoutputI[i], principals), sLe(u1getSalaryoutputA[i], principals), sLe(u1getSalarybotI[i], principals), sLe(u1getSalarybotA[i], principals), sLe(u1readp31outputI[i], principals), sLe(u1readp31outputA[i], principals), sLe(u1readp31botI[i], principals), sLe(u1readp31botA[i], principals), sLe(u1readp11outputI[i], principals), sLe(u1readp11outputA[i], principals), sLe(u1readp11botI[i], principals), sLe(u1readp11botA[i], principals), sLe(u1computeSum1outputI[i], principals), sLe(u1computeSum1outputA[i], principals), sLe(u1computeSum1input0I[i], principals), sLe(u1computeSum1input0A[i], principals), sLe(u1computeSum1input1I[i], principals), sLe(u1computeSum1input1A[i], principals), sLe(u1computeSum1input2I[i], principals), sLe(u1computeSum1input2A[i], principals)) for i in range(n)]
 s.add(u1range1)
+u1range2 = [And(0 <= u1H[i]) for i in range(n)]
+s.add(u1range2)
+u1range3 = sLe(u1H, principals)
+s.add(u1range3)
 u2qs = [ [ Int("u2qs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 u2qc = [ [ Int("u2qc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
-u2H = [ 0, 4, 0]
+u2H = [ Int('u2H_%s' % i) for i in range(n) ] 
 u2readp32botC = [ Bool('u2readp32botC_%s' % i) for i in range(n) ]
 u2readp32botI = [ [ Int("u2readp32botI_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 u2readp32botA = [ [ Int("u2readp32botA_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -664,9 +668,13 @@ u2range0 = [ And(0 <= u2qs[i][j], 0 <= u2qc[i][j], 0 <= u2readp32outputI[i][j], 
 s.add(u2range0)
 u2range1 = [And(sLe(u2qs[i], principals), sLe(u2qc[i], principals), sLe(u2readp32outputI[i], principals), sLe(u2readp32outputA[i], principals), sLe(u2readp32botI[i], principals), sLe(u2readp32botA[i], principals), sLe(u2computeSum2outputI[i], principals), sLe(u2computeSum2outputA[i], principals), sLe(u2computeSum2input0I[i], principals), sLe(u2computeSum2input0A[i], principals), sLe(u2computeSum2input1I[i], principals), sLe(u2computeSum2input1A[i], principals), sLe(u2computeSum2input2I[i], principals), sLe(u2computeSum2input2A[i], principals), sLe(u2readp12outputI[i], principals), sLe(u2readp12outputA[i], principals), sLe(u2readp12botI[i], principals), sLe(u2readp12botA[i], principals), sLe(u2readp22outputI[i], principals), sLe(u2readp22outputA[i], principals), sLe(u2readp22botI[i], principals), sLe(u2readp22botA[i], principals)) for i in range(n)]
 s.add(u2range1)
+u2range2 = [And(0 <= u2H[i]) for i in range(n)]
+s.add(u2range2)
+u2range3 = sLe(u2H, principals)
+s.add(u2range3)
 u3qs = [ [ Int("u3qs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 u3qc = [ [ Int("u3qc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
-u3H = [ 0, 0, 4]
+u3H = [ Int('u3H_%s' % i) for i in range(n) ] 
 u3readp13botC = u1writep13outputC
 u3readp13botI = u1writep13outputI
 u3readp13botA = u1writep13outputA
@@ -701,60 +709,64 @@ u3range0 = [ And(0 <= u3qs[i][j], 0 <= u3qc[i][j], 0 <= u3readp13outputI[i][j], 
 s.add(u3range0)
 u3range1 = [And(sLe(u3qs[i], principals), sLe(u3qc[i], principals), sLe(u3readp13outputI[i], principals), sLe(u3readp13outputA[i], principals), sLe(u3readp13botI[i], principals), sLe(u3readp13botA[i], principals), sLe(u3computeSum3outputI[i], principals), sLe(u3computeSum3outputA[i], principals), sLe(u3computeSum3input0I[i], principals), sLe(u3computeSum3input0A[i], principals), sLe(u3computeSum3input1I[i], principals), sLe(u3computeSum3input1A[i], principals), sLe(u3computeSum3input2I[i], principals), sLe(u3computeSum3input2A[i], principals), sLe(u3readp23outputI[i], principals), sLe(u3readp23outputA[i], principals), sLe(u3readp23botI[i], principals), sLe(u3readp23botA[i], principals), sLe(u3readp33outputI[i], principals), sLe(u3readp33outputA[i], principals), sLe(u3readp33botI[i], principals), sLe(u3readp33botA[i], principals)) for i in range(n)]
 s.add(u3range1)
+u3range2 = [And(0 <= u3H[i]) for i in range(n)]
+s.add(u3range2)
+u3range3 = sLe(u3H, principals)
+s.add(u3range3)
 #FieldT: u1
-s.add(confQ(u1writep11outputC, u1qs))
+s.add(cLeH(u1writep11outputC, u1H))
 s.add(sIntegrity(u1writep11outputI, u1qs, u1H))
 s.add(availabilityP(u1writep11outputA, u1qs, u1H))
 s.add(cIntegrityE(u1writep11input0I, u1qc))
 s.add(lableLe(u1writep11input0C, u1writep11outputC, u1writep11input0I, u1writep11outputI, u1writep11input0A, u1writep11outputA))
-s.add(confQ(u1writep13outputC, u1qs))
+s.add(cLeH(u1writep13outputC, u1H))
 s.add(sIntegrity(u1writep13outputI, u1qs, u1H))
 s.add(availabilityP(u1writep13outputA, u1qs, u1H))
 s.add(cIntegrityE(u1writep13input0I, u1qc))
 s.add(lableLe(u1writep13input0C, u1writep13outputC, u1writep13input0I, u1writep13outputI, u1writep13input0A, u1writep13outputA))
-s.add(confQ(u1writep12outputC, u1qs))
+s.add(cLeH(u1writep12outputC, u1H))
 s.add(sIntegrity(u1writep12outputI, u1qs, u1H))
 s.add(availabilityP(u1writep12outputA, u1qs, u1H))
 s.add(cIntegrityE(u1writep12input0I, u1qc))
 s.add(lableLe(u1writep12input0C, u1writep12outputC, u1writep12input0I, u1writep12outputI, u1writep12input0A, u1writep12outputA))
-s.add(confQ(u1random2outputC, u1qs))
+s.add(cLeH(u1random2outputC, u1H))
 s.add(sIntegrity(u1random2outputI, u1qs, u1H))
 s.add(availabilityP(u1random2outputA, u1qs, u1H))
 s.add(cIntegrityE(u1random2input0I, u1qc))
 s.add(bLe(u1random2outputI, u1random2input0I))
 s.add(bLe(u1random2outputA, u1random2input0A))
-s.add(confQ(u1random1outputC, u1qs))
+s.add(cLeH(u1random1outputC, u1H))
 s.add(sIntegrity(u1random1outputI, u1qs, u1H))
 s.add(availabilityP(u1random1outputA, u1qs, u1H))
 s.add(cIntegrityE(u1random1input0I, u1qc))
 s.add(lableLe(u1random1input0C, u1random1outputC, u1random1input0I, u1random1outputI, u1random1input0A, u1random1outputA))
-s.add(confQ(u1random3outputC, u1qs))
+s.add(cLeH(u1random3outputC, u1H))
 s.add(sIntegrity(u1random3outputI, u1qs, u1H))
 s.add(availabilityP(u1random3outputA, u1qs, u1H))
 s.add(cIntegrityE(u1random3input0I, u1qc))
 s.add(bLe(u1random3outputI, u1random3input0I))
 s.add(bLe(u1random3outputA, u1random3input0A))
-s.add(confQ(u1readp21outputC, u1qs))
+s.add(cLeH(u1readp21outputC, u1H))
 s.add(sIntegrity(u1readp21outputI, u1qs, u1H))
 s.add(availabilityP(u1readp21outputA, u1qs, u1H))
 s.add(cIntegrityE(u1readp21botI, u1qc))
 s.add(lableLe(u1readp21botC, u1readp21outputC, u1readp21botI, u1readp21outputI, u1readp21botA, u1readp21outputA))
-s.add(confQ(u1getSalaryoutputC, u1qs))
+s.add(cLeH(u1getSalaryoutputC, u1H))
 s.add(sIntegrity(u1getSalaryoutputI, u1qs, u1H))
 s.add(availabilityP(u1getSalaryoutputA, u1qs, u1H))
 s.add(cIntegrityE(u1getSalarybotI, u1qc))
 s.add(lableLe(u1getSalarybotC, u1getSalaryoutputC, u1getSalarybotI, u1getSalaryoutputI, u1getSalarybotA, u1getSalaryoutputA))
-s.add(confQ(u1readp31outputC, u1qs))
+s.add(cLeH(u1readp31outputC, u1H))
 s.add(sIntegrity(u1readp31outputI, u1qs, u1H))
 s.add(availabilityP(u1readp31outputA, u1qs, u1H))
 s.add(cIntegrityE(u1readp31botI, u1qc))
 s.add(lableLe(u1readp31botC, u1readp31outputC, u1readp31botI, u1readp31outputI, u1readp31botA, u1readp31outputA))
-s.add(confQ(u1readp11outputC, u1qs))
+s.add(cLeH(u1readp11outputC, u1H))
 s.add(sIntegrity(u1readp11outputI, u1qs, u1H))
 s.add(availabilityP(u1readp11outputA, u1qs, u1H))
 s.add(cIntegrityE(u1readp11botI, u1qc))
 s.add(lableLe(u1readp11botC, u1readp11outputC, u1readp11botI, u1readp11outputI, u1readp11botA, u1readp11outputA))
-s.add(confQ(u1computeSum1outputC, u1qs))
+s.add(cLeH(u1computeSum1outputC, u1H))
 s.add(sIntegrity(u1computeSum1outputI, u1qs, u1H))
 s.add(availabilityP(u1computeSum1outputA, u1qs, u1H))
 s.add(cIntegrityE(u1computeSum1input0I, u1qc))
@@ -767,12 +779,12 @@ s.add(cIntegrityE(u1computeSum1input2I, u1qc))
 s.add(bLe(u1computeSum1outputI, u1computeSum1input2I))
 s.add(bLe(u1computeSum1outputA, u1computeSum1input2A))
 #FieldT: u2
-s.add(confQ(u2readp32outputC, u2qs))
+s.add(cLeH(u2readp32outputC, u2H))
 s.add(sIntegrity(u2readp32outputI, u2qs, u2H))
 s.add(availabilityP(u2readp32outputA, u2qs, u2H))
 s.add(cIntegrityE(u2readp32botI, u2qc))
 s.add(lableLe(u2readp32botC, u2readp32outputC, u2readp32botI, u2readp32outputI, u2readp32botA, u2readp32outputA))
-s.add(confQ(u2computeSum2outputC, u2qs))
+s.add(cLeH(u2computeSum2outputC, u2H))
 s.add(sIntegrity(u2computeSum2outputI, u2qs, u2H))
 s.add(availabilityP(u2computeSum2outputA, u2qs, u2H))
 s.add(cIntegrityE(u2computeSum2input0I, u2qc))
@@ -784,23 +796,23 @@ s.add(bLe(u2computeSum2outputA, u2computeSum2input1A))
 s.add(cIntegrityE(u2computeSum2input2I, u2qc))
 s.add(bLe(u2computeSum2outputI, u2computeSum2input2I))
 s.add(bLe(u2computeSum2outputA, u2computeSum2input2A))
-s.add(confQ(u2readp12outputC, u2qs))
+s.add(cLeH(u2readp12outputC, u2H))
 s.add(sIntegrity(u2readp12outputI, u2qs, u2H))
 s.add(availabilityP(u2readp12outputA, u2qs, u2H))
 s.add(cIntegrityE(u2readp12botI, u2qc))
 s.add(lableLe(u2readp12botC, u2readp12outputC, u2readp12botI, u2readp12outputI, u2readp12botA, u2readp12outputA))
-s.add(confQ(u2readp22outputC, u2qs))
+s.add(cLeH(u2readp22outputC, u2H))
 s.add(sIntegrity(u2readp22outputI, u2qs, u2H))
 s.add(availabilityP(u2readp22outputA, u2qs, u2H))
 s.add(cIntegrityE(u2readp22botI, u2qc))
 s.add(lableLe(u2readp22botC, u2readp22outputC, u2readp22botI, u2readp22outputI, u2readp22botA, u2readp22outputA))
 #FieldT: u3
-s.add(confQ(u3readp13outputC, u3qs))
+s.add(cLeH(u3readp13outputC, u3H))
 s.add(sIntegrity(u3readp13outputI, u3qs, u3H))
 s.add(availabilityP(u3readp13outputA, u3qs, u3H))
 s.add(cIntegrityE(u3readp13botI, u3qc))
 s.add(lableLe(u3readp13botC, u3readp13outputC, u3readp13botI, u3readp13outputI, u3readp13botA, u3readp13outputA))
-s.add(confQ(u3computeSum3outputC, u3qs))
+s.add(cLeH(u3computeSum3outputC, u3H))
 s.add(sIntegrity(u3computeSum3outputI, u3qs, u3H))
 s.add(availabilityP(u3computeSum3outputA, u3qs, u3H))
 s.add(cIntegrityE(u3computeSum3input0I, u3qc))
@@ -812,12 +824,12 @@ s.add(bLe(u3computeSum3outputA, u3computeSum3input1A))
 s.add(cIntegrityE(u3computeSum3input2I, u3qc))
 s.add(bLe(u3computeSum3outputI, u3computeSum3input2I))
 s.add(bLe(u3computeSum3outputA, u3computeSum3input2A))
-s.add(confQ(u3readp23outputC, u3qs))
+s.add(cLeH(u3readp23outputC, u3H))
 s.add(sIntegrity(u3readp23outputI, u3qs, u3H))
 s.add(availabilityP(u3readp23outputA, u3qs, u3H))
 s.add(cIntegrityE(u3readp23botI, u3qc))
 s.add(lableLe(u3readp23botC, u3readp23outputC, u3readp23botI, u3readp23outputI, u3readp23botA, u3readp23outputA))
-s.add(confQ(u3readp33outputC, u3qs))
+s.add(cLeH(u3readp33outputC, u3H))
 s.add(sIntegrity(u3readp33outputI, u3qs, u3H))
 s.add(availabilityP(u3readp33outputA, u3qs, u3H))
 s.add(cIntegrityE(u3readp33botI, u3qc))
@@ -1592,8 +1604,8 @@ s.add(cLe(startC, m18botC))
 s.add(bLe(m18botI, startI))
 s.add(bLe(m18botA, startA))
 print("n = 3")
-print("principals = [ 7, 4, 4]")
-weight = [ 1, 1, 1]
+print("principals = [7, 4, 4]")
+weight = [1, 1, 1]
 
 s.minimize(sum(m0H[i] * weight[i] for i in range(n)) + sum(m1H[i] * weight[i] for i in range(n)) + sum(m2H[i] * weight[i] for i in range(n)) + sum(m3H[i] * weight[i] for i in range(n)) + sum(m4H[i] * weight[i] for i in range(n)) + sum(m5H[i] * weight[i] for i in range(n)) + sum(m6H[i] * weight[i] for i in range(n)) + sum(m7H[i] * weight[i] for i in range(n)) + sum(m8H[i] * weight[i] for i in range(n)) + sum(m9H[i] * weight[i] for i in range(n)) + sum(m11H[i] * weight[i] for i in range(n)) + sum(m10H[i] * weight[i] for i in range(n)) + sum(m13H[i] * weight[i] for i in range(n)) + sum(m12H[i] * weight[i] for i in range(n)) + sum(m15H[i] * weight[i] for i in range(n)) + sum(m14H[i] * weight[i] for i in range(n)) + sum(m17H[i] * weight[i] for i in range(n)) + sum(m16H[i] * weight[i] for i in range(n)) + sum(m18H[i] * weight[i] for i in range(n)) + sum(u1H[i] * weight[i] for i in range(n)) + sum(u2H[i] * weight[i] for i in range(n)) + sum(u3H[i] * weight[i] for i in range(n)) + sum(u1qs[0][i] * weight[i] for i in range(n)) + sum(u1qs[1][i] * weight[i] for i in range(n)) + sum(u1qs[2][i] * weight[i] for i in range(n)) + sum(u2qs[0][i] * weight[i] for i in range(n)) + sum(u2qs[1][i] * weight[i] for i in range(n)) + sum(u2qs[2][i] * weight[i] for i in range(n)) + sum(u3qs[0][i] * weight[i] for i in range(n)) + sum(u3qs[1][i] * weight[i] for i in range(n)) + sum(u3qs[2][i] * weight[i] for i in range(n)) + sum(u1qc[0][i] * weight[i] for i in range(n)) + sum(u1qc[1][i] * weight[i] for i in range(n)) + sum(u1qc[2][i] * weight[i] for i in range(n)) + sum(u2qc[0][i] * weight[i] for i in range(n)) + sum(u2qc[1][i] * weight[i] for i in range(n)) + sum(u2qc[2][i] * weight[i] for i in range(n)) + sum(u3qc[0][i] * weight[i] for i in range(n)) + sum(u3qc[1][i] * weight[i] for i in range(n)) + sum(u3qc[2][i] * weight[i] for i in range(n)) + sum(resQ[0]) + sum(resQ[1]) + sum(resQ[2]) + sum(m0Q[0]) + sum(m0Q[1]) + sum(m0Q[2]) + sum(m1Q[0]) + sum(m1Q[1]) + sum(m1Q[2]) + sum(m2Q[0]) + sum(m2Q[1]) + sum(m2Q[2]) + sum(m3Q[0]) + sum(m3Q[1]) + sum(m3Q[2]) + sum(m4Q[0]) + sum(m4Q[1]) + sum(m4Q[2]) + sum(m5Q[0]) + sum(m5Q[1]) + sum(m5Q[2]) + sum(m6Q[0]) + sum(m6Q[1]) + sum(m6Q[2]) + sum(m7Q[0]) + sum(m7Q[1]) + sum(m7Q[2]) + sum(m8Q[0]) + sum(m8Q[1]) + sum(m8Q[2]) + sum(m9Q[0]) + sum(m9Q[1]) + sum(m9Q[2]) + sum(m11Q[0]) + sum(m11Q[1]) + sum(m11Q[2]) + sum(m10Q[0]) + sum(m10Q[1]) + sum(m10Q[2]) + sum(m13Q[0]) + sum(m13Q[1]) + sum(m13Q[2]) + sum(m12Q[0]) + sum(m12Q[1]) + sum(m12Q[2]) + sum(m15Q[0]) + sum(m15Q[1]) + sum(m15Q[2]) + sum(m14Q[0]) + sum(m14Q[1]) + sum(m14Q[2]) + sum(m17Q[0]) + sum(m17Q[1]) + sum(m17Q[2]) + sum(m16Q[0]) + sum(m16Q[1]) + sum(m16Q[2]) + sum(m18Q[0]) + sum(m18Q[1]) + sum(m18Q[2]))
 print(s.check())
@@ -1690,11 +1702,11 @@ print("u2qc:")
 print([m[e].as_long() for qs in u2qc for e in qs])
 print("u3qc:")
 print([m[e].as_long() for qs in u3qc for e in qs])
-#print("u1H:")
-#print([m[hInfo].as_long() for hInfo in u1H])
-#print("u2H:")
-#print([m[hInfo].as_long() for hInfo in u2H])
-#print("u3H:")
-#print([m[hInfo].as_long() for hInfo in u3H])
+print("u1H:")
+print([m[hInfo].as_long() for hInfo in u1H])
+print("u2H:")
+print([m[hInfo].as_long() for hInfo in u2H])
+print("u3H:")
+print([m[hInfo].as_long() for hInfo in u3H])
 endT = time.time() - startT
 print(endT)

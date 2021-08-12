@@ -592,7 +592,11 @@ public class TypeInference implements PartitionVisitor{
             //todo: umbrella check
 
             //c_m' <= union q
-            result.append("s.add(confQ(" + objSig.omArgusC.get(mName).element2 + ", " + objHosts + "))\n");
+            //result.append("s.add(confQ(" + objSig.omArgusC.get(mName).element2 + ", " + objHosts + "))\n");
+            //constraintNum++;
+
+            //c_m' <= H
+            result.append("s.add(cLeH(" + objSig.omArgusC.get(mName).element2 + ", " + objectH + "))\n");
             constraintNum++;
 
             //i_m' <= Sintegrity(Qs)
@@ -828,12 +832,12 @@ public class TypeInference implements PartitionVisitor{
         r.append("print(\"principals = "+ principalLine +"\")\n");
         r.append(infer.optimizationResult(w));
 
-        //print object hosts for now
+/*        //print object hosts for now
         for(String on: infer.objHost.keySet()){
             String oHLine = hTrans(infer.objHost.get(on));
             oHLine = oHLine.replace("\n", "");
             r.append("print(\""+ on + " = "+ oHLine + "\")\n");
-        }
+        }*/
 
         r.append("endT = time.time() - startT\n");
         r.append("print(endT)\n");
@@ -910,11 +914,11 @@ public class TypeInference implements PartitionVisitor{
             result.append(printQuorum(oInfo.get(on2).Qc));
         }
 
-/*        //print object information
+        //print object information
         for(String on3: oInfo.keySet()){
             result.append("print(\"" + oInfo.get(on3).host + ":\")\n");
             result.append("print([m[hInfo].as_long() for hInfo in " + oInfo.get(on3).host + "])\n");
-        }*/
+        }
 
         return result.toString();
     }

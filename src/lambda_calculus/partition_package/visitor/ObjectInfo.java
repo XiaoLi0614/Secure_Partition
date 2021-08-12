@@ -169,15 +169,17 @@ public class ObjectInfo {
         result.append("s.add(" + oname + "range" + rangeO + ")\n");
         rangeO++;
 
-/*        //range constraints for the object hosts
-        //result.append(oname + "range" + rangeO + " = [And(0 <= " + host + "[i]) for i in range(n)]\n");
-        result.append(oname + "range" + rangeO + " = [And(sLe(" + Qs + "[i], " + host + ")) for i in range(n)]\n");
+        //range constraints for the object hosts
+        result.append(oname + "range" + rangeO + " = [And(0 <= " + host + "[i]) for i in range(n)]\n");
         result.append("s.add(" + oname + "range" + rangeO + ")\n");
         rangeO++;
+/*        result.append(oname + "range" + rangeO + " = [And(sLe(" + Qs + "[i], " + host + ")) for i in range(n)]\n");
+        result.append("s.add(" + oname + "range" + rangeO + ")\n");
+        rangeO++; */
 
         result.append(oname + "range" + rangeO + " = sLe(" + host + ", principals)\n");
         result.append("s.add(" + oname + "range" + rangeO + ")\n");
-        rangeO++;*/
+        rangeO++;
 
         //for object can not be hosted on client constraints
         //if(!oname.equals("user")){

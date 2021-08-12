@@ -283,7 +283,7 @@ public class translation_test {
         w.add(new Integer(1));
         w.add(new Integer(12));
 
-        //initialize the host information for objects
+        /*//initialize the host information for objects
         HashMap<String, ArrayList<Integer>> oH = new HashMap<>();
         ArrayList<Integer> i1H = new ArrayList<>();
         i1H.add(7);
@@ -295,7 +295,13 @@ public class translation_test {
         i2H.add(4);
         i2H.add(0);
         oH.put("i2H", i2H);
-        oH.put("aH", i2H);
+        oH.put("aH", i2H);*/
+
+        //initialize the host information for objects
+        HashMap<String, ArrayList<Integer>> oH = new HashMap<>();
+        oH.put("i1H", new ArrayList<>());
+        oH.put("i2H", new ArrayList<>());
+        oH.put("aH", new ArrayList<>());
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
@@ -468,7 +474,7 @@ public class translation_test {
 
         //initialize the host information for objects
         HashMap<String, ArrayList<Integer>> oH = new HashMap<>();
-        ArrayList<Integer> AH = new ArrayList<>();
+        /*ArrayList<Integer> AH = new ArrayList<>();
         AH.add(4);
         AH.add(0);
         AH.add(0);
@@ -482,7 +488,11 @@ public class translation_test {
         userH.add(0);
         userH.add(0);
         userH.add(1);
-        oH.put("userH", userH);
+        oH.put("userH", userH);*/
+
+        oH.put("AH", new ArrayList<>());
+        oH.put("BH", new ArrayList<>());
+        oH.put("userH", new ArrayList<>());
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
@@ -657,7 +667,7 @@ public class translation_test {
         w.add(new Integer(18));
 
         //initialize the host information for objects
-        HashMap<String, ArrayList<Integer>> oH = new HashMap<>();
+/*        HashMap<String, ArrayList<Integer>> oH = new HashMap<>();
         ArrayList<Integer> airlineH = new ArrayList<>();
         airlineH.add(7);
         airlineH.add(0);
@@ -672,7 +682,13 @@ public class translation_test {
         customerH.add(0);
         customerH.add(0);
         customerH.add(1);
-        oH.put("customerH", customerH);
+        oH.put("customerH", customerH);*/
+
+        //initialize the host information for objects
+        HashMap<String, ArrayList<Integer>> oH = new HashMap<>();
+        oH.put("airlineH", new ArrayList<>());
+        oH.put("bankH", new ArrayList<>());
+        oH.put("customerH", new ArrayList<>());
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
@@ -810,7 +826,7 @@ public class translation_test {
 
         //initialize the host information for objects
         HashMap<String, ArrayList<Integer>> oH = new HashMap<>();
-        ArrayList<Integer> i1H = new ArrayList<>();
+/*        ArrayList<Integer> i1H = new ArrayList<>();
         i1H.add(7);
         i1H.add(0);
         i1H.add(0);
@@ -820,7 +836,11 @@ public class translation_test {
         i2H.add(4);
         i2H.add(0);
         oH.put("i2H", i2H);
-        oH.put("aH", i2H);
+        oH.put("aH", i2H);*/
+
+        oH.put("i1H", new ArrayList<>());
+        oH.put("i2H", new ArrayList<>());
+        oH.put("aH", new ArrayList<>());
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
@@ -1012,7 +1032,7 @@ public class translation_test {
 
         //initialize the host information for objects
         HashMap<String, ArrayList<Integer>> oH = new HashMap<>();
-        ArrayList<Integer> AliceH = new ArrayList<>();
+/*        ArrayList<Integer> AliceH = new ArrayList<>();
         AliceH.add(4);
         AliceH.add(0);
         AliceH.add(0);
@@ -1035,7 +1055,12 @@ public class translation_test {
         mapServH.add(0);
         mapServH.add(7);
         mapServH.add(0);
-        oH.put("mapServH", mapServH);
+        oH.put("mapServH", mapServH);*/
+
+        oH.put("AliceH", new ArrayList<>());
+        oH.put("BobH", new ArrayList<>());
+        oH.put("mapServH", new ArrayList<>());
+        oH.put("SnappH", new ArrayList<>());
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 4, principals,
@@ -1314,7 +1339,7 @@ public class translation_test {
 
         //initialize the host information for objects
         HashMap<String, ArrayList<Integer>> oH = new HashMap<>();
-        ArrayList<Integer> u1H = new ArrayList<>();
+        /*ArrayList<Integer> u1H = new ArrayList<>();
         u1H.add(7);
         u1H.add(0);
         u1H.add(0);
@@ -1328,7 +1353,11 @@ public class translation_test {
         u3H.add(0);
         u3H.add(0);
         u3H.add(4);
-        oH.put("u3H", u3H);
+        oH.put("u3H", u3H);*/
+
+        oH.put("u1H", new ArrayList<>());
+        oH.put("u2H", new ArrayList<>());
+        oH.put("u3H", new ArrayList<>());
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,

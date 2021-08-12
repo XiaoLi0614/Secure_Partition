@@ -260,10 +260,6 @@ arange0 = [ And(0 <= aqs[i][j], 0 <= aqc[i][j], 0 <= areadoutputI[i][j], 0 <= ar
 s.add(arange0)
 arange1 = [And(sLe(aqs[i], principals), sLe(aqc[i], principals), sLe(areadoutputI[i], principals), sLe(areadoutputA[i], principals), sLe(areadbotI[i], principals), sLe(areadbotA[i], principals), sLe(awriteoutputI[i], principals), sLe(awriteoutputA[i], principals), sLe(awriteinput0I[i], principals), sLe(awriteinput0A[i], principals)) for i in range(n)]
 s.add(arange1)
-arange2 = [And(0 <= aH[i]) for i in range(n)]
-s.add(arange2)
-arange3 = sLe(aH, principals)
-s.add(arange3)
 i1qs = [ [ Int("i1qs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 i1qc = [ [ Int("i1qc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 i1H = [ Int('i1H_%s' % i) for i in range(n) ] 
@@ -277,10 +273,6 @@ i1range0 = [ And(0 <= i1qs[i][j], 0 <= i1qc[i][j], 0 <= i1readoutputI[i][j], 0 <
 s.add(i1range0)
 i1range1 = [And(sLe(i1qs[i], principals), sLe(i1qc[i], principals), sLe(i1readoutputI[i], principals), sLe(i1readoutputA[i], principals), sLe(i1readbotI[i], principals), sLe(i1readbotA[i], principals)) for i in range(n)]
 s.add(i1range1)
-i1range2 = [And(0 <= i1H[i]) for i in range(n)]
-s.add(i1range2)
-i1range3 = sLe(i1H, principals)
-s.add(i1range3)
 i2qs = [ [ Int("i2qs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 i2qc = [ [ Int("i2qc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 i2H = [ Int('i2H_%s' % i) for i in range(n) ] 
@@ -294,10 +286,6 @@ i2range0 = [ And(0 <= i2qs[i][j], 0 <= i2qc[i][j], 0 <= i2readoutputI[i][j], 0 <
 s.add(i2range0)
 i2range1 = [And(sLe(i2qs[i], principals), sLe(i2qc[i], principals), sLe(i2readoutputI[i], principals), sLe(i2readoutputA[i], principals), sLe(i2readbotI[i], principals), sLe(i2readbotA[i], principals)) for i in range(n)]
 s.add(i2range1)
-i2range2 = [And(0 <= i2H[i]) for i in range(n)]
-s.add(i2range2)
-i2range3 = sLe(i2H, principals)
-s.add(i2range3)
 #FieldT: a
 s.add(cLeH(areadoutputC, aH))
 s.add(sIntegrity(areadoutputI, aqs, aH))
@@ -571,11 +559,8 @@ print("i1qc:")
 print([m[e].as_long() for qs in i1qc for e in qs])
 print("i2qc:")
 print([m[e].as_long() for qs in i2qc for e in qs])
-print("aH:")
-print([m[hInfo].as_long() for hInfo in aH])
-print("i1H:")
-print([m[hInfo].as_long() for hInfo in i1H])
-print("i2H:")
-print([m[hInfo].as_long() for hInfo in i2H])
+print("i1H = [")
+print("aH = [")
+print("i2H = [")
 endT = time.time() - startT
 print(endT)

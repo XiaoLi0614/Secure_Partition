@@ -148,7 +148,7 @@ def lableLe(c1, c2, i1, i2, a1, a2):
     return And(cLe(c1, c2), bLe(i2, i1), bLe(a2, a1))
 
 n = 3
-principals = [ 7, 4, 4]
+principals = [7, 4, 4]
 xC = [ False, False, True ]
 xCI = [ [ Int("xCI_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 xCIrange0 = [ And(0 <= xCI[i][j]) for i in range(n) for j in range(n) ]
@@ -169,7 +169,7 @@ botA = [[ 7, 4, 4], [ 0, 0, 0], [ 0, 0, 0] ]
 resultC = [ False, False, True ]
 resultI = [[ 2, 1, 1], [ 0, 0, 0], [ 0, 0, 0] ]
 resultA = [[ 2, 1, 1], [ 0, 0, 0], [ 0, 0, 0] ]
-resH = [ 0, 0, 4]
+resH = [0, 0, 4]
 resQ = [ [ Int("resQ_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 s.add([ And(0 <= resQ[i][j]) for i in range(n) for j in range(n) ])
 s.add([ And(sLe(resQ[i], principals)) for i in range(n) ])
@@ -246,7 +246,7 @@ s.add(Not(nonCheck(m3H)))
 s.add(Not(nonCheckQ(m3Q)))
 aqs = [ [ Int("aqs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 aqc = [ [ Int("aqc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
-aH = [ 0, 4, 0]
+aH = [ Int('aH_%s' % i) for i in range(n) ] 
 areadbotC = [ Bool('areadbotC_%s' % i) for i in range(n) ]
 areadbotI = [ [ Int("areadbotI_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 areadbotA = [ [ Int("areadbotA_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -263,9 +263,13 @@ arange0 = [ And(0 <= aqs[i][j], 0 <= aqc[i][j], 0 <= areadoutputI[i][j], 0 <= ar
 s.add(arange0)
 arange1 = [And(sLe(aqs[i], principals), sLe(aqc[i], principals), sLe(areadoutputI[i], principals), sLe(areadoutputA[i], principals), sLe(areadbotI[i], principals), sLe(areadbotA[i], principals), sLe(awriteoutputI[i], principals), sLe(awriteoutputA[i], principals), sLe(awriteinput0I[i], principals), sLe(awriteinput0A[i], principals)) for i in range(n)]
 s.add(arange1)
+arange2 = [And(0 <= aH[i]) for i in range(n)]
+s.add(arange2)
+arange3 = sLe(aH, principals)
+s.add(arange3)
 i1qs = [ [ Int("i1qs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 i1qc = [ [ Int("i1qc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
-i1H = [ 7, 0, 0]
+i1H = [ Int('i1H_%s' % i) for i in range(n) ] 
 i1readbotC = [ Bool('i1readbotC_%s' % i) for i in range(n) ]
 i1readbotI = [ [ Int("i1readbotI_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 i1readbotA = [ [ Int("i1readbotA_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -276,9 +280,13 @@ i1range0 = [ And(0 <= i1qs[i][j], 0 <= i1qc[i][j], 0 <= i1readoutputI[i][j], 0 <
 s.add(i1range0)
 i1range1 = [And(sLe(i1qs[i], principals), sLe(i1qc[i], principals), sLe(i1readoutputI[i], principals), sLe(i1readoutputA[i], principals), sLe(i1readbotI[i], principals), sLe(i1readbotA[i], principals)) for i in range(n)]
 s.add(i1range1)
+i1range2 = [And(0 <= i1H[i]) for i in range(n)]
+s.add(i1range2)
+i1range3 = sLe(i1H, principals)
+s.add(i1range3)
 i2qs = [ [ Int("i2qs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 i2qc = [ [ Int("i2qc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
-i2H = [ 0, 4, 0]
+i2H = [ Int('i2H_%s' % i) for i in range(n) ] 
 i2readbotC = [ Bool('i2readbotC_%s' % i) for i in range(n) ]
 i2readbotI = [ [ Int("i2readbotI_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 i2readbotA = [ [ Int("i2readbotA_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -289,25 +297,29 @@ i2range0 = [ And(0 <= i2qs[i][j], 0 <= i2qc[i][j], 0 <= i2readoutputI[i][j], 0 <
 s.add(i2range0)
 i2range1 = [And(sLe(i2qs[i], principals), sLe(i2qc[i], principals), sLe(i2readoutputI[i], principals), sLe(i2readoutputA[i], principals), sLe(i2readbotI[i], principals), sLe(i2readbotA[i], principals)) for i in range(n)]
 s.add(i2range1)
+i2range2 = [And(0 <= i2H[i]) for i in range(n)]
+s.add(i2range2)
+i2range3 = sLe(i2H, principals)
+s.add(i2range3)
 #FieldT: a
-s.add(confQ(areadoutputC, aqs))
+s.add(cLeH(areadoutputC, aH))
 s.add(sIntegrity(areadoutputI, aqs, aH))
 s.add(availabilityP(areadoutputA, aqs, aH))
 s.add(cIntegrityE(areadbotI, aqc))
 s.add(lableLe(areadbotC, areadoutputC, areadbotI, areadoutputI, areadbotA, areadoutputA))
-s.add(confQ(awriteoutputC, aqs))
+s.add(cLeH(awriteoutputC, aH))
 s.add(sIntegrity(awriteoutputI, aqs, aH))
 s.add(availabilityP(awriteoutputA, aqs, aH))
 s.add(cIntegrityE(awriteinput0I, aqc))
 s.add(lableLe(awriteinput0C, awriteoutputC, awriteinput0I, awriteoutputI, awriteinput0A, awriteoutputA))
 #FieldT: i1
-s.add(confQ(i1readoutputC, i1qs))
+s.add(cLeH(i1readoutputC, i1H))
 s.add(sIntegrity(i1readoutputI, i1qs, i1H))
 s.add(availabilityP(i1readoutputA, i1qs, i1H))
 s.add(cIntegrityE(i1readbotI, i1qc))
 s.add(lableLe(i1readbotC, i1readoutputC, i1readbotI, i1readoutputI, i1readbotA, i1readoutputA))
 #FieldT: i2
-s.add(confQ(i2readoutputC, i2qs))
+s.add(cLeH(i2readoutputC, i2H))
 s.add(sIntegrity(i2readoutputI, i2qs, i2H))
 s.add(availabilityP(i2readoutputA, i2qs, i2H))
 s.add(cIntegrityE(i2readbotI, i2qc))
@@ -548,8 +560,8 @@ s.add(bLe(m3xI, botI))
 s.add(bLe(m3xA, botA))
 s.add(availabilityP(m3xA, m3Q, resH))
 print("n = 3")
-print("principals = [ 7, 4, 4]")
-weight = [ 1, 1, 12]
+print("principals = [7, 4, 4]")
+weight = [1, 1, 12]
 
 s.minimize(sum(m0H[i] * weight[i] for i in range(n)) + sum(m1H[i] * weight[i] for i in range(n)) + sum(m2H[i] * weight[i] for i in range(n)) + sum(m3H[i] * weight[i] for i in range(n)) + sum(aH[i] * weight[i] for i in range(n)) + sum(i1H[i] * weight[i] for i in range(n)) + sum(i2H[i] * weight[i] for i in range(n)) + sum(aqs[0][i] * weight[i] for i in range(n)) + sum(aqs[1][i] * weight[i] for i in range(n)) + sum(aqs[2][i] * weight[i] for i in range(n)) + sum(i1qs[0][i] * weight[i] for i in range(n)) + sum(i1qs[1][i] * weight[i] for i in range(n)) + sum(i1qs[2][i] * weight[i] for i in range(n)) + sum(i2qs[0][i] * weight[i] for i in range(n)) + sum(i2qs[1][i] * weight[i] for i in range(n)) + sum(i2qs[2][i] * weight[i] for i in range(n)) + sum(aqc[0][i] * weight[i] for i in range(n)) + sum(aqc[1][i] * weight[i] for i in range(n)) + sum(aqc[2][i] * weight[i] for i in range(n)) + sum(i1qc[0][i] * weight[i] for i in range(n)) + sum(i1qc[1][i] * weight[i] for i in range(n)) + sum(i1qc[2][i] * weight[i] for i in range(n)) + sum(i2qc[0][i] * weight[i] for i in range(n)) + sum(i2qc[1][i] * weight[i] for i in range(n)) + sum(i2qc[2][i] * weight[i] for i in range(n)) + sum(resQ[0]) + sum(resQ[1]) + sum(resQ[2]) + sum(m0Q[0]) + sum(m0Q[1]) + sum(m0Q[2]) + sum(m1Q[0]) + sum(m1Q[1]) + sum(m1Q[2]) + sum(m2Q[0]) + sum(m2Q[1]) + sum(m2Q[2]) + sum(m3Q[0]) + sum(m3Q[1]) + sum(m3Q[2]))
 print(s.check())
@@ -586,11 +598,11 @@ print("i1qc:")
 print([m[e].as_long() for qs in i1qc for e in qs])
 print("i2qc:")
 print([m[e].as_long() for qs in i2qc for e in qs])
-#print("aH:")
-#print([m[hInfo].as_long() for hInfo in aH])
-#print("i1H:")
-#print([m[hInfo].as_long() for hInfo in i1H])
-#print("i2H:")
-#print([m[hInfo].as_long() for hInfo in i2H])
+print("aH:")
+print([m[hInfo].as_long() for hInfo in aH])
+print("i1H:")
+print([m[hInfo].as_long() for hInfo in i1H])
+print("i2H:")
+print([m[hInfo].as_long() for hInfo in i2H])
 endT = time.time() - startT
 print(endT)
