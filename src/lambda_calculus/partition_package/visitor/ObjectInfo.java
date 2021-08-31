@@ -21,7 +21,7 @@ public class ObjectInfo {
         oname = on;
         Qs = on + "qs";
         Qc = on + "qc";
-        host = on + "H";
+        host = on + "OH";
         //methodName = new ArrayList<>();
         omArgusC = new HashMap<>();
         omArgusI = new HashMap<>();
@@ -60,7 +60,6 @@ public class ObjectInfo {
         //placement information for objects
         result.append(Qs + " = [ [ Int(\"" + Qs + "_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]\n");
         result.append(Qc + " = [ [ Int(\"" + Qc + "_%s_%s\" % (i, j)) for j in range(n) ] for i in range(n) ]\n");
-        //Todo: currently the object hosts are fixed. Can be inferred if z3 has enough computational power
         if(!oHost.get(host).isEmpty()){
             result.append(host + " = " + hTrans(oHost.get(host)));
         }

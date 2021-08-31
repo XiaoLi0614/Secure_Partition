@@ -9,6 +9,7 @@ import lambda_calculus.cps_ast.tree.command.Command;
 import lambda_calculus.cps_ast.visitor.BetaReduction;
 import lambda_calculus.cps_ast.visitor.translateToOtherAST;
 import lambda_calculus.partition_package.tree.MethodDefinition;
+import lambda_calculus.partition_package.tree.*;
 import lambda_calculus.partition_package.visitor.*;
 import lambda_calculus.source_ast.tree.expression.*;
 import lambda_calculus.source_ast.tree.expression.literal.IntLiteral;
@@ -39,7 +40,35 @@ public class translation_test {
         long consGenT;
         Date date1 = new Date();
         partitionT = date1.getTime();
-        Expression lambda1 = createOFTUseCase();
+        Expression lambda1 = new Var("Default");
+        switch (args[0]){
+            case "ott":
+                lambda1 = createOFTUseCase();
+                break;
+            case "ticket":
+                lambda1 = createTicketsUseCase();
+                break;
+            case "auction":
+                lambda1 = createAuctionUseCase();
+                break;
+            case "test" :
+                lambda1 = createTestUseCase();
+                break;
+            case "friendmap":
+                lambda1 = createFriendsMapUseCase();
+                break;
+            case "MPC":
+                lambda1 = createMPCSimpUseCase();
+                break;
+            case "ot":
+                lambda1 = createObliviousTransferUseCase();
+                break;
+            default:
+                System.out.println("Please input supported use-case!");
+                break;
+
+        }
+        //Expression lambda1 = createOFTUseCase();
         //Expression lambda1 = createTicketsUseCase();
         //Expression lambda1 = createObliviousTransferUseCase();
         //Expression lambda1 = createAuctionUseCase();
@@ -92,7 +121,36 @@ public class translation_test {
         System.out.println("\nStart generate constraints: \n");
         Date date3 = new Date();
         consGenT = date3.getTime();
-        printToFile(OneTimeTransferInfer(resultMethodDefs), "OneTimeTransfer");
+
+        switch (args[0]){
+            case "ott":
+                printToFile(OneTimeTransferInfer(resultMethodDefs), "OneTimeTransfer");
+                break;
+            case "ticket":
+                printToFile(TicketInfer(resultMethodDefs), "Ticket");
+                break;
+            case "auction":
+                printToFile(AuctionInfer(resultMethodDefs), "Auction");
+                break;
+            case "test" :
+                System.out.println("Please input supported use-case!");
+                break;
+            case "friendmap":
+                printToFile(FriendsMapInfer(resultMethodDefs), "FriendMap");
+                break;
+            case "MPC":
+                printToFile(MPCSimpInfer(resultMethodDefs), "MPCSimp");
+                break;
+            case "ot":
+                printToFile(ObliviousTransferInfer(resultMethodDefs), "ObliviousTransfer");
+                break;
+            default:
+                System.out.println("Please input supported use-case!");
+                break;
+
+        }
+
+        //printToFile(OneTimeTransferInfer(resultMethodDefs), "OneTimeTransfer");
         //printToFile(AuctionInfer(resultMethodDefs), "Auction");
         //printToFile(TicketInfer(resultMethodDefs), "Ticket");
         //printToFile(ObliviousTransferInfer(resultMethodDefs), "ObliviousTransfer");
@@ -154,12 +212,32 @@ public class translation_test {
         }
     }
 
+    //construct the method argument name array automatically. The order matters!
+    public static ArrayList<ArrayList<String>> methodArgNames(ArrayList<MethodDefinition> resultDefs){
+        ArrayList<ArrayList<String>> result = new ArrayList<>();
+
+        //add return argument for ret method
+        //ArrayList<String> retArgNames = new ArrayList<>();
+        //retArgNames.add("return");
+        //result.add(retArgNames);
+
+        //add the rest of method from partitioning result
+        for(MethodDefinition m: resultDefs){
+            ArrayList<String> mArgNames = new ArrayList<>();
+            for(lambda_calculus.partition_package.tree.expression.Var arg: m.freeVars){
+                mArgNames.add(arg.toString());
+            }
+            result.add(mArgNames);
+        }
+        return result;
+    }
+
     public static String OneTimeTransferInfer(ArrayList<MethodDefinition> resultDefs)
     {
         StringBuilder r = new StringBuilder();
 
         //initialize the method argument name array
-        ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
+        /*ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
         ArrayList<String> m1ArgNames = new ArrayList<>();
         m1ArgNames.add("return");
         ArrayList<String> m2ArgNames = new ArrayList<>();
@@ -170,7 +248,8 @@ public class translation_test {
         mArgNames.add(new ArrayList<>());
         mArgNames.add(new ArrayList<>());
         mArgNames.add(m2ArgNames);
-        mArgNames.add(m3ArgNames);
+        mArgNames.add(m3ArgNames);*/
+        ArrayList<ArrayList<String>> mArgNames = methodArgNames(resultDefs);
 
         //initialize the object method argument number array
         HashMap<String, HashMap<String, Integer>> oArgNums;
@@ -299,9 +378,9 @@ public class translation_test {
 
         //initialize the host information for objects
         HashMap<String, ArrayList<Integer>> oH = new HashMap<>();
-        oH.put("i1H", new ArrayList<>());
-        oH.put("i2H", new ArrayList<>());
-        oH.put("aH", new ArrayList<>());
+        oH.put("i1OH", new ArrayList<>());
+        oH.put("i2OH", new ArrayList<>());
+        oH.put("aOH", new ArrayList<>());
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
@@ -316,7 +395,8 @@ public class translation_test {
         StringBuilder r = new StringBuilder();
 
         //initialize the method argument name array
-        ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
+        ArrayList<ArrayList<String>> mArgNames =  methodArgNames(resultDefs);
+        /*ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
         ArrayList<String> resArgNames = new ArrayList<>();
         resArgNames.add("return");
         ArrayList<String> m0ArgNames = new ArrayList<>();
@@ -358,7 +438,7 @@ public class translation_test {
         mArgNames.add(m5ArgNames);
         mArgNames.add(m6ArgNames);
         mArgNames.add(m7ArgNames);
-        mArgNames.add(m8ArgNames);
+        mArgNames.add(m8ArgNames);*/
 
         //initialize the object method argument number array
         HashMap<String, HashMap<String, Integer>> oArgNums;
@@ -490,9 +570,9 @@ public class translation_test {
         userH.add(1);
         oH.put("userH", userH);*/
 
-        oH.put("AH", new ArrayList<>());
-        oH.put("BH", new ArrayList<>());
-        oH.put("userH", new ArrayList<>());
+        oH.put("AOH", new ArrayList<>());
+        oH.put("BOH", new ArrayList<>());
+        oH.put("userOH", new ArrayList<>());
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
@@ -507,7 +587,8 @@ public class translation_test {
         StringBuilder r = new StringBuilder();
 
         //initialize the method argument name array
-        ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
+        ArrayList<ArrayList<String>> mArgNames = methodArgNames(resultDefs);
+/*        ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
         ArrayList<String> resArgNames = new ArrayList<>();
         resArgNames.add("return");
         ArrayList<String> m0ArgNames = new ArrayList<>();
@@ -552,7 +633,7 @@ public class translation_test {
         mArgNames.add(m6ArgNames);
         mArgNames.add(m7ArgNames);
         mArgNames.add(m8ArgNames);
-        mArgNames.add(new ArrayList<>());
+        mArgNames.add(new ArrayList<>());*/
 
         //initialize the object method argument number array
         HashMap<String, HashMap<String, Integer>> oArgNums;
@@ -686,9 +767,9 @@ public class translation_test {
 
         //initialize the host information for objects
         HashMap<String, ArrayList<Integer>> oH = new HashMap<>();
-        oH.put("airlineH", new ArrayList<>());
-        oH.put("bankH", new ArrayList<>());
-        oH.put("customerH", new ArrayList<>());
+        oH.put("airlineOH", new ArrayList<>());
+        oH.put("bankOH", new ArrayList<>());
+        oH.put("customerOH", new ArrayList<>());
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
@@ -702,7 +783,8 @@ public class translation_test {
         StringBuilder r = new StringBuilder();
 
         //initialize the method argument name array
-        ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
+        ArrayList<ArrayList<String>> mArgNames = methodArgNames(resultDefs);
+        /*ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
         ArrayList<String> rArgNames = new ArrayList<>();
         rArgNames.add("return");
         ArrayList<String> m0ArgNames = new ArrayList<>();
@@ -718,7 +800,7 @@ public class translation_test {
         mArgNames.add(m0ArgNames);
         mArgNames.add(m1ArgNames);
         mArgNames.add(m2ArgNames);
-        mArgNames.add(m3ArgNames);
+        mArgNames.add(m3ArgNames);*/
 
         //initialize the object method argument number array
         HashMap<String, HashMap<String, Integer>> oArgNums;
@@ -838,9 +920,9 @@ public class translation_test {
         oH.put("i2H", i2H);
         oH.put("aH", i2H);*/
 
-        oH.put("i1H", new ArrayList<>());
-        oH.put("i2H", new ArrayList<>());
-        oH.put("aH", new ArrayList<>());
+        oH.put("i1OH", new ArrayList<>());
+        oH.put("i2OH", new ArrayList<>());
+        oH.put("aOH", new ArrayList<>());
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,
@@ -855,7 +937,8 @@ public class translation_test {
         StringBuilder r = new StringBuilder();
 
         //initialize the method argument name array
-        ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
+        ArrayList<ArrayList<String>> mArgNames = methodArgNames(resultDefs);
+        /*ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
         ArrayList<String> resArgNames = new ArrayList<>();
         resArgNames.add("return");
         ArrayList<String> m0ArgNames = new ArrayList<>();
@@ -889,7 +972,7 @@ public class translation_test {
         mArgNames.add(m5ArgNames);
         mArgNames.add(m6ArgNames);
         mArgNames.add(m7ArgNames);
-        mArgNames.add(new ArrayList<>());
+        mArgNames.add(new ArrayList<>());*/
 
         //initialize the object method argument number array
         HashMap<String, HashMap<String, Integer>> oArgNums;
@@ -1057,10 +1140,10 @@ public class translation_test {
         mapServH.add(0);
         oH.put("mapServH", mapServH);*/
 
-        oH.put("AliceH", new ArrayList<>());
-        oH.put("BobH", new ArrayList<>());
-        oH.put("mapServH", new ArrayList<>());
-        oH.put("SnappH", new ArrayList<>());
+        oH.put("AliceOH", new ArrayList<>());
+        oH.put("BobOH", new ArrayList<>());
+        oH.put("mapServOH", new ArrayList<>());
+        oH.put("SnappOH", new ArrayList<>());
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 4, principals,
@@ -1074,7 +1157,8 @@ public class translation_test {
         StringBuilder r = new StringBuilder();
 
         //initialize the method argument name array
-        ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
+        ArrayList<ArrayList<String>> mArgNames = methodArgNames(resultDefs);
+        /*ArrayList<ArrayList<String>> mArgNames = new ArrayList<>();
         ArrayList<String> resArgNames = new ArrayList<>();
         resArgNames.add("return");
         ArrayList<String> m0ArgNames = new ArrayList<>();
@@ -1154,7 +1238,7 @@ public class translation_test {
         mArgNames.add(m15ArgNames);
         mArgNames.add(m16ArgNames);
         mArgNames.add(m17ArgNames);
-        mArgNames.add(m18ArgNames);
+        mArgNames.add(m18ArgNames);*/
 
         //initialize the object method argument number array
         HashMap<String, HashMap<String, Integer>> oArgNums;
@@ -1355,9 +1439,9 @@ public class translation_test {
         u3H.add(4);
         oH.put("u3H", u3H);*/
 
-        oH.put("u1H", new ArrayList<>());
-        oH.put("u2H", new ArrayList<>());
-        oH.put("u3H", new ArrayList<>());
+        oH.put("u1OH", new ArrayList<>());
+        oH.put("u2OH", new ArrayList<>());
+        oH.put("u3OH", new ArrayList<>());
 
         TypeInference test = new TypeInference();
         r.append(test.classTypeCheck(resultDefs, mArgNames, oArgNums, 3, principals,

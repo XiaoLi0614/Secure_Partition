@@ -893,13 +893,15 @@ public class TypeInference implements PartitionVisitor{
             }
             c++;
         }
-        result.append("print(s.check())\nm = s.model()\nprint(\"resH:\")\nprint(resH)\n");
+        //result.append("print(s.check())\nm = s.model()\nprint(\"resH:\")\nprint(resH)\n");
+        result.append("print(s.check())\nm = s.model()\nprint(\"resH:\", resH)\n");
 
         //print method host information
         for(String mn2: mInfo.keySet()){
             if(!mn2.equals("ret")){
-                result.append("print(\"" + mInfo.get(mn2).host + ":\")\n");
-                result.append("print([m[hInfo].as_long() for hInfo in " + mInfo.get(mn2).host + "])\n");
+                result.append("print(\"" + mInfo.get(mn2).host + ":\", " + "[m[hInfo].as_long() for hInfo in " + mInfo.get(mn2).host + "])\n");
+                //result.append("print(\"" + mInfo.get(mn2).host + ":\")\n");
+                //result.append("print([m[hInfo].as_long() for hInfo in " + mInfo.get(mn2).host + "])\n");
             }
         }
 
@@ -916,8 +918,9 @@ public class TypeInference implements PartitionVisitor{
 
         //print object information
         for(String on3: oInfo.keySet()){
-            result.append("print(\"" + oInfo.get(on3).host + ":\")\n");
-            result.append("print([m[hInfo].as_long() for hInfo in " + oInfo.get(on3).host + "])\n");
+            result.append("print(\"" + oInfo.get(on3).host + ":\", " + "[m[hInfo].as_long() for hInfo in " + oInfo.get(on3).host + "])\n");
+            //result.append("print(\"" + oInfo.get(on3).host + ":\")\n");
+            //result.append("print([m[hInfo].as_long() for hInfo in " + oInfo.get(on3).host + "])\n");
         }
 
         return result.toString();
@@ -925,9 +928,9 @@ public class TypeInference implements PartitionVisitor{
 
     public String printQuorum(String qName){
         StringBuilder result  = new StringBuilder();
-        result.append("print(\"" + qName + ":\")\n");
-        //result.append("print([e for qs in " + qName + " for e in qs])\n");
-        result.append("print([m[e].as_long() for qs in " + qName + " for e in qs])\n");
+        result.append("print(\"" + qName + ":\", " + "[m[e].as_long() for qs in " + qName + " for e in qs])\n");
+        //result.append("print(\"" + qName + ":\")\n");
+        //result.append("print([m[e].as_long() for qs in " + qName + " for e in qs])\n");
         return result.toString();
     }
 

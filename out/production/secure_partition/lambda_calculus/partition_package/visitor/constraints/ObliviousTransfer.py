@@ -246,7 +246,7 @@ s.add(Not(nonCheck(m3H)))
 s.add(Not(nonCheckQ(m3Q)))
 aqs = [ [ Int("aqs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 aqc = [ [ Int("aqc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
-aH = [ Int('aH_%s' % i) for i in range(n) ] 
+aOH = [ Int('aOH_%s' % i) for i in range(n) ] 
 areadbotC = [ Bool('areadbotC_%s' % i) for i in range(n) ]
 areadbotI = [ [ Int("areadbotI_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 areadbotA = [ [ Int("areadbotA_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -263,13 +263,13 @@ arange0 = [ And(0 <= aqs[i][j], 0 <= aqc[i][j], 0 <= areadoutputI[i][j], 0 <= ar
 s.add(arange0)
 arange1 = [And(sLe(aqs[i], principals), sLe(aqc[i], principals), sLe(areadoutputI[i], principals), sLe(areadoutputA[i], principals), sLe(areadbotI[i], principals), sLe(areadbotA[i], principals), sLe(awriteoutputI[i], principals), sLe(awriteoutputA[i], principals), sLe(awriteinput0I[i], principals), sLe(awriteinput0A[i], principals)) for i in range(n)]
 s.add(arange1)
-arange2 = [And(0 <= aH[i]) for i in range(n)]
+arange2 = [And(0 <= aOH[i]) for i in range(n)]
 s.add(arange2)
-arange3 = sLe(aH, principals)
+arange3 = sLe(aOH, principals)
 s.add(arange3)
 i1qs = [ [ Int("i1qs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 i1qc = [ [ Int("i1qc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
-i1H = [ Int('i1H_%s' % i) for i in range(n) ] 
+i1OH = [ Int('i1OH_%s' % i) for i in range(n) ] 
 i1readbotC = [ Bool('i1readbotC_%s' % i) for i in range(n) ]
 i1readbotI = [ [ Int("i1readbotI_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 i1readbotA = [ [ Int("i1readbotA_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -280,13 +280,13 @@ i1range0 = [ And(0 <= i1qs[i][j], 0 <= i1qc[i][j], 0 <= i1readoutputI[i][j], 0 <
 s.add(i1range0)
 i1range1 = [And(sLe(i1qs[i], principals), sLe(i1qc[i], principals), sLe(i1readoutputI[i], principals), sLe(i1readoutputA[i], principals), sLe(i1readbotI[i], principals), sLe(i1readbotA[i], principals)) for i in range(n)]
 s.add(i1range1)
-i1range2 = [And(0 <= i1H[i]) for i in range(n)]
+i1range2 = [And(0 <= i1OH[i]) for i in range(n)]
 s.add(i1range2)
-i1range3 = sLe(i1H, principals)
+i1range3 = sLe(i1OH, principals)
 s.add(i1range3)
 i2qs = [ [ Int("i2qs_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 i2qc = [ [ Int("i2qc_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
-i2H = [ Int('i2H_%s' % i) for i in range(n) ] 
+i2OH = [ Int('i2OH_%s' % i) for i in range(n) ] 
 i2readbotC = [ Bool('i2readbotC_%s' % i) for i in range(n) ]
 i2readbotI = [ [ Int("i2readbotI_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
 i2readbotA = [ [ Int("i2readbotA_%s_%s" % (i, j)) for j in range(n) ] for i in range(n) ]
@@ -297,31 +297,31 @@ i2range0 = [ And(0 <= i2qs[i][j], 0 <= i2qc[i][j], 0 <= i2readoutputI[i][j], 0 <
 s.add(i2range0)
 i2range1 = [And(sLe(i2qs[i], principals), sLe(i2qc[i], principals), sLe(i2readoutputI[i], principals), sLe(i2readoutputA[i], principals), sLe(i2readbotI[i], principals), sLe(i2readbotA[i], principals)) for i in range(n)]
 s.add(i2range1)
-i2range2 = [And(0 <= i2H[i]) for i in range(n)]
+i2range2 = [And(0 <= i2OH[i]) for i in range(n)]
 s.add(i2range2)
-i2range3 = sLe(i2H, principals)
+i2range3 = sLe(i2OH, principals)
 s.add(i2range3)
 #FieldT: a
-s.add(cLeH(areadoutputC, aH))
-s.add(sIntegrity(areadoutputI, aqs, aH))
-s.add(availabilityP(areadoutputA, aqs, aH))
+s.add(cLeH(areadoutputC, aOH))
+s.add(sIntegrity(areadoutputI, aqs, aOH))
+s.add(availabilityP(areadoutputA, aqs, aOH))
 s.add(cIntegrityE(areadbotI, aqc))
 s.add(lableLe(areadbotC, areadoutputC, areadbotI, areadoutputI, areadbotA, areadoutputA))
-s.add(cLeH(awriteoutputC, aH))
-s.add(sIntegrity(awriteoutputI, aqs, aH))
-s.add(availabilityP(awriteoutputA, aqs, aH))
+s.add(cLeH(awriteoutputC, aOH))
+s.add(sIntegrity(awriteoutputI, aqs, aOH))
+s.add(availabilityP(awriteoutputA, aqs, aOH))
 s.add(cIntegrityE(awriteinput0I, aqc))
 s.add(lableLe(awriteinput0C, awriteoutputC, awriteinput0I, awriteoutputI, awriteinput0A, awriteoutputA))
 #FieldT: i1
-s.add(cLeH(i1readoutputC, i1H))
-s.add(sIntegrity(i1readoutputI, i1qs, i1H))
-s.add(availabilityP(i1readoutputA, i1qs, i1H))
+s.add(cLeH(i1readoutputC, i1OH))
+s.add(sIntegrity(i1readoutputI, i1qs, i1OH))
+s.add(availabilityP(i1readoutputA, i1qs, i1OH))
 s.add(cIntegrityE(i1readbotI, i1qc))
 s.add(lableLe(i1readbotC, i1readoutputC, i1readbotI, i1readoutputI, i1readbotA, i1readoutputA))
 #FieldT: i2
-s.add(cLeH(i2readoutputC, i2H))
-s.add(sIntegrity(i2readoutputI, i2qs, i2H))
-s.add(availabilityP(i2readoutputA, i2qs, i2H))
+s.add(cLeH(i2readoutputC, i2OH))
+s.add(sIntegrity(i2readoutputI, i2qs, i2OH))
+s.add(availabilityP(i2readoutputA, i2qs, i2OH))
 s.add(cIntegrityE(i2readbotI, i2qc))
 s.add(lableLe(i2readbotC, i2readoutputC, i2readbotI, i2readoutputI, i2readbotA, i2readoutputA))
 #MethodT: m3
@@ -563,46 +563,27 @@ print("n = 3")
 print("principals = [7, 4, 4]")
 weight = [1, 1, 12]
 
-s.minimize(sum(m0H[i] * weight[i] for i in range(n)) + sum(m1H[i] * weight[i] for i in range(n)) + sum(m2H[i] * weight[i] for i in range(n)) + sum(m3H[i] * weight[i] for i in range(n)) + sum(aH[i] * weight[i] for i in range(n)) + sum(i1H[i] * weight[i] for i in range(n)) + sum(i2H[i] * weight[i] for i in range(n)) + sum(aqs[0][i] * weight[i] for i in range(n)) + sum(aqs[1][i] * weight[i] for i in range(n)) + sum(aqs[2][i] * weight[i] for i in range(n)) + sum(i1qs[0][i] * weight[i] for i in range(n)) + sum(i1qs[1][i] * weight[i] for i in range(n)) + sum(i1qs[2][i] * weight[i] for i in range(n)) + sum(i2qs[0][i] * weight[i] for i in range(n)) + sum(i2qs[1][i] * weight[i] for i in range(n)) + sum(i2qs[2][i] * weight[i] for i in range(n)) + sum(aqc[0][i] * weight[i] for i in range(n)) + sum(aqc[1][i] * weight[i] for i in range(n)) + sum(aqc[2][i] * weight[i] for i in range(n)) + sum(i1qc[0][i] * weight[i] for i in range(n)) + sum(i1qc[1][i] * weight[i] for i in range(n)) + sum(i1qc[2][i] * weight[i] for i in range(n)) + sum(i2qc[0][i] * weight[i] for i in range(n)) + sum(i2qc[1][i] * weight[i] for i in range(n)) + sum(i2qc[2][i] * weight[i] for i in range(n)) + sum(resQ[0]) + sum(resQ[1]) + sum(resQ[2]) + sum(m0Q[0]) + sum(m0Q[1]) + sum(m0Q[2]) + sum(m1Q[0]) + sum(m1Q[1]) + sum(m1Q[2]) + sum(m2Q[0]) + sum(m2Q[1]) + sum(m2Q[2]) + sum(m3Q[0]) + sum(m3Q[1]) + sum(m3Q[2]))
+s.minimize(sum(m0H[i] * weight[i] for i in range(n)) + sum(m1H[i] * weight[i] for i in range(n)) + sum(m2H[i] * weight[i] for i in range(n)) + sum(m3H[i] * weight[i] for i in range(n)) + sum(aOH[i] * weight[i] for i in range(n)) + sum(i1OH[i] * weight[i] for i in range(n)) + sum(i2OH[i] * weight[i] for i in range(n)) + sum(aqs[0][i] * weight[i] for i in range(n)) + sum(aqs[1][i] * weight[i] for i in range(n)) + sum(aqs[2][i] * weight[i] for i in range(n)) + sum(i1qs[0][i] * weight[i] for i in range(n)) + sum(i1qs[1][i] * weight[i] for i in range(n)) + sum(i1qs[2][i] * weight[i] for i in range(n)) + sum(i2qs[0][i] * weight[i] for i in range(n)) + sum(i2qs[1][i] * weight[i] for i in range(n)) + sum(i2qs[2][i] * weight[i] for i in range(n)) + sum(aqc[0][i] * weight[i] for i in range(n)) + sum(aqc[1][i] * weight[i] for i in range(n)) + sum(aqc[2][i] * weight[i] for i in range(n)) + sum(i1qc[0][i] * weight[i] for i in range(n)) + sum(i1qc[1][i] * weight[i] for i in range(n)) + sum(i1qc[2][i] * weight[i] for i in range(n)) + sum(i2qc[0][i] * weight[i] for i in range(n)) + sum(i2qc[1][i] * weight[i] for i in range(n)) + sum(i2qc[2][i] * weight[i] for i in range(n)) + sum(resQ[0]) + sum(resQ[1]) + sum(resQ[2]) + sum(m0Q[0]) + sum(m0Q[1]) + sum(m0Q[2]) + sum(m1Q[0]) + sum(m1Q[1]) + sum(m1Q[2]) + sum(m2Q[0]) + sum(m2Q[1]) + sum(m2Q[2]) + sum(m3Q[0]) + sum(m3Q[1]) + sum(m3Q[2]))
 print(s.check())
 m = s.model()
-print("resH:")
-print(resH)
-print("m0H:")
-print([m[hInfo].as_long() for hInfo in m0H])
-print("m1H:")
-print([m[hInfo].as_long() for hInfo in m1H])
-print("m2H:")
-print([m[hInfo].as_long() for hInfo in m2H])
-print("m3H:")
-print([m[hInfo].as_long() for hInfo in m3H])
-print("resQ:")
-print([m[e].as_long() for qs in resQ for e in qs])
-print("m0Q:")
-print([m[e].as_long() for qs in m0Q for e in qs])
-print("m1Q:")
-print([m[e].as_long() for qs in m1Q for e in qs])
-print("m2Q:")
-print([m[e].as_long() for qs in m2Q for e in qs])
-print("m3Q:")
-print([m[e].as_long() for qs in m3Q for e in qs])
-print("aqs:")
-print([m[e].as_long() for qs in aqs for e in qs])
-print("i1qs:")
-print([m[e].as_long() for qs in i1qs for e in qs])
-print("i2qs:")
-print([m[e].as_long() for qs in i2qs for e in qs])
-print("aqc:")
-print([m[e].as_long() for qs in aqc for e in qs])
-print("i1qc:")
-print([m[e].as_long() for qs in i1qc for e in qs])
-print("i2qc:")
-print([m[e].as_long() for qs in i2qc for e in qs])
-print("aH:")
-print([m[hInfo].as_long() for hInfo in aH])
-print("i1H:")
-print([m[hInfo].as_long() for hInfo in i1H])
-print("i2H:")
-print([m[hInfo].as_long() for hInfo in i2H])
+print("resH:", resH)
+print("m0H:", [m[hInfo].as_long() for hInfo in m0H])
+print("m1H:", [m[hInfo].as_long() for hInfo in m1H])
+print("m2H:", [m[hInfo].as_long() for hInfo in m2H])
+print("m3H:", [m[hInfo].as_long() for hInfo in m3H])
+print("resQ:", [m[e].as_long() for qs in resQ for e in qs])
+print("m0Q:", [m[e].as_long() for qs in m0Q for e in qs])
+print("m1Q:", [m[e].as_long() for qs in m1Q for e in qs])
+print("m2Q:", [m[e].as_long() for qs in m2Q for e in qs])
+print("m3Q:", [m[e].as_long() for qs in m3Q for e in qs])
+print("aqs:", [m[e].as_long() for qs in aqs for e in qs])
+print("i1qs:", [m[e].as_long() for qs in i1qs for e in qs])
+print("i2qs:", [m[e].as_long() for qs in i2qs for e in qs])
+print("aqc:", [m[e].as_long() for qs in aqc for e in qs])
+print("i1qc:", [m[e].as_long() for qs in i1qc for e in qs])
+print("i2qc:", [m[e].as_long() for qs in i2qc for e in qs])
+print("aOH:", [m[hInfo].as_long() for hInfo in aOH])
+print("i1OH:", [m[hInfo].as_long() for hInfo in i1OH])
+print("i2OH:", [m[hInfo].as_long() for hInfo in i2OH])
 endT = time.time() - startT
 print(endT)
