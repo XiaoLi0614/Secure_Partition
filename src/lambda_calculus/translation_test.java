@@ -124,25 +124,25 @@ public class translation_test {
 
         switch (args[0]){
             case "ott":
-                printToFile(OneTimeTransferInfer(resultMethodDefs), "OneTimeTransfer");
+                printToFile(OneTimeTransferInfer(resultMethodDefs), "OneTimeTransfer", 0);
                 break;
             case "ticket":
-                printToFile(TicketInfer(resultMethodDefs), "Ticket");
+                printToFile(TicketInfer(resultMethodDefs), "Ticket", 0);
                 break;
             case "auction":
-                printToFile(AuctionInfer(resultMethodDefs), "Auction");
+                printToFile(AuctionInfer(resultMethodDefs), "Auction", 0);
                 break;
             case "test" :
                 System.out.println("Please input supported use-case!");
                 break;
             case "friendmap":
-                printToFile(FriendsMapInfer(resultMethodDefs), "FriendMap");
+                printToFile(FriendsMapInfer(resultMethodDefs), "FriendMap", 0);
                 break;
             case "MPC":
-                printToFile(MPCSimpInfer(resultMethodDefs), "MPCSimp");
+                printToFile(MPCSimpInfer(resultMethodDefs), "MPCSimp", 0);
                 break;
             case "ot":
-                printToFile(ObliviousTransferInfer(resultMethodDefs), "ObliviousTransfer");
+                printToFile(ObliviousTransferInfer(resultMethodDefs), "ObliviousTransfer", 0);
                 break;
             default:
                 System.out.println("Please input supported use-case!");
@@ -171,6 +171,11 @@ public class translation_test {
         Date date4 = new Date();
         consGenT = date4.getTime() - consGenT;
         System.out.println("Constraint generation time: " + consGenT + " ms");
+
+        System.out.println("method translation begin");
+        MethodTranslation test5 = new MethodTranslation("ott", "/home/xiao/IdeaProjects/secure_partition/src/lambda_calculus/partition_package/visitor/configuration/");
+        test5.createClasses(test5, resultMethodDefs);
+        //printToFile(test5.methodsInJava(resultMethodDefs).toString(), "ottMethods", 1);
     }
 
 //        public static String cpsTransformation(lambda_usecase useCase)
@@ -180,31 +185,43 @@ public class translation_test {
 //            return result;
 //        }
 
-    public static void printToFile(String transformation, String fileName) throws IOException
+    public static void printToFile(String transformation, String fileName, int type) throws IOException
     {
         try {
-            File f = new File(outputPath + fileName + ".py");
-            if (!f.exists()) {
-                f.createNewFile();
+            if(type == 0){
+                File f = new File(outputPath + fileName + ".py");
+                if (!f.exists()) {
+                    f.createNewFile();
+                }
+
+                File template = new File(outputPath + "constraints_template");
+                if (!template.exists()) {
+                    template.createNewFile();
+                }
+                //add the constraints template to output file
+                FileChannel tempChannel = new FileInputStream(template).getChannel();
+                FileChannel fChannel = new FileOutputStream(f).getChannel();
+                fChannel.transferFrom(tempChannel, 0, tempChannel.size());
+                tempChannel.close();
+                fChannel.close();
+
+                //write the collected constraints for the specific use-case
+                FileOutputStream consOutputStream = new FileOutputStream(f, true);
+                consOutputStream.write(transformation.getBytes());
+                consOutputStream.flush();
+                consOutputStream.close();
+            }
+            else {
+                File f = new File(outputPath + fileName + ".java");
+                if (!f.exists()) {
+                    f.createNewFile();
+                }
+                FileOutputStream consOutputStream = new FileOutputStream(f, true);
+                consOutputStream.write(transformation.getBytes());
+                consOutputStream.flush();
+                consOutputStream.close();
             }
 
-            File template = new File(outputPath + "constraints_template");
-            if (!template.exists()) {
-                template.createNewFile();
-            }
-
-            //add the constraints template to output file
-            FileChannel tempChannel = new FileInputStream(template).getChannel();
-            FileChannel fChannel = new FileOutputStream(f).getChannel();
-            fChannel.transferFrom(tempChannel, 0, tempChannel.size());
-            tempChannel.close();
-            fChannel.close();
-
-            //write the collected constraints for the specific use-case
-            FileOutputStream consOutputStream = new FileOutputStream(f, true);
-            consOutputStream.write(transformation.getBytes());
-            consOutputStream.flush();
-            consOutputStream.close();
         }
         catch (IOException e) {
             System.out.println("IO exception when print result to file");
