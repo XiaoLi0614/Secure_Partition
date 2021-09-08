@@ -131,6 +131,54 @@ public class MethodTranslation implements PartitionVisitor{
                 objPrimaryType.put("i1", "IntegerRegisterClient");
                 objPrimaryType.put("i2", "IntegerRegisterClient");
                 objPrimaryType.put("a", "BooleanRegisterClient");
+                requestName = "transfer";
+                requestArgs = new ArrayList<>();
+                requestArgs.add("x");
+                retType = new Pair<>("x", "Integer");
+                break;
+            case "friendmap":
+                objectMethodReturnType = new HashMap<>();
+                objectMethodReturnType.put("mapServ.getMap", "String");
+                objectMethodReturnType.put("Alice.newBox", "String");
+                objectMethodReturnType.put("Alice.ID", "Integer");
+                objectMethodReturnType.put("Alice.expand", "String");
+                objectMethodReturnType.put("Alice.addComment", "String");
+                objectMethodReturnType.put("Bob.ID", "Integer");
+                objectMethodReturnType.put("Bob.location", "String");
+                objectMethodReturnType.put("Bob.comment", "String");
+                objectMethodReturnType.put("Snapp.isFriend", "Boolean");
+                ArrayList<String> snappFriendType = new ArrayList<>();
+                snappFriendType.add("Integer");
+                snappFriendType.add("Integer");
+                ArrayList<String> aExpandType = new ArrayList<>();
+                aExpandType.add("String");
+                aExpandType.add("String");
+                ArrayList<String> addCommentType = new ArrayList<>();
+                addCommentType.add("String");
+                addCommentType.add("String");
+                ArrayList<String> getMapType = new ArrayList<>();
+                getMapType.add("String");
+                objectMethodArgType = new HashMap<>();
+                objectMethodArgType.put("Snapp.isFriend", snappFriendType);
+                objectMethodArgType.put("Alice.expand", aExpandType);
+                objectMethodArgType.put("Alice.addComment", addCommentType);
+                objectMethodArgType.put("mapServ.getMap", getMapType);
+                argumentType = new HashMap<>();
+                importedObjects = new ArrayList<>();
+                importedObjects.add("bftsmart.demo.friendmap.AliceClient");
+                importedObjects.add("bftsmart.demo.friendmap.BobClient");
+                importedObjects.add("bftsmart.usecase.Client");
+                importedObjects.add("bftsmart.demo.friendmap.SnappClient");
+                importedObjects.add("bftsmart.usecase.PartitionedObject");
+                importedObjects.add("bftsmart.demo.friendmap.MapServiceClient");
+                objPrimaryType = new HashMap<>();
+                objPrimaryType.put("mapServ", "MapServiceClient");
+                objPrimaryType.put("Snapp", "SnappClient");
+                objPrimaryType.put("Alice", "AliceClient");
+                objPrimaryType.put("Bob", "BobClient");
+                requestName = "friendMap";
+                requestArgs = new ArrayList<>();
+                retType = new Pair<>("map", "String");
                 break;
              default:
                 System.out.println("Please input supported use-cases!");
@@ -445,7 +493,7 @@ public class MethodTranslation implements PartitionVisitor{
     public HashMap<String, StringBuilder> methodsInJava(ArrayList<MethodDefinition> methodDefs, MethodTranslation mt){
     //public StringBuilder methodsInJava(ArrayList<MethodDefinition> methodDefs){
         //MethodTranslation trans = new MethodTranslation(usecaseName, outFolderPath);
-        mt.readInfoFromFile(mt.outputPath + "A1-B2");
+        mt.readInfoFromFile(mt.outputPath + "A2-B2-S1-M1");
         HashMap<String, StringBuilder> result = new HashMap<>();
         //StringBuilder result = new StringBuilder();
 

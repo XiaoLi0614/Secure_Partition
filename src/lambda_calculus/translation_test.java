@@ -173,7 +173,7 @@ public class translation_test {
         System.out.println("Constraint generation time: " + consGenT + " ms");
 
         System.out.println("method translation begin");
-        MethodTranslation test5 = new MethodTranslation("ott", "/home/xiao/IdeaProjects/secure_partition/src/lambda_calculus/partition_package/visitor/configuration/");
+        MethodTranslation test5 = new MethodTranslation("friendmap", "/home/xiao/IdeaProjects/secure_partition/src/lambda_calculus/partition_package/visitor/configuration/");
         test5.createClasses(test5, resultMethodDefs);
         //printToFile(test5.methodsInJava(resultMethodDefs).toString(), "ottMethods", 1);
     }

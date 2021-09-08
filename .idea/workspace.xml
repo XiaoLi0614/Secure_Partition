@@ -8,12 +8,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c8eb5f03-e017-4c19-b817-0c18d5b49b0d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/MethodTranslation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cs179e/cs179e/LesaniLib" beforeDir="false" afterPath="$PROJECT_DIR$/cs179e/cs179e/LesaniLib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/constraints/FriendMap.txt" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/constraints/FriendMap.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/constraints/Ticket.txt" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/constraints/Ticket.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/MethodTranslation$CommandT.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/MethodTranslation$CommandT.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/MethodTranslation$ExpressionT$BinaryOpB.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/MethodTranslation$ExpressionT$BinaryOpB.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/MethodTranslation$ExpressionT$GIdB.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/MethodTranslation$ExpressionT$GIdB.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/MethodTranslation$ExpressionT$LiteralB.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/MethodTranslation$ExpressionT$LiteralB.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/MethodTranslation$ExpressionT.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/MethodTranslation$ExpressionT.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/MethodTranslation.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/MethodTranslation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/partition_package/visitor/configuration/A1-B2" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/translation_test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/secure_partition/lambda_calculus/translation_test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/MethodTranslation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/MethodTranslation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/configuration/A1-B2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/configuration/OTTA.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/configuration/OTTB.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/configuration/OTTClient.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lambda_calculus/translation_test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/lambda_calculus/translation_test.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -28,7 +37,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/TypeInference.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2262">
+            <state relative-caret-position="3603">
               <caret line="418" column="68" selection-start-line="418" selection-start-column="55" selection-end-line="418" selection-end-column="68" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -40,43 +49,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/MethodTranslation.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="743">
-              <caret line="415" column="38" lean-forward="true" selection-start-line="415" selection-start-column="38" selection-end-line="415" selection-end-column="38" />
+            <state relative-caret-position="701">
+              <caret line="145" column="48" selection-start-line="145" selection-start-column="48" selection-end-line="145" selection-end-column="48" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#10225#10226#0" expanded="true" />
-                <element signature="e#13306#13307#0" expanded="true" />
+                <element signature="e#13075#13076#0" expanded="true" />
+                <element signature="e#16156#16157#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/expression/op/Plus.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/ObjectInfo.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="896">
-              <caret line="62" selection-start-line="62" selection-end-line="62" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/PartitionVisitor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="13" column="35" selection-start-line="13" selection-start-column="35" selection-end-line="13" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -85,7 +64,7 @@
         <entry file="file://$PROJECT_DIR$/src/lambda_calculus/translation_test.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="698">
-              <caret line="175" column="165" selection-start-line="175" selection-start-column="165" selection-end-line="175" selection-end-column="165" />
+              <caret line="175" column="66" selection-start-line="175" selection-start-column="66" selection-end-line="175" selection-end-column="66" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -212,8 +191,8 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1312" />
+  <component name="ProjectFrameBounds" extendedState="4">
+    <option name="x" value="65" />
     <option name="y" value="24" />
     <option name="width" value="1248" />
     <option name="height" value="1576" />
@@ -283,7 +262,7 @@
     <property name="Repository.Attach.Annotations" value="true" />
     <property name="Repository.Attach.JavaDocs" value="true" />
     <property name="Repository.Attach.Sources" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1631040414126" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1631060680245" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../bft_runtime/bft-library" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15" />
@@ -315,7 +294,7 @@
       <option name="INCLUDE_PROVIDED_SCOPE" value="true" />
       <option name="MAIN_CLASS_NAME" value="lambda_calculus.translation_test" />
       <module name="secure_partition" />
-      <option name="PROGRAM_PARAMETERS" value="ott" />
+      <option name="PROGRAM_PARAMETERS" value="friendmap" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -355,10 +334,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="2495" height="1604" extended-state="6" />
+    <frame x="65" y="24" width="1248" height="1576" extended-state="4" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11514904" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23460898" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -368,8 +347,8 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3409091" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49001664" visible="true" weight="0.23415978" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7079867" weight="0.3409091" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49001664" visible="true" weight="0.23876405" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7079867" weight="0.34058988" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32935393" />
@@ -381,7 +360,7 @@
       <window_info anchor="bottom" id="ANTLR Preview" order="12" weight="0.32959327" />
       <window_info anchor="bottom" id="Run with VisualVM" order="13" weight="0.32935393" />
       <window_info anchor="bottom" id="JProfiler" order="14" />
-      <window_info anchor="bottom" id="Messages" order="15" sideWeight="0.4969375" weight="0.32162535" />
+      <window_info anchor="bottom" id="Messages" order="15" sideWeight="0.4969375" weight="0.32092696" />
       <window_info anchor="bottom" id="Debug with VisualVM" order="16" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -535,9 +514,21 @@
         </line-breakpoint>
         <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/MethodTranslation.java</url>
-          <line>213</line>
+          <line>261</line>
           <properties />
           <option name="timeStamp" value="193" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/MethodTranslation.java</url>
+          <line>112</line>
+          <properties />
+          <option name="timeStamp" value="199" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/MethodTranslation.java</url>
+          <line>438</line>
+          <properties />
+          <option name="timeStamp" value="202" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -927,44 +918,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/expression/op/Plus.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/MethodDefinition.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/PartitionVisitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="13" column="35" selection-start-line="13" selection-start-column="35" selection-end-line="13" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/ObjectInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="896">
-          <caret line="62" selection-start-line="62" selection-end-line="62" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/TypeInference.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2262">
-          <caret line="418" column="68" selection-start-line="418" selection-start-column="55" selection-end-line="418" selection-end-column="68" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -978,16 +935,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/translation_test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="698">
-          <caret line="175" column="165" selection-start-line="175" selection-start-column="165" selection-end-line="175" selection-end-column="165" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/configuration/OTTClient.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -995,14 +942,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/MethodTranslation.java">
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/TypeInference.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="743">
-          <caret line="415" column="38" lean-forward="true" selection-start-line="415" selection-start-column="38" selection-end-line="415" selection-end-column="38" />
+        <state relative-caret-position="3603">
+          <caret line="418" column="68" selection-start-line="418" selection-start-column="55" selection-end-line="418" selection-end-column="68" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#10225#10226#0" expanded="true" />
-            <element signature="e#13306#13307#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/tree/expression/op/Plus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/ObjectInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="896">
+          <caret line="62" selection-start-line="62" selection-end-line="62" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/PartitionVisitor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="13" column="35" selection-start-line="13" selection-start-column="35" selection-end-line="13" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/translation_test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="698">
+          <caret line="175" column="66" selection-start-line="175" selection-start-column="66" selection-end-line="175" selection-end-column="66" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lambda_calculus/partition_package/visitor/MethodTranslation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="701">
+          <caret line="145" column="48" selection-start-line="145" selection-start-column="48" selection-end-line="145" selection-end-column="48" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#13075#13076#0" expanded="true" />
+            <element signature="e#16156#16157#0" expanded="true" />
           </folding>
         </state>
       </provider>
