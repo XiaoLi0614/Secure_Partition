@@ -14,6 +14,7 @@ import lambda_calculus.partition_package.tree.expression.id.Id;
 import lambda_calculus.partition_package.tree.expression.literal.IntLiteral;
 import lambda_calculus.partition_package.tree.expression.literal.Literal;
 import lambda_calculus.partition_package.tree.expression.op.BinaryOp;
+import lambda_calculus.partition_package.tree.expression.op.Compare;
 import lambda_calculus.partition_package.tree.expression.op.Plus;
 import lesani.collection.Pair;
 
@@ -213,6 +214,18 @@ public class TypeInference implements PartitionVisitor{
                         append(((StringBuilder) visitDispatch(plus.operand2)).toString());
                 updateStatementAll(plus, statementC.get(plus.operand1.toString()), statementI.get(plus.operand1.toString()), statementA.get(plus.operand1.toString()));
                 updateStatementAll(plus, statementC.get(plus.operand2.toString()), statementI.get(plus.operand2.toString()), statementA.get(plus.operand2.toString()));
+                return result;
+            }
+
+            @Override
+            public Object visit(Compare compare){
+                environment.put(compare.operand1, environment.get(compare).clone());
+                environment.put(compare.operand2, environment.get(compare).clone());
+
+                StringBuilder result = ((StringBuilder) visitDispatch(compare.operand1)).
+                        append(((StringBuilder) visitDispatch(compare.operand2)).toString());
+                updateStatementAll(compare, statementC.get(compare.operand1.toString()), statementI.get(compare.operand1.toString()), statementA.get(compare.operand1.toString()));
+                updateStatementAll(compare, statementC.get(compare.operand2.toString()), statementI.get(compare.operand2.toString()), statementA.get(compare.operand2.toString()));
                 return result;
             }
         }

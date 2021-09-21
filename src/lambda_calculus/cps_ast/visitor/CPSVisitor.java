@@ -8,6 +8,7 @@ import lambda_calculus.cps_ast.tree.expression.id.Id;
 import lambda_calculus.cps_ast.tree.expression.literal.IntLiteral;
 import lambda_calculus.cps_ast.tree.expression.literal.Literal;
 import lambda_calculus.cps_ast.tree.expression.op.BinaryOp;
+import lambda_calculus.cps_ast.tree.expression.op.Compare;
 import lambda_calculus.cps_ast.tree.expression.op.Plus;
 
 public interface CPSVisitor<R> {
@@ -26,6 +27,7 @@ public interface CPSVisitor<R> {
 
         interface BinaryOpVisitor<R>{
             R visit(Plus plus);
+            R visit(Compare compare);
         }
 
         R visit(Conditional conditional);

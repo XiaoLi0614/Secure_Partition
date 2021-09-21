@@ -9,6 +9,7 @@ import lambda_calculus.partition_package.tree.expression.literal.IntLiteral;
 import lambda_calculus.partition_package.tree.expression.literal.Literal;
 import lambda_calculus.partition_package.tree.expression.op.BinaryOp;
 import lambda_calculus.partition_package.tree.expression.op.Plus;
+import lambda_calculus.partition_package.tree.expression.op.Compare;
 
 public interface PartitionVisitor <R> {
     interface ExpressionVisitor<R>{
@@ -26,6 +27,7 @@ public interface PartitionVisitor <R> {
 
         interface BinaryOpVisitor<R>{
             R visit(Plus plus);
+            R visit(Compare compare);
         }
 
         R visit(Conditional conditional);

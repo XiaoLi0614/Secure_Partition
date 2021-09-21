@@ -14,6 +14,7 @@ import lambda_calculus.partition_package.tree.expression.id.Id;
 import lambda_calculus.partition_package.tree.expression.literal.IntLiteral;
 import lambda_calculus.partition_package.tree.expression.literal.Literal;
 import lambda_calculus.partition_package.tree.expression.op.BinaryOp;
+import lambda_calculus.partition_package.tree.expression.op.Compare;
 import lambda_calculus.partition_package.tree.expression.op.Plus;
 import lesani.collection.Pair;
 
@@ -180,6 +181,63 @@ public class MethodTranslation implements PartitionVisitor{
                 requestArgs = new ArrayList<>();
                 retType = new Pair<>("map", "String");
                 break;
+            case "ticket":
+                objectMethodReturnType = new HashMap<>();
+                objectMethodReturnType.put("customer.ticketNum", "Integer");
+                objectMethodReturnType.put("airline.getPrice1", "String");
+                objectMethodReturnType.put("airline.getPrice2", "Integer");
+                objectMethodReturnType.put("customer.updateInfo", "void");
+                objectMethodReturnType.put("customer.getID", "Integer");
+                objectMethodReturnType.put("airline.decSeat", "void");
+                objectMethodReturnType.put("bank.getBalance1", "Integer");
+                objectMethodReturnType.put("bank.getBalance2", "Integer");
+                objectMethodReturnType.put("customer.updatePayment", "void");
+                objectMethodReturnType.put("bank.decBalance", "void");
+                ArrayList<String> getPrice1Type = new ArrayList<>();
+                getPrice1Type.add("Integer");
+                ArrayList<String> getPrice2Type = new ArrayList<>();
+                getPrice2Type.add("Integer");
+                ArrayList<String> updateInfoType = new ArrayList<>();
+                updateInfoType.add("String");
+                updateInfoType.add("Integer");
+                ArrayList<String> getBalance1Type = new ArrayList<>();
+                getBalance1Type.add("Integer");
+                ArrayList<String> getBalance2Type = new ArrayList<>();
+                getBalance2Type.add("Integer");
+                ArrayList<String> updatePaymentType = new ArrayList<>();
+                updatePaymentType.add("Integer");
+                updatePaymentType.add("Integer");
+                ArrayList<String> decSeatType = new ArrayList<>();
+                decSeatType.add("Integer");
+                ArrayList<String> decBalanceType = new ArrayList<>();
+                decBalanceType.add("Integer");
+                objectMethodArgType = new HashMap<>();
+                objectMethodArgType.put("airline.getPrice1", getPrice1Type);
+                objectMethodArgType.put("airline.getPrice2", getPrice2Type);
+                objectMethodArgType.put("customer.updateInfo", updateInfoType);
+                objectMethodArgType.put("bank.getBalance1", getBalance1Type);
+                objectMethodArgType.put("bank.getBalance2", getBalance2Type);
+                objectMethodArgType.put("customer.updatePayment", updatePaymentType);
+                objectMethodArgType.put("airline.decSeat", decSeatType);
+                objectMethodArgType.put("bank.decBalance", decBalanceType);
+                argumentType = new HashMap<>();
+                argumentType.put("1", "Integer");
+                argumentType.put("0", "Integer");
+                importedObjects = new ArrayList<>();
+                importedObjects.add("bftsmart.demo.airlineagent.AirlineAgentClient");
+                importedObjects.add("bftsmart.runtime.util.IntIntPair");
+                importedObjects.add("bftsmart.usecase.PartitionedObject");
+                importedObjects.add("bftsmart.demo.bankagent.BankAgentClient");
+                importedObjects.add("bftsmart.demo.useragent.UserAgentClient");
+                importedObjects.add("bftsmart.demo.friendmap.MapServiceClient");
+                objPrimaryType = new HashMap<>();
+                objPrimaryType.put("airline", "AirlineAgentClient");
+                objPrimaryType.put("bank", "BankAgentClient");
+                objPrimaryType.put("customer", "UserAgentClient");
+                requestName = "buyTicket";
+                requestArgs = new ArrayList<>();
+                retType = new Pair<>("bought", "Boolean");
+                break;
              default:
                 System.out.println("Please input supported use-cases!");
                 break;
@@ -308,6 +366,14 @@ public class MethodTranslation implements PartitionVisitor{
                 result.append(((StringBuilder) visitDispatch(plus.operand2)).toString());
                 return result;
             }
+
+            @Override
+            public Object visit(Compare compare){
+                StringBuilder result = ((StringBuilder) visitDispatch(compare.operand1));
+                result.append(" " + compare.operatorText + " ");
+                result.append(((StringBuilder) visitDispatch(compare.operand2)).toString());
+                return result;
+            }
         }
         BinaryOpB binaryOpB = new BinaryOpB();
         @Override
@@ -328,8 +394,13 @@ public class MethodTranslation implements PartitionVisitor{
 
             //if statement
             //if the conditional is not of boolean type, we need to translate it. eg: if(x) -> if(x == 1)
-            if(!argumentType.get(conditional.condition.toString()).equals("Boolean")){
-                result.append((StringBuilder) visitDispatch(conditional.condition) + " == 1");
+            if(argumentType.get(conditional.condition.toString()) != null && !argumentType.get(conditional.condition.toString()).equals("Boolean")){
+                if(argumentType.get(conditional.condition.toString()).equals("Integer")){
+                    result.append((StringBuilder) visitDispatch(conditional.condition) + " == 1");
+                }
+                else if(argumentType.get(conditional.condition.toString()).equals("void")){
+                    result.append("true");
+                }
             }
             else {
                 result.append((StringBuilder) visitDispatch(conditional.condition));
@@ -372,8 +443,13 @@ public class MethodTranslation implements PartitionVisitor{
 
             //if statement
             //if the conditional is not of boolean type, we need to translate it. eg: if(x) -> if(x == 1)
-            if(!argumentType.get(iF.condition.toString()).equals("Boolean")){
-                result.append((StringBuilder) visitDispatch(iF.condition) + " == 1");
+            if(argumentType.get(iF.condition.toString()) != null && !argumentType.get(iF.condition.toString()).equals("Boolean")){
+                if(argumentType.get(iF.condition.toString()).equals("Integer")){
+                    result.append((StringBuilder) visitDispatch(iF.condition) + " == 1");
+                }
+                else if(argumentType.get(iF.condition.toString()).equals("void")){
+                    result.append("true");
+                }
             }
             else {
                 result.append((StringBuilder) visitDispatch(iF.condition));
@@ -419,11 +495,29 @@ public class MethodTranslation implements PartitionVisitor{
                     result.append(");");
                     return result;
                 }
+                //In ticket, void is passed to ret, we need to translate void -> boolean
                 else {
                     for(int a = 0; a < singleCall.args.length; a++){
                         Expression argE = singleCall.args[a];
                         if(a == singleCall.args.length - 1){
-                            result.append( ", " + ((StringBuilder) visitDispatch(argE)) + ");");
+                            if(singleCall.methodName.lexeme == "ret" && argumentType.get(argE.toString()) != null && retType.element2.equals("Boolean")){
+                            //if(singleCall.methodName.lexeme == "ret"){
+                                if(argumentType.get(argE.toString()).equals("void")){
+                                    result.append( ", true);");
+                                }
+                            else if(argumentType.get(argE.toString()).equals("Integer")){
+                                    if(argE.toString().equals("1")){
+                                        result.append( ", true);");
+                                    }
+                                    else {
+                                        result.append( ", false);");
+                                    }
+                                }
+                            }
+                            else {
+                                result.append( ", " + ((StringBuilder) visitDispatch(argE)) + ");");
+                            }
+                            //result.append( ", " + ((StringBuilder) visitDispatch(argE)) + ");");
                         }
                         else {
                             result.append(", " + ((StringBuilder) visitDispatch(argE)));
@@ -439,10 +533,17 @@ public class MethodTranslation implements PartitionVisitor{
                 argumentType.put(singleCall.administrativeX.toString(), objectMethodReturnType.get(singleCall.objectName + "." + singleCall.methodName));
                 String Oname = singleCall.objectName.toString();
                 String OMName = singleCall.methodName.toString();
-                result.append(insertTab() +  objectMethodReturnType.get(Oname + "." + OMName) + " " +
-                        singleCall.administrativeX.toString() + " = " + "(" + objectMethodReturnType.get(Oname + "." + OMName) + ") " +
-                        "runtime.invokeObj(\"" + singleCall.objectName.toString() + "\", \"" + singleCall.methodName.toString() +
-                        "\", \"" + currentMethodName + "\", callerId+\"::" + currentMethodName + "\", ++n");
+                //when the return type is void, we do not need to do administrative var assignment.
+                if(objectMethodReturnType.get(Oname + "." + OMName).equals("void")){
+                    result.append(insertTab() + "runtime.invokeObj(\"" + singleCall.objectName.toString() + "\", \"" + singleCall.methodName.toString() +
+                            "\", \"" + currentMethodName + "\", callerId+\"::" + currentMethodName + "\", ++n");
+                }
+                else {
+                    result.append(insertTab() +  objectMethodReturnType.get(Oname + "." + OMName) + " " +
+                            singleCall.administrativeX.toString() + " = " + "(" + objectMethodReturnType.get(Oname + "." + OMName) + ") " +
+                            "runtime.invokeObj(\"" + singleCall.objectName.toString() + "\", \"" + singleCall.methodName.toString() +
+                            "\", \"" + currentMethodName + "\", callerId+\"::" + currentMethodName + "\", ++n");
+                }
 
                 if(singleCall.args == null || singleCall.args.length == 0){
                     result.append(");");
@@ -493,7 +594,7 @@ public class MethodTranslation implements PartitionVisitor{
     public HashMap<String, StringBuilder> methodsInJava(ArrayList<MethodDefinition> methodDefs, MethodTranslation mt){
     //public StringBuilder methodsInJava(ArrayList<MethodDefinition> methodDefs){
         //MethodTranslation trans = new MethodTranslation(usecaseName, outFolderPath);
-        mt.readInfoFromFile(mt.outputPath + "A2-B2-S1-M1");
+        mt.readInfoFromFile(mt.outputPath + "A1-B1-C0");
         HashMap<String, StringBuilder> result = new HashMap<>();
         //StringBuilder result = new StringBuilder();
 

@@ -10,6 +10,7 @@ import lambda_calculus.source_ast.tree.expression.id.Id;
 import lambda_calculus.source_ast.tree.expression.literal.IntLiteral;
 import lambda_calculus.source_ast.tree.expression.literal.Literal;
 import lambda_calculus.source_ast.tree.expression.op.BinaryOp;
+import lambda_calculus.source_ast.tree.expression.op.Compare;
 import lambda_calculus.source_ast.tree.expression.op.Plus;
 import lambda_calculus.source_ast.tree.expression.op.Sequence;
 import lesani.collection.Pair;
@@ -120,6 +121,47 @@ public class CPSPrinter implements SourceVisitor{
                 resultContext.addVariableToContext(lambda1Var[0], body1);
                 continuationMap.put(plus.operand1, body1);
                 Command e1Evaluation = (Command) visitDispatch(plus.operand1);
+                //resultContext.bindValueToContext(lambda1Var[0], e1Evaluation);
+                //todo: I think the bindings are not correct now. I confuse the evaluation and the translation part
+
+                //Command[] body2AsVar = new Command[1];
+                //body2AsVar[0] = body2;
+                //Command[] body1AsVar = new Command[1];
+                //body1AsVar[0] = body1;
+                //Command resultCommand = new Application((Command) visitDispatch(plus.operand1), body1AsVar);
+
+                return e1Evaluation;
+                //return null;
+            }
+
+            @Override
+            public Object visit(Compare compare){
+                //System.out.println("CPS plus");
+                lambda_calculus.cps_ast.tree.expression.Var[] lambda1Var = new lambda_calculus.cps_ast.tree.expression.Var[1];
+                lambda1Var[0] = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
+                lambda_calculus.cps_ast.tree.expression.Var[] lambda2Var = new lambda_calculus.cps_ast.tree.expression.Var[1];
+                lambda2Var[0] = new lambda_calculus.cps_ast.tree.expression.Var(newXName());
+
+                //x1 + x2
+                lambda_calculus.cps_ast.tree.expression.op.Compare varCompare = new lambda_calculus.cps_ast.tree.expression.op.Compare(compare.operatorText, lambda1Var[0], lambda2Var[0]);
+                Command[] compareBody = new Command[1];
+                compareBody[0] = new ExpSt(varCompare);
+
+                //lambda x2 . k(x1 + x2)
+                Command body2 = new Abstraction(lambda2Var, new Application(continuationMap.get(compare), compareBody));
+                //lambda x2
+                resultContext.addVariableToContext(lambda2Var[0], body2);
+                continuationMap.put(compare.operand2, body2);
+                Command e2Evaluation = (Command) visitDispatch(compare.operand2);
+                //resultContext.bindValueToContext(lambda2Var[0], e2Evaluation);
+
+                //-----------------------------------------------------------------
+                //lambda x1. [e2] (lambda x2.k( x1 + x2))
+                Command body1 = new Abstraction(lambda1Var, e2Evaluation);
+                // lambda x1
+                resultContext.addVariableToContext(lambda1Var[0], body1);
+                continuationMap.put(compare.operand1, body1);
+                Command e1Evaluation = (Command) visitDispatch(compare.operand1);
                 //resultContext.bindValueToContext(lambda1Var[0], e1Evaluation);
                 //todo: I think the bindings are not correct now. I confuse the evaluation and the translation part
 

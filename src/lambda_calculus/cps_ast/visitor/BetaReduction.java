@@ -10,6 +10,7 @@ import lambda_calculus.cps_ast.tree.expression.id.Id;
 import lambda_calculus.cps_ast.tree.expression.literal.IntLiteral;
 import lambda_calculus.cps_ast.tree.expression.literal.Literal;
 import lambda_calculus.cps_ast.tree.expression.op.BinaryOp;
+import lambda_calculus.cps_ast.tree.expression.op.Compare;
 import lambda_calculus.cps_ast.tree.expression.op.Plus;
 import lesani.compiler.texttree.seq.TextSeq;
 import sun.nio.ch.AbstractPollArrayWrapper;
@@ -48,6 +49,11 @@ public class BetaReduction implements CPSVisitor{
             @Override
             public Object visit(Plus plus){
                 return new Plus((Expression) visitDispatch(plus.operand1), (Expression) visitDispatch(plus.operand2));
+            }
+
+            @Override
+            public Object visit(Compare compare){
+                return new Compare(compare.operatorText, (Expression) visitDispatch(compare.operand1), (Expression) visitDispatch(compare.operand2));
             }
         }
         BinaryOpB binaryOpB = new BinaryOpB();

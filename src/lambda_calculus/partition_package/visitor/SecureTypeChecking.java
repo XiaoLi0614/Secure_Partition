@@ -14,6 +14,7 @@ import lambda_calculus.partition_package.tree.expression.id.Id;
 import lambda_calculus.partition_package.tree.expression.literal.IntLiteral;
 import lambda_calculus.partition_package.tree.expression.literal.Literal;
 import lambda_calculus.partition_package.tree.expression.op.BinaryOp;
+import lambda_calculus.partition_package.tree.expression.op.Compare;
 import lambda_calculus.partition_package.tree.expression.op.Plus;
 import lesani.collection.Pair;
 
@@ -96,6 +97,30 @@ public class SecureTypeChecking implements PartitionVisitor{
                     environment.get(plus).getGamma().put(plus.toString(),
                             environment.get(plus.operand1).getGamma().get(plus.operand1.toString()).
                             ciaJoin(environment.get(plus.operand2).getGamma().get(plus.operand2.toString())));
+                    statistics.addCons();
+                    return resultB;
+                }
+            }
+
+            @Override
+            public Object visit(Compare compare){
+                environment.put(compare.operand1, environment.get(compare).clone());
+                environment.put(compare.operand2, environment.get(compare).clone());
+                Boolean resultB = (Boolean) visitDispatch(compare.operand1) & (Boolean) visitDispatch(compare.operand2);
+
+                if(environment.get(compare).getGamma().get(compare.toString()) != null){
+                    CIAType inter = environment.get(compare.operand1).getGamma().get(compare.operand1.toString()).
+                            ciaJoin(environment.get(compare.operand2).getGamma().get(compare.operand2.toString()));
+                    Boolean interB = inter.ciaLeq(environment.get(compare).getGamma().get(compare.toString()));
+                    statistics.addCons();
+                    return resultB & interB;
+                }
+                //currently we do not let user specify the type for intermediate result.
+                //Instead we infer them
+                else {
+                    environment.get(compare).getGamma().put(compare.toString(),
+                            environment.get(compare.operand1).getGamma().get(compare.operand1.toString()).
+                                    ciaJoin(environment.get(compare.operand2).getGamma().get(compare.operand2.toString())));
                     statistics.addCons();
                     return resultB;
                 }

@@ -12,6 +12,7 @@ import lambda_calculus.partition_package.tree.expression.id.Id;
 import lambda_calculus.partition_package.tree.expression.literal.IntLiteral;
 import lambda_calculus.partition_package.tree.expression.literal.Literal;
 import lambda_calculus.partition_package.tree.expression.op.BinaryOp;
+import lambda_calculus.partition_package.tree.expression.op.Compare;
 import lambda_calculus.partition_package.tree.expression.op.Plus;
 import lesani.collection.Pair;
 
@@ -73,6 +74,17 @@ public class PartitionMethod implements PartitionVisitor{
                 resultFreeVariables.addAll(partitionIntermediate.get(plus.operand2).getFreeVariables());
                 PartitionProcess resultP = new PartitionProcess(new ArrayList<>(), resultFreeVariables, new ExpSt(plus));
                 partitionIntermediate.put(plus, resultP);
+                return resultExpression;
+            }
+
+            @Override
+            public Object visit(Compare compare){
+                Expression resultExpression = new Compare(compare.operatorText, (Expression) visitDispatch(compare.operand1), (Expression) visitDispatch(compare.operand2));
+                //add the free variables from two different operators
+                HashSet<Var> resultFreeVariables = new HashSet<>(partitionIntermediate.get(compare.operand1).getFreeVariables());
+                resultFreeVariables.addAll(partitionIntermediate.get(compare.operand2).getFreeVariables());
+                PartitionProcess resultP = new PartitionProcess(new ArrayList<>(), resultFreeVariables, new ExpSt(compare));
+                partitionIntermediate.put(compare, resultP);
                 return resultExpression;
             }
         }

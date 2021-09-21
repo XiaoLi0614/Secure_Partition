@@ -13,6 +13,7 @@ import lambda_calculus.partition_package.tree.*;
 import lambda_calculus.partition_package.visitor.*;
 import lambda_calculus.source_ast.tree.expression.*;
 import lambda_calculus.source_ast.tree.expression.literal.IntLiteral;
+import lambda_calculus.source_ast.tree.expression.op.Compare;
 import lambda_calculus.source_ast.tree.expression.op.Plus;
 import lambda_calculus.source_ast.tree.expression.op.Sequence;
 import lambda_calculus.source_ast.visitor.CPSPrinter;
@@ -173,8 +174,9 @@ public class translation_test {
         System.out.println("Constraint generation time: " + consGenT + " ms");
 
         System.out.println("method translation begin");
-        MethodTranslation test5 = new MethodTranslation("friendmap", "/home/xiao/IdeaProjects/secure_partition/src/lambda_calculus/partition_package/visitor/configuration/");
+        MethodTranslation test5 = new MethodTranslation("ticket", "/home/xiao/IdeaProjects/secure_partition/src/lambda_calculus/partition_package/visitor/configuration/");
         test5.createClasses(test5, resultMethodDefs);
+
         //printToFile(test5.methodsInJava(resultMethodDefs).toString(), "ottMethods", 1);
     }
 
@@ -1529,10 +1531,10 @@ public class translation_test {
         //todo: how to make the recursion automatically know it's method name
         // create a map for the entrance of this-method: auction -> m8 and then have another map for where the replacement is needed
         Expression auctionUseCase = new Sequence(new ObjectMethod("update", "user", userUpdate1Args)
-                , new Conditional(new Plus(new Var("o"),new Var("offerA")),
+                , new Conditional(new Compare("<", new Var("o"),new Var("offerA")),
                 new ObjectMethod("declareWinner", "user", oAsArg),
                 new Sequence(new ObjectMethod("update", "user", userUpdate2Args),
-                        new Conditional(new Plus(new Var("offerA"), new Var("offerB")),
+                        new Conditional(new Compare(">=", new Var("offerA"), new Var("offerB")),
                                 new ThisMethod("self", offerBAsArg),
                                 new ObjectMethod("declareWinner", "user", offerAAsArg)))));
         return auctionUseCase;
@@ -1575,7 +1577,7 @@ public class translation_test {
         //todo: add more single argument operators. currently they are represented by plus.
         Expression ticketUseCase = new Sequence(new ObjectMethod("updateInfo", "customer", updateInfoArgs),
                 new Sequence(new ObjectMethod("updatePayment", "customer", updatePaymentArgs),
-                        new Conditional(new Plus(new Var("price"), new Var("balance")),
+                        new Conditional(new Compare("<=", new Var("price"), new Var("balance")),
                                 new Sequence(new ObjectMethod("decSeat", "airline", decSeatArg),
                                         //new Sequence(new ObjectMethod("decBalance", "bank", decBalanceArg), new IntLiteral(1))),
                                         new ObjectMethod("decBalance", "bank", decBalanceArg)),

@@ -10,6 +10,7 @@ import lambda_calculus.cps_ast.tree.expression.id.Id;
 import lambda_calculus.cps_ast.tree.expression.literal.IntLiteral;
 import lambda_calculus.cps_ast.tree.expression.literal.Literal;
 import lambda_calculus.cps_ast.tree.expression.op.BinaryOp;
+import lambda_calculus.cps_ast.tree.expression.op.Compare;
 import lambda_calculus.cps_ast.tree.expression.op.Plus;
 
 public class translateToOtherAST implements CPSVisitor {
@@ -47,6 +48,13 @@ public class translateToOtherAST implements CPSVisitor {
                 lambda_calculus.partition_package.tree.expression.Expression op1 = (lambda_calculus.partition_package.tree.expression.Expression)visitDispatch(plus.operand1);
                 lambda_calculus.partition_package.tree.expression.Expression op2 = (lambda_calculus.partition_package.tree.expression.Expression)visitDispatch(plus.operand2);
                 return new lambda_calculus.partition_package.tree.expression.op.Plus(op1, op2);
+            }
+
+            @Override
+            public Object visit(Compare compare){
+                lambda_calculus.partition_package.tree.expression.Expression op1 = (lambda_calculus.partition_package.tree.expression.Expression)visitDispatch(compare.operand1);
+                lambda_calculus.partition_package.tree.expression.Expression op2 = (lambda_calculus.partition_package.tree.expression.Expression)visitDispatch(compare.operand2);
+                return new lambda_calculus.partition_package.tree.expression.op.Compare(compare.operatorText, op1, op2);
             }
         }
         translateToOtherAST.ExpressionB.BinaryOpB binaryOpB = new translateToOtherAST.ExpressionB.BinaryOpB();
