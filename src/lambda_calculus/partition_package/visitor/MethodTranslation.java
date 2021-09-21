@@ -650,7 +650,7 @@ public class MethodTranslation implements PartitionVisitor{
     public HashMap<String, StringBuilder> methodsInJava(ArrayList<MethodDefinition> methodDefs, MethodTranslation mt){
     //public StringBuilder methodsInJava(ArrayList<MethodDefinition> methodDefs){
         //MethodTranslation trans = new MethodTranslation(usecaseName, outFolderPath);
-        mt.readInfoFromFile(mt.outputPath + "A2-B1-C0");
+        mt.readInfoFromFile(mt.outputPath + "configs");
         HashMap<String, StringBuilder> result = new HashMap<>();
         //StringBuilder result = new StringBuilder();
 

@@ -35,6 +35,7 @@ import static com.google.common.collect.Sets.newHashSet;
 
 public class translation_test {
     static String outputPath = "/home/xiao/IdeaProjects/secure_partition/src/lambda_calculus/partition_package/visitor/constraints/";
+    //static String outputPath = "/home/xiao/IdeaProjects/bft_runtime/bft-library/src/bftsmart/usecase/TranslatedClasses/";
     public static void main(String[] args) throws IOException
     {
         long partitionT;
@@ -174,7 +175,7 @@ public class translation_test {
         System.out.println("Constraint generation time: " + consGenT + " ms");
 
         System.out.println("method translation begin");
-        MethodTranslation test5 = new MethodTranslation("auction", "/home/xiao/IdeaProjects/secure_partition/src/lambda_calculus/partition_package/visitor/configuration/");
+        MethodTranslation test5 = new MethodTranslation(args[0], "/home/xiao/IdeaProjects/bft_runtime/bft-library/src/bftsmart/usecase/TranslatedClasses/" + args[0] + "/");
         test5.createClasses(test5, resultMethodDefs);
 
         //printToFile(test5.methodsInJava(resultMethodDefs).toString(), "ottMethods", 1);
