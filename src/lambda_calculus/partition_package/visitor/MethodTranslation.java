@@ -229,14 +229,65 @@ public class MethodTranslation implements PartitionVisitor{
                 importedObjects.add("bftsmart.usecase.PartitionedObject");
                 importedObjects.add("bftsmart.demo.bankagent.BankAgentClient");
                 importedObjects.add("bftsmart.demo.useragent.UserAgentClient");
-                importedObjects.add("bftsmart.demo.friendmap.MapServiceClient");
                 objPrimaryType = new HashMap<>();
                 objPrimaryType.put("airline", "AirlineAgentClient");
                 objPrimaryType.put("bank", "BankAgentClient");
                 objPrimaryType.put("customer", "UserAgentClient");
                 requestName = "buyTicket";
                 requestArgs = new ArrayList<>();
+                //todo: may need to add ticketNum here
                 retType = new Pair<>("bought", "Boolean");
+                break;
+            case "auction":
+                objectMethodReturnType = new HashMap<>();
+                objectMethodReturnType.put("user.read", "Integer");
+                objectMethodReturnType.put("A.makeOffer1", "OfferInfo");
+                objectMethodReturnType.put("A.makeOffer2", "Integer");
+                objectMethodReturnType.put("user.update", "void");
+                objectMethodReturnType.put("B.makeOffer1", "OfferInfo");
+                objectMethodReturnType.put("B.makeOffer2", "Integer");
+                objectMethodReturnType.put("user.declareWinner", "OfferInfo");
+                ArrayList<String> AmakeOffer1Type = new ArrayList<>();
+                AmakeOffer1Type.add("Integer");
+                AmakeOffer1Type.add("Integer");
+                ArrayList<String> AmakeOffer2Type = new ArrayList<>();
+                AmakeOffer2Type.add("Integer");
+                AmakeOffer2Type.add("Integer");
+                ArrayList<String> BmakeOffer1Type = new ArrayList<>();
+                BmakeOffer1Type.add("Integer");
+                BmakeOffer1Type.add("Integer");
+                ArrayList<String> BmakeOffer2Type = new ArrayList<>();
+                BmakeOffer2Type.add("Integer");
+                BmakeOffer2Type.add("Integer");
+                ArrayList<String> updateType = new ArrayList<>();
+                updateType.add("OfferInfo");
+                updateType.add("Integer");
+                ArrayList<String> declareWinnerType = new ArrayList<>();
+                declareWinnerType.add("Integer");
+                objectMethodArgType = new HashMap<>();
+                objectMethodArgType.put("A.makeOffer1", AmakeOffer1Type);
+                objectMethodArgType.put("A.makeOffer2", AmakeOffer2Type);
+                objectMethodArgType.put("B.makeOffer1", BmakeOffer1Type);
+                objectMethodArgType.put("B.makeOffer2", BmakeOffer2Type);
+                objectMethodArgType.put("user.update", updateType);
+                objectMethodArgType.put("user.declareWinner", declareWinnerType);
+                argumentType = new HashMap<>();
+                argumentType.put("o", "Integer");
+                //argumentType.put("1", "Integer");
+                //argumentType.put("0", "Integer");
+                importedObjects = new ArrayList<>();
+                importedObjects.add("bftsmart.demo.airlineagent.AirlineAgentClient");
+                importedObjects.add("bftsmart.usecase.PartitionedObject");
+                importedObjects.add("bftsmart.demo.useragent.UserAgentClient");
+                importedObjects.add("bftsmart.usecase.Client");
+                objPrimaryType = new HashMap<>();
+                objPrimaryType.put("A", "AirlineAgentClient");
+                objPrimaryType.put("B", "AirlineAgentClient");
+                objPrimaryType.put("user", "UserAgentClient");
+                requestName = "auction";
+                requestArgs = new ArrayList<>();
+                requestArgs.add("o");
+                retType = new Pair<>("offer", "OfferInfo");
                 break;
              default:
                 System.out.println("Please input supported use-cases!");
@@ -533,15 +584,20 @@ public class MethodTranslation implements PartitionVisitor{
                 argumentType.put(singleCall.administrativeX.toString(), objectMethodReturnType.get(singleCall.objectName + "." + singleCall.methodName));
                 String Oname = singleCall.objectName.toString();
                 String OMName = singleCall.methodName.toString();
+                //when the method name is makeOffer, we need to add A or B as appendix.
+                if(singleCall.methodName.lexeme.equals("makeOffer1") || singleCall.methodName.lexeme.equals("makeOffer2")){
+                    OMName = "makeOffer" + Oname + singleCall.methodName.lexeme.substring(singleCall.methodName.lexeme.length()-1);
+                }
+
                 //when the return type is void, we do not need to do administrative var assignment.
-                if(objectMethodReturnType.get(Oname + "." + OMName).equals("void")){
-                    result.append(insertTab() + "runtime.invokeObj(\"" + singleCall.objectName.toString() + "\", \"" + singleCall.methodName.toString() +
+                if(objectMethodReturnType.get(singleCall.objectName.toString() + "." + singleCall.methodName.toString()).equals("void")){
+                    result.append(insertTab() + "runtime.invokeObj(\"" + Oname + "\", \"" + OMName +
                             "\", \"" + currentMethodName + "\", callerId+\"::" + currentMethodName + "\", ++n");
                 }
                 else {
-                    result.append(insertTab() +  objectMethodReturnType.get(Oname + "." + OMName) + " " +
-                            singleCall.administrativeX.toString() + " = " + "(" + objectMethodReturnType.get(Oname + "." + OMName) + ") " +
-                            "runtime.invokeObj(\"" + singleCall.objectName.toString() + "\", \"" + singleCall.methodName.toString() +
+                    result.append(insertTab() +  objectMethodReturnType.get(singleCall.objectName.toString() + "." + singleCall.methodName.toString()) + " " +
+                            singleCall.administrativeX.toString() + " = " + "(" + objectMethodReturnType.get(singleCall.objectName.toString() + "." + singleCall.methodName.toString()) + ") " +
+                            "runtime.invokeObj(\"" + Oname + "\", \"" + OMName +
                             "\", \"" + currentMethodName + "\", callerId+\"::" + currentMethodName + "\", ++n");
                 }
 
@@ -594,7 +650,7 @@ public class MethodTranslation implements PartitionVisitor{
     public HashMap<String, StringBuilder> methodsInJava(ArrayList<MethodDefinition> methodDefs, MethodTranslation mt){
     //public StringBuilder methodsInJava(ArrayList<MethodDefinition> methodDefs){
         //MethodTranslation trans = new MethodTranslation(usecaseName, outFolderPath);
-        mt.readInfoFromFile(mt.outputPath + "A1-B1-C0");
+        mt.readInfoFromFile(mt.outputPath + "A2-B1-C0");
         HashMap<String, StringBuilder> result = new HashMap<>();
         //StringBuilder result = new StringBuilder();
 
